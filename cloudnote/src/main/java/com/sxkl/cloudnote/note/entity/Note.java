@@ -1,5 +1,6 @@
 package com.sxkl.cloudnote.note.entity;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,8 +25,10 @@ import com.sxkl.cloudnote.user.entity.User;
 @Entity
 @Table(name="cn_note")
 @GenericGenerator(name = "uuid", strategy = "uuid")
-public class Note {
+public class Note implements Serializable{
 	
+	private static final long serialVersionUID = -2237203894851782556L;
+
 	@Id
 	@GeneratedValue(generator = "uuid")
 	@Column(name="id",unique=true,nullable=false)
@@ -45,6 +48,15 @@ public class Note {
 	
 	@Transient
 	private boolean isLeaf;
+	
+	public Note() {
+		super();
+	}
+
+	public Note(String id, String name) {
+		this.id = id;
+		this.name = name;
+	}
 
 	public String getId() {
 		return id;

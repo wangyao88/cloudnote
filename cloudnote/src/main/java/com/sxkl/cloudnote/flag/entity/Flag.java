@@ -1,5 +1,6 @@
 package com.sxkl.cloudnote.flag.entity;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,12 +24,12 @@ import org.hibernate.annotations.GenericGenerator;
 import com.sxkl.cloudnote.article.entity.Article;
 import com.sxkl.cloudnote.user.entity.User;
 
-import lombok.Data;
-
 @Entity
 @Table(name="cn_flag")
 @GenericGenerator(name = "uuid", strategy = "uuid")
-public class Flag {
+public class Flag implements Serializable{
+
+	private static final long serialVersionUID = 595415798731869756L;
 
 	@Id
 	@GeneratedValue(generator = "uuid")
@@ -39,12 +40,11 @@ public class Flag {
 	private String name;
 	
 	@ManyToOne
-	@Cascade(value={CascadeType.ALL})
 	@JoinColumn(name="fId")
 	private Flag parent;
 	
-	@OneToMany(mappedBy="parent",fetch=FetchType.EAGER)
-	@Cascade(value={CascadeType.ALL})
+	@OneToMany(fetch=FetchType.EAGER,mappedBy="parent")
+	@Cascade(value={CascadeType.ALL, CascadeType.DELETE, CascadeType.SAVE_UPDATE})
 	private Set<Flag> children = new HashSet<Flag>();
 	
 	@ManyToOne
@@ -120,9 +120,7 @@ public class Flag {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + (isLeaf ? 1231 : 1237);
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((user == null) ? 0 : user.hashCode());
 		return result;
 	}
 
@@ -140,18 +138,12 @@ public class Flag {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (isLeaf != other.isLeaf)
-			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (user == null) {
-			if (other.user != null)
-				return false;
-		} else if (!user.equals(other.user))
-			return false;
 		return true;
 	}
+
 }

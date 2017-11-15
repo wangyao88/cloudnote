@@ -13,6 +13,15 @@ public class OperateResultService {
 		return gson.toJson(operateResult);
 	}
 	
+	public static String configurateSuccessResult(Object data){
+		Gson gson = new Gson();
+		OperateResult operateResult = new OperateResult();
+		operateResult.setMsg("操作成功");
+		operateResult.setStatus(true);
+		operateResult.setData(data);
+		return gson.toJson(operateResult);
+	}
+	
 	public static String configurateFailureResult(){
 		Gson gson = new Gson();
 		OperateResult operateResult = new OperateResult();

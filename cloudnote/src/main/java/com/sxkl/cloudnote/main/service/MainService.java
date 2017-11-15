@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import com.google.gson.Gson;
 import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.flag.entity.Flag;
-import com.sxkl.cloudnote.flag.service.FlagServie;
+import com.sxkl.cloudnote.flag.service.FlagService;
 import com.sxkl.cloudnote.main.entity.TreeNode;
 import com.sxkl.cloudnote.note.entity.Note;
 import com.sxkl.cloudnote.note.service.NoteService;
@@ -28,7 +28,7 @@ public class MainService {
 	@Autowired
 	private NoteService noteService;
 	@Autowired
-	private FlagServie flagService;
+	private FlagService flagService;
 	@Autowired
 	private UserService userService;
 	
@@ -59,6 +59,22 @@ public class MainService {
 			treeJson.append(Constant.COMMA);
 		}
 		
+//		Set<Flag> flas = getTestFalgData();
+		
+		for(Flag flag : flags){
+			TreeNode treeNode = flagService.convertToTreeNode(rootFlag,flag);
+			treeJson.append(gson.toJson(treeNode));
+			treeJson.append(Constant.COMMA);
+		}
+		
+		validateJson(treeJson);
+		treeJson.append(Constant.TREE_MENU_SUFFIX);
+		
+		return treeJson.toString();
+	}
+
+
+	private Set<Flag> getTestFalgData() {
 		Flag f = new Flag();
 		f.setName("标签1");
 		f.setId("dddddddd");
@@ -79,17 +95,7 @@ public class MainService {
 		flas.add(f);
 		flas.add(c);
 		flas.add(m);
-		
-		for(Flag flag : flas){
-			TreeNode treeNode = flagService.convertToTreeNode(rootFlag,flag);
-			treeJson.append(gson.toJson(treeNode));
-			treeJson.append(Constant.COMMA);
-		}
-		
-		validateJson(treeJson);
-		treeJson.append(Constant.TREE_MENU_SUFFIX);
-		
-		return treeJson.toString();
+		return flas;
 	}
 
 

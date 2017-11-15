@@ -7,7 +7,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html lang="cn">
 <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="UTF-8">
-<title>行业智慧能力平台</title>
+<title>曼妙云端笔记平台</title>
 <link rel="stylesheet" type="text/css" href="<%=basePath %>js/login/css/style2.0.css">
 <style type="text/css">
 	ul li{font-size: 30px;color:#2ec0f6;}
@@ -70,8 +70,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <div class="tyg-div">
 	<ul>
     	<li>让</li>
-    	<li><div style="margin-left:20px;">数</div></li>
-    	<li><div style="margin-left:40px;">据</div></li>
+    	<li><div style="margin-left:20px;">记</div></li>
+    	<li><div style="margin-left:40px;">录</div></li>
     	<li><div style="margin-left:60px;">改</div></li>
     	<li><div style="margin-left:80px;">变</div></li>
     	<li><div style="margin-left:100px;">生</div></li>

@@ -1,5 +1,6 @@
 package com.sxkl.cloudnote.user.entity;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,8 +25,10 @@ import lombok.Data;
 @Entity
 @Table(name="cn_user")
 @GenericGenerator(name = "uuid", strategy = "uuid")
-public class User {
+public class User implements Serializable{
 	
+	private static final long serialVersionUID = -6480781567126316019L;
+
 	@Id
 	@GeneratedValue(generator = "uuid")
 	@Column(name="id",unique=true,nullable=false)
@@ -44,9 +47,8 @@ public class User {
 	@Cascade(value={CascadeType.ALL})
 	private Set<Note> notes = new HashSet<Note>();
 	
-	@OneToMany(fetch=FetchType.EAGER)
-	@Cascade(value={CascadeType.SAVE_UPDATE})
-	@JoinColumn(name="uId")
+	@OneToMany(fetch=FetchType.EAGER,mappedBy="user")
+	@Cascade(value={CascadeType.ALL})
 	private Set<Flag> flags = new HashSet<Flag>();
 
 	public String getId() {

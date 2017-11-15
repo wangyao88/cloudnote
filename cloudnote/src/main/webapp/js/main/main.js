@@ -35,8 +35,21 @@ function onBeforeOpen(e) {
 //tree 单击事件
 function onNodeClick1(){
 	var tree = mini.get("menuTree")
-    var node = tree.getSelectedNode()
-    alert(node.text);
+    var node = tree.getSelectedNode();
+	var parentNode = tree.getParentNode(node);
+	if(parentNode._id == -1){
+		return false;
+	}
+	var data = {
+			first : false
+	};
+	if(isNoteTreeNode(node)){
+		data.noteId = node.id;
+	}
+	if(isFlagTreeNode(node)){
+		data.flagId = node.id;
+	}
+	loadArticles(data);
 }
 
 //新增节点
@@ -46,108 +59,75 @@ function onAddNode(e){
     var parentNode = tree.getParentNode(node);
     if(isNoteTreeNode(node)){
 		if(parentNode._id == -1){
-			mini.open({
-		    	url: bootPATH+ "main/taskPanel.jsp",
-		            title: "任务面板", width: 500, height: 300,
-		            onload: function () {
+//			mini.open({
+//		    	url: bootPATH+ "main/taskPanel.jsp",
+//		            title: "任务面板", width: 500, height: 300,
+//		            onload: function () {
 //		                var iframe = this.getIFrameEl();
 //		                iframe.contentWindow.SetData(node);
-		            }
-		        })
-		}else{
-			 mini.alert("笔记本不能添加子节点！");
-		}
+//		            }
+//		        })
+			addNoteNode(tree);
+		  }else{
+			   mini.alert("笔记本不能添加子节点！");
+		  }
 	}
+    
+    if(isFlagTreeNode(node)){
+    	addFlagNode(tree);
+    }
     
 }
 
-function addNode(fotmData){
+function onEditNode(){
 	var tree = mini.get("menuTree");
-	var nodeName = fotmData.name;
-	if(nodeName == null || nodeName == ""){
-		 mini.alert("笔记本名称不能为空！");
-	}else{
-		$.ajax({
-			url : basePATH+"/note/addNote",
-			type : "post",
-			data : {
-				name : fotmData.name
-			},
-			success : function(){
-				tree.load(basePATH+"/main/getTree");
-	        },
-	        error : function(){
-	        	mini.alert("笔记本添加失败，请稍候重试！");
-	        }
-		});
+    var node = tree.getSelectedNode();
+    var parentNode = tree.getParentNode(node);
+    if(parentNode._id == -1){
+		 mini.alert("根节点不能编辑！");
+		 return;
 	}
+    
+    if(isNoteTreeNode(node)){
+    	editNoteNode(tree,node);
+	}
+    if(isFlagTreeNode(node)){
+    	editFlagNode(tree,node);
+    }
 }
 
 function onRemoveNode(e){
 	var tree = mini.get("menuTree");
     var node = tree.getSelectedNode();
+    var parentNode = tree.getParentNode(node);
+    if(parentNode._id == -1){
+		 mini.alert("根节点不能删除！");
+		 return;
+	}
     var childrenNodes = tree.getChildNodes(node);
     if(childrenNodes != null && childrenNodes.length > 0){
     	mini.alert("不允许删除!有子节点！");
     	return false;
 	}
     if(isNoteTreeNode(node)){
-    	mini.confirm("确定删除笔记本？", "确定？",
-    		function(action) {
-    			if (action == "ok") {
-    				$.ajax({
-    					url : basePATH+"/note/deleteNote",
-    					type : "post",
-    					data : {
-    						id : node.id
-    					},
-    					success : function(){
-    						tree.load(basePATH+"/main/getTree");
-    			        },
-    			        error : function(){
-    			        	mini.alert("笔记本添加失败，请稍候重试！");
-    			        }
-    				});
-    			}
-    		}
-    	);
+    	removeNoteNode(tree,node);
     }
     
     if(isFlagTreeNode(node)){
-    	mini.confirm("确定删除标签["+node.text+"]吗？", "确定？",
-    		function(action) {
-    			if (action == "ok") {
-    				$.ajax({
-    					url : basePATH+"/flag/deleteFlag",
-    					type : "post",
-    					data : {
-    						id : node.id
-    					},
-    					success : function(){
-    						tree.load(basePATH+"/main/getTree");
-    			        },
-    			        error : function(){
-    			        	mini.alert("标签添加失败，请稍候重试！");
-    			        }
-    				});
-    			}
-    		}
-    	);
+    	removeFlagNode(tree,node);
     }
 }
 
 
-function  isNoteTreeNode(node){
-	 var nodeId = node.id;
-	 if(nodeId.substring(0,4) == 'note'){
+function isNoteTreeNode(node){
+	 if(node && node.id.substring(0,4) == 'note'){
 		 return true;
 	 }
 	 return false;
 }
 
 function  isFlagTreeNode(node){
-	 var nodeId = node.id;
-	 if(nodeId.substring(0,4) == 'flag'){
+	 if(node &&  node.id.substring(0,4) == 'flag'){
 		 return true;
 	 }
 	 return false;

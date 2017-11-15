@@ -1,4 +1,4 @@
-package com.sxkl.cloudnote.note.controller;
+package com.sxkl.cloudnote.flag.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -9,54 +9,51 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sxkl.cloudnote.common.service.OperateResultService;
-import com.sxkl.cloudnote.note.service.NoteService;
+import com.sxkl.cloudnote.flag.service.FlagService;
+
 
 @RestController
-@RequestMapping("/note")
-public class NoteController {
-
+@RequestMapping("/flag")
+public class FlagController {
+	
 	@Autowired
-	private NoteService noteService;
-
+	private FlagService flagService;
 	
-	@RequestMapping(value = "/addNote", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
-	@ResponseBody
-	public String addNote(HttpServletRequest request){
+	@RequestMapping(value = "/addFlag", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	public String addFlag(HttpServletRequest request){
 		try {
-			noteService.insertNote(request);
+			flagService.addFlag(request);
 			return OperateResultService.configurateSuccessResult();
 		} catch (Exception e) {
 			return OperateResultService.configurateFailureResult(e.getMessage());
 		}
 	}
 	
-	@RequestMapping(value = "/deleteNote", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	@RequestMapping(value = "/updateFlag", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
 	@ResponseBody
-	public String deleteNote(HttpServletRequest request){
+	public String updateFlag(HttpServletRequest request){
 		try {
-			noteService.deleteNote(request);
+			flagService.updateFlag(request);
 			return OperateResultService.configurateSuccessResult();
 		} catch (Exception e) {
 			return OperateResultService.configurateFailureResult(e.getMessage());
 		}
 	}
 	
-	@RequestMapping(value = "/updateNote", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
-	@ResponseBody
-	public String updateNote(HttpServletRequest request){
+	@RequestMapping(value = "/deleteFlag", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	public String deleteFlag(HttpServletRequest request){
 		try {
-			noteService.updateNote(request);
+			flagService.deleteFlag(request);
 			return OperateResultService.configurateSuccessResult();
 		} catch (Exception e) {
 			return OperateResultService.configurateFailureResult(e.getMessage());
 		}
 	}
 	
-	@RequestMapping(value = "/getNoteDataFromCombo", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
-	@ResponseBody
-	public String getNoteDataFromCombo(HttpServletRequest request){
+	@RequestMapping(value = "/getCheckFlagTree", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+	public String getCheckFlagTree(HttpServletRequest request){
 		try {
-			return noteService.getNoteDataFromCombo(request);
+			return flagService.getCheckFlagTree(request);
 		} catch (Exception e) {
 			return OperateResultService.configurateFailureResult(e.getMessage());
 		}

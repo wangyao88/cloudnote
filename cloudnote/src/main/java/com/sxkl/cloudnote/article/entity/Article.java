@@ -1,5 +1,6 @@
 package com.sxkl.cloudnote.article.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
@@ -29,7 +30,9 @@ import lombok.Data;
 @Entity
 @Table(name="cn_article")
 @GenericGenerator(name = "uuid", strategy = "uuid")
-public class Article {
+public class Article implements Serializable{
+
+	private static final long serialVersionUID = 1007956249838468112L;
 
 	@Id
 	@GeneratedValue(generator = "uuid")
@@ -60,4 +63,14 @@ public class Article {
 	@Cascade(value={CascadeType.SAVE_UPDATE})
 	@JoinTable(name="cn_flag_artile",joinColumns={@JoinColumn(name="article_id")},inverseJoinColumns={@JoinColumn(name="flag_id")})
     private Set<Flag> flags;
+	
+	public Article() {
+		super();
+	}
+
+	public Article(String id, String title, Integer hitNum) {
+		this.id = id;
+		this.title = title;
+		this.hitNum = hitNum;
+	}
 }

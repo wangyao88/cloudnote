@@ -1,10 +1,13 @@
 package com.sxkl.cloudnote.note.service;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
 import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.main.entity.TreeNode;
 import com.sxkl.cloudnote.note.dao.NoteDao;
@@ -34,7 +37,7 @@ public class NoteService {
 	public TreeNode convertToTreeNode(Note note){
 		TreeNode treeNode = new TreeNode();
 		treeNode.setId(Constant.TREE_MENU_NOTE_ID_PREFIX+note.getId());
-		treeNode.setText(note.getName());
+		treeNode.setText(note.getName()+"("+note.getArticles().size()+")");
 		treeNode.setIsleaf(true);
 		return treeNode;
 	}
@@ -51,18 +54,36 @@ public class NoteService {
 
 	public void deleteNote(HttpServletRequest request) {
 		String id = getNoteIdFromFront(request);
-		Note temp = new Note();
-		temp.setId(id);
-		Note note = noteDao.findById(temp);
+		Note note = noteDao.findById(id);
 		User sessionUser = UserUtil.getSessionUser(request);
 		User user = userDao.selectUser(sessionUser);
 		user.getNotes().remove(note);
 		userDao.updateUser(user);
 		noteDao.deleteNote(note);
 	}
+	
+	public void updateNote(HttpServletRequest request) {
+		String id = getNoteIdFromFront(request);
+		String name = request.getParameter("name");
+		Note note = noteDao.findById(id);
+		note.setName(name);
+		noteDao.updateNote(note);
+	}
 
 	private String getNoteIdFromFront(HttpServletRequest request) {
 		String frontId = request.getParameter("id");
 		return frontId.substring(Constant.TREE_MENU_NOTE_ID_PREFIX.length());
 	}
+
+	public String getNoteDataFromCombo(HttpServletRequest request) {
+		User user = UserUtil.getSessionUser(request);
+		List<Note> notes = noteDao.getAllNote(user.getId());
+		Gson gson = new Gson();
+		return gson.toJson(notes);
+	}
+
+	public Note selectNoteById(String noteId) {
+		return noteDao.selectNoteById(noteId);
+	}
+
 }
