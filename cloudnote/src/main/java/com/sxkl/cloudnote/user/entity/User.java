@@ -43,11 +43,11 @@ public class User implements Serializable{
 	@Column(name="email",unique=true,nullable=false)
 	private String email;
 	
-	@OneToMany(fetch=FetchType.EAGER,mappedBy="user")
+	@OneToMany(fetch=FetchType.LAZY,mappedBy="user")
 	@Cascade(value={CascadeType.ALL})
 	private Set<Note> notes = new HashSet<Note>();
 	
-	@OneToMany(fetch=FetchType.EAGER,mappedBy="user")
+	@OneToMany(fetch=FetchType.LAZY,mappedBy="user")
 	@Cascade(value={CascadeType.ALL})
 	private Set<Flag> flags = new HashSet<Flag>();
 

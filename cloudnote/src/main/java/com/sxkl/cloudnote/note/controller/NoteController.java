@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sxkl.cloudnote.common.service.OperateResultService;
+import com.sxkl.cloudnote.note.entity.Note;
 import com.sxkl.cloudnote.note.service.NoteService;
 
 @RestController
@@ -62,4 +63,14 @@ public class NoteController {
 		}
 	}
 	
+	@RequestMapping(value = "/getNoteByArticleId", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	@ResponseBody
+	public String getNoteByArticleId(HttpServletRequest request){
+		try {
+			Note note = noteService.getNoteByArticleId(request);
+			return OperateResultService.configurateSuccessResult(note);
+		} catch (Exception e) {
+			return OperateResultService.configurateFailureResult(e.getMessage());
+		}
+	}
 }

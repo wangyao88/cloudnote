@@ -9,11 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
+import com.sxkl.cloudnote.article.dao.ArticleDao;
+import com.sxkl.cloudnote.article.entity.Article;
+import com.sxkl.cloudnote.cache.annotation.RedisCachable;
+import com.sxkl.cloudnote.cache.annotation.RedisDisCachable;
 import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.flag.dao.FlagDao;
 import com.sxkl.cloudnote.flag.entity.Flag;
 import com.sxkl.cloudnote.main.entity.TreeNode;
-import com.sxkl.cloudnote.note.entity.Note;
 import com.sxkl.cloudnote.user.dao.UserDao;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.user.service.UserService;
@@ -27,6 +30,8 @@ public class FlagService {
 	private FlagDao flagDao;
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private ArticleDao articleDao;
 	@Autowired
 	private UserService userService;
 
@@ -57,6 +62,7 @@ public class FlagService {
 		return treeNode;
 	}
 
+	@RedisDisCachable(key={Constant.TREE_MENU_KEY_IN_REDIS,Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,})
 	public void addFlag(HttpServletRequest request) {
 		String id = getFlagIdFromFront(request);
 		String name = request.getParameter("name");
@@ -80,6 +86,7 @@ public class FlagService {
 		flagDao.saveFlag(parent);
 	}
 	
+	@RedisDisCachable(key={Constant.TREE_MENU_KEY_IN_REDIS,Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,})
 	public void updateFlag(HttpServletRequest request) {
 		String id = getFlagIdFromFront(request);
 		String name = request.getParameter("name");
@@ -88,6 +95,7 @@ public class FlagService {
 		flagDao.updateFlag(flag);
 	}
 	
+	@RedisDisCachable(key={Constant.TREE_MENU_KEY_IN_REDIS,Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,})
 	public void deleteFlag(HttpServletRequest request) {
 		try {
 			String id = getFlagIdFromFront(request);
@@ -120,6 +128,7 @@ public class FlagService {
 		return frontId.substring(Constant.TREE_MENU_FLAG_ID_PREFIX.length());
 	}
 
+	@RedisCachable(key=Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,dateTime=60)
 	public String getCheckFlagTree(HttpServletRequest request) {
 		User sessionUser = UserUtil.getSessionUser(request);
 		User user = userService.selectUser(sessionUser);
@@ -153,5 +162,27 @@ public class FlagService {
 
 	public List<Flag> selectFlagsByIds(String[] flags) {
 		return flagDao.selectFlagsByIds(flags);
+	}
+
+	public Flag getFlagByArticleId(HttpServletRequest request) {
+		String articleId = request.getParameter("articleId");
+		Article article = articleDao.selectArticleById(articleId);
+		Set<Flag> flags = article.getFlags();
+		String flagIds = "";
+		String flagNames = "";
+		for(Flag flag : flags){
+			flagIds += Constant.TREE_MENU_FLAG_ID_PREFIX + flag.getId() + ",";
+			flagNames += flag.getName() + ",";
+		}
+		if(flagIds.endsWith(Constant.COMMA)){
+			flagIds = flagIds.substring(0, flagIds.length()-1);
+		}
+		if(flagNames.endsWith(Constant.COMMA)){
+			flagNames = flagNames.substring(0, flagNames.length()-1);
+		}
+		Flag result = new Flag();
+		result.setId(flagIds);
+		result.setName(flagNames);
+		return result;
 	}
 }

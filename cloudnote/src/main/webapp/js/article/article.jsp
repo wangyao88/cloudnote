@@ -23,7 +23,7 @@
     <table id="form1" border="0" style="width:100%;table-layout:fixed;">
 	    <tr>
 	        <td style="width:90%"  colspan="2">
-	            <input name="title" class="mini-textbox" style="width:100%;" placeholder="请输入标题..."/>
+	            <input name="title" class="mini-textbox" style="width:100%;" required="true" emptyText="请输入标题..." nullItemText="请输入标题..."/>
 	        </td>
 	    </tr>
 	    <tr>
@@ -32,12 +32,12 @@
 	               url="<%=basePath %>note/getNoteDataFromCombo" ajaxType="get" required="true" allowInput="true" showNullItem="true" nullItemText="请选择笔记本..."/>
 	        </td>
 	        <td style="width:70%">
-	            <input id="flags" name="flags" class="mini-buttonedit" style="width:70%;"  onbuttonclick="onButtonEdit"/>    
+	            <input id="flags" name="flags" class="mini-buttonedit" style="width:70%;" required="true"  emptyText="请选择标签..." nullItemText="请选择标签..." onbuttonclick="onButtonEdit"/>    
 	        </td>
 	    </tr>
 	    <tr>
 	        <td colspan="2" >
-	         <textarea id="container" name="content" style="width:100%;height:450px;">
+	         <textarea id="container" name="content" style="width:100%;height:455px;">
        		 </textarea>
 	        </td>        
 	    </tr>
@@ -51,13 +51,68 @@ var ue = UE.getEditor('container');
 mini.parse();
 var form = new mini.Form("form1");
 
+var isEdit = false;
+var articleId;
+
 function SetData(data){
      data = mini.clone(data);
      form.setData(data);
+     if(data){
+    	 isEdit = true;
+    	 var articleIdTemp = data.id
+    	 articleId = articleIdTemp;
+    	 $.ajax({
+				url : basePATH+"/note/getNoteByArticleId",
+				type : "post",
+				data : {
+					articleId : articleIdTemp
+				},
+				dataType : 'json',
+				success : function(result){
+					 var note = mini.get("note");
+					 note.setValue(result.data.id);
+					 note.setText(result.data.name);
+		        }
+			});
+    	 $.ajax({
+				url : basePATH+"/flag/getFlagByArticleId",
+				type : "post",
+				data : {
+					articleId : articleIdTemp
+				},
+				dataType : 'json',
+				success : function(result){
+					 var flag = mini.get("flags");
+					 flag.setValue(result.data.id);
+					 flag.setText(result.data.name);
+		        }
+			});
+    	 $.ajax({
+    			url : basePATH+"/article/getArticle",
+    			type : "post",
+    			data : {
+    				id : articleIdTemp
+    			},
+    			dataType : 'json',
+    			success : function(result){
+    				ue.setContent(result.data);
+    	        },
+    	        error : function(){
+    	        	mini.alert("获取笔记详情失败，请稍候重试！");
+    	        }
+    		});
+     }else{
+    	 isEdit = false;
+     }
+    
 }
 
 function CloseWindow() {
     var options = form.getData();
+    if(isEdit){
+    	options.articleId = articleId;
+    }
+    options.isEdit = isEdit;
     //var nodeName = options.name;
    // if(nodeName == null || nodeName == ""){
 	//	 mini.alert("笔记本名称不能为空！");

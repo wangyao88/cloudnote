@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
+import com.sxkl.cloudnote.article.dao.ArticleDao;
+import com.sxkl.cloudnote.article.entity.Article;
+import com.sxkl.cloudnote.cache.annotation.RedisDisCachable;
 import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.main.entity.TreeNode;
 import com.sxkl.cloudnote.note.dao.NoteDao;
@@ -25,6 +28,9 @@ public class NoteService {
 	
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private ArticleDao articleDao;
 
 	public TreeNode getRootTreeNode() {
 		TreeNode note = new TreeNode();
@@ -42,6 +48,7 @@ public class NoteService {
 		return treeNode;
 	}
 
+	@RedisDisCachable(key={Constant.TREE_MENU_KEY_IN_REDIS,Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,})
 	public void insertNote(HttpServletRequest request) {
 		User user = UserUtil.getSessionUser(request);
 		String name = request.getParameter("name");
@@ -52,6 +59,7 @@ public class NoteService {
 		user.getNotes().add(note);
 	}
 
+	@RedisDisCachable(key={Constant.TREE_MENU_KEY_IN_REDIS,Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,})
 	public void deleteNote(HttpServletRequest request) {
 		String id = getNoteIdFromFront(request);
 		Note note = noteDao.findById(id);
@@ -62,6 +70,7 @@ public class NoteService {
 		noteDao.deleteNote(note);
 	}
 	
+	@RedisDisCachable(key={Constant.TREE_MENU_KEY_IN_REDIS,Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,})
 	public void updateNote(HttpServletRequest request) {
 		String id = getNoteIdFromFront(request);
 		String name = request.getParameter("name");
@@ -84,6 +93,16 @@ public class NoteService {
 
 	public Note selectNoteById(String noteId) {
 		return noteDao.selectNoteById(noteId);
+	}
+
+	public Note getNoteByArticleId(HttpServletRequest request) {
+		String articleId = request.getParameter("articleId");
+		Article article = articleDao.selectArticleById(articleId);
+		Note note = article.getNote();
+		Note result = new Note();
+		result.setId(note.getId());
+		result.setName(note.getName());;
+		return result;
 	}
 
 }

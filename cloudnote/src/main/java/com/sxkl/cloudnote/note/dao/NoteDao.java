@@ -49,6 +49,4 @@ public class NoteDao extends BaseDao {
 		Session session = this.getSessionFactory().getCurrentSession();
 		return session.get(Note.class, noteId);
 	}
-
-
 }

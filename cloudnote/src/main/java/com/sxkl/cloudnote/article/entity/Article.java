@@ -51,15 +51,15 @@ public class Article implements Serializable{
 	@Column(name="hitNum",nullable=false)
 	private Integer hitNum;
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="uId")
 	private User user;
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="nId")
 	private Note note;
 	
-	@ManyToMany(fetch=FetchType.EAGER)
+	@ManyToMany(fetch=FetchType.LAZY)
 	@Cascade(value={CascadeType.SAVE_UPDATE})
 	@JoinTable(name="cn_flag_artile",joinColumns={@JoinColumn(name="article_id")},inverseJoinColumns={@JoinColumn(name="flag_id")})
     private Set<Flag> flags;

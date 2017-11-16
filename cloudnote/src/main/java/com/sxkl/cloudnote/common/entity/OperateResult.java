@@ -8,5 +8,6 @@ public class OperateResult {
 	private String msg;
 	private boolean status;
 	private Object data;
+	private Integer total;
 
 }

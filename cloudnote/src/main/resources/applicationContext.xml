@@ -99,7 +99,7 @@
                 <prop key="hibernate.dialect">${hibernate.dialect}</prop>
                 <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
                 <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
-                <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+                <!-- <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop> -->
                 <!-- 开启二级缓存 ehcache -->
                 <prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>
                 <prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>
@@ -149,4 +149,7 @@
         <!-- 指定在txAdvice切入点应用txAdvice事务增强处理 -->
         <aop:advisor pointcut-ref="transactionPointcut"    advice-ref="transactionAdvice" />
     </aop:config>
+    
+    <aop:config proxy-target-class="true" expose-proxy="true"></aop:config>
+    <aop:aspectj-autoproxy/>
 </beans>

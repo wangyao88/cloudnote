@@ -1,16 +1,15 @@
 package com.sxkl.cloudnote.main.service;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
+import com.sxkl.cloudnote.cache.annotation.RedisCachable;
 import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.flag.entity.Flag;
 import com.sxkl.cloudnote.flag.service.FlagService;
@@ -20,11 +19,12 @@ import com.sxkl.cloudnote.note.service.NoteService;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.user.service.UserService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class MainService {
 	
-	@Autowired
-	private RedisTemplate<String, Object> redisTemplate;
 	@Autowired
 	private NoteService noteService;
 	@Autowired
@@ -33,8 +33,9 @@ public class MainService {
 	private UserService userService;
 	
 
-//	@Cacheable(value={Constant.TREE_MENU_VALUE_IN_REDIS},key="caches[0].name")
+	@RedisCachable(key=Constant.TREE_MENU_KEY_IN_REDIS,dateTime=20)
 	public String getTree(HttpServletRequest request) {
+		log.info("缓存中没有菜单树，从数据库获取数据，生成菜单树");
 		HttpSession session = request.getSession();
 		User sessionUser = (User) session.getAttribute(Constant.USER_IN_SESSION_KEY);
 		User user = userService.selectUser(sessionUser);
@@ -59,8 +60,6 @@ public class MainService {
 			treeJson.append(Constant.COMMA);
 		}
 		
-//		Set<Flag> flas = getTestFalgData();
-		
 		for(Flag flag : flags){
 			TreeNode treeNode = flagService.convertToTreeNode(rootFlag,flag);
 			treeJson.append(gson.toJson(treeNode));
@@ -72,32 +71,6 @@ public class MainService {
 		
 		return treeJson.toString();
 	}
-
-
-	private Set<Flag> getTestFalgData() {
-		Flag f = new Flag();
-		f.setName("标签1");
-		f.setId("dddddddd");
-		
-		Flag c = new Flag();
-		c.setName("标签2");
-		c.setId("dsfsdfsd");
-		
-		Flag m = new Flag();
-		m.setName("标签3");
-		m.setId("dsfsdfssssssssd");
-		
-		f.getChildren().add(c);
-		c.setParent(f);
-		
-		
-		Set<Flag> flas = new HashSet<Flag>();
-		flas.add(f);
-		flas.add(c);
-		flas.add(m);
-		return flas;
-	}
-
 
 	private void validateJson(StringBuilder treeJson) {
 		String treeStr = treeJson.toString();

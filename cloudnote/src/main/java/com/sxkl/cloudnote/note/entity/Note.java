@@ -37,11 +37,11 @@ public class Note implements Serializable{
 	@Column(name="name",unique=true,nullable=false)
 	private String name;
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="uId")
 	private User user;
 	
-	@OneToMany(fetch=FetchType.EAGER)
+	@OneToMany(fetch=FetchType.LAZY)
 	@Cascade(value={CascadeType.ALL})
 	@JoinColumn(name="nId")  
     private Set<Article> articles = new HashSet<Article>();

@@ -32,11 +32,11 @@
 	     <div title="工具栏" region="north" showHeader="false" height="28px">
 			<div class="mini-toolbar">
 			    <a class="mini-button" iconCls="icon-addnew" onclick="addArticle">增加</a>
-			    <a class="mini-button" iconCls="icon-edit">修改</a>
+			    <a class="mini-button" iconCls="icon-edit" onclick="editArticle">修改</a>
 			    <a class="mini-button" iconCls="icon-remove" onclick="removeArticle">删除</a>
 			    <span class="separator"></span>
 			    <input class="mini-textbox" />   
-			    <a class="mini-button" plain="true">查询</a>
+			    <a class="mini-button" plain="true" id="searchArticleBtn" onclick="searchArticle">查询</a>
 		    </div>
 		 </div>
 		 <div title="笔记和标签" showProxyText="true" region="west" width="200px" expanded="true" showSplitIcon="true">
@@ -60,7 +60,8 @@
 		<div title="笔记列表" region="east" width="400px" expanded="true">
 				<div id="articleGrid" class="mini-datagrid" style="width:395px;height:100%;" 
 			        url="<%=basePath%>article/getAllArticles" idField="id" allowResize="true" 
-			        pageSize="20"  ajaxType="post" multiSelect="false" onRowClick="gridRowClick">
+			        pageSize="20" sizeList="[20,50,100]" ajaxType="post" multiSelect="false" onRowClick="gridRowClick"
+			        onrowdblclick="gridRowdblclick">
 	            	<div property="columns">
 		            <div type="indexcolumn">序号</div>
 		            <div name="idColumn"  field="id"  headerAlign="center" allowSort="true" width="0px" >ID</div>

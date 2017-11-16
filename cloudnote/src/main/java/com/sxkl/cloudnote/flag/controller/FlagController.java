@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sxkl.cloudnote.common.service.OperateResultService;
+import com.sxkl.cloudnote.flag.entity.Flag;
 import com.sxkl.cloudnote.flag.service.FlagService;
 
 
@@ -59,4 +60,13 @@ public class FlagController {
 		}
 	}
 	
+	@RequestMapping(value = "/getFlagByArticleId", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	public String getFlagByArticleId(HttpServletRequest request){
+		try {
+			Flag flag = flagService.getFlagByArticleId(request);
+			return OperateResultService.configurateSuccessResult(flag);
+		} catch (Exception e) {
+			return OperateResultService.configurateFailureResult(e.getMessage());
+		}
+	}
 }

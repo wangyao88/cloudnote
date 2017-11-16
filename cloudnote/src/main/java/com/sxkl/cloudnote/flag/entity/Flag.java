@@ -39,19 +39,19 @@ public class Flag implements Serializable{
 	@Column(name="name",unique=true,nullable=false)
 	private String name;
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="fId")
 	private Flag parent;
 	
-	@OneToMany(fetch=FetchType.EAGER,mappedBy="parent")
+	@OneToMany(fetch=FetchType.LAZY,mappedBy="parent")
 	@Cascade(value={CascadeType.ALL, CascadeType.DELETE, CascadeType.SAVE_UPDATE})
 	private Set<Flag> children = new HashSet<Flag>();
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="uId")
 	private User user;
 	
-	@ManyToMany(fetch=FetchType.EAGER)
+	@ManyToMany(fetch=FetchType.LAZY)
 	@Cascade(value={CascadeType.SAVE_UPDATE})
 	@JoinTable(name="cn_flag_artile",joinColumns={@JoinColumn(name="flag_id")},inverseJoinColumns={@JoinColumn(name="article_id")})
     private Set<Article> articles = new HashSet<Article>();
