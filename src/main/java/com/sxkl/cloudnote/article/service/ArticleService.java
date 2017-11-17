@@ -82,12 +82,18 @@ public class ArticleService {
 		String pageIndex = request.getParameter("pageIndex");
 		String pageSize = request.getParameter("pageSize");
 		String first = request.getParameter("first");
+		String articleTitle = request.getParameter("articleTitle");
+		
+		
 		List<Article> articles = new ArrayList<Article>();
 		List<ArticleForHtml> articleForHtmls = new ArrayList<ArticleForHtml>();
 		int total = 0;
 		if(Boolean.valueOf(first)){
 			articles = articleDao.selectAllArticlesOrderByCreateTimeAndHitNum(Integer.parseInt(pageIndex),Integer.parseInt(pageSize));
 			total = articleDao.selectAllArticlesOrderByCreateTimeAndHitNumCount();
+		}else if(!StringUtils.isEmpty(articleTitle)){
+			articles = articleDao.selectAllArticlesByNameOrderByHitNum(articleTitle,Integer.parseInt(pageIndex),Integer.parseInt(pageSize));
+			total = articleDao.selectAllArticlesByNameOrderByCreateTimeAndHitNumCount(articleTitle);
 		}else{
 			String flagId = request.getParameter("flagId");
 			if(!StringUtils.isEmpty(flagId)){

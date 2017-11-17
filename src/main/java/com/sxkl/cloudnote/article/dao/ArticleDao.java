@@ -37,7 +37,34 @@ public class ArticleDao extends BaseDao {
 		BigInteger bInt = (BigInteger) query.uniqueResult();
 	    return bInt.intValue();
 	}
+	
+	
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<Article> selectAllArticlesByNameOrderByHitNum(String articleTitle, int pageIndex,int pageSize) {
+		String hql = "select new Article(id,title,hitNum) from Article a where a.title like :title order by a.hitNum desc";
+		Session session = this.getSessionFactory().getCurrentSession();
+	    Query query = session.createQuery(hql);
+	    query.setString("title", '%'+articleTitle+'%');
+	    query.setFirstResult(pageIndex*pageSize);
+        query.setMaxResults(pageSize);
+		return query.list();
+	}
 
+	public int selectAllArticlesByNameOrderByCreateTimeAndHitNumCount(String articleTitle) {
+		String hql = "select count(1) from cn_article a where a.title like :title";
+		Session session = this.getSessionFactory().getCurrentSession();
+		SQLQuery query = session.createSQLQuery(hql);
+		query.setString("title", '%'+articleTitle+'%');
+		BigInteger bInt = (BigInteger) query.uniqueResult();
+	    return bInt.intValue();
+	}
+
+	
+	
+	
+	
 	public Article selectArticleById(String articleId) {
 		String hql = "from Article a where a.id=:articleId";
 		Session session = this.getSessionFactory().getCurrentSession();
@@ -52,7 +79,6 @@ public class ArticleDao extends BaseDao {
 		sql.append("select a.id,a.title,a.hitNum from cn_flag_artile f left join cn_article a on f.article_id=a.id ")
 		   .append("where f.flag_id = :flagId ")
 		   .append("order by a.createTime desc, a.hitNum desc ");
-//		   .append("limit :start, :end ");
 		Session session = this.getSessionFactory().getCurrentSession();
 		SQLQuery query = session.createSQLQuery(sql.toString());
 		query.setString("flagId", flagId);

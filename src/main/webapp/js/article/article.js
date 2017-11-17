@@ -152,9 +152,9 @@ function editArticle(){
 }
 
 function searchArticle() {
-    var removeArticle = document.getElementById("searchArticleBtn").value;
+    var text = mini.get("searchArticleText");
     var grid = mini.get("articleGrid");
-    grid.load({ key: removeArticle });
+    grid.load({ articleTitle: text.value });
 }
 
 
@@ -164,7 +164,7 @@ $(document).ready(function(){
 	};
 	loadArticles(data);
 	
-	$("#key").bind("keydown", function (e) {
+	$("#searchArticleBtn").bind("keydown", function (e) {
 	    if (e.keyCode == 13) {
 	    	searchArticle();
 	    }
@@ -173,7 +173,6 @@ $(document).ready(function(){
 	mini.parse();
     var grid = mini.get("articleGrid");
 	grid.on("load",function(){
-		 console.log('------------------------------');
 		 	grid.select(0);
 		 	var record = grid.getSelected();
 		 	getArticleById(record.id);

@@ -35,7 +35,7 @@
 			    <a class="mini-button" iconCls="icon-edit" onclick="editArticle">修改</a>
 			    <a class="mini-button" iconCls="icon-remove" onclick="removeArticle">删除</a>
 			    <span class="separator"></span>
-			    <input class="mini-textbox" />   
+			    <input class="mini-textbox" id="searchArticleText" />   
 			    <a class="mini-button" plain="true" id="searchArticleBtn" onclick="searchArticle">查询</a>
 		    </div>
 		 </div>
