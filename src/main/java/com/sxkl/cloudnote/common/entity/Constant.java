@@ -22,4 +22,8 @@ public class Constant {
 
 	public static final String TREE_FOR_ARTICLE_KEY_IN_REDIS = "tree_article";
 
+	public static final String ARTICLE_CONTENT_DOMAIN = "cloudnote_domain";
+
+	public static final String LOGIN_PAGE_DOMAIN = "login_page_domain";;
+
 }

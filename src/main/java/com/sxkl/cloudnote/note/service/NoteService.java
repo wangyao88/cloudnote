@@ -50,7 +50,8 @@ public class NoteService {
 
 	@RedisDisCachable(key={Constant.TREE_MENU_KEY_IN_REDIS,Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,})
 	public void insertNote(HttpServletRequest request) {
-		User user = UserUtil.getSessionUser(request);
+		User sessionUser = UserUtil.getSessionUser(request);
+		User user = userDao.selectUser(sessionUser);
 		String name = request.getParameter("name");
 		Note note = new Note();
 		note.setName(name);
@@ -67,6 +68,7 @@ public class NoteService {
 		User user = userDao.selectUser(sessionUser);
 		user.getNotes().remove(note);
 		userDao.updateUser(user);
+		note.setArticles(null);
 		noteDao.deleteNote(note);
 	}
 	

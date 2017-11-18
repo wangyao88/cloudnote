@@ -18,6 +18,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.image.entity.Image;
 import com.sxkl.cloudnote.image.service.ImageService;
 
@@ -195,7 +196,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		return doc.html();
 	}
 	
-	public static String saveHtmlImgToDB(String domain, String html, ImageService imageService) {
+	public static String saveHtmlImgToDB(String html, ImageService imageService) {
 		Document doc = Jsoup.parse(html);
 		Elements imgs = doc.getElementsByTag("img");
 		String imgName = "";
@@ -204,12 +205,12 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		for (int i = 0; i < imgs.size(); i++) {
 			String imgOldUrl = imgs.get(i).attr("src");
 			String imgAlt = imgs.get(i).attr("alt");
-			if ((Pattern.matches(regex, imgOldUrl)) && (!imgOldUrl.startsWith(domain))) {
+			if ((Pattern.matches(regex, imgOldUrl)) && (!imgOldUrl.startsWith(Constant.ARTICLE_CONTENT_DOMAIN))) {
 				imgName = getUUIDNameWithoutextend(getUrlFileName(imgOldUrl));
 				try {
 					Image image = new Image(imgName,imgAlt);
 					saveFileToDBByUrl(imgOldUrl,image,imageService);
-					imgNewUrl = domain + "/image/getImage?name="+imgName;
+					imgNewUrl = Constant.ARTICLE_CONTENT_DOMAIN + "/image/getImage?name="+imgName;
 					doc.getElementsByTag("img").get(i).attr("src", imgNewUrl);
 				} catch (Exception localException) {
 				}

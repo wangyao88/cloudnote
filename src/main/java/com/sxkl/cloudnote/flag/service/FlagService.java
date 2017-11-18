@@ -100,9 +100,9 @@ public class FlagService {
 		try {
 			String id = getFlagIdFromFront(request);
 			Flag flag = flagDao.selectFlagById(id);
-			Flag parent = flagDao.selectFlagById(flag.getParent().getId());
-			if(parent != null){
-				flagDao.clearSession();
+			Flag parentTemp = flag.getParent();
+			if(parentTemp != null){
+				Flag parent = flagDao.selectFlagById(parentTemp.getId());
 				flag.setParent(null);
 				System.out.println(parent.getChildren().remove(flag));
 				System.out.println(parent.getChildren().size());
@@ -113,6 +113,7 @@ public class FlagService {
 			user.getFlags().remove(flag);
 			flag.setUser(null);
 			userDao.updateUser(user);
+			flag.setArticles(null);
 			flagDao.deleteFlag(flag);
 		} catch (Exception e) {
 			e.printStackTrace();

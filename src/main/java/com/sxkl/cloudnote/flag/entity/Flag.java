@@ -52,7 +52,7 @@ public class Flag implements Serializable{
 	private User user;
 	
 	@ManyToMany(fetch=FetchType.LAZY)
-	@Cascade(value={CascadeType.SAVE_UPDATE})
+	@Cascade(value={CascadeType.ALL})
 	@JoinTable(name="cn_flag_artile",joinColumns={@JoinColumn(name="flag_id")},inverseJoinColumns={@JoinColumn(name="article_id")})
     private Set<Article> articles = new HashSet<Article>();
 	

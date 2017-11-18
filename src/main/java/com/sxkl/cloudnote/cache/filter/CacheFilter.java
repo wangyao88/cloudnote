@@ -45,7 +45,7 @@ public class CacheFilter  implements Filter, ApplicationContextAware {
         String cachePages = PropertyUtil.getCachePages();
         //访问登录页，并且是GET请求，则拦截
         if(cachePages.contains(requestUrl)){
-        	String html = redisCacheService.getHtmlFromCache(resp,servletRequest,filterChain);
+        	String html = redisCacheService.getHtmlFromCache(resp,req,filterChain);
             // 返回响应
             resp.setContentType("text/html; charset=utf-8");
             resp.getWriter().print(html);

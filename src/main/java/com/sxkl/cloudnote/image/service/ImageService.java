@@ -38,5 +38,10 @@ public class ImageService {
 		log.info("Image 更新"+num+"条数据");
 	}
 
+	public void deleteImageByArticleId(String articleId) {
+		int num = imageDao.deleteImageByArticleId(articleId);
+		log.info("Image 删除"+num+"条数据");
+	}
+
 
 }

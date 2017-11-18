@@ -5,6 +5,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import com.sxkl.cloudnote.article.entity.Article;
+import com.sxkl.cloudnote.common.service.DomainService;
 import com.sxkl.cloudnote.eventdriven.entity.ArticlePublisherBean;
 import com.sxkl.cloudnote.eventdriven.entity.ArticlePublisherEvent;
 
@@ -16,12 +17,14 @@ public class ArticlePublisher {
 
 	@Autowired
 	private ApplicationContext applicationContext;
+	@Autowired
+	private DomainService domainService;
 	
-	public void establishLinkagesBetweenArticleAndImage(Article article, String domain){
+	public void establishLinkagesBetweenArticleAndImage(Article article){
 		ArticlePublisherBean bean = new ArticlePublisherBean();
 		bean.setArticleId(article.getId());
 		bean.setArticleContent(article.getContent());
-		bean.setDomain(domain);
+		bean.setDomain(domainService.getDomain());
         applicationContext.publishEvent(new ArticlePublisherEvent(bean));
         log.info("ArticlePublisher--establishLinkagesBetweenArticleAndImage--["+article.getTitle()+"]");
         

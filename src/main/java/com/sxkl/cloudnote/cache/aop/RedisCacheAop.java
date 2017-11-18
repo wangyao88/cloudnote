@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 import com.sxkl.cloudnote.cache.annotation.RedisCachable;
 import com.sxkl.cloudnote.cache.annotation.RedisDisCachable;
+import com.sxkl.cloudnote.common.entity.Constant;
+import com.sxkl.cloudnote.common.service.DomainService;
 
 @Aspect
 @Component
@@ -18,6 +20,8 @@ public class RedisCacheAop {
 
 	@Autowired
 	private RedisTemplate<Object, Object> redisTemplate;
+	@Autowired
+	private DomainService domainService;
 
 	@Around("@annotation(redisCachable)")
 	public Object doBasicProfiling(ProceedingJoinPoint pjp, RedisCachable redisCachable) throws Throwable {
@@ -25,7 +29,9 @@ public class RedisCacheAop {
 		long dateTime = redisCachable.dateTime();
 		boolean hasCached = redisTemplate.hasKey(key);
 		if(hasCached){
-			return redisTemplate.opsForValue().get(key);
+			Object value = redisTemplate.opsForValue().get(key);
+			value = loginPageFilter(key,value);
+			return value;
 		}
 		Object object = pjp.proceed();// 执行该方法
 		redisTemplate.opsForValue().set(key, object);
@@ -49,5 +55,15 @@ public class RedisCacheAop {
 		}
 		Object object = pjp.proceed();// 执行该方法
 		return object;
+	}
+	
+	private Object loginPageFilter(String cacheKey, Object value){
+		if(Constant.LOGIN_PAGE_KEY_IN_REDIS.equals(cacheKey)){
+			String page = String.valueOf(value);
+			String domain = domainService.getDomain();
+			page = page.replaceAll(Constant.LOGIN_PAGE_DOMAIN,domain);
+			return page;
+		}
+		return value;
 	}
 }

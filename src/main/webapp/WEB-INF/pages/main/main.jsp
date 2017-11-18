@@ -19,6 +19,7 @@
 <link href="<%=basePath%>js/miniui/res/demo.css" rel="stylesheet"
 	type="text/css" />
 <script src="<%=basePath%>js/boot.js" type="text/javascript"></script>
+<script src="<%=basePath%>js/jquery.min.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/note/note.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/flag/flag.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/article/article.js" type="text/javascript"></script> 
@@ -27,7 +28,7 @@
    var basePath = "<%=basePath%>";
 </script>
 </head>
-<body>
+<body id="globalKeyEvent">
 	<div id="layout1" class="mini-layout" style="width:100%;height:100%;"borderStyle="border:solid 1px #aaa;">
 	     <div title="工具栏" region="north" showHeader="false" height="28px">
 			<div class="mini-toolbar">
@@ -35,7 +36,7 @@
 			    <a class="mini-button" iconCls="icon-edit" onclick="editArticle">修改</a>
 			    <a class="mini-button" iconCls="icon-remove" onclick="removeArticle">删除</a>
 			    <span class="separator"></span>
-			    <input class="mini-textbox" id="searchArticleText" />   
+			    <input class="mini-textbox" id="searchArticleText" emptyText="搜索笔记标题"/>   
 			    <a class="mini-button" plain="true" id="searchArticleBtn" onclick="searchArticle">查询</a>
 		    </div>
 		 </div>
@@ -54,13 +55,13 @@
 				<li class="separator"/>     
 			</ul>
 		</div>
-		<div title="笔记详情" region="center">
+		<div title="笔记详情" region="center" id="globalKeyEvent">
 		    <div id="articleContainer"></div>
 		</div>
 		<div title="笔记列表" region="east" width="400px" expanded="true">
 				<div id="articleGrid" class="mini-datagrid" style="width:395px;height:100%;" 
 			        url="<%=basePath%>article/getAllArticles" idField="id" allowResize="true" 
-			        pageSize="20" sizeList="[20,50,100]" ajaxType="post" multiSelect="false" onRowClick="gridRowClick"
+			        pageSize="23" sizeList="[23,50,100]" ajaxType="post" multiSelect="false" onRowClick="gridRowClick"
 			        onrowdblclick="gridRowdblclick">
 	            	<div property="columns">
 		            <div type="indexcolumn">序号</div>

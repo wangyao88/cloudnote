@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -12,13 +13,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
 import com.sxkl.cloudnote.article.dao.ArticleDao;
 import com.sxkl.cloudnote.article.entity.Article;
+import com.sxkl.cloudnote.article.entity.ArticleForEdit;
 import com.sxkl.cloudnote.article.entity.ArticleForHtml;
+import com.sxkl.cloudnote.cache.annotation.RedisDisCachable;
 import com.sxkl.cloudnote.common.entity.Constant;
+import com.sxkl.cloudnote.common.service.DomainService;
 import com.sxkl.cloudnote.common.service.OperateResultService;
 import com.sxkl.cloudnote.eventdriven.manager.PublishManager;
-import com.sxkl.cloudnote.eventdriven.publisher.ArticlePublisher;
 import com.sxkl.cloudnote.flag.entity.Flag;
 import com.sxkl.cloudnote.flag.service.FlagService;
 import com.sxkl.cloudnote.image.service.ImageService;
@@ -42,10 +46,14 @@ public class ArticleService {
 	private UserService userService;
 	@Autowired
 	private ImageService imageService;
+	@Autowired
+	private DomainService domainService;
 
+	@RedisDisCachable(key={Constant.TREE_MENU_KEY_IN_REDIS,Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,})
 	public void addArticle(HttpServletRequest request) {
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");
+		content = content.replaceAll(domainService.getDomain(), Constant.ARTICLE_CONTENT_DOMAIN);
 		String noteId = request.getParameter("note");
 		String flagsStr = request.getParameter("flags");
 		String articleId = request.getParameter("articleId");
@@ -71,11 +79,14 @@ public class ArticleService {
 		article.setTitle(title);
 		article.setNote(note);
 		article.setFlags(new HashSet<Flag>(flagBeans));
-		String domain = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
-		String contentFilted = FileUtils.saveHtmlImgToDB(domain,content,imageService);
+		String contentFilted = FileUtils.saveHtmlImgToDB(content,imageService);
 		article.setContent(contentFilted);
 		articleDao.saveOrUpdateArticle(article);
-		PublishManager.getPublishManager().getArticlePublisher().establishLinkagesBetweenArticleAndImage(article,domain);
+		PublishManager.getPublishManager().getArticlePublisher().establishLinkagesBetweenArticleAndImage(article);
+	}
+	
+	private String getArticleDomain(){
+		return domainService.getDomain();
 	}
 
 	public String getAllArticles(HttpServletRequest request) {
@@ -130,9 +141,12 @@ public class ArticleService {
 		Article article = articleDao.selectArticleById(id);//加入二级缓存
 		article.setHitNum(article.getHitNum()+1);
 		articleDao.updateArticle(article);
-		return article.getContent();
+		String content = article.getContent();
+		content = content.replaceAll(Constant.ARTICLE_CONTENT_DOMAIN, getArticleDomain());
+		return content;
 	}
 
+	@RedisDisCachable(key={Constant.TREE_MENU_KEY_IN_REDIS,Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,})
 	public void deleteArticle(HttpServletRequest request) {
 		String id = request.getParameter("id");
 		Article article = articleDao.selectArticleById(id);
@@ -140,6 +154,48 @@ public class ArticleService {
 		article.setUser(null);
 		article.setFlags(null);
 		articleDao.deleteArticle(article);
+		imageService.deleteImageByArticleId(id);
+	}
+
+	public String getArticleForEdit(HttpServletRequest request) {
+		String articleId = request.getParameter("articleId");
+		Article article = articleDao.selectArticleById(articleId);
+		
+		Note note = article.getNote();
+		Note noteResult = new Note();
+		if(note != null){
+			noteResult.setId(note.getId());
+			noteResult.setName(note.getName());
+		}
+		
+		Flag flagResult = new Flag();
+		Set<Flag> flags = article.getFlags();
+		if(flags != null){
+			String flagIds = "";
+			String flagNames = "";
+			for(Flag flag : flags){
+				flagIds += Constant.TREE_MENU_FLAG_ID_PREFIX + flag.getId() + ",";
+				flagNames += flag.getName() + ",";
+			}
+			if(flagIds.endsWith(Constant.COMMA)){
+				flagIds = flagIds.substring(0, flagIds.length()-1);
+			}
+			if(flagNames.endsWith(Constant.COMMA)){
+				flagNames = flagNames.substring(0, flagNames.length()-1);
+			}
+			
+			flagResult.setId(flagIds);
+			flagResult.setName(flagNames);
+		}
+		
+		article.setHitNum(article.getHitNum()+1);
+		articleDao.updateArticle(article);
+		String content = article.getContent();
+		content = content.replaceAll(Constant.ARTICLE_CONTENT_DOMAIN, getArticleDomain());
+		
+		ArticleForEdit articleForEdit = new ArticleForEdit(noteResult,flagResult,content);
+		
+		return new Gson().toJson(articleForEdit);
 	}
 
 }

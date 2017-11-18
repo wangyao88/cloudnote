@@ -56,4 +56,13 @@ public class ArticleController {
 		}
 	}
 	
+	@RequestMapping(value = "/getArticleForEdit", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	public String getArticleForEdit(HttpServletRequest request){
+		try {
+		    return articleService.getArticleForEdit(request);
+		} catch (Exception e) {
+			return OperateResultService.configurateFailureResult(e.getMessage());
+		}
+	}
+	
 }

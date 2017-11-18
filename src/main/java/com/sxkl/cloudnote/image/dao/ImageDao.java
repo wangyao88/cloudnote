@@ -37,4 +37,12 @@ public class ImageDao extends BaseDao {
 		return query.executeUpdate();
 	}
 
+	public int deleteImageByArticleId(String articleId) {
+		String hql = "delete from Image i where i.aId = :articleId";
+		Session session = this.getSessionFactory().getCurrentSession();
+		Query query = session.createQuery(hql);
+		query.setString("articleId", articleId);
+		return query.executeUpdate();
+	}
+
 }
