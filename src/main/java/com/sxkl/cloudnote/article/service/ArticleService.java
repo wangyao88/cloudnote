@@ -11,16 +11,18 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 import com.sxkl.cloudnote.article.dao.ArticleDao;
 import com.sxkl.cloudnote.article.entity.Article;
+import com.sxkl.cloudnote.article.entity.ArticleForCache;
 import com.sxkl.cloudnote.article.entity.ArticleForEdit;
 import com.sxkl.cloudnote.article.entity.ArticleForHtml;
 import com.sxkl.cloudnote.cache.annotation.RedisDisCachable;
+import com.sxkl.cloudnote.cache.service.RedisCacheService;
 import com.sxkl.cloudnote.common.entity.Constant;
-import com.sxkl.cloudnote.common.service.DomainService;
 import com.sxkl.cloudnote.common.service.OperateResultService;
 import com.sxkl.cloudnote.eventdriven.manager.PublishManager;
 import com.sxkl.cloudnote.flag.entity.Flag;
@@ -47,13 +49,13 @@ public class ArticleService {
 	@Autowired
 	private ImageService imageService;
 	@Autowired
-	private DomainService domainService;
+	private RedisCacheService redisCacheService;
 
 	@RedisDisCachable(key={Constant.TREE_MENU_KEY_IN_REDIS,Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,})
 	public void addArticle(HttpServletRequest request) {
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");
-		content = content.replaceAll(domainService.getDomain(), Constant.ARTICLE_CONTENT_DOMAIN);
+		content = content.replaceAll(Constant.DOMAIN, Constant.ARTICLE_CONTENT_DOMAIN);
 		String noteId = request.getParameter("note");
 		String flagsStr = request.getParameter("flags");
 		String articleId = request.getParameter("articleId");
@@ -85,26 +87,23 @@ public class ArticleService {
 		PublishManager.getPublishManager().getArticlePublisher().establishLinkagesBetweenArticleAndImage(article);
 	}
 	
-	private String getArticleDomain(){
-		return domainService.getDomain();
-	}
-
 	public String getAllArticles(HttpServletRequest request) {
 		String pageIndex = request.getParameter("pageIndex");
 		String pageSize = request.getParameter("pageSize");
 		String first = request.getParameter("first");
 		String articleTitle = request.getParameter("articleTitle");
-		
+		User sessionUser = UserUtil.getSessionUser(request);
+		String userId = sessionUser.getId();
 		
 		List<Article> articles = new ArrayList<Article>();
 		List<ArticleForHtml> articleForHtmls = new ArrayList<ArticleForHtml>();
 		int total = 0;
 		if(Boolean.valueOf(first)){
-			articles = articleDao.selectAllArticlesOrderByCreateTimeAndHitNum(Integer.parseInt(pageIndex),Integer.parseInt(pageSize));
-			total = articleDao.selectAllArticlesOrderByCreateTimeAndHitNumCount();
+			articles = articleDao.selectAllArticlesOrderByCreateTimeAndHitNum(Integer.parseInt(pageIndex),Integer.parseInt(pageSize),userId);
+			total = articleDao.selectAllArticlesOrderByCreateTimeAndHitNumCount(userId);
 		}else if(!StringUtils.isEmpty(articleTitle)){
-			articles = articleDao.selectAllArticlesByNameOrderByHitNum(articleTitle,Integer.parseInt(pageIndex),Integer.parseInt(pageSize));
-			total = articleDao.selectAllArticlesByNameOrderByCreateTimeAndHitNumCount(articleTitle);
+			articles = articleDao.selectAllArticlesByNameOrderByHitNum(articleTitle,Integer.parseInt(pageIndex),Integer.parseInt(pageSize),userId);
+			total = articleDao.selectAllArticlesByNameOrderByCreateTimeAndHitNumCount(articleTitle,userId);
 		}else{
 			String flagId = request.getParameter("flagId");
 			if(!StringUtils.isEmpty(flagId)){
@@ -129,8 +128,8 @@ public class ArticleService {
 				total = articleDao.selectAllNoteArticlesOrderByCreateTimeAndHitNumCount(noteId);
 			}
 			if(StringUtils.isEmpty(flagId) && StringUtils.isEmpty(noteId)){
-				articles = articleDao.selectAllArticlesOrderByCreateTimeAndHitNum(Integer.parseInt(pageIndex),Integer.parseInt(pageSize));
-				total = articleDao.selectAllArticlesOrderByCreateTimeAndHitNumCount();
+				articles = articleDao.selectAllArticlesOrderByCreateTimeAndHitNum(Integer.parseInt(pageIndex),Integer.parseInt(pageSize),userId);
+				total = articleDao.selectAllArticlesOrderByCreateTimeAndHitNumCount(userId);
 			}
 		}
 		return OperateResultService.configurateSuccessDataGridResult(articles,total);
@@ -138,13 +137,31 @@ public class ArticleService {
 
 	public String getArticle(HttpServletRequest request) {
 		String id = request.getParameter("id");
-		Article article = articleDao.selectArticleById(id);//加入二级缓存
-		article.setHitNum(article.getHitNum()+1);
-		articleDao.updateArticle(article);
-		String content = article.getContent();
-		content = content.replaceAll(Constant.ARTICLE_CONTENT_DOMAIN, getArticleDomain());
+		String content = redisCacheService.getValueFromHash(Constant.HOT_ARTICLE_KEY_IN_REDIS,id);
+		if(StringUtils.isEmpty(content)){
+			Article article = articleDao.selectArticleById(id);
+			content = article.getContent();
+			executeAsyncUpdateArticle(article);
+		}else{
+			executeAsyncUpdateArticle(id);
+		}
+		content = content.replaceAll(Constant.ARTICLE_CONTENT_DOMAIN, Constant.DOMAIN);
 		return content;
 	}
+	
+	@Async
+    public void executeAsyncUpdateArticle(String articleId){
+		Article article = articleDao.selectArticleById(articleId);
+	    article.setHitNum(article.getHitNum()+1);
+		articleDao.updateArticle(article);
+    }
+	 
+	@Async
+    public void executeAsyncUpdateArticle(Article article){
+		article.setHitNum(article.getHitNum()+1);
+		articleDao.updateArticle(article);
+    }
+
 
 	@RedisDisCachable(key={Constant.TREE_MENU_KEY_IN_REDIS,Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,})
 	public void deleteArticle(HttpServletRequest request) {
@@ -191,11 +208,24 @@ public class ArticleService {
 		article.setHitNum(article.getHitNum()+1);
 		articleDao.updateArticle(article);
 		String content = article.getContent();
-		content = content.replaceAll(Constant.ARTICLE_CONTENT_DOMAIN, getArticleDomain());
+		content = content.replaceAll(Constant.ARTICLE_CONTENT_DOMAIN, Constant.DOMAIN);
 		
 		ArticleForEdit articleForEdit = new ArticleForEdit(noteResult,flagResult,content);
 		
 		return new Gson().toJson(articleForEdit);
+	}
+
+	public List<ArticleForCache> getHotArticles(int hotArticleRange) {
+		String userId = Constant.SESSION_USER.getId();
+		List<Article> articles = articleDao.selectAllArticlesOrderByHitNum(0, hotArticleRange,userId);
+		List<ArticleForCache> results = new ArrayList<ArticleForCache>();
+		for(Article article : articles){
+			ArticleForCache articleForCache = new ArticleForCache();
+			articleForCache.setId(article.getId());
+			articleForCache.setContent(article.getContent());
+			results.add(articleForCache);
+		}
+		return results;
 	}
 
 }

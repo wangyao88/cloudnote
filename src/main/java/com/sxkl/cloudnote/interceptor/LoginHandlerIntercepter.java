@@ -42,5 +42,4 @@ public class LoginHandlerIntercepter implements HandlerInterceptor {
 			return true;
 		}
 	}
-
 }

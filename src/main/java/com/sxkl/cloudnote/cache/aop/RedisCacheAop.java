@@ -2,6 +2,8 @@ package com.sxkl.cloudnote.cache.aop;
 
 import java.util.concurrent.TimeUnit;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -12,7 +14,6 @@ import org.springframework.stereotype.Component;
 import com.sxkl.cloudnote.cache.annotation.RedisCachable;
 import com.sxkl.cloudnote.cache.annotation.RedisDisCachable;
 import com.sxkl.cloudnote.common.entity.Constant;
-import com.sxkl.cloudnote.common.service.DomainService;
 
 @Aspect
 @Component
@@ -21,11 +22,14 @@ public class RedisCacheAop {
 	@Autowired
 	private RedisTemplate<Object, Object> redisTemplate;
 	@Autowired
-	private DomainService domainService;
+	private HttpServletRequest request;
 
 	@Around("@annotation(redisCachable)")
 	public Object doBasicProfiling(ProceedingJoinPoint pjp, RedisCachable redisCachable) throws Throwable {
 		String key = redisCachable.key();
+		if(!Constant.LOGIN_PAGE_KEY_IN_REDIS.equals(key)){
+			key += Constant.SESSION_USER.getId();
+		}
 		long dateTime = redisCachable.dateTime();
 		boolean hasCached = redisTemplate.hasKey(key);
 		if(hasCached){
@@ -46,11 +50,12 @@ public class RedisCacheAop {
 	
 	@Around("@annotation(redisDisCachable)")
 	public Object doBasicProfiling1(ProceedingJoinPoint pjp, RedisDisCachable redisDisCachable) throws Throwable {
+		String userId = Constant.SESSION_USER.getId();
 		String[] keys = redisDisCachable.key();
 		for(String key : keys){
-			boolean hasCached = redisTemplate.hasKey(key);
+			boolean hasCached = redisTemplate.hasKey(key+userId);
 			if(hasCached){
-				redisTemplate.delete(key);
+				redisTemplate.delete(key+userId);
 			}
 		}
 		Object object = pjp.proceed();// 执行该方法
@@ -60,8 +65,7 @@ public class RedisCacheAop {
 	private Object loginPageFilter(String cacheKey, Object value){
 		if(Constant.LOGIN_PAGE_KEY_IN_REDIS.equals(cacheKey)){
 			String page = String.valueOf(value);
-			String domain = domainService.getDomain();
-			page = page.replaceAll(Constant.LOGIN_PAGE_DOMAIN,domain);
+			page = page.replaceAll(Constant.LOGIN_PAGE_DOMAIN,Constant.DOMAIN);
 			return page;
 		}
 		return value;

@@ -67,6 +67,11 @@ public class Article implements Serializable{
 	public Article() {
 		super();
 	}
+	
+	public Article(String id, String content) {
+		this.id = id;
+		this.content = content;
+	}
 
 	public Article(String id, String title, Integer hitNum) {
 		this.id = id;

@@ -97,10 +97,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<form action="<%=basePath %>login" method="post">
 			<h2>登录</h2><p class="tyg-p">欢迎访问  曼妙云端笔记</p>
 			<div style="margin:5px 0px;">
-				<input type="text" name="userName" value="wangyao" placeholder="请输入账号..."/>
+				<input type="text" name="userName" placeholder="请输入账号..."/>
 			</div>
 			<div style="margin:5px 0px;">
-				<input type="text" name="password" value="123456" placeholder="请输入密码..."/>
+				<input type="text" name="password" placeholder="请输入密码..."/>
 			</div>
 			<button type="submit" >登<span style="width:20px;"></span>录</button>
 		</form>

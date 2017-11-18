@@ -20,6 +20,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.sxkl.cloudnote.cache.service.RedisCacheService;
+import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.utils.PropertyUtil;
 
 @Component
@@ -45,6 +46,7 @@ public class CacheFilter  implements Filter, ApplicationContextAware {
         String cachePages = PropertyUtil.getCachePages();
         //访问登录页，并且是GET请求，则拦截
         if(cachePages.contains(requestUrl)){
+        	Constant.DOMAIN = getDomain(req);
         	String html = redisCacheService.getHtmlFromCache(resp,req,filterChain);
             // 返回响应
             resp.setContentType("text/html; charset=utf-8");
@@ -62,5 +64,16 @@ public class CacheFilter  implements Filter, ApplicationContextAware {
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         
     }
+    
+    private String getDomain(HttpServletRequest request){
+		StringBuilder domain = new StringBuilder();
+		domain.append(request.getScheme())
+			  .append("://")
+			  .append(request.getServerName())
+			  .append(":")
+			  .append(request.getServerPort())
+			  .append(request.getContextPath());
+		return domain.toString();
+	}
 }
 

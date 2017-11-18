@@ -26,7 +26,6 @@ public class ArticleListener implements ApplicationListener<ApplicationEvent>{
 	@Override
 	public void onApplicationEvent(ApplicationEvent event) {
 		if(isNotDuty(event)){
-			log.info("ArticleListener:\"不归我管！\""+event.toString());
 			return;
 		}
 		ArticlePublisherBean article = (ArticlePublisherBean) event.getSource();
@@ -35,7 +34,6 @@ public class ArticleListener implements ApplicationListener<ApplicationEvent>{
 		String regex = "^(http|https|ftp)+://.*$";
 		for (int i = 0; i < imgs.size(); i++) {
 			String imgUrl = imgs.get(i).attr("src");
-			//http://127.0.0.1:8888/cloudnote/image/getImage?name=ac9cd356-c5c5-49f6-88df-c46962bfc28c
 			if ((Pattern.matches(regex, imgUrl)) && (imgUrl.startsWith(article.getDomain()))) {
 				String imageName = imgUrl.substring(imgUrl.lastIndexOf("=")+1);
 				imageService.establishLinkagesBetweenArticleAndImage(article.getArticleId(),imageName);

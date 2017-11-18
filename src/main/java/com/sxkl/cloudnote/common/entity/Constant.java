@@ -1,5 +1,7 @@
 package com.sxkl.cloudnote.common.entity;
 
+import com.sxkl.cloudnote.user.entity.User;
+
 public class Constant {
 	
 	public static final String USER_IN_SESSION_KEY = "user";
@@ -25,5 +27,13 @@ public class Constant {
 	public static final String ARTICLE_CONTENT_DOMAIN = "cloudnote_domain";
 
 	public static final String LOGIN_PAGE_DOMAIN = "login_page_domain";;
+	
+	public static final String HOT_ARTICLE_KEY_IN_REDIS = "hot_article";
+	
+	public static final long HOT_ARTICLE_EXPIRE_IN_REDIS = 1000*60*30;
+	
+	public static String DOMAIN = "";
+
+	public static User SESSION_USER;
 
 }

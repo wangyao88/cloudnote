@@ -14,26 +14,27 @@ import com.sxkl.cloudnote.common.dao.BaseDao;
 @Repository
 public class ArticleDao extends BaseDao {
 
-
 	public void insertArticle(Article article) {
 		Session session = this.getSessionFactory().getCurrentSession();
 		session.save(article);
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Article> selectAllArticlesOrderByCreateTimeAndHitNum(int pageIndex, int pageSize) {
-		String hql = "select new Article(id,title,hitNum) from Article a order by a.createTime desc,a.hitNum desc";
+	public List<Article> selectAllArticlesOrderByCreateTimeAndHitNum(int pageIndex, int pageSize,String userId) {
+		String hql = "select new Article(id,title,hitNum) from Article a where a.user.id=:userId order by a.createTime desc,a.hitNum desc";
 		Session session = this.getSessionFactory().getCurrentSession();
-	    Query query = session.createQuery(hql);	
+	    Query query = session.createQuery(hql);
+	    query.setString("userId", userId);
 	    query.setFirstResult(pageIndex*pageSize);
         query.setMaxResults(pageSize);
 		return query.list();
 	}
 	
-	public int selectAllArticlesOrderByCreateTimeAndHitNumCount() {
-		String hql = "select count(1) from cn_article";
+	public int selectAllArticlesOrderByCreateTimeAndHitNumCount(String userId) {
+		String hql = "select count(1) from cn_article c where c.uId=:userId";
 		Session session = this.getSessionFactory().getCurrentSession();
 		SQLQuery query = session.createSQLQuery(hql);
+		query.setString("userId", userId);
 		BigInteger bInt = (BigInteger) query.uniqueResult();
 	    return bInt.intValue();
 	}
@@ -42,21 +43,23 @@ public class ArticleDao extends BaseDao {
 	
 	
 	@SuppressWarnings("unchecked")
-	public List<Article> selectAllArticlesByNameOrderByHitNum(String articleTitle, int pageIndex,int pageSize) {
-		String hql = "select new Article(id,title,hitNum) from Article a where a.title like :title order by a.hitNum desc";
+	public List<Article> selectAllArticlesByNameOrderByHitNum(String articleTitle, int pageIndex,int pageSize,String userId) {
+		String hql = "select new Article(id,title,hitNum) from Article a where a.title like :title and a.user.id=:userId order by a.hitNum desc";
 		Session session = this.getSessionFactory().getCurrentSession();
 	    Query query = session.createQuery(hql);
 	    query.setString("title", '%'+articleTitle+'%');
+	    query.setString("userId", userId);
 	    query.setFirstResult(pageIndex*pageSize);
         query.setMaxResults(pageSize);
 		return query.list();
 	}
 
-	public int selectAllArticlesByNameOrderByCreateTimeAndHitNumCount(String articleTitle) {
-		String hql = "select count(1) from cn_article a where a.title like :title";
+	public int selectAllArticlesByNameOrderByCreateTimeAndHitNumCount(String articleTitle,String userId) {
+		String hql = "select count(1) from cn_article a where a.title like :title and a.uId=:userId";
 		Session session = this.getSessionFactory().getCurrentSession();
 		SQLQuery query = session.createSQLQuery(hql);
 		query.setString("title", '%'+articleTitle+'%');
+		query.setString("userId", userId);
 		BigInteger bInt = (BigInteger) query.uniqueResult();
 	    return bInt.intValue();
 	}
@@ -137,6 +140,17 @@ public class ArticleDao extends BaseDao {
 	    query.setString("articleId", article.getId());
 	    query.executeUpdate();
 		session.flush();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Article> selectAllArticlesOrderByHitNum(int pageIndex, int pageSize, String userId) {
+		String hql = "select new Article(id,content) from Article a where a.user.id=:userId order by a.hitNum desc";
+		Session session = this.getSessionFactory().getCurrentSession();
+	    Query query = session.createQuery(hql);
+	    query.setString("userId", userId);
+	    query.setFirstResult(pageIndex*pageSize);
+        query.setMaxResults(pageSize);
+		return query.list();
 	}
 
 }
