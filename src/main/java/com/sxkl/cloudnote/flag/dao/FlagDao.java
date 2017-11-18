@@ -52,4 +52,13 @@ public class FlagDao extends BaseDao {
 		return query.list();
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Flag> getAllFlagByUserId(String userId) {
+		Session session = this.getSessionFactory().getCurrentSession();
+		String hql="from Flag f where f.user.id = :userId";  
+		Query query = session.createQuery(hql);  
+		query.setString("userId", userId); 
+		return query.list();
+	}
+
 }

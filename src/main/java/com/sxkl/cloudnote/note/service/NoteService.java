@@ -107,4 +107,8 @@ public class NoteService {
 		return result;
 	}
 
+	public List<Note> getAllNoteByUserId(String userId) {
+		return noteDao.getAllNote(userId);
+	}
+
 }

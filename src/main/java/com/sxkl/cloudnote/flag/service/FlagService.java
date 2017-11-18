@@ -186,4 +186,8 @@ public class FlagService {
 		result.setName(flagNames);
 		return result;
 	}
+
+	public List<Flag> getAllFlagByUserId(String userId) {
+		return flagDao.getAllFlagByUserId(userId);
+	}
 }

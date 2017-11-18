@@ -75,4 +75,8 @@ public class UserService {
 		return userDao.selectUser(sessionUser);
 	}
 
+	public List<User> getAllUsers() {
+		return userDao.getAllUsers();
+	}
+
 }

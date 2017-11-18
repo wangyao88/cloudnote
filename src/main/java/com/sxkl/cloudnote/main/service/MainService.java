@@ -1,6 +1,6 @@
 package com.sxkl.cloudnote.main.service;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -32,16 +32,18 @@ public class MainService {
 	@Autowired
 	private UserService userService;
 	
-
 	@RedisCachable(key=Constant.TREE_MENU_KEY_IN_REDIS,dateTime=20)
 	public String getTree(HttpServletRequest request) {
 		log.info("缓存中没有菜单树，从数据库获取数据，生成菜单树");
 		HttpSession session = request.getSession();
 		User sessionUser = (User) session.getAttribute(Constant.USER_IN_SESSION_KEY);
 		User user = userService.selectUser(sessionUser);
-		
-		Set<Note> notes = user.getNotes();
-		Set<Flag> flags = user.getFlags();
+		return getTree(user);
+	}
+	
+	public String getTree(User user) {
+		List<Note> notes = noteService.getAllNoteByUserId(user.getId());
+		List<Flag> flags = flagService.getAllFlagByUserId(user.getId());
 		TreeNode rootNote = noteService.getRootTreeNode();
 		TreeNode rootFlag = flagService.getRootTreeNode();
 		

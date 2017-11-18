@@ -50,6 +50,16 @@ public class User implements Serializable{
 	@OneToMany(fetch=FetchType.LAZY,mappedBy="user")
 	@Cascade(value={CascadeType.ALL})
 	private Set<Flag> flags = new HashSet<Flag>();
+	
+	public User() {
+		super();
+	}
+	
+	public User(String id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
 
 	public String getId() {
 		return id;

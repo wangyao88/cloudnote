@@ -1,11 +1,15 @@
 package com.sxkl.cloudnote.user.dao;
 
 import java.util.List;
+import java.util.Set;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.sxkl.cloudnote.common.dao.BaseDao;
+import com.sxkl.cloudnote.flag.entity.Flag;
+import com.sxkl.cloudnote.note.entity.Note;
 import com.sxkl.cloudnote.user.entity.User;
 
 @Repository
@@ -36,6 +40,14 @@ public class UserDao extends BaseDao {
 	public User selectUser(User sessionUser) {
 		Session session = this.getSessionFactory().getCurrentSession();
 		return session.load(sessionUser.getClass(), sessionUser.getId());
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<User> getAllUsers() {
+		String hql = "from User u";
+		Session session = this.getSessionFactory().getCurrentSession();
+		Query query = session.createQuery(hql);
+		return query.list();
 	}
 
 }

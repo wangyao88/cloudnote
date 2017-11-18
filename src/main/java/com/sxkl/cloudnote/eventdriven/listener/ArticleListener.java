@@ -45,9 +45,4 @@ public class ArticleListener implements ApplicationListener<ApplicationEvent>{
 	private boolean isNotDuty(ApplicationEvent event){
 		return !event.getClass().toString().equals(ArticlePublisherEvent.class.toString());
 	}
-
-	public static void main(String[] args) {
-		String str = "http://127.0.0.1:8888/cloudnote/image/getImage?name=ac9cd356-c5c5-49f6-88df-c46962bfc28c";
-		System.out.println(str.substring(str.lastIndexOf("=")+1));
-	}
 }
