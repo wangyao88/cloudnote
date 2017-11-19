@@ -2,8 +2,6 @@ package com.sxkl.cloudnote.cache.aop;
 
 import java.util.concurrent.TimeUnit;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -21,8 +19,6 @@ public class RedisCacheAop {
 
 	@Autowired
 	private RedisTemplate<Object, Object> redisTemplate;
-	@Autowired
-	private HttpServletRequest request;
 
 	@Around("@annotation(redisCachable)")
 	public Object doBasicProfiling(ProceedingJoinPoint pjp, RedisCachable redisCachable) throws Throwable {

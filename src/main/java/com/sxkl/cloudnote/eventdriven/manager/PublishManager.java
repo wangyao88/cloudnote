@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sxkl.cloudnote.eventdriven.publisher.ArticlePublisher;
+import com.sxkl.cloudnote.eventdriven.publisher.FlagPublisher;
 import com.sxkl.cloudnote.utils.SpringContextUtil;
 
 import lombok.Data;
@@ -14,6 +15,8 @@ public class PublishManager {
 	
 	@Autowired
 	private ArticlePublisher articlePublisher;
+	@Autowired
+	private FlagPublisher flagPublisher;
 	
 	public static PublishManager getPublishManager(){
 		try {

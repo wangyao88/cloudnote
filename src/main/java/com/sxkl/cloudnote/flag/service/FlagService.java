@@ -1,5 +1,6 @@
 package com.sxkl.cloudnote.flag.service;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -19,7 +20,6 @@ import com.sxkl.cloudnote.flag.entity.Flag;
 import com.sxkl.cloudnote.main.entity.TreeNode;
 import com.sxkl.cloudnote.user.dao.UserDao;
 import com.sxkl.cloudnote.user.entity.User;
-import com.sxkl.cloudnote.user.service.UserService;
 import com.sxkl.cloudnote.utils.UUIDUtil;
 import com.sxkl.cloudnote.utils.UserUtil;
 
@@ -32,8 +32,6 @@ public class FlagService {
 	private UserDao userDao;
 	@Autowired
 	private ArticleDao articleDao;
-	@Autowired
-	private UserService userService;
 
 	public TreeNode getRootTreeNode() {
 		TreeNode flag = new TreeNode();
@@ -132,25 +130,11 @@ public class FlagService {
 	@RedisCachable(key=Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,dateTime=60)
 	public String getCheckFlagTree(HttpServletRequest request) {
 		User sessionUser = UserUtil.getSessionUser(request);
-		User user = userService.selectUser(sessionUser);
-		Set<Flag> flags = user.getFlags();
-		TreeNode rootFlag = getRootTreeNode();
-		
-		Gson gson = new Gson();
+		String flagTreeMenu = getFlagTreeMenu(sessionUser.getId());
 		StringBuilder treeJson = new StringBuilder();
 		treeJson.append(Constant.TREE_MENU_PREFIX);
-		treeJson.append(gson.toJson(rootFlag));
-		treeJson.append(Constant.COMMA);
-		
-		for(Flag flag : flags){
-			TreeNode treeNode = convertToTreeNode(rootFlag,flag);
-			treeJson.append(gson.toJson(treeNode));
-			treeJson.append(Constant.COMMA);
-		}
-		
-		validateJson(treeJson);
+		treeJson.append(flagTreeMenu);
 		treeJson.append(Constant.TREE_MENU_SUFFIX);
-		
 		return treeJson.toString();
 	}
 	
@@ -187,7 +171,32 @@ public class FlagService {
 		return result;
 	}
 
-	public List<Flag> getAllFlagByUserId(String userId) {
+	public List getAllFlagByUserId(String userId) {
 		return flagDao.getAllFlagByUserId(userId);
+	}
+
+	public String getFlagTreeMenu(String userId) {
+		TreeNode rootFlag = getRootTreeNode();
+		Gson gson = new Gson();
+		StringBuilder treeJson = new StringBuilder();
+		treeJson.append(gson.toJson(rootFlag));
+		treeJson.append(Constant.COMMA);
+		List result = getAllFlagByUserId(userId);
+		for(Iterator iterator = result.iterator();iterator.hasNext();){  
+            Object[] objects = (Object[]) iterator.next();
+            TreeNode treeNode = new TreeNode();
+    		treeNode.setId(Constant.TREE_MENU_FLAG_ID_PREFIX+String.valueOf(objects[0]));
+    		treeNode.setText(String.valueOf(objects[1]));
+    		Object pId = objects[2];
+    		if(pId == null){
+    			treeNode.setPid(rootFlag.getId());
+    		}else{
+    			treeNode.setPid(Constant.TREE_MENU_FLAG_ID_PREFIX+String.valueOf(objects[2]));
+    		}
+    		treeJson.append(gson.toJson(treeNode));
+			treeJson.append(Constant.COMMA);
+        }  
+		validateJson(treeJson);
+		return treeJson.toString();
 	}
 }

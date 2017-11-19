@@ -1,5 +1,6 @@
 package com.sxkl.cloudnote.note.service;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,7 +44,7 @@ public class NoteService {
 	public TreeNode convertToTreeNode(Note note){
 		TreeNode treeNode = new TreeNode();
 		treeNode.setId(Constant.TREE_MENU_NOTE_ID_PREFIX+note.getId());
-		treeNode.setText(note.getName()+"("+note.getArticles().size()+")");
+		treeNode.setText(note.getName());
 		treeNode.setIsleaf(true);
 		return treeNode;
 	}
@@ -109,6 +110,31 @@ public class NoteService {
 
 	public List<Note> getAllNoteByUserId(String userId) {
 		return noteDao.getAllNote(userId);
+	}
+	
+	public String getNoteTreeMenu(String userId) {
+		TreeNode rootNote = getRootTreeNode();
+		Gson gson = new Gson();
+		StringBuilder treeJson = new StringBuilder();
+		treeJson.append(gson.toJson(rootNote));
+		treeJson.append(Constant.COMMA);
+		
+		List<Note> notes = getAllNoteByUserId(userId);
+		for(Note note : notes){
+			TreeNode treeNode = convertToTreeNode(note);
+			treeNode.setPid(rootNote.getId());
+			treeJson.append(gson.toJson(treeNode));
+			treeJson.append(Constant.COMMA);
+		}
+		validateJson(treeJson);
+		return treeJson.toString();
+	}
+	
+	private void validateJson(StringBuilder treeJson) {
+		String treeStr = treeJson.toString();
+		if(treeStr.substring(treeStr.length()-1, treeStr.length()).equals(Constant.COMMA)){
+			treeJson.deleteCharAt(treeJson.length()-1);
+		}
 	}
 
 }

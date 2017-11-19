@@ -1,7 +1,7 @@
 function addArticle() {
 	var tree = mini.get("menuTree");
 	var node = tree.getSelectedNode();
-
+	cacheAddArticleTreeMenu();
 	mini.open({
 		url : bootPATH + "article/article.jsp",
 		title : "笔记详情",
@@ -20,6 +20,12 @@ function addArticle() {
 			}
 		}
 	})
+}
+
+function cacheAddArticleTreeMenu(){
+	$.ajax({
+		url : basePATH + "/flag/cacheAddArticleTreeMenu"
+	});
 }
 
 function addArticleAction(data) {

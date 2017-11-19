@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -50,6 +49,8 @@ public class ArticleService {
 	private ImageService imageService;
 	@Autowired
 	private RedisCacheService redisCacheService;
+	@Autowired
+	private ArticleExecutor articleExecutor;
 
 	@RedisDisCachable(key={Constant.TREE_MENU_KEY_IN_REDIS,Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,})
 	public void addArticle(HttpServletRequest request) {
@@ -141,28 +142,12 @@ public class ArticleService {
 		if(StringUtils.isEmpty(content)){
 			Article article = articleDao.selectArticleById(id);
 			content = article.getContent();
-			executeAsyncUpdateArticle(article);
-		}else{
-			executeAsyncUpdateArticle(id);
 		}
 		content = content.replaceAll(Constant.ARTICLE_CONTENT_DOMAIN, Constant.DOMAIN);
+		PublishManager.getPublishManager().getArticlePublisher().increaseArticleHitNum(id);
 		return content;
 	}
 	
-	@Async
-    public void executeAsyncUpdateArticle(String articleId){
-		Article article = articleDao.selectArticleById(articleId);
-	    article.setHitNum(article.getHitNum()+1);
-		articleDao.updateArticle(article);
-    }
-	 
-	@Async
-    public void executeAsyncUpdateArticle(Article article){
-		article.setHitNum(article.getHitNum()+1);
-		articleDao.updateArticle(article);
-    }
-
-
 	@RedisDisCachable(key={Constant.TREE_MENU_KEY_IN_REDIS,Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,})
 	public void deleteArticle(HttpServletRequest request) {
 		String id = request.getParameter("id");
@@ -227,5 +212,4 @@ public class ArticleService {
 		}
 		return results;
 	}
-
 }

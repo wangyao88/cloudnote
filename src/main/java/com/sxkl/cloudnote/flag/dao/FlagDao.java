@@ -3,6 +3,7 @@ package com.sxkl.cloudnote.flag.dao;
 import java.util.List;
 
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
@@ -52,12 +53,23 @@ public class FlagDao extends BaseDao {
 		return query.list();
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<Flag> getAllFlagByUserId(String userId) {
+//	@SuppressWarnings("unchecked")
+//	public List<Flag> getAllFlagByUserId(String userId) {
+//		Session session = this.getSessionFactory().getCurrentSession();
+//		String hql="from Flag f where f.user.id = :userId";  
+//		Query query = session.createQuery(hql);  
+//		query.setString("userId", userId); 
+//		return query.list();
+//	}
+	
+	@SuppressWarnings("rawtypes")
+	public List getAllFlagByUserId(String userId) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("select f.id,f.name,f.fId from cn_flag f ")
+		   .append("where f.uId = :userId ");
 		Session session = this.getSessionFactory().getCurrentSession();
-		String hql="from Flag f where f.user.id = :userId";  
-		Query query = session.createQuery(hql);  
-		query.setString("userId", userId); 
+		SQLQuery query = session.createSQLQuery(sql.toString());
+		query.setString("userId", userId);
 		return query.list();
 	}
 

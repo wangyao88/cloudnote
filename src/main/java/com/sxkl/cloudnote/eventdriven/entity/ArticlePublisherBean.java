@@ -8,5 +8,6 @@ public class ArticlePublisherBean{
 	private String articleId;
 	private String articleContent;
 	private String domain;
+	private DutyType dutype;
 
 }

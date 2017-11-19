@@ -64,5 +64,4 @@ public class ArticleController {
 			return OperateResultService.configurateFailureResult(e.getMessage());
 		}
 	}
-	
 }

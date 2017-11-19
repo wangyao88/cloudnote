@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sxkl.cloudnote.common.service.OperateResultService;
+import com.sxkl.cloudnote.eventdriven.manager.PublishManager;
 import com.sxkl.cloudnote.flag.entity.Flag;
 import com.sxkl.cloudnote.flag.service.FlagService;
+import com.sxkl.cloudnote.user.entity.User;
+import com.sxkl.cloudnote.utils.UserUtil;
 
 
 @RestController
@@ -69,4 +72,11 @@ public class FlagController {
 			return OperateResultService.configurateFailureResult(e.getMessage());
 		}
 	}
+	
+	@RequestMapping(value = "/cacheAddArticleTreeMenu", method = RequestMethod.GET)
+	public void cacheAddArticleTreeMenu(HttpServletRequest request){
+		User sessionUser = UserUtil.getSessionUser(request);
+		PublishManager.getPublishManager().getFlagPublisher().cacheAddArticleTreeMenu(sessionUser.getId());
+	}
+
 }

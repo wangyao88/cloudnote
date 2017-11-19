@@ -1,20 +1,14 @@
 package com.sxkl.cloudnote.main.service;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.gson.Gson;
 import com.sxkl.cloudnote.cache.annotation.RedisCachable;
 import com.sxkl.cloudnote.common.entity.Constant;
-import com.sxkl.cloudnote.flag.entity.Flag;
 import com.sxkl.cloudnote.flag.service.FlagService;
-import com.sxkl.cloudnote.main.entity.TreeNode;
-import com.sxkl.cloudnote.note.entity.Note;
 import com.sxkl.cloudnote.note.service.NoteService;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.user.service.UserService;
@@ -42,35 +36,15 @@ public class MainService {
 	}
 	
 	public String getTree(User user) {
-		List<Note> notes = noteService.getAllNoteByUserId(user.getId());
-		List<Flag> flags = flagService.getAllFlagByUserId(user.getId());
-		TreeNode rootNote = noteService.getRootTreeNode();
-		TreeNode rootFlag = flagService.getRootTreeNode();
-		
-		Gson gson = new Gson();
+		String noteTreeMenu = noteService.getNoteTreeMenu(user.getId());
+		String flagTreeMenu = flagService.getFlagTreeMenu(user.getId());
 		StringBuilder treeJson = new StringBuilder();
 		treeJson.append(Constant.TREE_MENU_PREFIX);
-		treeJson.append(gson.toJson(rootNote));
+		treeJson.append(noteTreeMenu);
 		treeJson.append(Constant.COMMA);
-		treeJson.append(gson.toJson(rootFlag));
-		treeJson.append(Constant.COMMA);
-		
-		for(Note note : notes){
-			TreeNode treeNode = noteService.convertToTreeNode(note);
-			treeNode.setPid(rootNote.getId());
-			treeJson.append(gson.toJson(treeNode));
-			treeJson.append(Constant.COMMA);
-		}
-		
-		for(Flag flag : flags){
-			TreeNode treeNode = flagService.convertToTreeNode(rootFlag,flag);
-			treeJson.append(gson.toJson(treeNode));
-			treeJson.append(Constant.COMMA);
-		}
-		
+		treeJson.append(flagTreeMenu);
 		validateJson(treeJson);
 		treeJson.append(Constant.TREE_MENU_SUFFIX);
-		
 		return treeJson.toString();
 	}
 

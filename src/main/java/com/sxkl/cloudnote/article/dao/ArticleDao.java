@@ -152,5 +152,15 @@ public class ArticleDao extends BaseDao {
         query.setMaxResults(pageSize);
 		return query.list();
 	}
+	
+	public void increaseHitNum(String articleId) {
+		String hql = "update Article a set a.hitNum=a.hitNum+1 where a.id=:articleId";
+		Session session = this.getSessionFactory().openSession();
+	    Query query = session.createQuery(hql);
+	    query.setString("articleId", articleId);
+	    query.executeUpdate();
+	    session.flush();
+	    session.close();
+	}
 
 }

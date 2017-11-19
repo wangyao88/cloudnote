@@ -8,6 +8,7 @@ import com.sxkl.cloudnote.article.entity.Article;
 import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.eventdriven.entity.ArticlePublisherBean;
 import com.sxkl.cloudnote.eventdriven.entity.ArticlePublisherEvent;
+import com.sxkl.cloudnote.eventdriven.entity.DutyType;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,9 +24,18 @@ public class ArticlePublisher {
 		bean.setArticleId(article.getId());
 		bean.setArticleContent(article.getContent());
 		bean.setDomain(Constant.DOMAIN);
+		bean.setDutype(DutyType.LINK_ARTICLE_IMAGE);
         applicationContext.publishEvent(new ArticlePublisherEvent(bean));
         log.info("ArticlePublisher--establishLinkagesBetweenArticleAndImage--["+article.getTitle()+"]");
         
   }
+
+	public void increaseArticleHitNum(String id) {
+		ArticlePublisherBean bean = new ArticlePublisherBean();
+		bean.setArticleId(id);
+		bean.setDutype(DutyType.INCREASE_HITNUM);
+        applicationContext.publishEvent(new ArticlePublisherEvent(bean));
+        log.info("ArticlePublisher--increaseArticleHitNum");
+	}
 
 }

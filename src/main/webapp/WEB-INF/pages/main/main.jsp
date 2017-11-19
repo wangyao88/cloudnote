@@ -60,7 +60,7 @@
 		</div>
 		<div title="笔记列表" region="east" width="400px" expanded="true">
 				<div id="articleGrid" class="mini-datagrid" style="width:395px;height:100%;" 
-			        url="<%=basePath%>article/getAllArticles" idField="id" allowResize="true" 
+			        url="<%=basePath%>article/getAllArticles" idField="id" allowResize="false" 
 			        pageSize="23" sizeList="[23,50,100]" ajaxType="post" multiSelect="false" onRowClick="gridRowClick"
 			        onrowdblclick="gridRowdblclick">
 	            	<div property="columns">
