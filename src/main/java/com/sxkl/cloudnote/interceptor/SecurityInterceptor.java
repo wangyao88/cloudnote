@@ -25,7 +25,8 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
             if (req.getHeader("x-requested-with") != null && req.getHeader("x-requested-with").equalsIgnoreCase("XMLHttpRequest")) {
                 res.setHeader("sessionStatus", "timeout");
             } else {
-                res.sendRedirect(req.getContextPath() + LOGIN_URL);
+            	  String redirectUrl = req.getContextPath() + LOGIN_URL;
+                  res.sendRedirect(redirectUrl);
             }
             return false; // 不再往下执行
         }

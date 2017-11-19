@@ -1,6 +1,8 @@
 package com.sxkl.cloudnote.common.entity;
 
-import com.sxkl.cloudnote.user.entity.User;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.servlet.http.HttpSession;
 
 public class Constant {
 	
@@ -33,5 +35,21 @@ public class Constant {
 	public static final long HOT_ARTICLE_EXPIRE_IN_REDIS = 1000*60*30;
 	
 	public static String DOMAIN = "";
+	
+	public static final String ONLINE_SESSION_PREFIX_IN_REDIS = "online_session";
+	
+	private static ConcurrentHashMap<String, HttpSession> onLineSession = new ConcurrentHashMap<String,HttpSession>();
+	
+	public static void onLine(String userId, HttpSession session){
+		onLineSession.put(userId, session);
+	}
+	
+	public static void outLine(String userId){
+		onLineSession.remove(userId);
+	}
+	
+	public static int onLineNum(){
+		return onLineSession.size();
+	}
 
 }

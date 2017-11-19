@@ -12,15 +12,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
+import com.sxkl.cloudnote.cache.service.RedisCacheService;
 import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.user.dao.UserDao;
 import com.sxkl.cloudnote.user.entity.User;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class UserService {
 	
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private RedisCacheService redisCacheService;
 	
 	@Autowired
 	private RedisTemplate<Object, Object> redisTemplate;
@@ -35,21 +41,23 @@ public class UserService {
         		mv.setViewName("redirect:/main");
                 HttpSession session = request.getSession();
                 session.setAttribute(Constant.USER_IN_SESSION_KEY, user);
-                setUserToRedis(user);
+                Constant.onLine(user.getId(), session);
         	}else{
         		mv.setViewName("login/login");
                 mv.addObject("error","用户名或密码错误！");
         	}
         }else {
-            mv.setViewName("login");
+            mv.setViewName("login/login");
             mv.addObject("error","用户名与密码不能为空！");
         }
         return mv;
 	}
-
-	private void setUserToRedis(User user) {
-		redisTemplate.opsForHash().put("user", "userName", user.getName());
-		redisTemplate.opsForHash().put("user", "id", user.getId());
+	
+	public void logout(HttpServletRequest request){
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute(Constant.USER_IN_SESSION_KEY);
+        Constant.outLine(user.getId());
+        session.invalidate();
 	}
 
 	private User validateLogin(String userName, String password) {

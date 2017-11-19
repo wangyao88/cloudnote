@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -27,14 +26,12 @@ import com.sxkl.cloudnote.utils.PropertyUtil;
 public class CacheFilter  implements Filter, ApplicationContextAware {
 	
     private WebApplicationContext springContext;
-    private RedisTemplate<Object, Object> redisTemplate;
     private RedisCacheService redisCacheService;
     
     @SuppressWarnings("unchecked")
     @Override
     public void init(FilterConfig config) throws ServletException {
         springContext = WebApplicationContextUtils.getWebApplicationContext(config.getServletContext());
-        redisTemplate = (RedisTemplate<Object, Object>) springContext.getBean("redisTemplate");
         redisCacheService = (RedisCacheService) springContext.getBean("redisCacheService");
     }
     
@@ -42,6 +39,10 @@ public class CacheFilter  implements Filter, ApplicationContextAware {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
         HttpServletRequest req = (HttpServletRequest) servletRequest;
+        
+        
+        
+        
         String requestUrl = req.getRequestURI()+"-"+req.getMethod();
         String cachePages = PropertyUtil.getCachePages();
         //访问登录页，并且是GET请求，则拦截

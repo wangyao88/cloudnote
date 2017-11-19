@@ -1,6 +1,7 @@
 package com.sxkl.cloudnote.user.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,9 +32,6 @@ public class LoginController {
 
 	/**
 	 * 登录
-	 * 
-	 * @param username
-	 * @param password
 	 * @param httpServletRequest
 	 * @param modelMap
 	 * @return
@@ -41,6 +39,16 @@ public class LoginController {
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ModelAndView login(HttpServletRequest httpServletRequest, RedirectAttributesModelMap modelMap) {
 		return userService.login(httpServletRequest, modelMap);
+	}
+	
+	@RequestMapping(value = "/logout", method = { RequestMethod.GET, RequestMethod.HEAD })
+	public String logout(HttpServletRequest httpServletRequest, HttpServletResponse response) {
+		try {
+			userService.logout(httpServletRequest);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "redirect:/login";
 	}
 
 }

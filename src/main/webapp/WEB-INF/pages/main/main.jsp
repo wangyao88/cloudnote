@@ -23,6 +23,7 @@
 <script src="<%=basePath%>js/note/note.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/flag/flag.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/article/article.js" type="text/javascript"></script> 
+<script src="<%=basePath%>js/user/user.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/main/main.js" type="text/javascript"></script>
 <script type="text/javascript">
    var basePath = "<%=basePath%>";
@@ -57,6 +58,10 @@
 			    <a class="mini-button" iconCls="icon-search" onclick="">问题反馈</a>
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-goto" onclick="">发送邮件</a>
+			    <span class="separator"></span>
+			    <a class="mini-button" iconCls="icon-goto" onclick="onLineNum">在线用户数</a>
+			    <span class="separator"></span>
+			    <a class="mini-button" iconCls="icon-goto" onclick="logout">退出</a>
 			    <span class="separator"></span>
 		    </div>
     	</div>
