@@ -49,8 +49,6 @@ public class ArticleService {
 	private ImageService imageService;
 	@Autowired
 	private RedisCacheService redisCacheService;
-	@Autowired
-	private ArticleExecutor articleExecutor;
 
 	@RedisDisCachable(key={Constant.TREE_MENU_KEY_IN_REDIS,Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,})
 	public void addArticle(HttpServletRequest request) {
@@ -138,7 +136,7 @@ public class ArticleService {
 
 	public String getArticle(HttpServletRequest request) {
 		String id = request.getParameter("id");
-		String content = redisCacheService.getValueFromHash(Constant.HOT_ARTICLE_KEY_IN_REDIS,id);
+		String content = redisCacheService.getValueFromHash(Constant.HOT_ARTICLE_KEY_IN_REDIS,id,request);
 		if(StringUtils.isEmpty(content)){
 			Article article = articleDao.selectArticleById(id);
 			content = article.getContent();
@@ -200,8 +198,7 @@ public class ArticleService {
 		return new Gson().toJson(articleForEdit);
 	}
 
-	public List<ArticleForCache> getHotArticles(int hotArticleRange) {
-		String userId = Constant.SESSION_USER.getId();
+	public List<ArticleForCache> getHotArticles(String userId, int hotArticleRange) {
 		List<Article> articles = articleDao.selectAllArticlesOrderByHitNum(0, hotArticleRange,userId);
 		List<ArticleForCache> results = new ArrayList<ArticleForCache>();
 		for(Article article : articles){

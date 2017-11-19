@@ -2,9 +2,13 @@ package com.sxkl.cloudnote.cache.aop;
 
 import java.util.concurrent.TimeUnit;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -12,6 +16,8 @@ import org.springframework.stereotype.Component;
 import com.sxkl.cloudnote.cache.annotation.RedisCachable;
 import com.sxkl.cloudnote.cache.annotation.RedisDisCachable;
 import com.sxkl.cloudnote.common.entity.Constant;
+import com.sxkl.cloudnote.user.entity.User;
+import com.sxkl.cloudnote.utils.UserUtil;
 
 @Aspect
 @Component
@@ -19,12 +25,27 @@ public class RedisCacheAop {
 
 	@Autowired
 	private RedisTemplate<Object, Object> redisTemplate;
+	private static final String REQUEST_NAME = "request";
 
 	@Around("@annotation(redisCachable)")
-	public Object doBasicProfiling(ProceedingJoinPoint pjp, RedisCachable redisCachable) throws Throwable {
+	public synchronized Object doBasicProfiling(ProceedingJoinPoint pjp, RedisCachable redisCachable) throws Throwable {
+		Signature signature = pjp.getSignature();
+		MethodSignature methodSignature = (MethodSignature)signature;
+		String[] paramNames = methodSignature.getParameterNames();
+		int i = 0;
+		for(String paramName : paramNames){
+			if(REQUEST_NAME.equals(paramName)){
+				break;
+			}
+			i++;
+		}
+		Object[] objs = pjp.getArgs();
 		String key = redisCachable.key();
 		if(!Constant.LOGIN_PAGE_KEY_IN_REDIS.equals(key)){
-			key += Constant.SESSION_USER.getId();
+			HttpServletRequest request = (HttpServletRequest) objs[i];
+			i = 0;
+			User sessionUser = UserUtil.getSessionUser(request);
+			key += sessionUser.getId();
 		}
 		long dateTime = redisCachable.dateTime();
 		boolean hasCached = redisTemplate.hasKey(key);
@@ -46,7 +67,21 @@ public class RedisCacheAop {
 	
 	@Around("@annotation(redisDisCachable)")
 	public Object doBasicProfiling1(ProceedingJoinPoint pjp, RedisDisCachable redisDisCachable) throws Throwable {
-		String userId = Constant.SESSION_USER.getId();
+		Signature signature = pjp.getSignature();
+		MethodSignature methodSignature = (MethodSignature)signature;
+		String[] paramNames = methodSignature.getParameterNames();
+		int i = 0;
+		for(String paramName : paramNames){
+			if(REQUEST_NAME.equals(paramName)){
+				break;
+			}
+			i++;
+		}
+		Object[] objs = pjp.getArgs();
+		HttpServletRequest request = (HttpServletRequest) objs[i];
+		i = 0;
+		User sessionUser = UserUtil.getSessionUser(request);
+		String userId = sessionUser.getId();
 		String[] keys = redisDisCachable.key();
 		for(String key : keys){
 			boolean hasCached = redisTemplate.hasKey(key+userId);

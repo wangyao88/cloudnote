@@ -35,7 +35,6 @@ public class UserService {
         		mv.setViewName("redirect:/main");
                 HttpSession session = request.getSession();
                 session.setAttribute(Constant.USER_IN_SESSION_KEY, user);
-                Constant.SESSION_USER = user;
                 setUserToRedis(user);
         	}else{
         		mv.setViewName("login/login");

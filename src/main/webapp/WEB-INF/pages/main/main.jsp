@@ -33,13 +33,33 @@
 	     <div title="工具栏" region="north" showHeader="false" height="28px">
 			<div class="mini-toolbar">
 			    <a class="mini-button" iconCls="icon-addnew" onclick="addArticle">增加</a>
+			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-edit" onclick="editArticle">修改</a>
+			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-remove" onclick="removeArticle">删除</a>
 			    <span class="separator"></span>
 			    <input class="mini-textbox" id="searchArticleText" emptyText="搜索笔记标题"/>   
 			    <a class="mini-button" plain="true" id="searchArticleBtn" onclick="searchArticle">查询</a>
 		    </div>
 		 </div>
+		 <div title="south" region="south" showSplit="false" showHeader="false" height="30px" showSplitIcon="false" >
+        		<div class="mini-toolbar">
+			    <a class="mini-button" iconCls="icon-user" onclick="">在线聊天</a>
+			    <span class="separator"></span>
+			    <a class="mini-button" iconCls="icon-date" onclick="">报表</a>
+			    <span class="separator"></span>
+			    <a class="mini-button" iconCls="icon-edit" onclick="">账号管理</a>
+			    <span class="separator"></span>
+			    <a class="mini-button" iconCls="icon-redo" onclick="">导出笔记</a>
+			    <span class="separator"></span>
+			    <a class="mini-button" iconCls="icon-undo" onclick="">导入笔记</a>
+			    <span class="separator"></span>
+			    <a class="mini-button" iconCls="icon-search" onclick="">问题反馈</a>
+			    <span class="separator"></span>
+			    <a class="mini-button" iconCls="icon-goto" onclick="">发送邮件</a>
+			    <span class="separator"></span>
+		    </div>
+    	</div>
 		 <div title="笔记和标签" showProxyText="true" region="west" width="200px" expanded="true" showSplitIcon="true">
 			<ul id="menuTree" class="mini-tree" url="<%=basePath%>main/getTree" ajaxType="post" style="width:100%;height:100%;" 
                     showTreeIcon="true" textField="text" idField="id" resultAsTree="false"   contextMenu="#treeMenu"
@@ -61,16 +81,15 @@
 		<div title="笔记列表" region="east" width="400px" expanded="true">
 				<div id="articleGrid" class="mini-datagrid" style="width:395px;height:100%;" 
 			        url="<%=basePath%>article/getAllArticles" idField="id" allowResize="false" 
-			        pageSize="23" sizeList="[23,50,100]" ajaxType="post" multiSelect="false" onRowClick="gridRowClick"
+			        pageSize="20" sizeList="[20,50,100]" ajaxType="post" multiSelect="false" onRowClick="gridRowClick"
 			        onrowdblclick="gridRowdblclick">
 	            	<div property="columns">
 		            <div type="indexcolumn">序号</div>
 		            <div name="idColumn"  field="id"  headerAlign="center" allowSort="true" width="0px" >ID</div>
-		            <div name="title"  field="title" headerAlign="center" allowSort="true" width="310px" >标题</div>
-		            <div field="hitNum" width="53px" allowSort="true" >阅读次数</div>            
+		            <div name="title"  field="title" headerAlign="center" allowSort="true" width="300px" >标题</div>
+		            <div field="hitNum" width="60px" allowSort="true" >阅读次数</div>            
 	            </div>
         </div>
-		</div>
 	</div>
-	</body>
+</body>
 </html>

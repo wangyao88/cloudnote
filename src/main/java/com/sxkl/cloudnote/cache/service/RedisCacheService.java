@@ -8,7 +8,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -19,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import com.sxkl.cloudnote.cache.annotation.RedisCachable;
 import com.sxkl.cloudnote.common.entity.Constant;
+import com.sxkl.cloudnote.user.entity.User;
+import com.sxkl.cloudnote.utils.UserUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -58,19 +59,12 @@ public class RedisCacheService {
     }
 
 	public void cacheMap(String hotArticleKeyInRedis, Map<String, String> result) {
-		if(Constant.SESSION_USER == null){
-			return;
-		}
-		String userId = Constant.SESSION_USER.getId();
-		hotArticleKeyInRedis += userId;
 		redisTemplate.opsForHash().putAll(hotArticleKeyInRedis, result);
 	}
 
-	public String getValueFromHash(String hotArticleKeyInRedis, String hashKey) {
-		if(Constant.SESSION_USER == null){
-			return null;
-		}
-		String userId = Constant.SESSION_USER.getId();
+	public String getValueFromHash(String hotArticleKeyInRedis, String hashKey, HttpServletRequest request) {
+		User sessionUser = UserUtil.getSessionUser(request);
+		String userId = sessionUser.getId();
 		hotArticleKeyInRedis += userId;
 		if(redisTemplate.opsForHash().hasKey(hotArticleKeyInRedis, hashKey)){
 			return String.valueOf(redisTemplate.opsForHash().get(hotArticleKeyInRedis, hashKey));

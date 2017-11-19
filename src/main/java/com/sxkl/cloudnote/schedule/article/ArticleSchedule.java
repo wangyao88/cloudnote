@@ -1,8 +1,5 @@
 package com.sxkl.cloudnote.schedule.article;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +13,7 @@ import com.sxkl.cloudnote.article.service.ArticleService;
 import com.sxkl.cloudnote.cache.service.RedisCacheService;
 import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.user.entity.User;
+import com.sxkl.cloudnote.user.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,23 +25,23 @@ public class ArticleSchedule {
 	
 	@Autowired
 	private RedisCacheService redisCacheService;
-	
 	@Autowired
 	private ArticleService articleService;
+	@Autowired
+	private UserService userService;
 	
 	@Scheduled(fixedRate=Constant.HOT_ARTICLE_EXPIRE_IN_REDIS)
     public void cacheHotArticle(){
-		User user = Constant.SESSION_USER;
-		if(user == null){
-			return;
+		List<User> users = userService.getAllUsers();
+		for(User user : users){
+			List<ArticleForCache> articles = articleService.getHotArticles(user.getId(),HOT_ARTICLE_RANGE);
+			Map<String,String> result = new HashMap<String,String>();
+			for(ArticleForCache articleForCache : articles){
+				result.put(articleForCache.getId(), articleForCache.getContent());
+			}
+			redisCacheService.cacheMap(Constant.HOT_ARTICLE_KEY_IN_REDIS+user.getId(),result);
+			log.info("缓存用户["+user.getName()+"]热门笔记");
 		}
-		List<ArticleForCache> articles = articleService.getHotArticles(HOT_ARTICLE_RANGE);
-		Map<String,String> result = new HashMap<String,String>();
-		for(ArticleForCache articleForCache : articles){
-			result.put(articleForCache.getId(), articleForCache.getContent());
-		}
-		redisCacheService.cacheMap(Constant.HOT_ARTICLE_KEY_IN_REDIS,result);
-        log.info("缓存热门笔记");
     }
 
 

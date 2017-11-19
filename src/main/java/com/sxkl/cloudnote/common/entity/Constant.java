@@ -34,6 +34,4 @@ public class Constant {
 	
 	public static String DOMAIN = "";
 
-	public static User SESSION_USER;
-
 }
