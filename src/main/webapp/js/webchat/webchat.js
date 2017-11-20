@@ -4,6 +4,10 @@ function openWebchatPage(){
 		title : "聊天窗口",
 		width : 1000,
 		height : 700,
+		allowResize: false,
+	    allowDrag: false,
+	    showMaxButton: true, 
+	    showMinButton: true, 
 		onload : function() {
 			//                var iframe = this.getIFrameEl();
 			//                iframe.contentWindow.SetData(node);
@@ -42,7 +46,7 @@ function sendMsg(){
 		var data={};
 		data["from"]=from;
 		data["fromName"]=fromName;
-		data["to"]='1';
+		data["to"]='fdsfds';
 		data["text"]=v;
 		websocket.send(JSON.stringify(data));
 		$("#content").append("<div class='tmsg'><label class='name'>我&nbsp;"+new Date().Format("yyyy-MM-dd hh:mm:ss")+"</label><div class='tmsg_text'>"+data.text+"</div></div>");
