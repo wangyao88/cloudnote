@@ -327,6 +327,30 @@
 		    <artifactId>jsoup</artifactId>
 		    <version>1.7.2</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-messaging</artifactId>
+			<version>4.0.5.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-websocket</artifactId>
+			<version>4.0.5.RELEASE</version>
+		</dependency>
+		<dependency>
+            <groupId>javax.websocket</groupId>
+            <artifactId>javax.websocket-api</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
+		
+		<dependency>
+	        <groupId>org.apache.tomcat.embed</groupId>
+	        <artifactId>tomcat-embed-websocket</artifactId>
+	        <version>8.0.23</version>
+	        <scope>provided</scope>
+	    </dependency>
     </dependencies>
     
   <build>

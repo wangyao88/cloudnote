@@ -24,6 +24,7 @@
 <script src="<%=basePath%>js/flag/flag.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/article/article.js" type="text/javascript"></script> 
 <script src="<%=basePath%>js/user/user.js" type="text/javascript"></script>
+<script src="<%=basePath%>js/webchat/webchat.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/main/main.js" type="text/javascript"></script>
 <script type="text/javascript">
    var basePath = "<%=basePath%>";
@@ -45,7 +46,7 @@
 		 </div>
 		 <div title="south" region="south" showSplit="false" showHeader="false" height="30px" showSplitIcon="false" >
         		<div class="mini-toolbar">
-			    <a class="mini-button" iconCls="icon-user" onclick="">在线聊天</a>
+			    <a class="mini-button" iconCls="icon-user" onclick="openWebchatPage">在线聊天</a>
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-date" onclick="">报表</a>
 			    <span class="separator"></span>
