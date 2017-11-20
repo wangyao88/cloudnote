@@ -53,7 +53,6 @@ public class User implements Serializable{
 	}
 	
 	public User(String id, String name) {
-		super();
 		this.id = id;
 		this.name = name;
 	}

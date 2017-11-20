@@ -34,6 +34,9 @@ function addArticleAction(data) {
 		cls : 'mini-mask-loading',
 		html : '笔记保存中...'
 	});
+	
+	
+	
 	$.ajax({
 		url : basePATH + "/article/addArticle",
 		type : "post",

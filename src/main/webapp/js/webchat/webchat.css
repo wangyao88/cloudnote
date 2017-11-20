@@ -32,13 +32,7 @@ input[type=button] {
 	background: yellow;
 }
 
-#content {
-	border: 1px solid gray;
-	width: 765px;
-	height: 380px;
-	overflow-y: scroll;
-	overflow-x: hidden;
-}
+
 
 .from {
 	background-color: green;
@@ -77,6 +71,7 @@ input[type=button] {
 	font-size: 18px;
 	border-radius: 5px;
 	padding: 2px;
+	text-align: left;
 }
 
 .fmsg_text {

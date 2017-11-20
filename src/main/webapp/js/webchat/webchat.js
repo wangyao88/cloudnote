@@ -1,16 +1,17 @@
+mini.parse();
+
+
 function openWebchatPage(){
 	mini.open({
 		url : bootPATH + "webchat/webchat.jsp",
 		title : "聊天窗口",
-		width : 1000,
-		height : 700,
+		width : 600,
+		height : 600,
 		allowResize: false,
 	    allowDrag: false,
 	    showMaxButton: true, 
 	    showMinButton: true, 
 		onload : function() {
-			//                var iframe = this.getIFrameEl();
-			//                iframe.contentWindow.SetData(node);
 		},
 		ondestroy : function(action) {
 			if (action == "ok") {
@@ -43,13 +44,18 @@ function sendMsg(){
 	if(v==""){
 		return;
 	}else{
+		var userTo = mini.get("userTo").getValue();
+		if(!userTo){
+			mini.alert('请选择好友');
+			return;
+		}
 		var data={};
 		data["from"]=from;
 		data["fromName"]=fromName;
-		data["to"]='fdsfds';
+		data["to"]=userTo;
 		data["text"]=v;
 		websocket.send(JSON.stringify(data));
-		$("#content").append("<div class='tmsg'><label class='name'>我&nbsp;"+new Date().Format("yyyy-MM-dd hh:mm:ss")+"</label><div class='tmsg_text'>"+data.text+"</div></div>");
+		$("#content").append("<div class='tmsg'><label class='name'>我&nbsp;"+new Date().Format("yyyy-MM-dd hh:mm:ss")+"</label><div class='tmsg_text'>"+"&nbsp;&nbsp;&nbsp;&nbsp;"+data.text+"</div></div>");
 		scrollToBottom();
 		$("#msg").val("");
 	}
@@ -58,6 +64,10 @@ function sendMsg(){
 function scrollToBottom(){
 	var div = document.getElementById('content');
 	div.scrollTop = div.scrollHeight;
+	div.scrollIntoView(); 
+	
+	var msg_end = document.getElementById('msg_end');
+	msg_end.click(); 
 }
 
 Date.prototype.Format = function (fmt) { //author: meizz 
@@ -78,11 +88,11 @@ Date.prototype.Format = function (fmt) { //author: meizz
 
 function linkToWebsocketServer(uid){
 	if ('WebSocket' in window) {
-		websocket = new WebSocket("ws://127.0.0.1:8080/cloudnote/mywebsocket?uid="+uid);
+		websocket = new WebSocket("ws://127.0.0.1:8888/cloudnote/mywebsocket?uid="+uid);
 	} else if ('MozWebSocket' in window) {
-		websocket = new MozWebSocket("ws://127.0.0.1:8080/cloudnote/mywebsocket?uid="+uid);
+		websocket = new MozWebSocket("ws://127.0.0.1:8888/cloudnote/mywebsocket?uid="+uid);
 	} else {
-		websocket = new SockJS("http://127.0.0.1:8080/cloudnote/mywebsocket/sockjs?uid="+uid);
+		websocket = new SockJS("http://127.0.0.1:8888/cloudnote/mywebsocket/sockjs?uid="+uid);
 	}
 	websocket.onopen = function(event) {
 		console.log("WebSocket:已连接");
@@ -92,7 +102,7 @@ function linkToWebsocketServer(uid){
 		var data=JSON.parse(event.data);
 		console.log("WebSocket:收到一条消息",data);
 		var textCss=data.from==-1?"sfmsg_text":"fmsg_text";
-		$("#content").append("<div class='fmsg'><label class='name'>"+data.fromName+"&nbsp;"+data.date+"</label><div class='"+textCss+"'>"+data.text+"</div></div>");
+		$("#content").append("<div class='fmsg'><label class='name'>"+data.fromName+"&nbsp;"+data.date+"</label><div class='"+textCss+"'>"+"&nbsp;&nbsp;&nbsp;&nbsp;"+data.text+"</div></div>");
 		scrollToBottom();
 	};
 	websocket.onerror = function(event) {
@@ -105,7 +115,6 @@ function linkToWebsocketServer(uid){
 	}
 }
 
-console.log('from' + from);
 linkToWebsocketServer(from);
 
 $(document).ready(function(){

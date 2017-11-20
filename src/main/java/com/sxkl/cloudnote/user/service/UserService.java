@@ -12,10 +12,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
+import com.google.gson.Gson;
 import com.sxkl.cloudnote.cache.service.RedisCacheService;
 import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.user.dao.UserDao;
 import com.sxkl.cloudnote.user.entity.User;
+import com.sxkl.cloudnote.utils.UserUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -84,6 +86,13 @@ public class UserService {
 
 	public List<User> getAllUsers() {
 		return userDao.getAllUsers();
+	}
+
+	public String getAllFriendsFromCombo(HttpServletRequest request) {
+		User sessionUser = UserUtil.getSessionUser(request);
+		List<User> users = userDao.getFriends(sessionUser.getId());
+		Gson gson = new Gson();
+		return gson.toJson(users);
 	}
 
 }

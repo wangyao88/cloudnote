@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -17,6 +18,7 @@ import org.springframework.web.socket.WebSocketSession;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sxkl.cloudnote.webchat.entity.Message;
+import com.sxkl.cloudnote.webchat.service.MessageService;
 
 /**
  * Socket处理器
@@ -26,6 +28,10 @@ import com.sxkl.cloudnote.webchat.entity.Message;
  */
 @Component
 public class MyWebSocketHandler implements WebSocketHandler {
+	
+	@Autowired
+	private MessageService messageService;
+	
 	public static final Map<String, WebSocketSession> userSocketSessionMap;
 
 	static {
@@ -50,6 +56,7 @@ public class MyWebSocketHandler implements WebSocketHandler {
 			if(message.getPayloadLength()==0)return;
 			Message msg=new Gson().fromJson(message.getPayload().toString(),Message.class);
 			msg.setDate(new Date());
+			messageService.saveMessage(msg);
 			sendMessageToUser(msg.getTo(), new TextMessage(new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(msg)));
 	}
 

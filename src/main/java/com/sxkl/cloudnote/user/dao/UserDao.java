@@ -50,4 +50,13 @@ public class UserDao extends BaseDao {
 		return query.list();
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<User> getFriends(String userId) {
+		String hql = "select new User(u.id, u.name)from User u where u.id <> :userId";
+		Session session = this.getSessionFactory().getCurrentSession();
+		Query query = session.createQuery(hql);
+		query.setString("userId", userId);
+		return query.list();
+	}
+
 }
