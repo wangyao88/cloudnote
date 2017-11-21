@@ -10,8 +10,8 @@
 <head>
 <title>增加节点</title>
 <script src="<%=basePath%>js/boot.js" type="text/javascript"></script>
-<script src="http://apps.bdimg.com/libs/ueditor/1.4.3.1/ueditor.config.js" type="text/javascript"></script>
-    <script src="http://apps.bdimg.com/libs/ueditor/1.4.3.1/ueditor.all.min.js" type="text/javascript"></script>
+<script src="<%=basePath%>js/ueditor-1.4.3.3/ueditor.config.js" type="text/javascript"></script>
+<script src="<%=basePath%>js/ueditor-1.4.3.3/ueditor.all.min.js" type="text/javascript"></script>
 
 <style type="text/css">
 body, html {

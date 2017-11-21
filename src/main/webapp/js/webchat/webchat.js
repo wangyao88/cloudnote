@@ -88,11 +88,11 @@ Date.prototype.Format = function (fmt) { //author: meizz
 
 function linkToWebsocketServer(uid){
 	if ('WebSocket' in window) {
-		websocket = new WebSocket("ws://127.0.0.1:8888/cloudnote/mywebsocket?uid="+uid);
+		websocket = new WebSocket("ws"+wsPath+"mywebsocket?uid="+uid);
 	} else if ('MozWebSocket' in window) {
-		websocket = new MozWebSocket("ws://127.0.0.1:8888/cloudnote/mywebsocket?uid="+uid);
+		websocket = new MozWebSocket("ws"+wsPath+"mywebsocket?uid="+uid);
 	} else {
-		websocket = new SockJS("http://127.0.0.1:8888/cloudnote/mywebsocket/sockjs?uid="+uid);
+		websocket = new SockJS("http"+wsPath+"mywebsocket/sockjs?uid="+uid);
 	}
 	websocket.onopen = function(event) {
 		console.log("WebSocket:已连接");

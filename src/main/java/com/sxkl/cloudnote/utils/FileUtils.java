@@ -196,6 +196,21 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		return doc.html();
 	}
 	
+	public static String replaceAllDomain(String html) {
+		Document doc = Jsoup.parse(html);
+		Elements imgs = doc.getElementsByTag("img");
+		String imgNewUrl = "";
+		String regex = "^(http|https|ftp)+://.*$";
+		for (int i = 0; i < imgs.size(); i++) {
+			String imgOldUrl = imgs.get(i).attr("src");
+			if ((Pattern.matches(regex, imgOldUrl)) && imgOldUrl.startsWith(Constant.DOMAIN) && !imgOldUrl.contains(Constant.UEDITOR_UPLOAD_PATH)) {
+				imgNewUrl = imgOldUrl.replaceAll(Constant.DOMAIN, Constant.ARTICLE_CONTENT_DOMAIN);
+				doc.getElementsByTag("img").get(i).attr("src", imgNewUrl);
+			}
+		}
+		return doc.html();
+	}
+	
 	public static String saveHtmlImgToDB(String html, ImageService imageService) {
 		Document doc = Jsoup.parse(html);
 		Elements imgs = doc.getElementsByTag("img");

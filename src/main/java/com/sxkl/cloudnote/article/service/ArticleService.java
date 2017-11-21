@@ -54,7 +54,7 @@ public class ArticleService {
 	public void addArticle(HttpServletRequest request) {
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");
-		content = content.replaceAll(Constant.DOMAIN, Constant.ARTICLE_CONTENT_DOMAIN);
+		FileUtils.replaceAllDomain(content);
 		String noteId = request.getParameter("note");
 		String flagsStr = request.getParameter("flags");
 		String articleId = request.getParameter("articleId");

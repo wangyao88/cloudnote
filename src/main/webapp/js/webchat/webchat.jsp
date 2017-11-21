@@ -8,6 +8,8 @@ import="com.sxkl.cloudnote.user.entity.User" pageEncoding="UTF-8"%>
     User user = (User)session.getAttribute("user");
     String uid = user.getId();
     String name = user.getName();
+    
+    String wsPath = "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %>
 
 
@@ -21,6 +23,7 @@ import="com.sxkl.cloudnote.user.entity.User" pageEncoding="UTF-8"%>
 <script type="text/javascript">
 var from='<%=uid%>';
 var fromName='<%=name%>';
+var wsPath = '<%=wsPath%>';
 </script>
 <script src="<%=basePath%>js/webchat/webchat.js" type="text/javascript"></script>
 </head>
