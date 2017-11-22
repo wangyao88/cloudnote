@@ -328,6 +328,7 @@
 		    <version>1.7.2</version>
 		</dependency>
 		
+		<!-- websocket -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-messaging</artifactId>
@@ -352,6 +353,7 @@
 	        <scope>provided</scope>
 	    </dependency>
 	    
+	    <!-- ueditor -->
 	    <dependency>
 		  <groupId>com.baidu</groupId>
 		  <artifactId>ueditor-json</artifactId>
@@ -371,6 +373,13 @@
 		    <groupId>commons-codec</groupId>
 		    <artifactId>commons-codec</artifactId>
 		    <version>1.9</version>
+		</dependency>
+		
+		<!-- echarts -->
+		<dependency>
+		    <groupId>com.github.abel533</groupId>
+		    <artifactId>ECharts</artifactId>
+		    <version>3.0.0.2</version>
 		</dependency>
     </dependencies>
     

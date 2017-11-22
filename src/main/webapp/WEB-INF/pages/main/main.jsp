@@ -25,6 +25,7 @@
 <script src="<%=basePath%>js/article/article.js" type="text/javascript"></script> 
 <script src="<%=basePath%>js/user/user.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/webchat/webchat.js" type="text/javascript"></script>
+<script src="<%=basePath%>js/statChart/statChart.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/main/main.js" type="text/javascript"></script>
 <script type="text/javascript">
    var basePath = "<%=basePath%>";
@@ -48,7 +49,7 @@
         		<div class="mini-toolbar">
 			    <a class="mini-button" iconCls="icon-user" onclick="openWebchatPage">在线聊天</a>
 			    <span class="separator"></span>
-			    <a class="mini-button" iconCls="icon-date" onclick="">报表</a>
+			    <a class="mini-button" iconCls="icon-date" onclick="openStatChart">报表</a>
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-edit" onclick="">账号管理</a>
 			    <span class="separator"></span>
@@ -82,7 +83,7 @@
 			</ul>
 		</div>
 		<div title="笔记详情" region="center" id="globalKeyEvent">
-		    <div id="articleContainer"></div>
+		    <div id="articleContainer" style="margin-left:10px"></div>
 		</div>
 		<div title="笔记列表" region="east" width="400px" expanded="true">
 				<div id="articleGrid" class="mini-datagrid" style="width:395px;height:100%;" 
