@@ -46,7 +46,7 @@ body, html {
 
 				<div class="mini-panel" title="月笔记记录量走势" width="auto"
 					showCollapseButton="false" showCloseButton="false">
-					 <div id="monthArticleColumn" style="width: 400px;height:200px;"></div>
+					 <div id="monthArticleColumn" style="width: 400px;height:300px;"></div>
 				</div>
 			</div>
 			

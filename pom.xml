@@ -381,6 +381,18 @@
 		    <artifactId>ECharts</artifactId>
 		    <version>3.0.0.2</version>
 		</dependency>
+		
+		<!--solr客户端solrj的依赖 -->
+        <dependency>
+		    <groupId>org.apache.solr</groupId>
+		    <artifactId>solr-solrj</artifactId>
+		    <version>7.1.0</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework.data</groupId>
+		    <artifactId>spring-data-solr</artifactId>
+		    <version>3.0.1.RELEASE</version>
+		</dependency>
     </dependencies>
     
   <build>
