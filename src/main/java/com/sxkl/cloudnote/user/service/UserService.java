@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.sxkl.cloudnote.utils.DESUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -63,7 +64,8 @@ public class UserService {
 	}
 
 	private User validateLogin(String userName, String password) {
-		List<User> users = userDao.getUserByNameAndPass(userName,password);
+		DESUtil tool = new DESUtil();
+		List<User> users = userDao.getUserByNameAndPass(userName,tool.encrypt(password));
 		if(users != null && users.size() > 0){
 			return users.get(0);
 		}
