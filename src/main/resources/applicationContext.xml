@@ -22,7 +22,7 @@
 		default-lazy-init="false">
     <!-- 属性文件位置 -->
     <bean id="annotationPropertyConfigurer"
-        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        class="com.sxkl.cloudnote.utils.CustomizedPropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
                 <value>classpath:init.properties</value>

@@ -70,7 +70,7 @@
 		 <div title="笔记和标签" showProxyText="true" region="west" width="200px" expanded="true" showSplitIcon="true">
 			<ul id="menuTree" class="mini-tree" url="<%=basePath%>main/getTree" ajaxType="post" style="width:100%;height:100%;" 
                     showTreeIcon="true" textField="text" idField="id" resultAsTree="false"   contextMenu="#treeMenu"
-                    onNodeClick="onNodeClick1" >        
+				    expandOnLoad="true" onNodeClick="onNodeClick1" >
             </ul>
             <ul id="treeMenu" class="mini-contextmenu"  onbeforeopen="onBeforeOpen">        
 			    <li class="separator"/>
