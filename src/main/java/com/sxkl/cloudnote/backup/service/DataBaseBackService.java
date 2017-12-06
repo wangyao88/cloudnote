@@ -8,7 +8,5 @@ import com.sxkl.cloudnote.backup.entity.DataBaseInfo;
  */
 public interface DataBaseBackService {
 
-    boolean backup(DataBaseInfo dataBaseInfo);
-
-    DataBaseInfo getDataBaseInfo();
+    String backup(DataBaseInfo dataBaseInfo);
 }

@@ -2,6 +2,7 @@ package com.sxkl.cloudnote.searcher.config;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -140,5 +141,6 @@ public class SolrContext {
 		 solr.addDoc();
 //		 solr.deleteDocumentById();
 		 solr.querySolr();
+//		 ConcurrentLinkedQueue<E>
 	}
 }

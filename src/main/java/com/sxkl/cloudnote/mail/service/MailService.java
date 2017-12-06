@@ -1,27 +1,33 @@
 package com.sxkl.cloudnote.mail.service;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Maps;
-import com.sun.mail.util.MailSSLSocketFactory;
-import com.sxkl.cloudnote.common.entity.Constant;
-import com.sxkl.cloudnote.mail.entity.Mail;
-import com.sxkl.cloudnote.mail.entity.MailMessage;
-import com.sxkl.cloudnote.mail.entity.MailUser;
-import com.sxkl.cloudnote.utils.DESUtil;
-import com.sxkl.cloudnote.utils.DateUtils;
-import com.sxkl.cloudnote.utils.MapToBeanUtils;
-import com.sxkl.cloudnote.utils.PropertyUtil;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import java.util.Properties;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
-import javax.mail.*;
-import javax.mail.internet.*;
-import java.lang.reflect.Method;
-import java.util.Map;
-import java.util.Properties;
+import javax.mail.Authenticator;
+import javax.mail.BodyPart;
+import javax.mail.Message;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimeUtility;
+
+import org.springframework.stereotype.Service;
+
+import com.sun.mail.util.MailSSLSocketFactory;
+import com.sxkl.cloudnote.mail.entity.Mail;
+import com.sxkl.cloudnote.mail.entity.MailMessage;
+import com.sxkl.cloudnote.mail.entity.MailUser;
+import com.sxkl.cloudnote.utils.DESUtil;
+import com.sxkl.cloudnote.utils.MapToBeanUtils;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Created by wangyao
@@ -33,6 +39,7 @@ public class MailService {
 
     public void sendMail(Mail mail){
         try{
+        	log.info("开始发送邮件");
             MailUser toUser = mail.getToUser();
             MailUser fromUser = mail.getFromUser();
             MailMessage mailMessage = mail.getMessage();
@@ -101,19 +108,13 @@ public class MailService {
         MailUser fromuser = new MailUser();
         MapToBeanUtils<MailUser> mapToBeanUtils = new MapToBeanUtils<MailUser>();
         mapToBeanUtils.mapToBean(fromuser,"mail.from.");
-        try{
-            DESUtil desUtil = new DESUtil();
-            fromuser.setPassword(desUtil.decrypt(fromuser.getPassword()));
-        }catch (Exception e){
-            log.error("解密用户密码失败！错误信息:{}",e.getMessage());
-        }
         return fromuser;
     }
 
     public MailUser getSystemMailToUser(){
         MailUser touser = new MailUser();
         MapToBeanUtils<MailUser> mapToBeanUtils = new MapToBeanUtils<MailUser>();
-        mapToBeanUtils.mapToBean(touser,"mail.from.");
+        mapToBeanUtils.mapToBean(touser,"mail.to.");
         return touser;
     }
 }

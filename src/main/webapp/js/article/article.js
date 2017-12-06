@@ -65,6 +65,7 @@ function addArticleAction(data) {
 		},
 		error : function() {
 			mini.alert("笔记添加失败，请稍候重试！");
+			mini.unmask(document.body);
 		}
 	});
 
