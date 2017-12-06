@@ -39,6 +39,8 @@ public class Constant {
 	public static final String ONLINE_SESSION_PREFIX_IN_REDIS = "online_session";
 	
 	public static final String UEDITOR_UPLOAD_PATH = "/ueditor/jsp/upload/image";
+
+	public static final String SQL_FILE_EXTENSION = ".sql";
 	
 	private static ConcurrentHashMap<String, HttpSession> onLineSession = new ConcurrentHashMap<String,HttpSession>();
 	

@@ -27,6 +27,7 @@
 <script src="<%=basePath%>js/webchat/webchat.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/statChart/statChart.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/main/main.js" type="text/javascript"></script>
+	<script src="<%=basePath%>js/backup/backup.js" type="text/javascript"></script>
 <script type="text/javascript">
    var basePath = "<%=basePath%>";
 </script>
@@ -57,7 +58,7 @@
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-undo" onclick="">导入笔记</a>
 			    <span class="separator"></span>
-			    <a class="mini-button" iconCls="icon-search" onclick="">问题反馈</a>
+			    <a class="mini-button" iconCls="icon-search" onclick="backupDB()">备份数据</a>
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-goto" onclick="">发送邮件</a>
 			    <span class="separator"></span>
@@ -82,7 +83,7 @@
 				<li class="separator"/>     
 			</ul>
 		</div>
-		<div title="笔记详情" region="center" id="globalKeyEvent">
+		<div title="笔记详情" region="center">
 		    <div id="articleContainer" style="margin-left:10px"></div>
 		</div>
 		<div title="笔记列表" region="east" width="400px" expanded="true">

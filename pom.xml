@@ -381,8 +381,26 @@
 		    <artifactId>ECharts</artifactId>
 		    <version>3.0.0.2</version>
 		</dependency>
-		
-		<!--solr客户端solrj的依赖 -->
+
+        <dependency>
+            <groupId>org.ocpsoft.prettytime</groupId>
+            <artifactId>prettytime</artifactId>
+            <version>4.0.1.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>19.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.7</version>
+        </dependency>
+
+        <!--solr客户端solrj的依赖 -->
         <dependency>
 		    <groupId>org.apache.solr</groupId>
 		    <artifactId>solr-solrj</artifactId>

@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.sxkl.cloudnote.utils.DESUtil;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
@@ -78,7 +79,8 @@ public class User implements Serializable{
 	}
 
 	public void setPassword(String password) {
-		this.password = password;
+		DESUtil desUtil = new DESUtil();
+		this.password = desUtil.encrypt(password);
 	}
 
 	public String getEmail() {

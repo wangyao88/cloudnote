@@ -34,7 +34,6 @@ public class FlagController {
 	}
 	
 	@RequestMapping(value = "/updateFlag", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
-	@ResponseBody
 	public String updateFlag(HttpServletRequest request){
 		try {
 			flagService.updateFlag(request);

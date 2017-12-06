@@ -13,6 +13,7 @@ public class DateUtils {
 	public static final String DATE_TIME_PATTON_1 = "yyyy-MM-dd HH:mm:ss";
 	public static final String DATE_TIME_PATTON_2 = "yyyy/MM/dd HH:mm:ss";
 	public static final String DATE_TIME_PATTON_3 = "yyyyMMddHHmmss";
+	public static final String DATE_TIME_PATTON_4 = "yyyyMMddHHmmssSSS";
 	public static final int C_ONE_SECOND = 1000;
 	public static final int C_ONE_MINUTE = 60000;
 	public static final long C_ONE_HOUR = 3600000L;
@@ -359,5 +360,11 @@ public class DateUtils {
 	 */
 	public static String formatDuring(Date begin, Date end) {
 		return formatDuring(end.getTime() - begin.getTime());
+	}
+
+	public static String formatDate4(){
+		Date date = new Date();
+		SimpleDateFormat format = new SimpleDateFormat(DATE_TIME_PATTON_4);
+		return format.format(date);
 	}
 }
