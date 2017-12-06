@@ -61,7 +61,7 @@ public class DESUtil {
 
     public static void main(String[] args) {
         DESUtil tool = new DESUtil();
-        String content = "5ff8ff5f-c0fe-4cf0-8d4f-a56d956e9284";
+        String content = "sxkl1285674045sx";
         System.out.println("原文内容："+content);
         String encrpt = null;
         try {

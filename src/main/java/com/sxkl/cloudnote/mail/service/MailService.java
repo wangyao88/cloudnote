@@ -1,10 +1,16 @@
 package com.sxkl.cloudnote.mail.service;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Maps;
 import com.sun.mail.util.MailSSLSocketFactory;
+import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.mail.entity.Mail;
 import com.sxkl.cloudnote.mail.entity.MailMessage;
 import com.sxkl.cloudnote.mail.entity.MailUser;
 import com.sxkl.cloudnote.utils.DESUtil;
+import com.sxkl.cloudnote.utils.DateUtils;
+import com.sxkl.cloudnote.utils.MapToBeanUtils;
+import com.sxkl.cloudnote.utils.PropertyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +19,8 @@ import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 import javax.mail.*;
 import javax.mail.internet.*;
-import javax.swing.tree.ExpandVetoException;
+import java.lang.reflect.Method;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -45,7 +52,7 @@ public class MailService {
                     DESUtil desUtil = new DESUtil();
                     //qq邮箱服务器账户、第三方登录授权码
                     try{
-                        return new PasswordAuthentication(fromUser.getUserName(), desUtil.decrypt(fromUser.getPassword())); //发件人邮件用户名、密码
+                        return new PasswordAuthentication(fromUser.getUsername(), desUtil.decrypt(fromUser.getPassword())); //发件人邮件用户名、密码
                     }catch (Exception e){
                         log.error("创建PasswordAuthentication失败！错误信息:{}",e.getMessage());
                     }
@@ -55,9 +62,9 @@ public class MailService {
             // 创建默认的 MimeMessage 对象
             MimeMessage message = new MimeMessage(session);
             // Set From: 头部头字段
-            message.setFrom(new InternetAddress(fromUser.getUserName()));
+            message.setFrom(new InternetAddress(fromUser.getUsername()));
             // Set To: 头部头字段
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(toUser.getUserName()));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(toUser.getUsername()));
             // Set Subject: 主题文字
             message.setSubject(mailMessage.getSubject());
             // 创建消息部分
@@ -88,5 +95,25 @@ public class MailService {
         }catch (Exception mex) {
             log.error("发送邮件失败！错误信息:{}",mex.getMessage());
         }
+    }
+
+    public MailUser getSystemMailFromUser(){
+        MailUser fromuser = new MailUser();
+        MapToBeanUtils<MailUser> mapToBeanUtils = new MapToBeanUtils<MailUser>();
+        mapToBeanUtils.mapToBean(fromuser,"mail.from.");
+        try{
+            DESUtil desUtil = new DESUtil();
+            fromuser.setPassword(desUtil.decrypt(fromuser.getPassword()));
+        }catch (Exception e){
+            log.error("解密用户密码失败！错误信息:{}",e.getMessage());
+        }
+        return fromuser;
+    }
+
+    public MailUser getSystemMailToUser(){
+        MailUser touser = new MailUser();
+        MapToBeanUtils<MailUser> mapToBeanUtils = new MapToBeanUtils<MailUser>();
+        mapToBeanUtils.mapToBean(touser,"mail.from.");
+        return touser;
     }
 }

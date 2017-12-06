@@ -1,24 +1,15 @@
 package com.sxkl.cloudnote.user.entity;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
-import com.sxkl.cloudnote.utils.DESUtil;
+import com.sxkl.cloudnote.flag.entity.Flag;
+import com.sxkl.cloudnote.note.entity.Note;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
 
-import com.sxkl.cloudnote.flag.entity.Flag;
-import com.sxkl.cloudnote.note.entity.Note;
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="cn_user")
@@ -40,6 +31,9 @@ public class User implements Serializable{
 	
 	@Column(name="email",unique=true,nullable=false)
 	private String email;
+
+	@Column(name="mailpass",unique=true,nullable=false)
+	private String mailpass;
 	
 	@OneToMany(fetch=FetchType.LAZY,mappedBy="user")
 	@Cascade(value={CascadeType.ALL})
@@ -79,8 +73,7 @@ public class User implements Serializable{
 	}
 
 	public void setPassword(String password) {
-		DESUtil desUtil = new DESUtil();
-		this.password = desUtil.encrypt(password);
+		this.password = password;
 	}
 
 	public String getEmail() {

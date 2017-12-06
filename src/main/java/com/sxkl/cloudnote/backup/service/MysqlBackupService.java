@@ -4,15 +4,19 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Maps;
 import com.sxkl.cloudnote.backup.entity.DataBaseInfo;
 import com.sxkl.cloudnote.common.entity.Constant;
-import com.sxkl.cloudnote.utils.DESUtil;
-import com.sxkl.cloudnote.utils.DateUtils;
-import com.sxkl.cloudnote.utils.PropertyUtil;
+import com.sxkl.cloudnote.mail.entity.Mail;
+import com.sxkl.cloudnote.mail.entity.MailMessage;
+import com.sxkl.cloudnote.mail.entity.MailUser;
+import com.sxkl.cloudnote.mail.service.MailService;
+import com.sxkl.cloudnote.utils.*;
 import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.lang.reflect.Method;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +27,9 @@ import java.util.Map;
 @Slf4j
 @Service
 public class MysqlBackupService implements DataBaseBackService {
+
+    @Autowired
+    private MailService mailService;
 
     @Override
     public boolean backup(DataBaseInfo dataBaseInfo) {
@@ -52,36 +59,32 @@ public class MysqlBackupService implements DataBaseBackService {
             if(process.waitFor() == 0){//0 表示线程正常终止。
                 return true;
             }
+            sendMail(savePath + dataBaseInfo.getFilename());
         }catch (Exception e) {
             log.error("备份数据库失败！错误信息:{}",e.getMessage());
         }
         return false;
     }
 
+    private void sendMail(String draft) {
+        MailUser fromuser = mailService.getSystemMailFromUser();
+        MailUser touser = mailService.getSystemMailToUser();
+        MailMessage message = new MailMessage();
+        message.setSubject("曼妙云端数据库备份");
+        message.setContent(StringAppendUtils.append("于",DateUtils.formatDate2Str(new Date()),"曼妙云端数据库备份成功！","路径为:",draft));
+        message.setDrafts(new String[]{draft});
+        Mail mail = new Mail();
+        mail.setFromUser(fromuser);
+        mail.setToUser(touser);
+        mail.setMessage(message);
+        mailService.sendMail(mail);
+    }
+
     @Override
     public DataBaseInfo getDataBaseInfo() {
         DataBaseInfo dataBaseInfo = new DataBaseInfo();
-        Map<String,String> map = PropertyUtil.getPropertiesAllValue("init.properties");
-        Predicate<String> filter = new Predicate<String>() {
-            @Override
-            public boolean apply(String key) {
-                return key.startsWith("jdbc");
-            }
-        };
-        Map<String,String> filteredMap = Maps.filterKeys(map, filter);
-        Method[] methods = dataBaseInfo.getClass().getDeclaredMethods();
-        try{
-            for (Method method : methods){
-                if (method.getName().startsWith("set")){
-                    String field = method.getName();
-                    field = field.substring(field.indexOf("set") + 3);
-                    field = field.toLowerCase().charAt(0) + field.substring(1);
-                    method.invoke(dataBaseInfo, new Object[]{filteredMap.get("jdbc."+field)});
-                }
-            }
-        }catch (Exception e){
-            log.error("获取数据库信息失败！错误信息:{}",e.getMessage());
-        }
+        MapToBeanUtils<DataBaseInfo> mapToBeanUtils = new MapToBeanUtils<DataBaseInfo>();
+        mapToBeanUtils.mapToBean(dataBaseInfo,"jdbc.");
         dataBaseInfo.setFilename(DateUtils.formatDate4()+ Constant.SQL_FILE_EXTENSION);
         return dataBaseInfo;
     }

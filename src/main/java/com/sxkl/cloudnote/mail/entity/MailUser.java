@@ -8,6 +8,6 @@ import lombok.Data;
 @Data
 public class MailUser {
 
-    private String userName;
+    private String username;
     private String password;
 }

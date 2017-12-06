@@ -44,3 +44,5 @@ CREATE TABLE `cloudnote`.`cn_message` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
+ALTER TABLE `cloudnote`.`cn_user`
+  ADD COLUMN `mailpass` VARCHAR(50) NOT NULL AFTER `password`;
