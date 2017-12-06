@@ -1,24 +1,22 @@
 package com.sxkl.cloudnote.backup.service;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Maps;
 import com.sxkl.cloudnote.backup.entity.DataBaseInfo;
 import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.mail.entity.Mail;
 import com.sxkl.cloudnote.mail.entity.MailMessage;
 import com.sxkl.cloudnote.mail.entity.MailUser;
 import com.sxkl.cloudnote.mail.service.MailService;
-import com.sxkl.cloudnote.utils.*;
-import lombok.Cleanup;
+import com.sxkl.cloudnote.utils.DESUtil;
+import com.sxkl.cloudnote.utils.DateUtils;
+import com.sxkl.cloudnote.utils.MapToBeanUtils;
+import com.sxkl.cloudnote.utils.StringAppendUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
-import java.lang.reflect.Method;
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by wangyao
@@ -43,21 +41,22 @@ public class MysqlBackupService implements DataBaseBackService {
         }
         try {
             DESUtil desUtil = new DESUtil();
-            @Cleanup
-            PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(new FileOutputStream(savePath + dataBaseInfo.getFilename()), "utf8"));
-            String comand = " mysqldump -h " + dataBaseInfo.getIp() + " -u " + dataBaseInfo.getUsername() + " -p " + desUtil.decrypt(dataBaseInfo.getPassword()) + " --set-charset=UTF8 " + dataBaseInfo.getSchema();
-            System.out.println(comand);
-            Process process = Runtime.getRuntime().exec(comand);
-            InputStreamReader inputStreamReader = new InputStreamReader(process.getInputStream(), "utf8");
-            @Cleanup
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-            String line;
-            while((line = bufferedReader.readLine())!= null){
-                printWriter.println(line);
-            }
-            printWriter.flush();
-            if(process.waitFor() == 0){//0 表示线程正常终止。
-                return true;
+//            mysqldump --login-path=mysql_key cloudnote > /home/wy/backup/cloudnote2.sql
+            StringBuilder sb = new StringBuilder();
+            sb.append("mysqldump ");
+            sb.append("--login-path=mysql_key ");
+            sb.append(dataBaseInfo.getSchema());
+            sb.append(" ");
+            sb.append("> ");
+            sb.append(savePath+dataBaseInfo.getFilename());
+            Runtime cmd = Runtime.getRuntime();
+            try {
+                Process p = cmd.exec(sb.toString());
+                if(p.waitFor() == 0){
+                    p.destroy();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
             sendMail(savePath + dataBaseInfo.getFilename());
         }catch (Exception e) {
