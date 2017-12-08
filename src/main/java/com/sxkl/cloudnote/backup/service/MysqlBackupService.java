@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.Ordering;
 import com.sxkl.cloudnote.backup.entity.DataBaseInfo;
 import com.sxkl.cloudnote.common.entity.Constant;
+import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.mail.entity.Mail;
 import com.sxkl.cloudnote.mail.entity.MailMessage;
 import com.sxkl.cloudnote.mail.entity.MailUser;
@@ -33,6 +34,7 @@ public class MysqlBackupService extends AbstractBackupDB {
     @Autowired
     private MailService mailService;
 
+    @Logger(message="获取数据库信息")
     @Override
     public DataBaseInfo getDataBaseInfo() {
         DataBaseInfo dataBaseInfo = new DataBaseInfo();
@@ -42,6 +44,7 @@ public class MysqlBackupService extends AbstractBackupDB {
         return dataBaseInfo;
     }
 
+    @Logger(message="备份数据库")
 	@Override
 	public String backup(DataBaseInfo dataBaseInfo) {
 		String savePath = dataBaseInfo.getPath();
@@ -76,6 +79,7 @@ public class MysqlBackupService extends AbstractBackupDB {
 		return path;
 	}
 
+    @Logger(message="调用邮件服务")
 	@Override
 	public void sendMail(String draft) {
 		MailUser fromuser = mailService.getSystemMailFromUser();
@@ -91,6 +95,7 @@ public class MysqlBackupService extends AbstractBackupDB {
         mailService.sendMail(mail);
 	}
 
+    @Logger(message="删除数据库过期的备份文件")
 	@Override
 	public void deleteExpireFile(String path) {
 		path = path.substring(0,path.lastIndexOf("/"));

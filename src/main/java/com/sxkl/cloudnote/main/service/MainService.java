@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.sxkl.cloudnote.cache.annotation.RedisCachable;
 import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.flag.service.FlagService;
+import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.note.service.NoteService;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.user.service.UserService;
@@ -26,6 +27,7 @@ public class MainService {
 	@Autowired
 	private UserService userService;
 	
+	@Logger(message="获取主页菜单树")
 	@RedisCachable(key=Constant.TREE_MENU_KEY_IN_REDIS,dateTime=20)
 	public String getTree(HttpServletRequest request) {
 		log.info("缓存中没有菜单树，从数据库获取数据，生成菜单树");
@@ -35,6 +37,7 @@ public class MainService {
 		return getTree(user);
 	}
 	
+	@Logger(message="获取主页菜单树")
 	public String getTree(User user) {
 		String noteTreeMenu = noteService.getNoteTreeMenu(user.getId());
 		String flagTreeMenu = flagService.getFlagTreeMenu(user.getId());

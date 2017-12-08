@@ -7,7 +7,6 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import com.google.gson.Gson;
 import com.sxkl.cloudnote.cache.annotation.RedisCachable;
 import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.user.entity.User;
@@ -31,8 +29,6 @@ public class RedisCacheService {
 
 	@Autowired
     private RedisTemplate<Object, Object> redisTemplate;
-	@Autowired
-	private HttpServletRequest request;
 	
     public void initAllData() throws Exception{
         RedisCacheService redisCacheServiceProxy = (RedisCacheService)AopContext.currentProxy();

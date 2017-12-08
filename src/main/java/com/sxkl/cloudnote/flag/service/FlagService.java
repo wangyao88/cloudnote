@@ -17,6 +17,7 @@ import com.sxkl.cloudnote.cache.annotation.RedisDisCachable;
 import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.flag.dao.FlagDao;
 import com.sxkl.cloudnote.flag.entity.Flag;
+import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.main.entity.TreeNode;
 import com.sxkl.cloudnote.user.dao.UserDao;
 import com.sxkl.cloudnote.user.entity.User;
@@ -33,6 +34,7 @@ public class FlagService {
 	@Autowired
 	private ArticleDao articleDao;
 
+	@Logger(message="获取菜单树标签根节点")
 	public TreeNode getRootTreeNode() {
 		TreeNode flag = new TreeNode();
 		flag.setId(Constant.TREE_MENU_FLAG_ID_PREFIX+UUIDUtil.getUUID());
@@ -41,6 +43,7 @@ public class FlagService {
 		return flag;
 	}
 
+	@Logger(message="将标签转换为菜单树节点")
 	public TreeNode convertToTreeNode(TreeNode rootFlag, Flag flag) {
 		TreeNode treeNode = new TreeNode();
 		treeNode.setId(Constant.TREE_MENU_FLAG_ID_PREFIX+flag.getId());
@@ -60,6 +63,7 @@ public class FlagService {
 		return treeNode;
 	}
 
+	@Logger(message="添加标签")
 	@RedisDisCachable(key={Constant.TREE_MENU_KEY_IN_REDIS,Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,})
 	public void addFlag(HttpServletRequest request) {
 		String id = getFlagIdFromFront(request);
@@ -84,6 +88,7 @@ public class FlagService {
 		flagDao.saveFlag(parent);
 	}
 	
+	@Logger(message="更新标签")
 	@RedisDisCachable(key={Constant.TREE_MENU_KEY_IN_REDIS,Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,})
 	public void updateFlag(HttpServletRequest request) {
 		String id = getFlagIdFromFront(request);
@@ -93,6 +98,7 @@ public class FlagService {
 		flagDao.updateFlag(flag);
 	}
 	
+	@Logger(message="删除标签")
 	@RedisDisCachable(key={Constant.TREE_MENU_KEY_IN_REDIS,Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,})
 	public void deleteFlag(HttpServletRequest request) {
 		try {
@@ -127,6 +133,7 @@ public class FlagService {
 		return frontId.substring(Constant.TREE_MENU_FLAG_ID_PREFIX.length());
 	}
 
+	@Logger(message="获取添加文章页面的标签树")
 	@RedisCachable(key=Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,dateTime=60)
 	public String getCheckFlagTree(HttpServletRequest request) {
 		User sessionUser = UserUtil.getSessionUser(request);
@@ -145,10 +152,12 @@ public class FlagService {
 		}
 	}
 
+	@Logger(message="根据主键获取标签")
 	public List<Flag> selectFlagsByIds(String[] flags) {
 		return flagDao.selectFlagsByIds(flags);
 	}
 
+	@Logger(message="根据文章主键获取标签")
 	public Flag getFlagByArticleId(HttpServletRequest request) {
 		String articleId = request.getParameter("articleId");
 		Article article = articleDao.selectArticleById(articleId);
@@ -171,10 +180,12 @@ public class FlagService {
 		return result;
 	}
 
+	@Logger(message="获取用户相关联的标签")
 	public List getAllFlagByUserId(String userId) {
 		return flagDao.getAllFlagByUserId(userId);
 	}
 
+	@Logger(message="获取标签树")
 	public String getFlagTreeMenu(String userId) {
 		TreeNode rootFlag = getRootTreeNode();
 		Gson gson = new Gson();

@@ -27,6 +27,7 @@ import com.sxkl.cloudnote.eventdriven.manager.PublishManager;
 import com.sxkl.cloudnote.flag.entity.Flag;
 import com.sxkl.cloudnote.flag.service.FlagService;
 import com.sxkl.cloudnote.image.service.ImageService;
+import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.note.entity.Note;
 import com.sxkl.cloudnote.note.service.NoteService;
 import com.sxkl.cloudnote.user.entity.User;
@@ -50,6 +51,7 @@ public class ArticleService {
 	@Autowired
 	private RedisCacheService redisCacheService;
 
+	@Logger(message="添加笔记")
 	@RedisDisCachable(key={Constant.TREE_MENU_KEY_IN_REDIS,Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,})
 	public void addArticle(HttpServletRequest request) {
 		String title = request.getParameter("title");
@@ -86,6 +88,8 @@ public class ArticleService {
 		PublishManager.getPublishManager().getArticlePublisher().establishLinkagesBetweenArticleAndImage(article);
 	}
 	
+	@SuppressWarnings("rawtypes")
+	@Logger(message="获取所有笔记")
 	public String getAllArticles(HttpServletRequest request) {
 		String pageIndex = request.getParameter("pageIndex");
 		String pageSize = request.getParameter("pageSize");
@@ -134,6 +138,7 @@ public class ArticleService {
 		return OperateResultService.configurateSuccessDataGridResult(articles,total);
 	}
 
+    @Logger(message="获取笔记")
 	public String getArticle(HttpServletRequest request) {
 		String id = request.getParameter("id");
 		String content = redisCacheService.getValueFromHash(Constant.HOT_ARTICLE_KEY_IN_REDIS,id,request);
@@ -146,6 +151,7 @@ public class ArticleService {
 		return content;
 	}
 	
+    @Logger(message="删除笔记")
 	@RedisDisCachable(key={Constant.TREE_MENU_KEY_IN_REDIS,Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,})
 	public void deleteArticle(HttpServletRequest request) {
 		String id = request.getParameter("id");
@@ -157,6 +163,7 @@ public class ArticleService {
 		imageService.deleteImageByArticleId(id);
 	}
 
+    @Logger(message="获取待修改笔记")
 	public String getArticleForEdit(HttpServletRequest request) {
 		String articleId = request.getParameter("articleId");
 		Article article = articleDao.selectArticleById(articleId);
@@ -198,6 +205,7 @@ public class ArticleService {
 		return new Gson().toJson(articleForEdit);
 	}
 
+    @Logger(message="获取热门笔记")
 	public List<ArticleForCache> getHotArticles(String userId, int hotArticleRange) {
 		List<Article> articles = articleDao.selectAllArticlesOrderByHitNum(0, hotArticleRange,userId);
 		List<ArticleForCache> results = new ArrayList<ArticleForCache>();

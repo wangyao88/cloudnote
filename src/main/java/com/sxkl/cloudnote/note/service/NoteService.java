@@ -1,6 +1,5 @@
 package com.sxkl.cloudnote.note.service;
 
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +12,7 @@ import com.sxkl.cloudnote.article.dao.ArticleDao;
 import com.sxkl.cloudnote.article.entity.Article;
 import com.sxkl.cloudnote.cache.annotation.RedisDisCachable;
 import com.sxkl.cloudnote.common.entity.Constant;
+import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.main.entity.TreeNode;
 import com.sxkl.cloudnote.note.dao.NoteDao;
 import com.sxkl.cloudnote.note.entity.Note;
@@ -33,6 +33,7 @@ public class NoteService {
 	@Autowired
 	private ArticleDao articleDao;
 
+	@Logger(message="获取菜单树笔记本根节点")
 	public TreeNode getRootTreeNode() {
 		TreeNode note = new TreeNode();
 		note.setId(Constant.TREE_MENU_NOTE_ID_PREFIX+UUIDUtil.getUUID());
@@ -41,6 +42,7 @@ public class NoteService {
 		return note;
 	}
 	
+	@Logger(message="将笔记本转换为菜单树节点")
 	public TreeNode convertToTreeNode(Note note){
 		TreeNode treeNode = new TreeNode();
 		treeNode.setId(Constant.TREE_MENU_NOTE_ID_PREFIX+note.getId());
@@ -49,6 +51,7 @@ public class NoteService {
 		return treeNode;
 	}
 
+	@Logger(message="保存笔记本")
 	@RedisDisCachable(key={Constant.TREE_MENU_KEY_IN_REDIS,Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,})
 	public void insertNote(HttpServletRequest request) {
 		User sessionUser = UserUtil.getSessionUser(request);
@@ -61,6 +64,7 @@ public class NoteService {
 		user.getNotes().add(note);
 	}
 
+	@Logger(message="删除笔记本")
 	@RedisDisCachable(key={Constant.TREE_MENU_KEY_IN_REDIS,Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,})
 	public void deleteNote(HttpServletRequest request) {
 		String id = getNoteIdFromFront(request);
@@ -73,6 +77,7 @@ public class NoteService {
 		noteDao.deleteNote(note);
 	}
 	
+	@Logger(message="更新笔记本")
 	@RedisDisCachable(key={Constant.TREE_MENU_KEY_IN_REDIS,Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,})
 	public void updateNote(HttpServletRequest request) {
 		String id = getNoteIdFromFront(request);
@@ -87,6 +92,7 @@ public class NoteService {
 		return frontId.substring(Constant.TREE_MENU_NOTE_ID_PREFIX.length());
 	}
 
+	@Logger(message="获取下拉框笔记本")
 	public String getNoteDataFromCombo(HttpServletRequest request) {
 		User user = UserUtil.getSessionUser(request);
 		List<Note> notes = noteDao.getAllNote(user.getId());
@@ -94,10 +100,12 @@ public class NoteService {
 		return gson.toJson(notes);
 	}
 
+	@Logger(message="根据主键获取笔记本")
 	public Note selectNoteById(String noteId) {
 		return noteDao.selectNoteById(noteId);
 	}
 
+	@Logger(message="根据文章主键获取笔记本")
 	public Note getNoteByArticleId(HttpServletRequest request) {
 		String articleId = request.getParameter("articleId");
 		Article article = articleDao.selectArticleById(articleId);
@@ -108,10 +116,12 @@ public class NoteService {
 		return result;
 	}
 
+	@Logger(message="用户关联的笔记本")
 	public List<Note> getAllNoteByUserId(String userId) {
 		return noteDao.getAllNote(userId);
 	}
 	
+	@Logger(message="获取笔记本菜单树")
 	public String getNoteTreeMenu(String userId) {
 		TreeNode rootNote = getRootTreeNode();
 		Gson gson = new Gson();

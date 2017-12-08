@@ -3,8 +3,6 @@ package com.sxkl.cloudnote.common.service;
 import java.util.List;
 
 import com.google.gson.Gson;
-import com.sxkl.cloudnote.article.entity.Article;
-import com.sxkl.cloudnote.article.entity.ArticleForHtml;
 import com.sxkl.cloudnote.common.entity.OperateResult;
 
 public class OperateResultService {
@@ -42,6 +40,7 @@ public class OperateResultService {
 		return gson.toJson(operateResult);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static String configurateSuccessDataGridResult(List articles, int total) {
 		Gson gson = new Gson();
 		OperateResult operateResult = new OperateResult();

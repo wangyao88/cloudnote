@@ -21,6 +21,7 @@ import javax.mail.internet.MimeUtility;
 import org.springframework.stereotype.Service;
 
 import com.sun.mail.util.MailSSLSocketFactory;
+import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.mail.entity.Mail;
 import com.sxkl.cloudnote.mail.entity.MailMessage;
 import com.sxkl.cloudnote.mail.entity.MailUser;
@@ -37,6 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class MailService {
 
+	@Logger(message="发送邮件")
     public void sendMail(Mail mail){
         try{
         	log.info("开始发送邮件");
@@ -104,6 +106,7 @@ public class MailService {
         }
     }
 
+	@Logger(message="获取系统默认邮件发送人")
     public MailUser getSystemMailFromUser(){
         MailUser fromuser = new MailUser();
         MapToBeanUtils<MailUser> mapToBeanUtils = new MapToBeanUtils<MailUser>();
@@ -111,6 +114,7 @@ public class MailService {
         return fromuser;
     }
 
+	@Logger(message="获取系统默认邮件接收人")
     public MailUser getSystemMailToUser(){
         MailUser touser = new MailUser();
         MapToBeanUtils<MailUser> mapToBeanUtils = new MapToBeanUtils<MailUser>();
