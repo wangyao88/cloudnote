@@ -12,6 +12,8 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.sxkl.cloudnote.cache.annotation.RedisCachable;
 import com.sxkl.cloudnote.cache.annotation.RedisDisCachable;
@@ -43,6 +45,9 @@ public class RedisCacheAop {
 		String key = redisCachable.key();
 		if(!Constant.LOGIN_PAGE_KEY_IN_REDIS.equals(key)){
 			HttpServletRequest request = (HttpServletRequest) objs[i];
+			if(request == null){
+				request = getRequest();
+			}
 			i = 0;
 			User sessionUser = UserUtil.getSessionUser(request);
 			key += sessionUser.getId();
@@ -79,6 +84,9 @@ public class RedisCacheAop {
 		}
 		Object[] objs = pjp.getArgs();
 		HttpServletRequest request = (HttpServletRequest) objs[i];
+		if(request == null){
+			request = getRequest();
+		}
 		i = 0;
 		User sessionUser = UserUtil.getSessionUser(request);
 		String userId = sessionUser.getId();
@@ -100,5 +108,15 @@ public class RedisCacheAop {
 			return page;
 		}
 		return value;
+	}
+	
+	private HttpServletRequest getRequest(){
+		HttpServletRequest request = null;
+		try {
+			request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+		} catch (Exception e) {
+			request = null;
+		}
+	    return request;
 	}
 }

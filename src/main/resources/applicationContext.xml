@@ -153,6 +153,7 @@
         <!-- 配置详细事务处理语义 -->
         <tx:attributes>
             <tx:method name="insert*" propagation="REQUIRED" />
+            <tx:method name="save*" propagation="REQUIRED" />
             <tx:method name="update*" propagation="REQUIRED" />
             <tx:method name="delete*" propagation="REQUIRED" />
             <tx:method name="get*" propagation="SUPPORTS" read-only="true" />

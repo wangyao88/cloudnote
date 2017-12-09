@@ -12,6 +12,7 @@ import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -19,6 +20,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.log.entity.Log;
 import com.sxkl.cloudnote.log.entity.LogLevel;
+import com.sxkl.cloudnote.log.service.LogService;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.utils.UserUtil;
 
@@ -26,40 +28,32 @@ import com.sxkl.cloudnote.utils.UserUtil;
 @Component
 public class LogInterceptor {
 	
+	@Autowired
+	private LogService logService;
+	
 	@Around("@annotation(logger)")
 	public Object afterMethod(ProceedingJoinPoint pjp, Logger logger) throws Throwable{
-		Signature signature = pjp.getSignature();
-		MethodSignature methodSignature = (MethodSignature)signature;
-		Method method = methodSignature.getMethod();
-		String methodName = method.getName();
-		String className = pjp.getTarget().getClass().getName();
-		String message = logger.message();
+		Log log = configurateLog(pjp);
 		LogLevel logLevel = LogLevel.valueOf(LogLevel.class, logger.logLevel());
-		Date happenTime = new Date();
 		long start = System.currentTimeMillis();
-		Object object = pjp.proceed();// 执行该方法
+		Object object = pjp.proceed();
 		long end = System.currentTimeMillis();
 		long costTime = end - start;
-		Log log = new Log();
 		log.setLogLevel(logLevel);
-		log.setClassName(className);
-		log.setMethodName(methodName);
-		log.setMessage(message);
-		log.setDate(happenTime);
 		log.setCostTime(costTime);
-		HttpServletRequest request = getRequest();
-		User user = UserUtil.getSessionUser(request);
-		if(user != null){
-			log.setIp(request.getRemoteAddr());
-			log.setUserId(user.getId());
-			log.setUserName(user.getName());
-		}
-		System.out.println(log);
+		logService.showLogInConsole(log);
 		return object;
 	}
 	
 	@AfterThrowing(pointcut="execution(* com.sxkl.cloudnote.*.service.*.*(..))", throwing="e")
     public void doAfterThrowing(JoinPoint jp,Throwable e){
+		Log log = configurateLog(jp);
+		log.setLogLevel(LogLevel.ERROR);
+		log.setErrorMsg(e.getMessage());
+		logService.showLogInConsole(log);
+	}
+
+	private Log configurateLog(JoinPoint jp) {
 		Signature signature = jp.getSignature();
 		MethodSignature methodSignature = (MethodSignature)signature;
 		Method method = methodSignature.getMethod();
@@ -68,12 +62,10 @@ public class LogInterceptor {
 		String message = getServiceMethodDescription(method);
 		Date happenTime = new Date();
 		Log log = new Log();
-		log.setLogLevel(LogLevel.ERROR);
 		log.setClassName(className);
 		log.setMethodName(methodName);
 		log.setMessage(message);
 		log.setDate(happenTime);
-		log.setErrorMsg(e.getMessage());
 		HttpServletRequest request = getRequest();
 		User user = UserUtil.getSessionUser(request);
 		if(user != null){
@@ -81,7 +73,7 @@ public class LogInterceptor {
 			log.setUserId(user.getId());
 			log.setUserName(user.getName());
 		}
-		System.out.println(log);
+		return log;
 	}
 	
 	private String getServiceMethodDescription(Method method) {
