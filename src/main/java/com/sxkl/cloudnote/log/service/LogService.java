@@ -3,6 +3,7 @@ package com.sxkl.cloudnote.log.service;
 import org.springframework.stereotype.Service;
 
 import com.sxkl.cloudnote.log.entity.Log;
+import com.sxkl.cloudnote.log.entity.LogLevel;
 import com.sxkl.cloudnote.utils.DateUtils;
 
 @Service
@@ -19,14 +20,16 @@ public class LogService {
 				  .append(logger.getMethodName())
 				  .append(" ")
 				  .append(logger.getMessage())
-				  .append(" ")
-				  .append(logger.getErrorMsg())
-				  .append(" ")
-				  .append(logger.getCostTime())
-				  .append(" ")
-				  .append(logger.getUserName())
-				  .append(" ")
-				  .append(logger.getIp());
+				  .append(" ");
+		 if(LogLevel.ERROR.equals(logger.getLogLevel())){
+			 consoleLog.append(logger.getErrorMsg())
+			           .append(" ");
+		 }
+		 consoleLog.append(logger.getCostTime())
+				   .append(" ")
+				   .append(logger.getUserName())
+				   .append(" ")
+				   .append(logger.getIp());
 		System.out.println(consoleLog.toString());
 	}
 }

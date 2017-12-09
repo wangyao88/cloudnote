@@ -22,6 +22,7 @@ import com.sxkl.cloudnote.log.entity.Log;
 import com.sxkl.cloudnote.log.entity.LogLevel;
 import com.sxkl.cloudnote.log.service.LogService;
 import com.sxkl.cloudnote.user.entity.User;
+import com.sxkl.cloudnote.utils.IPUtils;
 import com.sxkl.cloudnote.utils.UserUtil;
 
 @Aspect
@@ -67,11 +68,17 @@ public class LogInterceptor {
 		log.setMessage(message);
 		log.setDate(happenTime);
 		HttpServletRequest request = getRequest();
-		User user = UserUtil.getSessionUser(request);
-		if(user != null){
-			log.setIp(request.getRemoteAddr());
-			log.setUserId(user.getId());
-			log.setUserName(user.getName());
+		if(request != null){
+			try {
+				log.setIp(IPUtils.getIPAddr(request));
+			} catch (Exception e) {
+				System.out.println("获取用户IP失败！错误信息："+e.getMessage());
+			}
+			User user = UserUtil.getSessionUser(request);
+			if(user != null){
+				log.setUserId(user.getId());
+				log.setUserName(user.getName());
+			}
 		}
 		return log;
 	}
