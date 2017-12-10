@@ -362,6 +362,12 @@ public class DateUtils {
 		return formatDuring(end.getTime() - begin.getTime());
 	}
 
+	public static String formatDate3(){
+		Date date = new Date();
+		SimpleDateFormat format = new SimpleDateFormat(DATE_TIME_PATTON_3);
+		return format.format(date);
+	}
+	
 	public static String formatDate4(){
 		Date date = new Date();
 		SimpleDateFormat format = new SimpleDateFormat(DATE_TIME_PATTON_4);

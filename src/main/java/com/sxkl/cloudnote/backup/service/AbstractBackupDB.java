@@ -4,11 +4,12 @@ import com.sxkl.cloudnote.backup.entity.DataBaseInfo;
 
 public abstract class AbstractBackupDB implements DataBaseBackService{
 	
-	public void backupChain(){
+	public String backupChain(){
 		DataBaseInfo dataBaseInfo = getDataBaseInfo();
 		String path = backup(dataBaseInfo);
-		sendMail(path);
+//		sendMail(path);
 		deleteExpireFile(path);
+		return path.substring(path.lastIndexOf("/")+1, path.length());
 	}
 	
 	public abstract DataBaseInfo getDataBaseInfo();
@@ -18,5 +19,11 @@ public abstract class AbstractBackupDB implements DataBaseBackService{
 	public abstract void sendMail(String draft);
 	
 	public abstract void deleteExpireFile(String path);
+	
+	public static void main(String[] args) {
+		String str = "/home/wy/sdfsfs.sql";
+		str = str.substring(str.lastIndexOf("/")+1, str.length());
+		System.out.println(str);
+	}
 
 }
