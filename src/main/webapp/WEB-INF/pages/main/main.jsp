@@ -34,8 +34,8 @@
 </head>
 <body id="globalKeyEvent">
 	<div id="layout1" class="mini-layout" style="width:100%;height:100%;"borderStyle="border:solid 1px #aaa;">
-	     <div title="工具栏" region="north" showHeader="false" height="28px">
-			<div class="mini-toolbar">
+	     <div title="工具栏" region="north" showHeader="false" height="34px">
+			<div class="mini-toolbar" height="33px">
 			    <a class="mini-button" iconCls="icon-addnew" onclick="addArticle">增加</a>
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-edit" onclick="editArticle">修改</a>
@@ -46,7 +46,7 @@
 			    <a class="mini-button" plain="true" id="searchArticleBtn" onclick="searchArticle">查询</a>
 		    </div>
 		 </div>
-		 <div title="south" region="south" showSplit="false" showHeader="false" height="30px" showSplitIcon="false" >
+		 <div title="south" region="south" showSplit="false" showHeader="false" height="32px" showSplitIcon="false" >
         		<div class="mini-toolbar">
 			    <a class="mini-button" iconCls="icon-user" onclick="openWebchatPage">在线聊天</a>
 			    <span class="separator"></span>
@@ -54,9 +54,9 @@
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-edit" onclick="">账号管理</a>
 			    <span class="separator"></span>
-			    <a class="mini-button" iconCls="icon-redo" onclick="">导出笔记</a>
+			    <a class="mini-button" iconCls="icon-undo" onclick="">导出笔记</a>
 			    <span class="separator"></span>
-			    <a class="mini-button" iconCls="icon-undo" onclick="">导入笔记</a>
+			    <a class="mini-button" iconCls="icon-redo" onclick="">导入笔记</a>
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-search" onclick="backupDB()">备份数据</a>
 			    <span class="separator"></span>

@@ -74,6 +74,21 @@ body, html {
 
 	var isEdit = false;
 	var articleId;
+	
+	function SetDefaultFlagData(node){
+	    var nodeId = node.id;
+	    var nodeText = node.text;
+	    if(nodeId.indexOf("note") == 0){
+	    	var note = mini.get("note");
+			note.setValue(nodeId);
+			note.setText(nodeText);
+	    }
+	    if(nodeId.indexOf("flag") == 0){
+	    	var flag = mini.get("flags");
+			flag.setValue(nodeId);
+			flag.setText(nodeText);
+	    }
+	}
 
 	function SetData(data) {
 		data = mini.clone(data);

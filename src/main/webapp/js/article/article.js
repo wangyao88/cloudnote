@@ -8,8 +8,8 @@ function addArticle() {
 		width : 1000,
 		height : 700,
 		onload : function() {
-			//                var iframe = this.getIFrameEl();
-			//                iframe.contentWindow.SetData(node);
+            var iframe = this.getIFrameEl();
+            iframe.contentWindow.SetDefaultFlagData(node);
 		},
 		ondestroy : function(action) {
 			if (action == "ok") {
