@@ -12,12 +12,10 @@ import com.sxkl.cloudnote.article.entity.ArticleForCache;
 import com.sxkl.cloudnote.article.service.ArticleService;
 import com.sxkl.cloudnote.cache.service.RedisCacheService;
 import com.sxkl.cloudnote.common.entity.Constant;
+import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.user.service.UserService;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Service
 public class ArticleSchedule {
 	
@@ -30,6 +28,7 @@ public class ArticleSchedule {
 	@Autowired
 	private UserService userService;
 	
+	@Logger(message="定时缓存用户热门笔记")
 	@Scheduled(fixedRate=Constant.HOT_ARTICLE_EXPIRE_IN_REDIS)
     public void cacheHotArticle(){
 		List<User> users = userService.getAllUsers();
@@ -40,7 +39,6 @@ public class ArticleSchedule {
 				result.put(articleForCache.getId(), articleForCache.getContent());
 			}
 			redisCacheService.cacheMap(Constant.HOT_ARTICLE_KEY_IN_REDIS+user.getId(),result);
-			log.info("缓存用户["+user.getName()+"]热门笔记");
 		}
     }
 

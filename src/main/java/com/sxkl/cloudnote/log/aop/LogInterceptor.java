@@ -14,8 +14,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.log.entity.Log;
@@ -23,6 +21,7 @@ import com.sxkl.cloudnote.log.entity.LogLevel;
 import com.sxkl.cloudnote.log.service.LogService;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.utils.IPUtils;
+import com.sxkl.cloudnote.utils.RequestUtils;
 import com.sxkl.cloudnote.utils.UserUtil;
 
 @Aspect
@@ -67,7 +66,7 @@ public class LogInterceptor {
 		log.setMethodName(methodName);
 		log.setMessage(message);
 		log.setDate(happenTime);
-		HttpServletRequest request = getRequest();
+		HttpServletRequest request = RequestUtils.getRequest();
 		if(request != null){
 			try {
 				log.setIp(IPUtils.getIPAddr(request));
@@ -92,15 +91,4 @@ public class LogInterceptor {
 		}
 		return methodDescription;
 	}
-
-	private HttpServletRequest getRequest(){
-		HttpServletRequest request = null;
-		try {
-			request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-		} catch (Exception e) {
-			request = null;
-		}
-	    return request;
-	}
-
 }

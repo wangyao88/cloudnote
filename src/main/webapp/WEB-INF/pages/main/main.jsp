@@ -27,7 +27,7 @@
 <script src="<%=basePath%>js/webchat/webchat.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/statChart/statChart.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/main/main.js" type="text/javascript"></script>
-	<script src="<%=basePath%>js/backup/backup.js" type="text/javascript"></script>
+<script src="<%=basePath%>js/backup/backup.js" type="text/javascript"></script>
 <script type="text/javascript">
    var basePath = "<%=basePath%>";
 </script>

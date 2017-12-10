@@ -218,4 +218,8 @@ public class ArticleService {
 		}
 		return results;
 	}
+
+	public Article getArticleByDraftName(String fileName) {
+		return articleDao.getArticleByDraftName(fileName);
+	}
 }

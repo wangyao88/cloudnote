@@ -142,3 +142,5 @@ function  isFlagTreeNode(node){
 	 }
 	 return false;
 }
+
+

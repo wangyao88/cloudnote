@@ -17,6 +17,7 @@ import com.sxkl.cloudnote.article.dao.ArticleDao;
 import com.sxkl.cloudnote.eventdriven.entity.ArticlePublisherBean;
 import com.sxkl.cloudnote.eventdriven.entity.ArticlePublisherEvent;
 import com.sxkl.cloudnote.image.service.ImageService;
+import com.sxkl.cloudnote.log.annotation.Logger;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,17 +46,18 @@ public class ArticleListener implements ApplicationListener<ApplicationEvent>{
 		}
 	}
 	
-	private void increaseHitNum(ArticlePublisherBean bean) {
+	@Logger(message="增加笔记点击量")
+	public void increaseHitNum(ArticlePublisherBean bean) {
 		try {
 			TimeUnit.SECONDS.sleep(1);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		articleDao.increaseHitNum(bean.getArticleId());
-		log.info("ArticleListener:[increaseHitNum]处理完成！");
 	}
 
-	private void linkArticleImage(ArticlePublisherBean article) {
+	@Logger(message="建立笔记和图片的关系")
+	public void linkArticleImage(ArticlePublisherBean article) {
 		Document doc = Jsoup.parse(article.getArticleContent());
 		Elements imgs = doc.getElementsByTag("img");
 		String regex = "^(http|https|ftp)+://.*$";
@@ -66,7 +68,6 @@ public class ArticleListener implements ApplicationListener<ApplicationEvent>{
 				imageService.establishLinkagesBetweenArticleAndImage(article.getArticleId(),imageName);
 			}
 		}
-		log.info("ArticleListener:[linkArticleImage]处理完成！");
 	}
 
 	private boolean isNotDuty(ApplicationEvent event){

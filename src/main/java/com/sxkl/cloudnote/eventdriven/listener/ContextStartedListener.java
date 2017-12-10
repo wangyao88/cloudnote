@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.sxkl.cloudnote.common.entity.Constant;
+import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.main.service.MainService;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.user.service.UserService;
@@ -34,7 +35,8 @@ public class ContextStartedListener implements ApplicationListener<ContextRefres
 		}
 	}
 
-	private void configurateTreeMenuCache() {
+	@Logger(message="缓存用户菜单树")
+	public void configurateTreeMenuCache() {
 		List<User> users = userService.getAllUsers();
 		for(User user : users){
 			String key = Constant.TREE_MENU_KEY_IN_REDIS+user.getId();
@@ -49,7 +51,6 @@ public class ContextStartedListener implements ApplicationListener<ContextRefres
 						redisTemplate.expire(key, dateTime, TimeUnit.MINUTES);
 					}
 				}
-				log.info("缓存用户["+user.getName()+"]的菜单树");
 			}
 		}
 	}

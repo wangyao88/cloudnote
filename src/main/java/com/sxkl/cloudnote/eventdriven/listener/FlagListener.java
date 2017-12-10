@@ -13,6 +13,7 @@ import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.eventdriven.entity.FlagPublisherBean;
 import com.sxkl.cloudnote.eventdriven.entity.FlagPublisherEvent;
 import com.sxkl.cloudnote.flag.service.FlagService;
+import com.sxkl.cloudnote.log.annotation.Logger;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,7 +33,6 @@ public class FlagListener implements ApplicationListener<ApplicationEvent>{
 		}
 		FlagPublisherBean flag = (FlagPublisherBean) event.getSource();
 		cacheAddArticleTreeMenu(flag.getUserId());
-		log.info("ArticleListener:[linkArticleImage]处理完成！");
 	}
 	
 	
@@ -41,6 +41,7 @@ public class FlagListener implements ApplicationListener<ApplicationEvent>{
 		return !event.getClass().toString().equals(FlagPublisherEvent.class.toString());
 	}
 	
+	@Logger(message="缓存增加笔记时的标签树")
 	public void cacheAddArticleTreeMenu(String userId) {
 		String key = Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS + userId;
 		boolean hasCached = redisTemplate.hasKey(key);

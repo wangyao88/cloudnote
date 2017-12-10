@@ -9,16 +9,15 @@ import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.eventdriven.entity.ArticlePublisherBean;
 import com.sxkl.cloudnote.eventdriven.entity.ArticlePublisherEvent;
 import com.sxkl.cloudnote.eventdriven.entity.DutyType;
+import com.sxkl.cloudnote.log.annotation.Logger;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Service
 public class ArticlePublisher {
 
 	@Autowired
 	private ApplicationContext applicationContext;
 	
+	@Logger(message="建立笔记和图片的关系")
 	public void establishLinkagesBetweenArticleAndImage(Article article){
 		ArticlePublisherBean bean = new ArticlePublisherBean();
 		bean.setArticleId(article.getId());
@@ -26,16 +25,15 @@ public class ArticlePublisher {
 		bean.setDomain(Constant.DOMAIN);
 		bean.setDutype(DutyType.LINK_ARTICLE_IMAGE);
         applicationContext.publishEvent(new ArticlePublisherEvent(bean));
-        log.info("ArticlePublisher--establishLinkagesBetweenArticleAndImage--["+article.getTitle()+"]");
         
-  }
+    }
 
+	@Logger(message="增加笔记点击量")
 	public void increaseArticleHitNum(String id) {
 		ArticlePublisherBean bean = new ArticlePublisherBean();
 		bean.setArticleId(id);
 		bean.setDutype(DutyType.INCREASE_HITNUM);
         applicationContext.publishEvent(new ArticlePublisherEvent(bean));
-        log.info("ArticlePublisher--increaseArticleHitNum");
 	}
 
 }

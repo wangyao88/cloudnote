@@ -1,5 +1,6 @@
 package com.sxkl.cloudnote.user.service;
 
+import java.io.File;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,7 @@ import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.user.dao.UserDao;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.utils.DESUtil;
+import com.sxkl.cloudnote.utils.StringAppendUtils;
 import com.sxkl.cloudnote.utils.UserUtil;
 
 @Service
@@ -33,10 +35,7 @@ public class UserService {
         if(chackeLoginParams(userName,password)){
         	User user = validateLogin(userName,password);
         	if(user != null){
-        		mv.setViewName("redirect:/main");
-                HttpSession session = request.getSession();
-                session.setAttribute(Constant.USER_IN_SESSION_KEY, user);
-                Constant.onLine(user.getId(), session);
+        		processLoginEvent(request, mv, user);
         	}else{
         		mv.setViewName("login/login");
                 mv.addObject("error","用户名或密码错误！");
@@ -46,6 +45,14 @@ public class UserService {
             mv.addObject("error","用户名与密码不能为空！");
         }
         return mv;
+	}
+
+	private void processLoginEvent(HttpServletRequest request, ModelAndView mv, User user) {
+		mv.setViewName("redirect:/main");
+		HttpSession session = request.getSession();
+		session.setAttribute(Constant.USER_IN_SESSION_KEY, user);
+		Constant.onLine(user.getId(), session);
+		Constant.REAL_DRAFT_PATH = StringAppendUtils.append(request.getSession().getServletContext().getRealPath(File.separator),Constant.DRAFT_PATH_PREFIX);
 	}
 	
 	@Logger(message="退出系统")

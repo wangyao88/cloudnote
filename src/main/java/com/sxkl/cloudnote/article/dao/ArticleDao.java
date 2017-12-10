@@ -163,4 +163,12 @@ public class ArticleDao extends BaseDao {
 	    session.close();
 	}
 
+	public Article getArticleByDraftName(String fileName) {
+		String hql = "select new Article(id,title,hitNum) from Article a where a.content like :content";
+		Session session = this.getSessionFactory().getCurrentSession();
+	    Query query = session.createQuery(hql);
+	    query.setString("content", '%'+fileName+'%');
+		return (Article) query.uniqueResult();
+	}
+
 }
