@@ -5,8 +5,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.UUID;
@@ -17,12 +19,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.image.entity.Image;
 import com.sxkl.cloudnote.image.service.ImageService;
-
-import lombok.Cleanup;
 
 public class FileUtils extends org.apache.commons.io.FileUtils {
 	public static void writeFileToDisk(byte[] data, String filePath) throws Exception {
@@ -217,20 +221,50 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		String imgName = "";
 		String imgNewUrl = "";
 		String regex = "^(http|https|ftp)+://.*$";
-		for (int i = 0; i < imgs.size(); i++) {
-			String imgOldUrl = imgs.get(i).attr("src");
-			String imgAlt = imgs.get(i).attr("alt");
-			if ((Pattern.matches(regex, imgOldUrl)) && (!imgOldUrl.startsWith(Constant.ARTICLE_CONTENT_DOMAIN))) {
-				imgName = getUUIDNameWithoutextend(getUrlFileName(imgOldUrl));
-				try {
+		try {
+			for (int i = 0; i < imgs.size(); i++) {
+				String imgOldUrl = imgs.get(i).attr("src");
+				String imgAlt = imgs.get(i).attr("alt");
+				if ((Pattern.matches(regex, imgOldUrl)) && (!imgOldUrl.startsWith(Constant.ARTICLE_CONTENT_DOMAIN))) {
+					imgName = getUUIDNameWithoutextend(getUrlFileName(imgOldUrl));
 					Image image = new Image(imgName,imgAlt);
 					saveFileToDBByUrl(imgOldUrl,image,imageService);
 					imgNewUrl = Constant.ARTICLE_CONTENT_DOMAIN + "/image/getImage?name="+imgName;
 					doc.getElementsByTag("img").get(i).attr("src", imgNewUrl);
-				} catch (Exception localException) {
 				}
 			}
+		} catch (Exception localException) {
 		}
 		return doc.html();
+	}
+
+	public static String filterDraft(String contentFilted) {
+		Document doc = Jsoup.parse(contentFilted);
+		Elements as = doc.getElementsByTag("a");
+		String aNewUrl = "";
+		try {
+			for (int i = 0; i < as.size(); i++) {
+				String aOldUrl = as.get(i).attr("href");
+				String title = as.get(i).attr("title");
+				if (aOldUrl.startsWith(Constant.DRAFT_PATH_PREFIX)) {
+					String draftPath = aOldUrl.replaceAll(Constant.DRAFT_PATH_PREFIX, Constant.STRING_EMPTY)
+							                  .replaceAll(Constant.FILE_SEPARATOR,Constant.SLASH);
+					aNewUrl = StringAppendUtils.append(Constant.ARTICLE_CONTENT_DOMAIN,Constant.DOWNLOAD_DRAFT,draftPath,"&title=",title);
+					doc.getElementsByTag("a").get(i).attr("href", aNewUrl);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return doc.html();
+	}
+	
+	public static ResponseEntity<byte[]> downloadFile(String fileName, String filePath) throws UnsupportedEncodingException, IOException {
+		File file = new File(filePath);
+		HttpHeaders header = new HttpHeaders();
+		fileName = new String(fileName.getBytes("UTF-8"),"iso-8859-1");//为了解决中文名称乱码问题  
+		header.setContentDispositionFormData("attachment",fileName);
+		header.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+		return new ResponseEntity<byte[]>(org.apache.commons.io.FileUtils.readFileToByteArray(file),header,HttpStatus.CREATED);
 	}
 }

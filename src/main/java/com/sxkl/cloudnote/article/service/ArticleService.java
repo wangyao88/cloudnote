@@ -83,6 +83,7 @@ public class ArticleService {
 		article.setNote(note);
 		article.setFlags(new HashSet<Flag>(flagBeans));
 		String contentFilted = FileUtils.saveHtmlImgToDB(content,imageService);
+		contentFilted = FileUtils.filterDraft(contentFilted);
 		article.setContent(contentFilted);
 		articleDao.saveOrUpdateArticle(article);
 		PublishManager.getPublishManager().getArticlePublisher().establishLinkagesBetweenArticleAndImage(article);

@@ -1,10 +1,13 @@
 package com.sxkl.cloudnote.common.entity;
 
+import java.io.File;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpSession;
 
 public class Constant {
+	
+	public static final String PROJECT_NAME = "cloudnote";
 	
 	public static final String USER_IN_SESSION_KEY = "user";
 	
@@ -41,6 +44,16 @@ public class Constant {
 	public static final String UEDITOR_UPLOAD_PATH = "/ueditor/jsp/upload/image";
 
 	public static final String SQL_FILE_EXTENSION = ".sql";
+	
+	public static final String DRAFT_PATH_PREFIX = "/ueditor/jsp/upload/file/";
+
+	public static final String DOWNLOAD_DRAFT = "/file/downloadDraft?filepath=";
+	
+	public static final String STRING_EMPTY = "";
+	
+	public static final String SLASH = "slash";
+	
+	public static final String FILE_SEPARATOR = "/";
 	
 	private static ConcurrentHashMap<String, HttpSession> onLineSession = new ConcurrentHashMap<String,HttpSession>();
 	
