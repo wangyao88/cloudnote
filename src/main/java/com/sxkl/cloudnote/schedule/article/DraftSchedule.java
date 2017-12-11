@@ -24,19 +24,26 @@ public class DraftSchedule {
 	@Logger(message="定时删除失效笔记附件")
 	@Scheduled(cron="0 0 2 * * ?")
     public void deleteExpireDraft(){
-		if(!StringUtils.isEmpty(Constant.REAL_DRAFT_PATH)){
-			File uploadPrefix = new File(Constant.REAL_DRAFT_PATH);
-	        File[] directories = uploadPrefix.listFiles();
-	        for(File file : directories){
-	        	File[] uploads = file.listFiles();
-	        	for(File upload : uploads){
-	            	String fileName = upload.getName();
-	            	Article article = articleService.getArticleByDraftName(fileName);
-	            	if(article == null && upload.delete()){
-	            		log.info("删除失效笔记附件[{}]",fileName);
-	            	}
-	            }
-	        }
+		if(StringUtils.isEmpty(Constant.REAL_DRAFT_PATH)){
+			return;
 		}
+		File uploadPrefix = new File(Constant.REAL_DRAFT_PATH);
+        File[] directories = uploadPrefix.listFiles();
+        if(directories == null){
+			return;
+		}
+        for(File file : directories){
+        	File[] uploads = file.listFiles();
+        	if(uploads == null){
+        		continue;
+        	}
+        	for(File upload : uploads){
+            	String fileName = upload.getName();
+            	Article article = articleService.getArticleByDraftName(fileName);
+            	if(article == null && upload.delete()){
+            		log.info("删除失效笔记附件[{}]",fileName);
+            	}
+            }
+        }
     }
 }
