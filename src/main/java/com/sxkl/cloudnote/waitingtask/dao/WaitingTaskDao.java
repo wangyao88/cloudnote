@@ -6,10 +6,12 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 import com.sxkl.cloudnote.common.dao.BaseDao;
 import com.sxkl.cloudnote.waitingtask.entity.WaitingTask;
 
+@Repository
 public class WaitingTaskDao extends BaseDao{
 
 	public void insert(WaitingTask waitingTask) {
@@ -29,7 +31,7 @@ public class WaitingTaskDao extends BaseDao{
 	
 	@SuppressWarnings("unchecked")
 	public List<WaitingTask> findPage(int pageIndex, int pageSize,String userId) {
-		String hql = "from WaitingTask w where w.user.id=:userId";
+		String hql = "select new WaitingTask(id,name,createDate,expire,process,content,taskType) from WaitingTask w where w.user.id=:userId";
 		Session session = this.getSessionFactory().getCurrentSession();
 	    Query query = session.createQuery(hql);
 	    query.setString("userId", userId);

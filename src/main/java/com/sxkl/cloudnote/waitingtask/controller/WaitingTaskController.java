@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.utils.UserUtil;
 import com.sxkl.cloudnote.waitingtask.entity.WaitingTask;
@@ -19,12 +21,20 @@ public class WaitingTaskController {
 	private WaitingTaskService waitingTaskService;
 	
 	@RequestMapping("/insert")
-	public void insert(WaitingTask waitingTask){
+	public void insert(String waitingTaskStr,HttpServletRequest request){
+		User user = UserUtil.getSessionUser(request);
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+	    WaitingTask waitingTask = gson.fromJson(waitingTaskStr, WaitingTask.class);
+	    waitingTask.setUser(user);
 		waitingTaskService.insert(waitingTask);
 	}
 	
 	@RequestMapping("/update")
-	public void update(WaitingTask waitingTask){
+	public void update(String waitingTaskStr,HttpServletRequest request){
+		User user = UserUtil.getSessionUser(request);
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+	    WaitingTask waitingTask = gson.fromJson(waitingTaskStr, WaitingTask.class);
+	    waitingTask.setUser(user);
 		waitingTaskService.update(waitingTask);
 	}
 	

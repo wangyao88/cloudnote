@@ -46,3 +46,20 @@ DEFAULT CHARACTER SET = utf8mb4;
 
 ALTER TABLE `cloudnote`.`cn_user`
   ADD COLUMN `mailpass` VARCHAR(50) NOT NULL AFTER `password`;
+  
+  CREATE TABLE `cloudnote`.`cn_waitingtask` (
+  `id` VARCHAR(50) NOT NULL COMMENT '待办事项主键',
+  `name` VARCHAR(200) NULL COMMENT '待办任务名称',
+  `createDate` DATETIME NULL COMMENT '创建时间',
+  `expire` DATETIME NULL COMMENT '过期时间',
+  `taskType` VARCHAR(10) NULL COMMENT '任务类型',
+  `uId` VARCHAR(45) NULL COMMENT '用户主键',
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+ 
+ALTER TABLE `cloudnote`.`cn_waitingtask` 
+ADD COLUMN `process` DECIMAL(3,2) NULL COMMENT '任务进度' AFTER `uId`;
+
+ALTER TABLE `cloudnote`.`cn_waitingtask` 
+ADD COLUMN `content` VARCHAR(500) NULL COMMENT '任务内容' AFTER `process`;

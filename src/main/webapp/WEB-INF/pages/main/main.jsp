@@ -28,6 +28,7 @@
 <script src="<%=basePath%>js/statChart/statChart.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/main/main.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/backup/backup.js" type="text/javascript"></script>
+<script src="<%=basePath%>js/waitingtask/waitingtask.js" type="text/javascript"></script>
 <script type="text/javascript">
    var basePath = "<%=basePath%>";
 </script>
@@ -63,6 +64,8 @@
 			    <a class="mini-button" iconCls="icon-goto" onclick="">发送邮件</a>
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-goto" onclick="onLineNum">在线用户数</a>
+			    <span class="separator"></span>
+			    <a class="mini-button" iconCls="icon-goto" onclick="openwaitingtask">待办任务</a>
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-goto" onclick="logout">退出</a>
 			    <span class="separator"></span>
