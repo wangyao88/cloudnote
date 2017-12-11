@@ -3,6 +3,7 @@ package com.sxkl.cloudnote.common.service;
 import java.util.List;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sxkl.cloudnote.common.entity.OperateResult;
 
 public class OperateResultService {
@@ -41,12 +42,12 @@ public class OperateResultService {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public static String configurateSuccessDataGridResult(List articles, int total) {
-		Gson gson = new Gson();
+	public static String configurateSuccessDataGridResult(List datas, int total) {
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 		OperateResult operateResult = new OperateResult();
 		operateResult.setMsg("操作成功");
 		operateResult.setStatus(true);
-		operateResult.setData(articles);
+		operateResult.setData(datas);
 		operateResult.setTotal(total);
 		return gson.toJson(operateResult);
 	}
