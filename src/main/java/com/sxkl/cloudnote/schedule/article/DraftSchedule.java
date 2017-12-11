@@ -38,12 +38,16 @@ public class DraftSchedule {
         		continue;
         	}
         	for(File upload : uploads){
-            	String fileName = upload.getName();
-            	Article article = articleService.getArticleByDraftName(fileName);
-            	if(article == null && upload.delete()){
-            		log.info("删除失效笔记附件[{}]",fileName);
-            	}
+            	deleteDraft(upload);
             }
         }
     }
+
+	private void deleteDraft(File upload) {
+		String fileName = upload.getName();
+		Article article = articleService.getArticleByDraftName(fileName);
+		if(article == null && upload.delete()){
+			log.info("删除失效笔记附件[{}]",fileName);
+		}
+	}
 }
