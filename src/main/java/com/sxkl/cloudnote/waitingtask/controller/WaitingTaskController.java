@@ -1,5 +1,7 @@
 package com.sxkl.cloudnote.waitingtask.controller;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +24,20 @@ public class WaitingTaskController {
 	
 	@RequestMapping("/insert")
 	public void insert(String waitingTaskStr,HttpServletRequest request){
+		waitingTaskStr = waitingTaskService.filterWaitingTaskStr(waitingTaskStr);
 		User user = UserUtil.getSessionUser(request);
-		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 	    WaitingTask waitingTask = gson.fromJson(waitingTaskStr, WaitingTask.class);
 	    waitingTask.setUser(user);
+	    waitingTask.setCreateDate(new Date());
 		waitingTaskService.insert(waitingTask);
 	}
 	
 	@RequestMapping("/update")
 	public void update(String waitingTaskStr,HttpServletRequest request){
+		waitingTaskStr = waitingTaskService.filterWaitingTaskStr(waitingTaskStr);
 		User user = UserUtil.getSessionUser(request);
-		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 	    WaitingTask waitingTask = gson.fromJson(waitingTaskStr, WaitingTask.class);
 	    waitingTask.setUser(user);
 		waitingTaskService.update(waitingTask);

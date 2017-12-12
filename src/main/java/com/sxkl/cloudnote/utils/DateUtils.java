@@ -373,4 +373,12 @@ public class DateUtils {
 		SimpleDateFormat format = new SimpleDateFormat(DATE_TIME_PATTON_4);
 		return format.format(date);
 	}
+
+	public static Date getBeforeSevenDay() {
+		Date date = new Date();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.DAY_OF_MONTH, -7);
+		return calendar.getTime();
+	}
 }

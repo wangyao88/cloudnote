@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -15,8 +16,10 @@ import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.webchat.entity.Message;
 import com.sxkl.cloudnote.webchat.service.MessageService;
 
@@ -32,7 +35,7 @@ public class MyWebSocketHandler implements WebSocketHandler {
 	@Autowired
 	private MessageService messageService;
 	
-	public static final Map<String, WebSocketSession> userSocketSessionMap;
+	private static final Map<String, WebSocketSession> userSocketSessionMap;
 
 	static {
 		userSocketSessionMap = new HashMap<String, WebSocketSession>();
@@ -146,12 +149,24 @@ public class MyWebSocketHandler implements WebSocketHandler {
 	 * @param message
 	 * @throws IOException
 	 */
-	public void sendMessageToUser(String uid, TextMessage message)
-			throws IOException {
-		WebSocketSession session = userSocketSessionMap.get(uid);
-		if (session != null && session.isOpen()) {
-			session.sendMessage(message);
+	public void sendMessageToUser(String uid, TextMessage message) throws IOException {
+		if(userSocketSessionMap.containsKey(uid)){
+			userSocketSessionMap.get(uid).sendMessage(message);
 		}
+	}
+	
+	public List<WebSocketSession> getWaitingTaskSession() {
+		List<WebSocketSession> sessions = Lists.newArrayList();
+		for(Map.Entry<String, WebSocketSession> entry : userSocketSessionMap.entrySet()) {
+			if(entry.getKey().contains(Constant.WAITING_TASK_PREFIX_FOR_WEBSOCKET)){
+				sessions.add(entry.getValue());
+			}
+		}
+		return sessions;
+	}
+	
+	public boolean isLinked(String uid){
+		return userSocketSessionMap.containsKey(uid);
 	}
 
 }

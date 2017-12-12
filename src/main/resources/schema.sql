@@ -63,3 +63,9 @@ ADD COLUMN `process` DECIMAL(3,2) NULL COMMENT '任务进度' AFTER `uId`;
 
 ALTER TABLE `cloudnote`.`cn_waitingtask` 
 ADD COLUMN `content` VARCHAR(500) NULL COMMENT '任务内容' AFTER `process`;
+
+ALTER TABLE `cloudnote`.`cn_waitingtask` 
+ADD COLUMN `beginDate` DATETIME NULL COMMENT '开始日期' AFTER `content`;
+
+ALTER TABLE `cloudnote`.`cn_waitingtask` 
+CHANGE COLUMN `expire` `expireDate` DATETIME NULL DEFAULT NULL COMMENT '过期时间' ;

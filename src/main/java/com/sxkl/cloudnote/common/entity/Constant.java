@@ -53,6 +53,8 @@ public class Constant {
 	public static final String SLASH = "slash";
 	
 	public static final String FILE_SEPARATOR = "/";
+
+	public static final String WAITING_TASK_PREFIX_FOR_WEBSOCKET = "waitingtask-";
 	
 	public static String REAL_DRAFT_PATH = STRING_EMPTY;//seted in login
 	

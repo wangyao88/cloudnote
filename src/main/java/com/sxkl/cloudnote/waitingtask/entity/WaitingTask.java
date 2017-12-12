@@ -35,8 +35,11 @@ public class WaitingTask implements Serializable{
 	@Column(name="createDate",nullable=false)
 	private Date createDate;
 	
-	@Column(name="expire",nullable=false)
-	private Date expire;
+	@Column(name="beginDate",nullable=false)
+	private Date beginDate;
+	
+	@Column(name="expireDate",nullable=false)
+	private Date expireDate;
 	
 	@Column(name="process",nullable=false)
 	private double process;
@@ -56,11 +59,12 @@ public class WaitingTask implements Serializable{
 		super();
 	}
 
-	public WaitingTask(String id, String name, Date createDate, Date expire, double process, String content, TaskType taskType) {
+	public WaitingTask(String id, String name, Date createDate, Date beginDate, Date expireDate, double process, String content, TaskType taskType) {
 		this.id = id;
 		this.name = name;
 		this.createDate = createDate;
-		this.expire = expire;
+		this.beginDate = beginDate;
+		this.expireDate = expireDate;
 		this.process = process;
 		this.content = content;
 		this.taskType = taskType;
@@ -89,13 +93,21 @@ public class WaitingTask implements Serializable{
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
-
-	public Date getExpire() {
-		return expire;
+	
+	public Date getBeginDate() {
+		return beginDate;
 	}
 
-	public void setExpire(Date expire) {
-		this.expire = expire;
+	public void setBeginDate(Date beginDate) {
+		this.beginDate = beginDate;
+	}
+
+	public Date getExpireDate() {
+		return expireDate;
+	}
+
+	public void setExpireDate(Date expireDate) {
+		this.expireDate = expireDate;
 	}
 	
 	public double getProcess() {
