@@ -14,10 +14,8 @@
 <meta http-equiv="cache-control" content="no-cache">
 <meta http-equiv="expires" content="0">
 
-<link href="<%=basePath%>js/miniui/themes/bootstrap/skin.css"
-	rel="stylesheet" type="text/css" />
-<link href="<%=basePath%>js/miniui/res/demo.css" rel="stylesheet"
-	type="text/css" />
+<link href="<%=basePath%>js/miniui/themes/bootstrap/skin.css" rel="stylesheet" type="text/css" />
+<link href="<%=basePath%>js/miniui/res/demo.css" rel="stylesheet" type="text/css" />
 <script src="<%=basePath%>js/boot.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/jquery.min.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/waitingtask/waitingtask.js" type="text/javascript"></script>
@@ -30,7 +28,8 @@
 		 <div title="任务列表" region="west" width="800px" expanded="true">
 				<div id="waitingtaskGrid" class="mini-datagrid" style="width:795px;height:100%;" 
 			        url="<%=basePath%>waitingtask/findPage" idField="id" allowResize="false" 
-			        pageSize="10" sizeList="[20,50,100]" ajaxType="post" multiSelect="false">
+			        pageSize="10" sizeList="[20,50,100]" ajaxType="post" multiSelect="false"
+			        ondrawcell="onDrawCell">
 	            	<div property="columns">
 			            <div type="indexcolumn">序号</div>
 			            <div field="id"  headerAlign="center" allowSort="true" width="0px" >ID</div>

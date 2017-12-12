@@ -101,3 +101,17 @@ function insertWaitingTask() {
 		}
 	});
 }
+
+function onDrawCell(e){
+	var node = e.node,
+    column = e.column,
+    field = e.field,
+    value = e.value;
+	//进度
+	if (field == "process") {
+	    e.cellHtml =  '<div class="progressbar">'
+			            + '<div class="progressbar-percent" style="width:' + value + '%;"></div>'
+			            + '<div class="progressbar-label">' + value + '%</div>'
+			        +'</div>';
+	}
+}
