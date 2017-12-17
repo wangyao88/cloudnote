@@ -189,6 +189,6 @@ $(document).ready(function(){
 	var db = new mini.DataBinding();
 	db.bindForm("waitingtaskEditForm", grid);
 	linkToWaitingTaskWebsocketServer(uid);
-	finishedRateChart = echarts.init(document.getElementById('finishedRateChart'));
-	drawFinishedRateChart();
+//	finishedRateChart = echarts.init(document.getElementById('finishedRateChart'));
+//	drawFinishedRateChart();
 });

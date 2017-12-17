@@ -126,8 +126,8 @@
                 <prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>
                 <prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>
                 <prop key="hibernate.cache.region.factory_class">${hibernate.cache.region.factory_class}</prop>
-                <prop key="hibernate.cache.provider_configuration_file_resource_path">${hibernate.cache.provider_configuration_file_resource_path}
-                </prop>
+                <prop key="hibernate.cache.provider_configuration_file_resource_path">${hibernate.cache.provider_configuration_file_resource_path}</prop>
+                <prop key="hibernate.connection.release_mode">after_transaction</prop> 
             </props>
         </property>
         <!-- 扫描hibernate注解配置的entity -->
@@ -187,7 +187,7 @@
     <bean id="applicationEventMulticaster" class="org.springframework.context.event.SimpleApplicationEventMulticaster"> 
         <!-- 注入任务执行器 这样就实现了异步调用（缺点是全局的，要么全部异步，要么全部同步（删除这个属性即是同步））  --> 
         <property name="taskExecutor" ref="coreTaskExecutor"/> 
-    </bean> 
+    </bean>
     
     <task:annotation-driven executor="coreTaskExecutor"/>
     

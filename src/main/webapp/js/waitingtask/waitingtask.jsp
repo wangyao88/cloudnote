@@ -98,7 +98,6 @@ var wsPath = '<%=wsPath%>';
 			        </div>
 			    </fieldset>
 			    
-			    <div id="finishedRateChart" style="width:330px;height:380px;over-flow:hidden;"></div>
 		</div>
 	</div>
 </body>
