@@ -62,6 +62,13 @@ body, html {
 			</td>
 		</tr>
 	</table>
+	<div title="工具栏" region="north" showHeader="false" height="28px">
+		<div class="mini-toolbar">
+		    <a class="mini-button" iconCls="icon-addnew" style="align:center"onclick="onOk">确定</a>
+		    <span class="separator"></span>
+		    <a class="mini-button" iconCls="icon-edit" onclick="onCancel">取消</a>
+	    </div>
+	</div>
 </body>
 </html>
 <script type="text/javascript">
