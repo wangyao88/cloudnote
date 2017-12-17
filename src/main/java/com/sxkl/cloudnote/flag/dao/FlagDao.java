@@ -66,7 +66,7 @@ public class FlagDao extends BaseDao {
 	public List getAllFlagByUserId(String userId) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("select f.id,f.name,f.fId from cn_flag f ")
-		   .append("where f.uId = :userId ");
+		   .append("where f.uId = :userId");
 		Session session = this.getSessionFactory().getCurrentSession();
 		SQLQuery query = session.createSQLQuery(sql.toString());
 		query.setString("userId", userId);

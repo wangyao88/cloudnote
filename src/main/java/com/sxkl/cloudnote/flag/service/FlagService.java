@@ -1,14 +1,17 @@
 package com.sxkl.cloudnote.flag.service;
 
+import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.Ordering;
 import com.google.gson.Gson;
 import com.sxkl.cloudnote.article.dao.ArticleDao;
 import com.sxkl.cloudnote.article.entity.Article;
@@ -180,11 +183,31 @@ public class FlagService {
 		return result;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Logger(message="获取用户相关联的标签")
 	public List getAllFlagByUserId(String userId) {
-		return flagDao.getAllFlagByUserId(userId);
+		List result = flagDao.getAllFlagByUserId(userId);
+		return sortFlags(result);
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private List sortFlags(List result) {
+		Ordering<Object[]> flagOrdering = new Ordering<Object[]>() {
+			public int compare(Object[] left, Object[] right) {
+				String leftStr = left[1].toString();
+				String rightStr = right[1].toString();
+				leftStr = leftStr.contains(".") ? leftStr.substring(0, leftStr.lastIndexOf(".")) : "99999";
+				rightStr = rightStr.contains(".") ? rightStr.substring(0, rightStr.lastIndexOf(".")) : "99999";
+				if(NumberUtils.isNumber(leftStr)&&NumberUtils.isNumber(rightStr)){
+					return NumberUtils.createInteger(leftStr) - NumberUtils.createInteger(rightStr);
+				}
+				return leftStr.compareTo(rightStr);
+			}
+		};
+		return flagOrdering.sortedCopy(result);
+	}
+
+	@SuppressWarnings("rawtypes")
 	@Logger(message="获取标签树")
 	public String getFlagTreeMenu(String userId) {
 		TreeNode rootFlag = getRootTreeNode();
@@ -209,5 +232,10 @@ public class FlagService {
         }  
 		validateJson(treeJson);
 		return treeJson.toString();
+	}
+	
+	public static void main(String[] args) {
+		String str = "12.java";
+		System.out.println(str.substring(0, str.lastIndexOf(".")));
 	}
 }
