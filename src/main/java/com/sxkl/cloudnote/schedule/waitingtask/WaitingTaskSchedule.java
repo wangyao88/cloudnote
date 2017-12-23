@@ -14,7 +14,7 @@ public class WaitingTaskSchedule {
     private WaitingTaskService waitingTaskService;
 	
 	@Logger(message="定时更新页面待办任务状态，推送消息")
-	@Scheduled(cron="0 * * */1 * ?")
+	@Scheduled(cron="0 0/60 9-20 * * ?")
 	public void sendToWaitingTask(){
 		waitingTaskService.sendToWaitingTask();
 	}

@@ -170,5 +170,29 @@ public class ArticleDao extends BaseDao {
 	    query.setString("content", '%'+fileName+'%');
 		return (Article) query.uniqueResult();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Article> selectAllArticlesByTitle(String title, int pageIndex, int pageSize,String userId) {
+		String hql = "select new Article(id,title,content,hitNum) from Article a where a.title like :title and a.user.id=:userId";
+		Session session = this.getSessionFactory().getCurrentSession();
+	    Query query = session.createQuery(hql);
+	    query.setString("title", '%'+title+'%');
+	    query.setString("userId", userId);
+	    query.setFirstResult(pageIndex*pageSize);
+        query.setMaxResults(pageSize);
+		return query.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Article> selectAllArticlesByContent(String content, int pageIndex, int pageSize,String userId) {
+		String hql = "select new Article(id,title,content,hitNum) from Article a where a.content like :content and a.user.id=:userId";
+		Session session = this.getSessionFactory().getCurrentSession();
+	    Query query = session.createQuery(hql);
+	    query.setString("content", '%'+content+'%');
+	    query.setString("userId", userId);
+	    query.setFirstResult(pageIndex*pageSize);
+        query.setMaxResults(pageSize);
+		return query.list();
+	}
 
 }

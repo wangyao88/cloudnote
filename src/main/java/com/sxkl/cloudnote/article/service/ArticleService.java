@@ -95,7 +95,8 @@ public class ArticleService {
 		String pageIndex = request.getParameter("pageIndex");
 		String pageSize = request.getParameter("pageSize");
 		String first = request.getParameter("first");
-		String articleTitle = request.getParameter("articleTitle");
+		String title = request.getParameter("title");
+		String titleOrContent = request.getParameter("titleOrContent");
 		User sessionUser = UserUtil.getSessionUser(request);
 		String userId = sessionUser.getId();
 		
@@ -105,9 +106,12 @@ public class ArticleService {
 		if(Boolean.valueOf(first)){
 			articles = articleDao.selectAllArticlesOrderByCreateTimeAndHitNum(Integer.parseInt(pageIndex),Integer.parseInt(pageSize),userId);
 			total = articleDao.selectAllArticlesOrderByCreateTimeAndHitNumCount(userId);
-		}else if(!StringUtils.isEmpty(articleTitle)){
-			articles = articleDao.selectAllArticlesByNameOrderByHitNum(articleTitle,Integer.parseInt(pageIndex),Integer.parseInt(pageSize),userId);
-			total = articleDao.selectAllArticlesByNameOrderByCreateTimeAndHitNumCount(articleTitle,userId);
+		}else if(!StringUtils.isEmpty(title)){
+			articles = articleDao.selectAllArticlesByNameOrderByHitNum(title,Integer.parseInt(pageIndex),Integer.parseInt(pageSize),userId);
+			total = articleDao.selectAllArticlesByNameOrderByCreateTimeAndHitNumCount(title,userId);
+		}else if(!StringUtils.isEmpty(titleOrContent)){
+			articles = ArticleSearcher.build(articleDao, userId).search(titleOrContent);
+			total = articles.size();
 		}else{
 			String flagId = request.getParameter("flagId");
 			if(!StringUtils.isEmpty(flagId)){

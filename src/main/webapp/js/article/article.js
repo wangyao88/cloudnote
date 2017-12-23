@@ -179,11 +179,21 @@ function editArticle() {
 	})
 }
 
-function searchArticle() {
-	var text = mini.get("searchArticleText");
+function searchArticleByTitle() {
+	mini.get("searchArticleByTitleOrContentText").setValue("");
+	var text = mini.get("searchArticleByTitleText");
 	var grid = mini.get("articleGrid");
 	grid.load({
-		articleTitle : text.value
+		title : text.value
+	});
+}
+
+function searchArticleByTitleOrContentText() {
+	mini.get("searchArticleByTitleText").setValue("");
+	var text = mini.get("searchArticleByTitleOrContentText");
+	var grid = mini.get("articleGrid");
+	grid.load({
+		titleOrContent : text.value
 	});
 }
 
@@ -209,8 +219,8 @@ function addListener(){
 		grid.unmask();
 	});
 
-	var searchText = mini.get("searchArticleText");
-	searchText.on("keydown", function(event) {
+	var searchArticleByTitleText = mini.get("searchArticleByTitleText");
+	searchArticleByTitleText.on("keydown", function(event) {
 		//		htmlEvent,sender,source,type
 		if (event.htmlEvent.keyCode == 13) {
 			searchArticle();

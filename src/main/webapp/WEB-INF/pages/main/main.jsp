@@ -43,8 +43,11 @@
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-remove" onclick="removeArticle">删除</a>
 			    <span class="separator"></span>
-			    <input class="mini-textbox" id="searchArticleText" emptyText="搜索笔记标题"/>   
-			    <a class="mini-button" plain="true" id="searchArticleBtn" onclick="searchArticle">查询</a>
+			    <input class="mini-textbox" id="searchArticleByTitleText" emptyText="笔记标题"/>   
+			    <a class="mini-button" plain="true" id="searchArticleByTitleBtn" onclick="searchArticleByTitle">查询</a>
+			    <span class="separator"></span>
+			    <input class="mini-textbox" width="400px" id="searchArticleByTitleOrContentText" emptyText="笔记标题或内容，以逗号分隔"/>   
+			    <a class="mini-button" plain="true" id="searchArticleByTitleOrContentBtn" onclick="searchArticleByTitleOrContentText">搜索</a>
 		    </div>
 		 </div>
 		 <div title="south" region="south" showSplit="false" showHeader="false" height="32px" showSplitIcon="false" >
@@ -71,7 +74,7 @@
 			    <span class="separator"></span>
 		    </div>
     	</div>
-		 <div title="笔记和标签" showProxyText="true" region="west" width="200px" expanded="true" showSplitIcon="true">
+		 <div title="笔记和标签" showProxyText="true" region="west" width="300px" expanded="true" showSplitIcon="true">
 			<ul id="menuTree" class="mini-tree" url="<%=basePath%>main/getTree" ajaxType="post" style="width:100%;height:100%;" 
                     showTreeIcon="true" textField="text" idField="id" resultAsTree="false"   contextMenu="#treeMenu"
 				    expandOnLoad="true" onNodeClick="onNodeClick1" >
