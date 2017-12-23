@@ -15,6 +15,8 @@ public class ArticleSearcher {
 
 	private ArticleDao articleDao;
 	private String userId;
+	private static final int PAGE_INDEX = 0;
+	private static final int PAGE_SIZE = 20;
 	private static final int TITLE_WEIGHT = 50;
 	private static final int CONTENTS_WEIGHT = 10;
 	private static final int HITNUM_WEIGHT = 2;
@@ -33,8 +35,8 @@ public class ArticleSearcher {
 		Set<Article> temps = new HashSet<Article>();
 		String[] keys = searchKeys.split(",");
 		for(String key : keys){
-			temps.addAll(articleDao.selectAllArticlesByTitle(key,0,10,userId));
-			temps.addAll(articleDao.selectAllArticlesByContent(key,0,10,userId));
+			temps.addAll(articleDao.selectAllArticlesByTitle(key,PAGE_INDEX,PAGE_SIZE,userId));
+			temps.addAll(articleDao.selectAllArticlesByContent(key,PAGE_INDEX,PAGE_SIZE,userId));
 		}
 		List<Article> articles = Lists.newArrayList(temps);
 		for(String key : keys){
@@ -54,7 +56,7 @@ public class ArticleSearcher {
 				return left.getWeight() - right.getWeight();
 			}
 		};
-		return articleOrdering.greatestOf(articles, 10);
+		return articleOrdering.greatestOf(articles, PAGE_SIZE);
 	}
 	
     private static int wordCount(String content, String word){

@@ -58,15 +58,11 @@
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-edit" onclick="">账号管理</a>
 			    <span class="separator"></span>
-			    <a class="mini-button" iconCls="icon-undo" onclick="">导出笔记</a>
-			    <span class="separator"></span>
-			    <a class="mini-button" iconCls="icon-redo" onclick="">导入笔记</a>
-			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-search" onclick="backupDB()">备份数据</a>
-			    <span class="separator"></span>
-			    <a class="mini-button" iconCls="icon-goto" onclick="">发送邮件</a>
-			    <span class="separator"></span>
-			    <a class="mini-button" iconCls="icon-goto" onclick="onLineNum">在线用户数</a>
+			    <!-- <span class="separator"></span>
+			    <a class="mini-button" iconCls="icon-goto" onclick="">发送邮件</a> -->
+			    <!-- <span class="separator"></span>
+			    <a class="mini-button" iconCls="icon-goto" onclick="onLineNum">在线用户数</a> -->
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-goto" onclick="openwaitingtask">待办任务</a>
 			    <span class="separator"></span>

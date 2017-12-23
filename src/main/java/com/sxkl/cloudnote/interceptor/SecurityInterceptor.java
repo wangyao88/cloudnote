@@ -13,24 +13,25 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
     private static final String LOGIN_URL = "/login";
 
     @Override
-    public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         
-    	HttpSession session = req.getSession(true);
+    	HttpSession session = request.getSession(true);
 
         // 从session 里面获取用户名的信息
         Object obj = session.getAttribute(Constant.USER_IN_SESSION_KEY);
 
         // 判断如果没有取到用户信息，就跳转到登陆页面，提示用户进行登陆
         if (obj == null || "".equals(obj.toString())) {
-            if (req.getHeader("x-requested-with") != null && req.getHeader("x-requested-with").equalsIgnoreCase("XMLHttpRequest")) {
-                res.setHeader("sessionStatus", "timeout");
+            if (request.getHeader("x-requested-with") != null && request.getHeader("x-requested-with").equalsIgnoreCase("XMLHttpRequest")) {
+            	response.setHeader("sessionStatus", "timeout");
+                String redirectUrl = request.getContextPath() + LOGIN_URL;
+                response.sendRedirect(redirectUrl);
             } else {
-            	  String redirectUrl = req.getContextPath() + LOGIN_URL;
-                  res.sendRedirect(redirectUrl);
+            	  String redirectUrl = request.getContextPath() + LOGIN_URL;
+            	  response.sendRedirect(redirectUrl);
             }
-            return false; // 不再往下执行
+            return false;
         }
-
-        return super.preHandle(req, res, handler);
+        return true;
     }
 }

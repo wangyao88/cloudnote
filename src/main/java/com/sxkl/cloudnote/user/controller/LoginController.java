@@ -1,5 +1,7 @@
 package com.sxkl.cloudnote.user.controller;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -7,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
@@ -42,12 +45,8 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value = "/logout", method = { RequestMethod.GET, RequestMethod.HEAD })
-	public String logout(HttpServletRequest httpServletRequest, HttpServletResponse response) {
-		try {
-			userService.logout(httpServletRequest);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public String logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		userService.logout(request);
 		return "redirect:/login";
 	}
 
