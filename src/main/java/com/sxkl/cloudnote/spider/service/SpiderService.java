@@ -29,7 +29,6 @@ public class SpiderService {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public String getArticles(){
 		Set<Object> keys = redisTemplate.opsForHash().keys(Constant.SIMPLE_NETARTICLE_KEY_IN_REDIS);
-		System.out.println("-------------------------------"+keys.size());
 		long size = keys.size();
 		List articles = null;
 		if(size > 25){
@@ -61,6 +60,14 @@ public class SpiderService {
 	public void delete(String id) {
 		redisTemplate.opsForHash().delete(Constant.SIMPLE_NETARTICLE_KEY_IN_REDIS, id);
 		redisTemplate.opsForHash().delete(Constant.NETARTICLE_KEY_IN_REDIS, id);
+	}
+	
+	@Logger(message="删除所有订阅文章")
+	public void deleteAll() {
+		Set<Object> simpleKeys = redisTemplate.opsForHash().keys(Constant.SIMPLE_NETARTICLE_KEY_IN_REDIS);
+		redisTemplate.opsForHash().delete(Constant.SIMPLE_NETARTICLE_KEY_IN_REDIS, simpleKeys.toArray());
+		Set<Object> keys = redisTemplate.opsForHash().keys(Constant.NETARTICLE_KEY_IN_REDIS);
+		redisTemplate.opsForHash().delete(Constant.NETARTICLE_KEY_IN_REDIS, keys.toArray());
 	}
 
 	public void spider() {

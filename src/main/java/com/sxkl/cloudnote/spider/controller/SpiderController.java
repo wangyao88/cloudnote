@@ -39,6 +39,12 @@ public class SpiderController {
 		spiderService.delete(id);
 	}
 	
+	@RequestMapping("/deleteAll")
+	@ResponseBody
+	public void deleteAll(){
+		spiderService.deleteAll();
+	}
+	
 	@RequestMapping("/spider")
 	@ResponseBody
 	public void spider(){

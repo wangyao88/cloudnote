@@ -59,7 +59,24 @@ function removeArticle(){
 	);
 }
 
-
+function removeAll(){
+	mini.confirm("确定删除所有文章吗？", "确定？",
+			function(action) {
+				if (action == "ok") {
+					$.ajax({
+						url : basePATH + "/spider/deleteAll",
+						type : "post",
+						success : function() {
+							reload();
+						},
+						error : function() {
+							reload();
+						}
+					});
+				}
+			}
+		);
+}
 
 function gridRowClick() {
 	var grid = mini.get("articleGrid");

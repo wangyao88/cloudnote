@@ -34,6 +34,8 @@
 			    <a class="mini-button" iconCls="icon-addnew" onclick="addArticle">入库</a>
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-remove" onclick="removeArticle">删除</a>
+			    <span class="separator"></span>
+			    <a class="mini-button" iconCls="icon-remove" onclick="removeAll">清空</a>
 		    </div>
 		 </div>
 		<div title="文章列表" region="west" width="400px" expanded="true">
