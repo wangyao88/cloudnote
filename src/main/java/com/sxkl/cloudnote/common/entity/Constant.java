@@ -59,6 +59,10 @@ public class Constant {
 	public static String REAL_DRAFT_PATH = STRING_EMPTY;//seted in login
 	
 	private static ConcurrentHashMap<String, HttpSession> onLineSession = new ConcurrentHashMap<String,HttpSession>();
+
+	public static final String NETARTICLE_KEY_IN_REDIS = "net_article";
+	
+	public static final String SIMPLE_NETARTICLE_KEY_IN_REDIS = "simple_net_article";
 	
 	public static void onLine(String userId, HttpSession session){
 		onLineSession.put(userId, session);

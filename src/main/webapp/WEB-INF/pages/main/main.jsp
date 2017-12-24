@@ -58,6 +58,8 @@
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-edit" onclick="">账号管理</a>
 			    <span class="separator"></span>
+			    <a class="mini-button" iconCls="icon-undo" href="<%=basePath%>spider/index" target="_blank">订阅文章</a>
+			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-search" onclick="backupDB()">备份数据</a>
 			    <!-- <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-goto" onclick="">发送邮件</a> -->

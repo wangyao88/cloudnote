@@ -38,28 +38,28 @@
     <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
              <property name="maxIdle" value="${redis.maxIdle}" />
              <property name="testOnBorrow" value="true" />
-       </bean>
-       <bean id="connectionFactory"
-              class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
-             p:host-name="${redis.ip}"
-             p:port="${redis.port}"
-             p:password="${redis.password}"
-             p:pool-config-ref="poolConfig" />
-       <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
-             <property name="connectionFactory" ref="connectionFactory" />
-             <property name="keySerializer">
-            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
-        </property>
-        <property name="valueSerializer">
-            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
-        </property>
-        <property name="hashKeySerializer">
-            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
-        </property>
-        <property name="hashValueSerializer">
-            <bean class="com.sxkl.cloudnote.utils.redis.GenericJackson2JsonRedisSerializer"/>
-        </property>
-       </bean>
+    </bean>
+    <bean id="connectionFactory"
+           class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:host-name="${redis.ip}"
+          p:port="${redis.port}"
+          p:password="${redis.password}"
+          p:pool-config-ref="poolConfig" />
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+         <property name="connectionFactory" ref="connectionFactory" />
+         <property name="keySerializer">
+         	<bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+	     </property>
+	     <property name="valueSerializer">
+	         <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+	     </property>
+	     <property name="hashKeySerializer">
+	         <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+	     </property>
+	     <property name="hashValueSerializer">
+	         <bean class="com.sxkl.cloudnote.utils.redis.GenericJackson2JsonRedisSerializer"/>
+	     </property>
+    </bean>
        
     <cache:annotation-driven cache-manager="cacheManager"/>
    
