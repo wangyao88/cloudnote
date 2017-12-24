@@ -5,7 +5,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
+
+import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
@@ -22,8 +25,27 @@ import com.sxkl.cloudnote.utils.UUIDUtil;
 @Service
 public class Spider {
 	
+	private static List<String> urls;
+	
+	@PostConstruct
+	public void initUrl(){
+		urls = Lists.newArrayList();
+		urls.add("http://blog.csdn.net/nav/arch");
+		urls.add("http://blog.csdn.net/nav/lang");
+		urls.add("http://blog.csdn.net/nav/db");
+		urls.add("http://blog.csdn.net/nav/fund");
+		urls.add("http://blog.csdn.net/nav/ops");
+	}
+	
+	private String getUrl(){
+		Random random = new Random();
+		int index = random.nextInt(urls.size());
+		return urls.get(index);
+	}
+	
 	public static void main(String[] args) throws IOException, InterruptedException {
 		Spider spider = new Spider();
+		spider.initUrl();
 		for(int i = 0; i < 10; i++){
 			List<NetArticle> articles = spider.spider();
 			System.out.print(articles.size() + " ");
@@ -33,9 +55,10 @@ public class Spider {
 	
 	@Logger(message="爬取CSDN文章")
 	public List<NetArticle> spider() throws IOException{
+		
 		List<NetArticle> articles = Lists.newArrayList();
 		Map<String, String> cookies = getCookies();
-		Document document = Jsoup.connect("http://blog.csdn.net/nav/lang").cookies(cookies).get();
+		Document document = Jsoup.connect(getUrl()).cookies(cookies).get();
 		Elements elements = document.getElementsByClass("list_con");
 		for(Element element : elements){
 			NetArticle article = new NetArticle();
