@@ -16,6 +16,7 @@ import com.sxkl.cloudnote.common.service.OperateResultService;
 import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.schedule.spider.SpiderSchedule;
 import com.sxkl.cloudnote.spider.entity.NetArticle;
+import com.sxkl.cloudnote.spider.manager.ContentFilter;
 
 @Service
 public class SpiderService {
@@ -24,6 +25,8 @@ public class SpiderService {
     private RedisTemplate<Object, NetArticle> redisTemplate;
 	@Autowired
 	private SpiderSchedule spiderSchedule;
+	@Autowired
+	private ContentFilter contentFilter;
 	
 	@Logger(message="获取所有订阅文章")
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -72,5 +75,10 @@ public class SpiderService {
 
 	public void spider() {
 		spiderSchedule.spider();
+	}
+
+	public int getTotal() {
+		Set<Object> keys = redisTemplate.opsForHash().keys(Constant.SIMPLE_NETARTICLE_KEY_IN_REDIS);
+		return keys.size();
 	}
 }

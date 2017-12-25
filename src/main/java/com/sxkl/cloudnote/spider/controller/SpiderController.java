@@ -50,4 +50,23 @@ public class SpiderController {
 	public void spider(){
 		spiderService.spider();
 	}
+	
+	@RequestMapping("/getTotal")
+	@ResponseBody
+	public int getTotal(){
+		return spiderService.getTotal();
+	}
+	
+	@RequestMapping("/searchPage")
+	public ModelAndView searchPage(){
+		ModelAndView modelAndView = new ModelAndView("spider/searchPage");
+		return modelAndView;
+	}
+	
+	@RequestMapping("/search")
+	public ModelAndView search(String searchKey){
+		System.out.println(searchKey);
+		ModelAndView modelAndView = new ModelAndView("spider/searchResult");
+		return modelAndView;
+	}
 }
