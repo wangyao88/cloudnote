@@ -59,4 +59,17 @@ public class UserDao extends BaseDao {
 		return query.list();
 	}
 
+	public User getUserByName(String name) {
+		String hql = "select new User(u.id, u.name)from User u where u.name=:name";
+		Session session = this.getSessionFactory().getCurrentSession();
+		Query query = session.createQuery(hql);
+		query.setString("name", name);
+		return (User) query.uniqueResult();
+	}
+
+	public void insert(User user) {
+		Session session = this.getSessionFactory().getCurrentSession();
+		session.save(user);
+	}
+
 }

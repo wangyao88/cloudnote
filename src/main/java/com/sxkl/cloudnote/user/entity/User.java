@@ -38,10 +38,10 @@ public class User implements Serializable{
 	@Column(name="password",nullable=false)
 	private String password;
 	
-	@Column(name="email",unique=true,nullable=false)
+	@Column(name="email",unique=true,nullable=true)
 	private String email;
 
-	@Column(name="mailpass",unique=true,nullable=false)
+	@Column(name="mailpass",unique=true,nullable=true)
 	private String mailpass;
 	
 	@OneToMany(fetch=FetchType.LAZY,mappedBy="user")
