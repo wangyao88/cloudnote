@@ -63,10 +63,6 @@ public class ArticleDao extends BaseDao {
 		BigInteger bInt = (BigInteger) query.uniqueResult();
 	    return bInt.intValue();
 	}
-
-	
-	
-	
 	
 	public Article selectArticleById(String articleId) {
 		String hql = "from Article a where a.id=:articleId";
@@ -192,6 +188,17 @@ public class ArticleDao extends BaseDao {
 	    query.setString("userId", userId);
 	    query.setFirstResult(pageIndex*pageSize);
         query.setMaxResults(pageSize);
+		return query.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Article> getAllByTitle(String title) {
+		String hql = "select new Article(id,title,hitNum) from Article a where a.title like :title order by a.hitNum desc";
+		Session session = this.getSessionFactory().getCurrentSession();
+	    Query query = session.createQuery(hql);
+	    query.setString("title", '%'+title+'%');
+	    query.setFirstResult(0);
+        query.setMaxResults(20);
 		return query.list();
 	}
 
