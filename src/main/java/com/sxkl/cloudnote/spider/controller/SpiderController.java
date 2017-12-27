@@ -68,13 +68,6 @@ public class SpiderController {
 		return modelAndView;
 	}
 	
-	@RequestMapping("/search")
-	public ModelAndView searchIndex(String searchKey){
-		System.out.println(searchKey);
-		ModelAndView modelAndView = new ModelAndView("spider/searchResult");
-		return modelAndView;
-	}
-	
 	@RequestMapping(value="/searchKey", method = RequestMethod.GET)
 	@ResponseBody
 	public SearchComplete search(String query){
@@ -83,7 +76,9 @@ public class SpiderController {
 	
 	@RequestMapping(value="/search", method = RequestMethod.POST)
 	@ResponseBody
-	public SearchComplete searchOnLine(String query){
-		return articleService.getAllByTitle(query);
+	public ModelAndView searchOnLine(String query){
+		ModelAndView modelAndView = new ModelAndView("spider/searchResult");
+//		List<>spiderService.spiderByKey();
+		return modelAndView;
 	}
 }

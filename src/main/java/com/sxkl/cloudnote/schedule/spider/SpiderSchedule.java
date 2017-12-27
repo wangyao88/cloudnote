@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.spider.entity.NetArticle;
-import com.sxkl.cloudnote.spider.manager.Spider;
+import com.sxkl.cloudnote.spider.manager.ArticleSpider;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 public class SpiderSchedule {
 
 	@Autowired
-	private Spider spider;
+	private ArticleSpider spider;
 	@Autowired
     private RedisTemplate<Object, NetArticle> redisTemplate;
 	

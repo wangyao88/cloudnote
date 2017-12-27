@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class Spider {
+public class SearchSpider {
 	
 	@Autowired
 	private UrlFactory urlFactory;
@@ -78,8 +78,15 @@ public class Spider {
 		return articles;
 	}
 	
+	public static void main(String[] args) throws IOException {
+		Map<String, String> cookies = getCookies();
+		Document document = Jsoup.connect("http://so.csdn.net/so/search/s.do?q=java&t=&o=&s=&l=").cookies(cookies).get();
+		Elements elements = document.getElementsByClass("search-list");
+		System.out.println(elements.get(6));
+	}
+	
 	private static Map<String, String> getCookies() {
-		String str = "uuid_tt_dd=10_16972385510-1513519269797-401969; __message_sys_msg_id=0; __message_gu_msg_id=0; __message_cnel_msg_id=0; __message_in_school=0; TY_SESSION_ID=d74284b0-1be7-4d41-9a30-b144c953b4da; uuid=a82114e4-8754-4681-bdc0-d9a0e6d43f1e; ADHOC_MEMBERSHIP_CLIENT_ID1.0=bb04ca10-d9d5-7771-07d3-ecf9e7670720; dc_tos=p1gb12; dc_session_id=10_1514038447015.330218; Hm_lvt_6bcd52f51e9b3dce32bec4a3997715ac=1513519270,1513519362,1514038449; Hm_lpvt_6bcd52f51e9b3dce32bec4a3997715ac=1514094806";
+		String str = "Hm_lvt_6bcd52f51e9b3dce32bec4a3997715ac=1514210549,1514214067,1514216653,1514303680; uuid_tt_dd=-2938934644871967934_20170917; UN=qq_36265493; UE=\"\"; BT=1513261119195; __message_sys_msg_id=0; __message_gu_msg_id=0; __message_cnel_msg_id=0; Hm_ct_6bcd52f51e9b3dce32bec4a3997715ac=1788*1*PC_VC; kd_user_id=213e4964-b6e4-4cb6-81e5-fa3052429418; __message_in_school=0; gr_user_id=d507363a-3052-49c1-8dbd-5a3109462f9c; __message_district_code=000000; dc_tos=p1ks9t; UM_distinctid=1608e332815402-012f9868972eb4-7c4f563c-15f900-1608e332816f17; dc_session_id=10_1514303677235.131538; Hm_lpvt_6bcd52f51e9b3dce32bec4a3997715ac=1514303777";
 		String[] strs = str.split(";");
 		Map<String,String> cookies = new HashMap<String,String>();
 		for(String cookie : strs){
@@ -87,7 +94,6 @@ public class Spider {
 			cookies.put(temp[0],temp[1]);
 		}
 		cookies.put("Hm_lpvt_6bcd52f51e9b3dce32bec4a3997715ac", new Date().getTime()+"");
-		cookies.put("dc_tos", "p1gbsy");
 		return cookies;
 	}
 }

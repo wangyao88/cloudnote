@@ -16,7 +16,7 @@ import com.sxkl.cloudnote.common.service.OperateResultService;
 import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.schedule.spider.SpiderSchedule;
 import com.sxkl.cloudnote.spider.entity.NetArticle;
-import com.sxkl.cloudnote.spider.manager.ContentFilter;
+import com.sxkl.cloudnote.spider.manager.SearchSpider;
 
 @Service
 public class SpiderService {
@@ -26,7 +26,7 @@ public class SpiderService {
 	@Autowired
 	private SpiderSchedule spiderSchedule;
 	@Autowired
-	private ContentFilter contentFilter;
+	private SearchSpider searchSpider;
 	
 	@Logger(message="获取所有订阅文章")
 	@SuppressWarnings({ "unchecked", "rawtypes" })
