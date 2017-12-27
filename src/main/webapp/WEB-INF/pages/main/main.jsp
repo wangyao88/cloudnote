@@ -48,6 +48,8 @@
 			    <span class="separator"></span>
 			    <input class="mini-textbox" width="400px" id="searchArticleByTitleOrContentText" emptyText="笔记标题或内容，以逗号分隔"/>   
 			    <a class="mini-button" plain="true" id="searchArticleByTitleOrContentBtn" onclick="searchArticleByTitleOrContentText">搜索</a>
+			    <span class="separator"></span>
+			    <a class="mini-button" iconCls="icon-help" href="<%=basePath%>spider/searchPage" target="_blank">在线搜索</a>
 		    </div>
 		 </div>
 		 <div title="south" region="south" showSplit="false" showHeader="false" height="32px" showSplitIcon="false" >

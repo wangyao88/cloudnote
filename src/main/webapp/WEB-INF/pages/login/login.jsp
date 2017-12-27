@@ -81,7 +81,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <div id="contPar" class="contPar">
 	<div id="page1"  style="z-index:1;">
 		<div class="title0">曼妙云端笔记平台</div>
-		<div class="title1">旅游、交通、气象、公共安全、大数据</div>
+		<div class="title1">点点滴滴的感动</div>
 		<div class="imgGroug">
 			<ul>
 				<img alt="" class="img0 png" src="<%=basePath %>js/login/img/page1_0.png">
@@ -95,7 +95,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <div class="tyg-div-denglv">
 	<div class="tyg-div-form">
 		<form action="<%=basePath %>login" method="post">
-			<h2>登录</h2><p class="tyg-p">欢迎访问  曼妙云端笔记</p>
+			<h2>登录</h2>
+			<p class="tyg-p">
+			      欢迎访问  曼妙云端笔记
+			   <span style="margin-left:10px;">
+			              <a href="<%=basePath %>login/registe" target="_self">注册</a>
+			    </span>
+			</p>
 			<div style="margin:5px 0px;">
 				<input type="text" name="userName" placeholder="请输入账号..."/>
 			</div>

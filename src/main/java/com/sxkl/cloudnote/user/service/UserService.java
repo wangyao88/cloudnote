@@ -100,4 +100,12 @@ public class UserService {
 		return gson.toJson(users);
 	}
 
+	public User getUserByName(String name) {
+		return userDao.getUserByName(name);
+	}
+
+	public void registe(User user) {
+		userDao.insert(user);
+	}
+
 }

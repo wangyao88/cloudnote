@@ -30,6 +30,7 @@ import com.sxkl.cloudnote.image.service.ImageService;
 import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.note.entity.Note;
 import com.sxkl.cloudnote.note.service.NoteService;
+import com.sxkl.cloudnote.spider.entity.SearchComplete;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.user.service.UserService;
 import com.sxkl.cloudnote.utils.FileUtils;
@@ -225,5 +226,18 @@ public class ArticleService {
 
 	public Article getArticleByDraftName(String fileName) {
 		return articleDao.getArticleByDraftName(fileName);
+	}
+
+	public SearchComplete getAllByTitle(String title) {
+		List<Article> articles = articleDao.getAllByTitle(title);
+		int size = articles.size();
+		SearchComplete result = new SearchComplete(size);
+		for(int i = 0; i < size; i++){
+			Article article = articles.get(i);
+			result.getSuggestions()[i] = article.getTitle();
+			result.getData()[i] = article.getId();
+		}
+		result.setQuery(title);
+		return result;
 	}
 }

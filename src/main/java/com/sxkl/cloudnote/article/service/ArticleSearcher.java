@@ -17,7 +17,7 @@ public class ArticleSearcher {
 	private String userId;
 	private static final int PAGE_INDEX = 0;
 	private static final int PAGE_SIZE = 20;
-	private static final int TITLE_WEIGHT = 50;
+	private static final int TITLE_WEIGHT = 70;
 	private static final int CONTENTS_WEIGHT = 10;
 	private static final int HITNUM_WEIGHT = 2;
 	

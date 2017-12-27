@@ -27,8 +27,26 @@ function spider(){
 function reload(){
 	mini.parse();
 	var grid = mini.get("articleGrid");
-	console.log(grid);
 	grid.load();
+	
+	$.ajax({
+		url : basePATH + "/spider/getTotal",
+		type : "post",
+		dataType : 'json',
+		success : function(result) {
+			mini.showTips({
+	            showModal: false,
+	            state : "info",
+	            content: "共有"+result+"篇文章",
+	            timeout: 3000,
+	            x: 'center',
+	            y: 'center'
+	        });
+		},
+		error : function() {
+			
+		}
+	});
 }
 
 function removeArticle(){
@@ -122,4 +140,8 @@ function addListener(){
 		//grid.updateRow(record,{hitNum : record.hitNum+1});
 		grid.unmask();
 	});
+}
+
+function addArticle(){
+	mini.alert("待建设");
 }

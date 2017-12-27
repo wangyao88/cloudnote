@@ -5,16 +5,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
-
-import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
@@ -22,63 +19,43 @@ import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.spider.entity.NetArticle;
 import com.sxkl.cloudnote.utils.UUIDUtil;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class Spider {
 	
-	private static List<String> urls;
-	
-	@PostConstruct
-	public void initUrl(){
-		urls = Lists.newArrayList();
-		urls.add("http://blog.csdn.net/nav/arch");
-		urls.add("http://blog.csdn.net/nav/lang");
-		urls.add("http://blog.csdn.net/nav/db");
-		urls.add("http://blog.csdn.net/nav/fund");
-		urls.add("http://blog.csdn.net/nav/ops");
-	}
-	
-	private String getUrl(){
-		Random random = new Random();
-		int index = random.nextInt(urls.size());
-		return urls.get(index);
-	}
-	
-	public static void main(String[] args) throws IOException, InterruptedException {
-		Spider spider = new Spider();
-		spider.initUrl();
-		for(int i = 0; i < 10; i++){
-			List<NetArticle> articles = spider.spider();
-			System.out.print(articles.size() + " ");
-			TimeUnit.MILLISECONDS.sleep(200);
-		}
-	}
+	@Autowired
+	private UrlFactory urlFactory;
+	@Autowired
+	private TitleFilter titleFilter;
+	@Autowired
+	private ContentFilter contentFilter;
 	
 	@Logger(message="爬取CSDN文章")
 	public List<NetArticle> spider() throws IOException{
-		
 		List<NetArticle> articles = Lists.newArrayList();
 		Map<String, String> cookies = getCookies();
-		Document document = Jsoup.connect(getUrl()).cookies(cookies).get();
+		Document document = Jsoup.connect(urlFactory.getUrl()).cookies(cookies).get();
 		Elements elements = document.getElementsByClass("list_con");
 		for(Element element : elements){
 			NetArticle article = new NetArticle();
 			String titleStr = element.getElementsByTag("h2").html();
-			if(titleStr.contains("更多专栏")){
+			if(!titleFilter.validateTitle(titleStr)){
 				continue;
 			}
 			Document titleDoc = Jsoup.parse(titleStr);
 			Elements titleEle = titleDoc.getElementsByTag("a");
 			String href = titleEle.get(0).attr("href");
 			String title = titleEle.get(0).html();
-			if(title.contains("C#") || title.contains("C++")){
+			if(!titleFilter.validateTitle(title)){
 				continue;
 			}
-			if(title.length() > 25){
-				title = title.substring(0, 25) + "...";
-			}
+			title = titleFilter.subTitle(title);
 			String content = "";
 			try {
 				content = Jsoup.connect(href).get().html();
+				content = contentFilter.filter(content);
 			} catch (Exception e) {
 				continue;
 			}
@@ -97,6 +74,7 @@ public class Spider {
 			}
 			articles.add(article);
 		}
+		log.info("爬取了{}篇文章",articles.size());
 		return articles;
 	}
 	

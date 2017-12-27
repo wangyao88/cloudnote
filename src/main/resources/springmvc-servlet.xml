@@ -48,8 +48,11 @@
 
 			<!-- 需排除拦截的地址 -->
 			<mvc:exclude-mapping path="/login" />
+			<mvc:exclude-mapping path="/login/registe" />
+			<mvc:exclude-mapping path="/login/checkName" />
 			<mvc:exclude-mapping path="/log/power" />
 			<mvc:exclude-mapping path="/js/*/*" />
+			<mvc:exclude-mapping path="/images/*/*" />
 			<mvc:exclude-mapping path="/mywebsocket" />
 			<beans:bean class="com.sxkl.cloudnote.interceptor.SecurityInterceptor" />
 		</mvc:interceptor>
@@ -61,6 +64,7 @@
 	</beans:bean>
 	
 	<mvc:resources mapping="/js/**" location="/js/" />
+	<mvc:resources mapping="/images/**" location="/images/" />
 	<mvc:resources mapping="/cloudnote/css/**" location="/WEB-INF/pages/login/css/" />
 	<mvc:resources mapping="/cloudnote/img/**" location="/WEB-INF/pages/login/img/" />
 	<aop:config proxy-target-class="true"></aop:config>
