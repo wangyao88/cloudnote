@@ -41,19 +41,18 @@ $(function() {
     }; 
     var options = {
         serviceUrl: basePATH + "spider/searchKey",//获取数据的后台页面
-        width: 700,//提示框的宽度
+        width: 350,//提示框的宽度
+        height: 600,
         delimiter: /(,|;)\s*/,//分隔符
         onSelect: onAutocompleteSelect,//选中之后的回调函数
         deferRequestBy: 0, //单位微秒
         params: { country: 'Yes' },//参数
-        noCache: false //是否启用缓存 默认是开启缓存的
+        noCache: true //是否启用缓存 默认是开启缓存的
     };
 
     a1 = $('#searchText').autocomplete(options);
                 
 });
-
-
 
 function search(){
 	var searchKey = $("#searchText").val();
@@ -64,14 +63,39 @@ function search(){
 		url : basePATH + "/spider/search",
 		type : "post",
 		data : {
+			page : 1,
 			searchKey : searchKey
 		},
 		dataType : 'json',
 		success : function(result) {
-			
+			var panels = $("div[name^='search-panle']");
+			$.each( panels, function( index, val ) {
+				this.innerHTML = result[index].content;
+			});
 		},
 		error : function() {
 			
 		}
 	});
 }
+
+function news(){
+	$.ajax({
+		url : basePATH + "/spider/news",
+		type : "post",
+//		dataType : 'json',
+		success : function(result) {
+			console.log(result);
+			$("#news").html(result);
+//			$("#news").innerHTML = result;
+//			console.log($("#news").innerHTML);
+		},
+		error : function() {
+			
+		}
+	});
+}
+
+$(document).ready(function(){
+	news();
+});

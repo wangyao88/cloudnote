@@ -198,7 +198,7 @@ public class ArticleDao extends BaseDao {
 	    Query query = session.createQuery(hql);
 	    query.setString("title", '%'+title+'%');
 	    query.setFirstResult(0);
-        query.setMaxResults(20);
+        query.setMaxResults(11);
 		return query.list();
 	}
 

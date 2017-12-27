@@ -6,83 +6,81 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
 import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.spider.entity.NetArticle;
-import com.sxkl.cloudnote.utils.UUIDUtil;
+import com.sxkl.cloudnote.utils.StringAppendUtils;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Service
 public class SearchSpider {
 	
-	@Autowired
-	private UrlFactory urlFactory;
-	@Autowired
-	private TitleFilter titleFilter;
-	@Autowired
-	private ContentFilter contentFilter;
-	
-	@Logger(message="爬取CSDN文章")
-	public List<NetArticle> spider() throws IOException{
+	@Logger(message="搜索文章")
+	public List<NetArticle> spider(int page, String key) throws IOException{
 		List<NetArticle> articles = Lists.newArrayList();
 		Map<String, String> cookies = getCookies();
-		Document document = Jsoup.connect(urlFactory.getUrl()).cookies(cookies).get();
-		Elements elements = document.getElementsByClass("list_con");
+		String url = StringAppendUtils.append("http://so.csdn.net/so/search/s.do?p=",page,"&q=",key,"&t=&domain=&o=&s=&u=&l=&f=");
+		Document document = Jsoup.connect(url).cookies(cookies).get();
+		Elements elements = document.getElementsByClass("search-list");
 		for(Element element : elements){
+			System.out.println(element.html());
 			NetArticle article = new NetArticle();
-			String titleStr = element.getElementsByTag("h2").html();
-			if(!titleFilter.validateTitle(titleStr)){
-				continue;
+			Elements as = element.getElementsByTag("a");
+			String title = as.get(0).text();
+			if(title.length() > 30){
+				title = title.substring(0, 30) + "...";
 			}
-			Document titleDoc = Jsoup.parse(titleStr);
-			Elements titleEle = titleDoc.getElementsByTag("a");
-			String href = titleEle.get(0).attr("href");
-			String title = titleEle.get(0).html();
-			if(!titleFilter.validateTitle(title)){
-				continue;
-			}
-			title = titleFilter.subTitle(title);
-			String content = "";
-			try {
-				content = Jsoup.connect(href).get().html();
-				content = contentFilter.filter(content);
-			} catch (Exception e) {
-				continue;
-			}
-			String time = element.getElementsByClass("time").html();
-			article.setId(UUIDUtil.getUUID());
 			article.setTitle(title);
-			article.setUrl(href);
-			article.setContent(content);
-			article.setDate(time);
-			String tagStr = element.getElementsByClass("tag").html();
-			if(!StringUtils.isEmpty(tagStr)){
-				Document tagDoc = Jsoup.parse(tagStr);
-				Elements tagEle = tagDoc.getElementsByTag("a");
-				String tag = tagEle.get(0).html();
-				article.setCategory(tag);
+			if(as.size()>1){
+				for(int i = 1; i < as.size(); i++){
+					as.get(i).remove();
+				}
 			}
+			Elements children = element.getElementsByTag("dd");
+			for(Element ele : children){
+				if(!ele.hasClass("search-detail")){
+					ele.remove();
+				}else{
+					String text = ele.text();
+					if(text.length() > 80){
+						text = text.substring(0, 80) + "...";
+						text.replaceAll("key", "<em>"+key+"</em>");
+						ele.text(text);
+					}
+				}
+			}
+			article.setContent(element.html());
 			articles.add(article);
 		}
-		log.info("爬取了{}篇文章",articles.size());
 		return articles;
+	}
+	
+	@Logger(message="搜索新闻怕行榜")
+	public String news() throws IOException{
+		Map<String, String> cookies = getCookies();
+		Document document = Jsoup.connect("http://news.sina.com.cn/hotnews/").cookies(cookies).get();
+		Elements elements = document.getElementsByTag("table");
+		return StringAppendUtils.append("<table>",elements.get(35).html(),"</table>");
 	}
 	
 	public static void main(String[] args) throws IOException {
 		Map<String, String> cookies = getCookies();
-		Document document = Jsoup.connect("http://so.csdn.net/so/search/s.do?q=java&t=&o=&s=&l=").cookies(cookies).get();
-		Elements elements = document.getElementsByClass("search-list");
-		System.out.println(elements.get(6));
+		Document document = Jsoup.connect("http://news.sina.com.cn/hotnews/").cookies(cookies).get();
+		Elements elements = document.getElementsByTag("table");
+//		System.out.println(elements.get(2));
+		int count = 0;
+		for(Element element : elements){
+			count++;
+			if(element.html().contains("108名高校学生联名上书后 最高权力机关有大动作")){
+				System.out.println(element);
+				System.out.println(count);
+			}
+		}
 	}
 	
 	private static Map<String, String> getCookies() {

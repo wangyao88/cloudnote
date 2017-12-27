@@ -19,7 +19,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
 	<link rel="stylesheet" href="<%=basePath%>css/search/default.css" />
 	<link rel="stylesheet" href="<%=basePath%>css/search/search-form.css" />
+	<link rel="stylesheet" href="<%=basePath%>css/search/search.css" />
 	<link rel="stylesheet" href="<%=basePath%>css/jquery.autocomplete.css" />
+	
 	<script type="text/javascript" src="<%=basePath%>js/jquery.min.js"></script>
 	<script type="text/javascript" src="<%=basePath%>js/jquery.autocomplete-min.js"></script>
 	<script src="<%=basePath%>js/layer/layer.js" type="text/javascript"></script>
@@ -30,12 +32,28 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
 
 <body>
-	<div class="search-wrapper" style="top:200px;">
+	<div class="search-wrapper" style="top:50px;left:250px;">
 		<div class="input-holder">
-			<input id="searchText" type="text" class="search-input" placeholder="请输入关键词" />
+			<input id="searchText" type="text" class="search-input" placeholder="请输入关键词"/>
 			<button class="search-icon" onClick="searchToggle(this, event);"><span></span></button>
 		</div>
 		<span class="close" onClick="searchToggle(this, event);"></span>
+	</div>
+	
+	<div style="float:left;width:30%;border:1px solid #F00">
+		<div class="news" id="news"></div>
+	</div>
+	
+	<div style="float:right;width:65%;border:1px solid #F00">
+		<div name="search-panle" class="search-panle-normal search-panle-Gainsboro"></div>
+	    <div name="search-panle" class="search-panle-normal search-panle-DarkMagenta"></div>
+	    <div name="search-panle" class="search-panle-normal search-panle-CornflowerBlue"></div>
+	    <div name="search-panle" class="search-panle-normal search-panle-Cyan"></div>
+	    <div name="search-panle" class="search-panle-normal search-panle-Yellow"></div>
+	    <div name="search-panle" class="search-panle-normal search-panle-Orchid"></div>
+	    <div name="search-panle" class="search-panle-normal search-panle-Lavender"></div>
+	    <div name="search-panle" class="search-panle-normal search-panle-LightBLue"></div>
+	    <div name="search-panle" class="search-panle-normal search-panle-DoderBlue"></div>
 	</div>
 </body>
 </html>

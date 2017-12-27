@@ -1,5 +1,8 @@
 package com.sxkl.cloudnote.spider.controller;
 
+import java.io.IOException;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,7 +11,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sxkl.cloudnote.article.service.ArticleService;
+import com.sxkl.cloudnote.spider.entity.NetArticle;
 import com.sxkl.cloudnote.spider.entity.SearchComplete;
+import com.sxkl.cloudnote.spider.manager.SearchSpider;
 import com.sxkl.cloudnote.spider.service.SpiderService;
 
 @Controller
@@ -19,6 +24,8 @@ public class SpiderController {
 	private SpiderService spiderService;
 	@Autowired
 	private ArticleService articleService;
+	@Autowired
+	private SearchSpider searchSpider;
 	
 	@RequestMapping("/index")
 	public ModelAndView index(){
@@ -76,9 +83,13 @@ public class SpiderController {
 	
 	@RequestMapping(value="/search", method = RequestMethod.POST)
 	@ResponseBody
-	public ModelAndView searchOnLine(String query){
-		ModelAndView modelAndView = new ModelAndView("spider/searchResult");
-//		List<>spiderService.spiderByKey();
-		return modelAndView;
+	public List<NetArticle> searchOnLine(int page, String searchKey) throws IOException{
+		return  searchSpider.spider(page, searchKey);
+	}
+	
+	@RequestMapping(value="/news", method = RequestMethod.POST)
+	@ResponseBody
+	public String news() throws IOException{
+		return  searchSpider.news();
 	}
 }

@@ -1,6 +1,12 @@
 .autocomplete{
-    max-height: 300px;
+	z-index:1111;
+    height: 600px;
+    width:300px;
     display: block;
-    margin-left: 50px;
+    margin-left: 40px;
     margin-top: 20px;
+    padding-left:10px;
+    padding-top:5px;
+    background:#DA70D6; 
+	color:#FFF;
 }
