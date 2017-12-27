@@ -19,6 +19,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
 	<link rel="stylesheet" href="<%=basePath%>css/search/default.css" />
 	<link rel="stylesheet" href="<%=basePath%>css/search/search-form.css" />
+	<link rel="stylesheet" href="<%=basePath%>css/jquery.autocomplete.css" />
 	<script type="text/javascript" src="<%=basePath%>js/jquery.min.js"></script>
 	<script type="text/javascript" src="<%=basePath%>js/jquery.autocomplete-min.js"></script>
 	<script src="<%=basePath%>js/layer/layer.js" type="text/javascript"></script>
