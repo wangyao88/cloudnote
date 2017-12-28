@@ -1,6 +1,7 @@
 package com.sxkl.cloudnote.spider.manager;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +23,7 @@ public class SearchSpider {
 	
 	@Logger(message="搜索文章")
 	public List<NetArticle> spider(int page, String key) throws IOException{
+		key = URLEncoder.encode(key, "utf-8");
 		List<NetArticle> articles = Lists.newArrayList();
 		Map<String, String> cookies = getCookies();
 		String url = StringAppendUtils.append("http://so.csdn.net/so/search/s.do?p=",page,"&q=",key,"&t=&domain=&o=&s=&u=&l=&f=");
