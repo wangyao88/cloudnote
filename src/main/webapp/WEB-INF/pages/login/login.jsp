@@ -99,7 +99,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<p class="tyg-p">
 			      欢迎访问  曼妙云端笔记
 			   <span style="margin-left:10px;">
-			              <a href="<%=basePath %>login/registe" target="_self">注册</a>
+			              <a href="<%=basePath %>login/registe" target="_self" style="color:white">注册</a>
 			    </span>
 			</p>
 			<div style="margin:5px 0px;">
