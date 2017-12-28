@@ -1,5 +1,18 @@
 body{
+	background:	#A9A9A9;
 	color:black;
+}
+
+tr{
+    display:block; /*将tr设置为块体元素*/
+    margin:2px 0;  /*设置tr间距为2px*/
+}
+.date-right{
+	text-align:right;
+}
+
+.new-width{
+    width:410px;	
 }
 
 .news{
@@ -15,7 +28,7 @@ body{
 	border:1px聽solid聽#F00;
 	word-wrap:break-word;
 	overflow:hidden;
-	background:#E6E6FA; 
+	/* background:	#DCDCDC;  */
 	color:#2F4F4F;
 }
 
@@ -24,17 +37,19 @@ body{
 	position:relative;
 	float:left;
 	margin-top:15px;
-	margin-right:50px;
+	margin-left:50px;
+	padding-top:10px;
+	padding-left:10px;
 	z-index:9999;
-	width:250px;
-	height:200px;
+	width:80%;
+	height:100px;
 	border:1px聽solid聽#F00;
 	word-wrap:break-word;
 	overflow:hidden;
 }
 
 .search-panle-Gainsboro{
-	background:#E1FFFF; 
+	background:	#D3D3D3; 
 	color:#000000;
 }
 

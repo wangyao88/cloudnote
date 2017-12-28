@@ -4,8 +4,11 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -21,6 +24,9 @@ import com.sxkl.cloudnote.utils.StringAppendUtils;
 @Service
 public class SearchSpider {
 	
+	private static final int NEW_BEGIN = 35;
+	private static final int NEW_END = 40;
+	
 	@Logger(message="搜索文章")
 	public List<NetArticle> spider(int page, String key) throws IOException{
 		key = URLEncoder.encode(key, "utf-8");
@@ -30,7 +36,6 @@ public class SearchSpider {
 		Document document = Jsoup.connect(url).cookies(cookies).get();
 		Elements elements = document.getElementsByClass("search-list");
 		for(Element element : elements){
-			System.out.println(element.html());
 			NetArticle article = new NetArticle();
 			Elements as = element.getElementsByTag("a");
 			String title = as.get(0).text();
@@ -67,14 +72,46 @@ public class SearchSpider {
 		Map<String, String> cookies = getCookies();
 		Document document = Jsoup.connect("http://news.sina.com.cn/hotnews/").cookies(cookies).get();
 		Elements elements = document.getElementsByTag("table");
-		return StringAppendUtils.append("<table>",elements.get(35).html(),"</table>");
+		Set<String> news = new HashSet<String>();
+		getNews(elements,news);
+		StringBuilder result = new StringBuilder();
+		for(String _new : news){
+			result.append(_new);
+		}
+		return result.toString();
+	}
+
+	private void getNews(Elements elements,Set<String> news) {
+		if(news.size() >= 4){
+			return;
+		}
+		int size = elements.size();
+		Random random = new Random();
+		int index = random.nextInt(size);
+		if(index > NEW_BEGIN){
+			Elements trs = elements.get(index).getElementsByTag("tr");
+			for(Element tr : trs){
+				Elements ths = tr.getElementsByTag("th");
+				for(Element th : ths){
+					th.remove();
+				}
+				Elements tds = tr.getElementsByTag("td");
+				if(!tds.isEmpty() && tds.size() > 3){
+					tds.get(0).remove();
+					tds.get(1).addClass("new-width");
+					tds.get(2).remove();
+					tds.get(3).addClass("date-right");
+				}
+			}
+			news.add(StringAppendUtils.append("<table>",elements.get(index).html(),"</table>"));
+		}
+		getNews(elements,news);
 	}
 	
 	public static void main(String[] args) throws IOException {
 		Map<String, String> cookies = getCookies();
 		Document document = Jsoup.connect("http://news.sina.com.cn/hotnews/").cookies(cookies).get();
 		Elements elements = document.getElementsByTag("table");
-//		System.out.println(elements.get(2));
 		int count = 0;
 		for(Element element : elements){
 			count++;

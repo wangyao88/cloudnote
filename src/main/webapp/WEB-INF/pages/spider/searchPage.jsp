@@ -40,20 +40,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<span class="close" onClick="searchToggle(this, event);"></span>
 	</div>
 	
-	<div style="float:left;width:30%;border:1px solid #F00">
-		<div class="news" id="news"></div>
+	<div style="float:left;width:35%;border:1px solid #F00">
+	    <div class="news" id="news"></div>
 	</div>
 	
-	<div style="float:right;width:65%;border:1px solid #F00">
-		<div name="search-panle" class="search-panle-normal search-panle-Gainsboro"></div>
-	    <div name="search-panle" class="search-panle-normal search-panle-DarkMagenta"></div>
-	    <div name="search-panle" class="search-panle-normal search-panle-CornflowerBlue"></div>
-	    <div name="search-panle" class="search-panle-normal search-panle-Cyan"></div>
-	    <div name="search-panle" class="search-panle-normal search-panle-Yellow"></div>
-	    <div name="search-panle" class="search-panle-normal search-panle-Orchid"></div>
-	    <div name="search-panle" class="search-panle-normal search-panle-Lavender"></div>
-	    <div name="search-panle" class="search-panle-normal search-panle-LightBLue"></div>
-	    <div name="search-panle" class="search-panle-normal search-panle-DoderBlue"></div>
+	<div id="searchResult" style="float:right;width:65%;border:1px solid #F00">
+		
 	</div>
 </body>
 </html>

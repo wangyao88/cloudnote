@@ -68,9 +68,10 @@ function search(){
 		},
 		dataType : 'json',
 		success : function(result) {
-			var panels = $("div[name^='search-panle']");
-			$.each( panels, function( index, val ) {
-				this.innerHTML = result[index].content;
+			var searchResult = $("#searchResult");
+			searchResult.empty();
+			$.each( result, function( index, val ) {
+				searchResult.append("<div name=\"search-panle\" class=\"search-panle-normal search-panle-Gainsboro\">"+result[index].content+"</div>");
 			});
 		},
 		error : function() {
@@ -83,12 +84,9 @@ function news(){
 	$.ajax({
 		url : basePATH + "/spider/news",
 		type : "post",
-//		dataType : 'json',
 		success : function(result) {
 			console.log(result);
 			$("#news").html(result);
-//			$("#news").innerHTML = result;
-//			console.log($("#news").innerHTML);
 		},
 		error : function() {
 			
@@ -98,4 +96,5 @@ function news(){
 
 $(document).ready(function(){
 	news();
+	window.setInterval(news, 60000); 
 });
