@@ -63,12 +63,14 @@ public class ArticleSearcher {
     	if(StringUtils.isEmpty(content) || StringUtils.isEmpty(word)){
     		return 0;
     	}
-    	int count = 0;
-		int start = 0;
-		while (content.indexOf(word, start) >= 0 && start < content.length()) {
-			count++;
-			start = content.indexOf(word, start) + word.length();
-		}
-		return count;
+//    	int count = 0;
+//		int start = 0;
+//		while (content.indexOf(word, start) >= 0 && start < content.length()) {
+//			count++;
+//			start = content.indexOf(word, start) + word.length();
+//		}
+//		return count;
+    	final String[] words = content.split(word);
+    	return  words.length-1;
     }
 }
