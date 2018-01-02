@@ -50,9 +50,10 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value = "/logout", method = { RequestMethod.GET, RequestMethod.HEAD })
-	public String logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public ModelAndView logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		userService.logout(request);
-		return "redirect:/login";
+		ModelAndView modelAndView = new ModelAndView("redirect:/login");
+		return modelAndView;
 	}
 	
 	@RequestMapping(value = "/login/registe", method = { RequestMethod.GET, RequestMethod.HEAD })
