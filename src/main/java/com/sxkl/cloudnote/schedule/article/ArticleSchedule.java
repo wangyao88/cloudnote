@@ -41,6 +41,4 @@ public class ArticleSchedule {
 			redisCacheService.cacheMap(Constant.HOT_ARTICLE_KEY_IN_REDIS+user.getId(),result);
 		}
     }
-
-
 }

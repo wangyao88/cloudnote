@@ -25,7 +25,6 @@ public class ArticlePublisher {
 		bean.setDomain(Constant.DOMAIN);
 		bean.setDutype(DutyType.LINK_ARTICLE_IMAGE);
         applicationContext.publishEvent(new ArticlePublisherEvent(bean));
-        
     }
 
 	@Logger(message="增加笔记点击量")

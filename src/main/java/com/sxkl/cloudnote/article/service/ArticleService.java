@@ -30,6 +30,7 @@ import com.sxkl.cloudnote.image.service.ImageService;
 import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.note.entity.Note;
 import com.sxkl.cloudnote.note.service.NoteService;
+import com.sxkl.cloudnote.schedule.article.ArticleSchedule;
 import com.sxkl.cloudnote.spider.entity.SearchComplete;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.user.service.UserService;
@@ -57,7 +58,7 @@ public class ArticleService {
 	public void addArticle(HttpServletRequest request) {
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");
-		FileUtils.replaceAllDomain(content);
+		content = FileUtils.replaceAllDomain(content);
 		String noteId = request.getParameter("note");
 		String flagsStr = request.getParameter("flags");
 		String articleId = request.getParameter("articleId");
@@ -147,11 +148,13 @@ public class ArticleService {
     @Logger(message="获取笔记")
 	public String getArticle(HttpServletRequest request) {
 		String id = request.getParameter("id");
-		String content = redisCacheService.getValueFromHash(Constant.HOT_ARTICLE_KEY_IN_REDIS,id,request);
-		if(StringUtils.isEmpty(content)){
-			Article article = articleDao.selectArticleById(id);
-			content = article.getContent();
-		}
+//		String content = redisCacheService.getValueFromHash(Constant.HOT_ARTICLE_KEY_IN_REDIS,id,request);
+//		if(StringUtils.isEmpty(content)){
+//			Article article = articleDao.selectArticleById(id);
+//			content = article.getContent();
+//		}
+		Article article = articleDao.selectArticleById(id);
+		String content = article.getContent();
 		content = content.replaceAll(Constant.ARTICLE_CONTENT_DOMAIN, Constant.DOMAIN);
 		PublishManager.getPublishManager().getArticlePublisher().increaseArticleHitNum(id);
 		return content;
