@@ -1,5 +1,7 @@
 package com.sxkl.cloudnote.disk.entity;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
@@ -23,6 +25,7 @@ public class FileType {
 	private static Set<String> pptType;
 	private static Set<String> pdfType;
 	private static Set<String> txtType;
+	private static Map<String,Set<String>> icons;
 	
 	@PostConstruct
 	public void init(){
@@ -34,9 +37,24 @@ public class FileType {
 		pptType = new ArraySet<String>("ppt", "pptx");
 		pdfType = new ArraySet<String>("pdf");
 		txtType = new ArraySet<String>("txt", "md", "xml","html", "jsp");
+		icons = new HashMap<String,Set<String>>();
+		icons.put("image", imageType);
+		icons.put("vidoe", vidoeType);
+		icons.put("zip", zipType);
+		icons.put("word", wordType);
+		icons.put("excel", excelType);
+		icons.put("ppt", pptType);
+		icons.put("pdf", pdfType);
+		icons.put("txt", txtType);
 	}
 	
-//	public String getIcon(String type){
-//		
-//	}
+	public String getIcon(String type){
+		for(Map.Entry<String, Set<String>> entry : icons.entrySet()){
+			Set<String> types = entry.getValue();
+			if(types.contains(type.toLowerCase())){
+				return entry.getKey();
+			}
+		}
+		return "directory";
+	}
 }

@@ -73,3 +73,37 @@ CHANGE COLUMN `expire` `expireDate` DATETIME NULL DEFAULT NULL COMMENT '过期�
 ALTER TABLE `cloudnote`.`cn_article` 
 CHANGE COLUMN `title` `title` VARCHAR(100) NOT NULL ;
 
+
+CREATE TABLE `cloudnote`.`cn_disk` (
+  `id` VARCHAR(36) NOT NULL COMMENT '云盘主键',
+  `totalSize` DOUBLE NULL COMMENT '总空间',
+  `usedSize` DOUBLE NULL COMMENT '已使用空间',
+  `uId` VARCHAR(36) NULL COMMENT '用户主键',
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_bin
+COMMENT = '云盘信息表';
+
+
+CREATE TABLE `cloudnote`.`cn_fileInfo` (
+  `id` VARCHAR(36) NOT NULL COMMENT '文件主键',
+  `name` VARCHAR(100) NULL COMMENT '文件名称',
+  `size` DOUBLE NULL COMMENT '文件大小',
+  `type` VARCHAR(10) NULL COMMENT '文件类型',
+  `icon` VARCHAR(10) NULL COMMENT '文件图标',
+  `path` VARCHAR(200) NULL COMMENT '文件路径',
+  `createDate` DATE NULL COMMENT '上传时间',
+  `isshare` TINYINT NULL COMMENT '是否分享',
+  `password` VARCHAR(45) NULL COMMENT '分享密码',
+  `shareurl` VARCHAR(200) NULL COMMENT '分享链接',
+  `description` VARCHAR(45) NULL COMMENT '文件描述',
+  `md5` VARCHAR(45) NULL COMMENT 'md5值',
+  `fId` VARCHAR(36) NULL COMMENT '父文件主键',
+  `dId` VARCHAR(36) NULL COMMENT '所属云盘主键',
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_bin
+COMMENT = '云盘文件信息表';
+

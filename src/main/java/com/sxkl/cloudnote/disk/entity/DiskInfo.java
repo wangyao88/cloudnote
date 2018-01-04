@@ -36,9 +36,6 @@ public class DiskInfo {
 	@Column(name="usedSize",nullable=false)
 	private double usedSize;
 	
-	@Column(name="isLocked",nullable=false)
-	private boolean isLocked;
-	
 	@OneToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="uId")
 	private User user;

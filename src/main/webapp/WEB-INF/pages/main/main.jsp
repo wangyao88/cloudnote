@@ -55,10 +55,12 @@
 		 <div title="south" region="south" showSplit="false" showHeader="false" height="32px" showSplitIcon="false" >
         		<div class="mini-toolbar">
 			    <a class="mini-button" iconCls="icon-user" onclick="openWebchatPage">在线聊天</a>
-			    <span class="separator"></span>
+			    <!-- <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-date" onclick="openStatChart">报表</a>
 			    <span class="separator"></span>
-			    <a class="mini-button" iconCls="icon-edit" onclick="">账号管理</a>
+			    <a class="mini-button" iconCls="icon-edit" onclick="">账号管理</a> -->
+			    <span class="separator"></span>
+			    <a class="mini-button" iconCls="icon-date" href="<%=basePath%>disk/index" target="_blank">云盘</a>
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-undo" href="<%=basePath%>spider/index" target="_blank">订阅文章</a>
 			    <span class="separator"></span>
