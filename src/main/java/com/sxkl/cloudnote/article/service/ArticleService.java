@@ -20,7 +20,6 @@ import com.sxkl.cloudnote.article.entity.ArticleForCache;
 import com.sxkl.cloudnote.article.entity.ArticleForEdit;
 import com.sxkl.cloudnote.article.entity.ArticleForHtml;
 import com.sxkl.cloudnote.cache.annotation.RedisDisCachable;
-import com.sxkl.cloudnote.cache.service.RedisCacheService;
 import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.common.service.OperateResultService;
 import com.sxkl.cloudnote.eventdriven.manager.PublishManager;
@@ -30,7 +29,6 @@ import com.sxkl.cloudnote.image.service.ImageService;
 import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.note.entity.Note;
 import com.sxkl.cloudnote.note.service.NoteService;
-import com.sxkl.cloudnote.schedule.article.ArticleSchedule;
 import com.sxkl.cloudnote.spider.entity.SearchComplete;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.user.service.UserService;
@@ -50,8 +48,6 @@ public class ArticleService {
 	private UserService userService;
 	@Autowired
 	private ImageService imageService;
-	@Autowired
-	private RedisCacheService redisCacheService;
 
 	@Logger(message="添加笔记")
 	@RedisDisCachable(key={Constant.TREE_MENU_KEY_IN_REDIS,Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,})

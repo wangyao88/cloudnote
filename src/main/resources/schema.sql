@@ -69,3 +69,7 @@ ADD COLUMN `beginDate` DATETIME NULL COMMENT '开始日期' AFTER `content`;
 
 ALTER TABLE `cloudnote`.`cn_waitingtask` 
 CHANGE COLUMN `expire` `expireDate` DATETIME NULL DEFAULT NULL COMMENT '过期时间' ;
+
+ALTER TABLE `cloudnote`.`cn_article` 
+CHANGE COLUMN `title` `title` VARCHAR(100) NOT NULL ;
+
