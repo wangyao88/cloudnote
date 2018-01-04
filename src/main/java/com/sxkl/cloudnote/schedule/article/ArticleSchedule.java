@@ -29,7 +29,7 @@ public class ArticleSchedule {
 	private UserService userService;
 	
 	@Logger(message="定时缓存用户热门笔记")
-	@Scheduled(fixedRate=Constant.HOT_ARTICLE_EXPIRE_IN_REDIS)
+//	@Scheduled(fixedRate=Constant.HOT_ARTICLE_EXPIRE_IN_REDIS)
     public void cacheHotArticle(){
 		List<User> users = userService.getAllUsers();
 		for(User user : users){
