@@ -49,9 +49,13 @@ public class FileType {
 	}
 	
 	public String getIcon(String type){
+		type = type.toLowerCase();
+		if(txtType.contains(type)){
+			return type;
+		}
 		for(Map.Entry<String, Set<String>> entry : icons.entrySet()){
 			Set<String> types = entry.getValue();
-			if(types.contains(type.toLowerCase())){
+			if(types.contains(type)){
 				return entry.getKey();
 			}
 		}

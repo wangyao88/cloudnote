@@ -1,14 +1,11 @@
 package com.sxkl.cloudnote.disk.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sxkl.cloudnote.disk.dao.DiskInfoDao;
 import com.sxkl.cloudnote.disk.entity.DiskInfo;
 import com.sxkl.cloudnote.log.annotation.Logger;
-import com.sxkl.cloudnote.main.entity.TreeNode;
 
 /**
  * @author: wangyao
@@ -43,10 +40,5 @@ public class DiskInfoService {
 	@Logger(message="获取云盘")
 	public DiskInfo fetch(String id){
 		return diskInfoDao.fetch(id);
-	}
-
-	public List<TreeNode> getTree() {
-		
-		return null;
 	}
 }

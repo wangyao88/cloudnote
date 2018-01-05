@@ -60,7 +60,7 @@
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-edit" onclick="">账号管理</a> -->
 			    <span class="separator"></span>
-			    <a class="mini-button" iconCls="icon-date" href="<%=basePath%>disk/index" target="_blank">云盘</a>
+			    <a class="mini-button" iconCls="icon-date" href="<%=basePath%>js/disk/index.html" target="_blank">云盘</a>
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-undo" href="<%=basePath%>spider/index" target="_blank">订阅文章</a>
 			    <span class="separator"></span>
