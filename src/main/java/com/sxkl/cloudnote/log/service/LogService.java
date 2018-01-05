@@ -30,6 +30,6 @@ public class LogService {
 				   .append(logger.getUserName())
 				   .append(" ")
 				   .append(logger.getIp());
-		System.out.println(consoleLog.toString());
+//		System.out.println(consoleLog.toString());
 	}
 }

@@ -10,5 +10,6 @@ public class TreeNode {
 	private String pid;
 	private boolean isleaf;
 	private String icon;
+	private String iconCls;
 //	private boolean expandOnLoad = true;
 }

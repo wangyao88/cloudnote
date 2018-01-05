@@ -38,6 +38,10 @@
 			    <a class="mini-button" iconCls="icon-remove" onclick="removeArticle">删除</a>
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-edit" onclick="removeAll">重命名</a>
+			    <span class="separator"></span>
+			    <a class="mini-button" iconCls="icon-edit" onclick="removeAll">上传</a>
+			    <span class="separator"></span>
+			    <a class="mini-button" iconCls="icon-edit" onclick="removeAll">下载</a>
 		    </div>
 		 </div>
 		<div title="菜单" region="west" width="200px" expanded="true">
