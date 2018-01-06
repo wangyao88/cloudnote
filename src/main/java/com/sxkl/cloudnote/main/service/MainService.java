@@ -14,9 +14,6 @@ import com.sxkl.cloudnote.note.service.NoteService;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.user.service.UserService;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Service
 public class MainService {
 	
@@ -30,7 +27,6 @@ public class MainService {
 	@Logger(message="获取主页菜单树")
 	@RedisCachable(key=Constant.TREE_MENU_KEY_IN_REDIS,dateTime=20)
 	public String getTree(HttpServletRequest request) {
-		log.info("缓存中没有菜单树，从数据库获取数据，生成菜单树");
 		HttpSession session = request.getSession();
 		User sessionUser = (User) session.getAttribute(Constant.USER_IN_SESSION_KEY);
 		User user = userService.selectUser(sessionUser);

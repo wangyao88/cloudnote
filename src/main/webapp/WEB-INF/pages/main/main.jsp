@@ -89,7 +89,7 @@
 			 </div>
 			<ul id="menuTree" class="mini-tree" url="<%=basePath%>main/getTree" ajaxType="post" style="width:100%;height:95%;" 
                     showTreeIcon="true" textField="text" idField="id" resultAsTree="false"   contextMenu="#treeMenu"
-				    expandOnLoad="true" onNodeClick="onNodeClick1" >
+				    expandOnLoad="true" onNodeClick="onNodeClick1" style="overflow:hidden;">
             </ul>
             <ul id="treeMenu" class="mini-contextmenu"  onbeforeopen="onBeforeOpen">        
 			    <li class="separator"/>

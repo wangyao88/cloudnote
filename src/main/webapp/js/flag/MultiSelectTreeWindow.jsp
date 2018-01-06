@@ -49,13 +49,13 @@
 
     var tree = mini.get("tree1");
 
-
     tree.load("<%=basePath%>flag/getCheckFlagTree");
 
     function GetCheckedNodes() {
         var nodes = tree.getCheckedNodes();
         return nodes;
     }
+    
     function GetData() {
         var nodes = tree.getCheckedNodes();
         var ids = [], texts = [];
@@ -68,6 +68,20 @@
         data.id = ids.join(",");
         data.text = texts.join(",");
         return data;
+    }
+    
+    function SetData(nodeIdsStr){
+	    if(nodeIdsStr){
+	    	var nodeIds = nodeIdsStr.split(",");
+	        for(var i = 0; i < nodeIds.length; i++){
+	           var node = tree.getNode(nodeIds[i]);
+	           tree.checkNode(node);
+	        }
+	        var node = tree.getNode(nodeIds[0]);
+			if(node){
+				tree.scrollIntoView(node);
+			}
+	    }
     }
 
     function CloseWindow(action) {

@@ -171,6 +171,13 @@ body, html {
 			title : "请选择标签",
 			width : 550,
 			height : 450,
+			onload: function () {       //弹出页面加载完成
+		        var iframe = this.getIFrameEl(); 
+		        var nodes = btnEdit.getValue();       
+		        //调用弹出页面方法进行初始化
+		        iframe.contentWindow.SetData(nodes); 
+		                        
+		    },
 			ondestroy : function(action) {
 				if (action == "ok") {
 					var iframe = this.getIFrameEl();
