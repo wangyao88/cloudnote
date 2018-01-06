@@ -73,4 +73,24 @@ public class FlagDao extends BaseDao {
 		return query.list();
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Flag> getAllByName(String name, String userId) {
+		String hql = "select new Flag(id,name) from Flag a where a.name like :name and a.user.id=:userId";
+		Session session = this.getSessionFactory().getCurrentSession();
+	    Query query = session.createQuery(hql);
+	    query.setString("name", '%'+name+'%');
+	    query.setString("userId", userId);
+	    query.setFirstResult(0);
+        query.setMaxResults(11);
+		return query.list();
+	}
+
+	public Flag getByName(String flagName) {
+		String hql = "select new Flag(id,name) from Flag a where a.name = :name";
+		Session session = this.getSessionFactory().getCurrentSession();
+	    Query query = session.createQuery(hql);
+	    query.setString("name", flagName);
+		return (Flag) query.uniqueResult();
+	}
+
 }

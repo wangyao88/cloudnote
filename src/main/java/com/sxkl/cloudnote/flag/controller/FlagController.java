@@ -12,6 +12,7 @@ import com.sxkl.cloudnote.common.service.OperateResultService;
 import com.sxkl.cloudnote.eventdriven.manager.PublishManager;
 import com.sxkl.cloudnote.flag.entity.Flag;
 import com.sxkl.cloudnote.flag.service.FlagService;
+import com.sxkl.cloudnote.spider.entity.SearchComplete;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.utils.UserUtil;
 
@@ -77,5 +78,17 @@ public class FlagController {
 		User sessionUser = UserUtil.getSessionUser(request);
 		PublishManager.getPublishManager().getFlagPublisher().cacheAddArticleTreeMenu(sessionUser.getId());
 	}
-
+	
+	@RequestMapping(value="/searchFlag", method = RequestMethod.GET)
+	@ResponseBody
+	public SearchComplete searchFlag(String query,HttpServletRequest request){
+		User user = UserUtil.getSessionUser(request);
+		return flagService.getAllByName(query,user.getId());
+	}
+	
+	@RequestMapping(value="/getFlagId", method = RequestMethod.POST)
+	@ResponseBody
+	public String getFlagId(String flagName){
+		return flagService.getFlagId(flagName);
+	}
 }

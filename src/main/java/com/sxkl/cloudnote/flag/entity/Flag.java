@@ -58,6 +58,14 @@ public class Flag implements Serializable{
 	
 	@Transient
 	private boolean isLeaf;
+	
+	public Flag() {
+	}
+
+	public Flag(String id, String name) {
+		this.id = id;
+		this.name = name;
+	}
 
 	public String getId() {
 		return id;

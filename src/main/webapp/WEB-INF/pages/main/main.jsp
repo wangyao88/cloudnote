@@ -14,10 +14,10 @@
 <meta http-equiv="cache-control" content="no-cache">
 <meta http-equiv="expires" content="0">
 
-<link href="<%=basePath%>js/miniui/themes/bootstrap/skin.css"
-	rel="stylesheet" type="text/css" />
-<link href="<%=basePath%>js/miniui/res/demo.css" rel="stylesheet"
-	type="text/css" />
+<link href="<%=basePath%>js/miniui/themes/bootstrap/skin.css" rel="stylesheet" type="text/css" />
+<link href="<%=basePath%>js/miniui/res/demo.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="<%=basePath%>css/flag.jquery.autocomplete.css" />
+	
 <script src="<%=basePath%>js/boot.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/jquery.min.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/note/note.js" type="text/javascript"></script>
@@ -29,6 +29,7 @@
 <script src="<%=basePath%>js/main/main.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/backup/backup.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/waitingtask/waitingtask.js" type="text/javascript"></script>
+<script type="text/javascript" src="<%=basePath%>js/jquery.autocomplete-min.js"></script>
 <script type="text/javascript">
    var basePath = "<%=basePath%>";
 </script>
@@ -54,21 +55,22 @@
 		 </div>
 		 <div title="south" region="south" showSplit="false" showHeader="false" height="32px" showSplitIcon="false" >
         		<div class="mini-toolbar">
-			    <a class="mini-button" iconCls="icon-user" onclick="openWebchatPage">在线聊天</a>
-			    <!-- <span class="separator"></span>
-			    <a class="mini-button" iconCls="icon-date" onclick="openStatChart">报表</a>
+			    <%-- <a class="mini-button" iconCls="icon-date" onclick="openStatChart">报表</a>
 			    <span class="separator"></span>
-			    <a class="mini-button" iconCls="icon-edit" onclick="">账号管理</a> -->
+			    <a class="mini-button" iconCls="icon-edit" onclick="">账号管理</a>
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-date" href="<%=basePath%>js/disk/index.html" target="_blank">云盘</a>
+			    <span class="separator"></span>
+			    <a class="mini-button" iconCls="icon-goto" onclick="">发送邮件</a>
+			    <span class="separator"></span>
+			    <a class="mini-button" iconCls="icon-goto" onclick="onLineNum">在线用户数</a>
+			    <span class="separator"></span>--%>
+			    
+			    <a class="mini-button" iconCls="icon-user" onclick="openWebchatPage">在线聊天</a>
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-undo" href="<%=basePath%>spider/index" target="_blank">订阅文章</a>
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-search" onclick="backupDB()">备份数据</a>
-			    <!-- <span class="separator"></span>
-			    <a class="mini-button" iconCls="icon-goto" onclick="">发送邮件</a> -->
-			    <!-- <span class="separator"></span>
-			    <a class="mini-button" iconCls="icon-goto" onclick="onLineNum">在线用户数</a> -->
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-goto" onclick="openwaitingtask">待办任务</a>
 			    <span class="separator"></span>
@@ -77,7 +79,15 @@
 		    </div>
     	</div>
 		 <div title="笔记和标签" showProxyText="true" region="west" width="300px" expanded="true" showSplitIcon="true">
-			<ul id="menuTree" class="mini-tree" url="<%=basePath%>main/getTree" ajaxType="post" style="width:100%;height:100%;" 
+			 <div region="north" showHeader="false" height="34px">
+				<div class="mini-toolbar" height="33px">
+				    <span class="separator"></span>
+				    <input type="text" id="flagNameInput" emptyText="标签名称"/>   
+				    <a class="mini-button" plain="true" id="searchArticleByTitleBtn" onclick="selectFlag">选中</a>
+				    <span class="separator"></span>
+			    </div>
+			 </div>
+			<ul id="menuTree" class="mini-tree" url="<%=basePath%>main/getTree" ajaxType="post" style="width:100%;height:95%;" 
                     showTreeIcon="true" textField="text" idField="id" resultAsTree="false"   contextMenu="#treeMenu"
 				    expandOnLoad="true" onNodeClick="onNodeClick1" >
             </ul>

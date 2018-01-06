@@ -1,6 +1,5 @@
 package com.sxkl.cloudnote.flag.service;
 
-import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -22,6 +21,7 @@ import com.sxkl.cloudnote.flag.dao.FlagDao;
 import com.sxkl.cloudnote.flag.entity.Flag;
 import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.main.entity.TreeNode;
+import com.sxkl.cloudnote.spider.entity.SearchComplete;
 import com.sxkl.cloudnote.user.dao.UserDao;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.utils.UUIDUtil;
@@ -234,8 +234,23 @@ public class FlagService {
 		return treeJson.toString();
 	}
 	
-	public static void main(String[] args) {
-		String str = "12.java";
-		System.out.println(str.substring(0, str.lastIndexOf(".")));
+	@Logger(message="获取自动补全标签")
+	public SearchComplete getAllByName(String name, String userId) {
+		List<Flag> flags = flagDao.getAllByName(name,userId);
+		int size = flags.size();
+		SearchComplete result = new SearchComplete(size);
+		for(int i = 0; i < size; i++){
+			Flag flag = flags.get(i);
+			result.getSuggestions()[i] = flag.getName();
+			result.getData()[i] = flag.getId();
+		}
+		result.setQuery(name);
+		return result;
+	}
+
+	@Logger(message="获取标签主键")
+	public String getFlagId(String flagName) {
+		Flag flag = flagDao.getByName(flagName);
+		return flag.getId();
 	}
 }

@@ -30,7 +30,7 @@ function addFlagNode(tree){
 }
 
 function editFlagNode(tree,node){
-	 mini.prompt("请输入标签名称：", "请输入",
+	 mini.prompt("请输入标签名称：", "编辑标签",
 	            function (action, value) {
 	                if (action == "ok") {
 		                if(value == null || value == ""){
@@ -77,4 +77,47 @@ function removeFlagNode(tree,node){
     			}
     		}
     	);
+}
+
+$(function() {
+    var onAutocompleteSelect =function(value, data) {  　　
+　　//根据返回结果自定义一些操作
+    }; 
+    var options = {
+        serviceUrl: basePATH + "/flag/searchFlag",//获取数据的后台页面
+        width: 140,//提示框的宽度
+        delimiter: /(,|;)\s*/,//分隔符
+        onSelect: onAutocompleteSelect,//选中之后的回调函数
+        deferRequestBy: 0, //单位微秒
+        noCache: true //是否启用缓存 默认是开启缓存的
+    };
+    a1 = $('#flagNameInput').autocomplete(options);
+                
+});
+
+function selectFlag(){
+	var nodeName = $("#flagNameInput").val();
+	if(!nodeName){
+		return;
+	}
+	
+	$.ajax({
+		url : basePATH + "/flag/getFlagId",
+		type : "post",
+		data : {
+			flagName : nodeName
+		},
+		dataType : 'json',
+		success : function(result) {
+			var flagId = "flag" + result;
+			var tree = mini.get("menuTree");
+			var node = tree.getNode(flagId);
+			if(node){
+				tree.scrollIntoView(node);
+			}
+		},
+		error : function() {
+			
+		}
+	});
 }

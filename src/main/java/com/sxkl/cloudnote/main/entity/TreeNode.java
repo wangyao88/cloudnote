@@ -9,7 +9,6 @@ public class TreeNode {
 	private String text;
 	private String pid;
 	private boolean isleaf;
-	private String iconCls;
 	private String imgPath;
 	private String iconCls;
 //	private boolean expandOnLoad = true;

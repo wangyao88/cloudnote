@@ -1,0 +1,13 @@
+.autocomplete{
+	overflow-y:hidden;
+	overflow-x:hidden;
+	z-index:1111;
+    height: 300px;
+    width:100px;
+    display: block;
+    margin-left: 0px;
+    margin-top: 3px;
+    padding-left:10px;
+    background:	#edf1f5; 
+	color:#000;
+}
