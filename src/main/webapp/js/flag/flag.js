@@ -30,7 +30,7 @@ function addFlagNode(tree){
 }
 
 function editFlagNode(tree,node){
-	 mini.prompt("请输入标签名称：", "编辑标签",
+	 mini.prompt("请输入标签名称："+node.text, "编辑标签",
 	            function (action, value) {
 	                if (action == "ok") {
 		                if(value == null || value == ""){

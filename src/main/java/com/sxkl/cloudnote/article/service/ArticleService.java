@@ -223,10 +223,12 @@ public class ArticleService {
 		return results;
 	}
 
+    @Logger(message="获取热门笔记")
 	public Article getArticleByDraftName(String fileName) {
 		return articleDao.getArticleByDraftName(fileName);
 	}
 
+    @Logger(message="获取自动补全笔记标题")
 	public SearchComplete getAllByTitle(String title) {
 		List<Article> articles = articleDao.getAllByTitle(title);
 		int size = articles.size();
@@ -238,5 +240,14 @@ public class ArticleService {
 		}
 		result.setQuery(title);
 		return result;
+	}
+
+    @Logger(message="检查笔记标题是否存在")
+	public String checkTitle(String title, String userId) {
+		List<Article> articles = articleDao.getAllByTitle(title,userId);
+		if(!articles.isEmpty()){
+			return OperateResultService.configurateSuccessResult(false);
+		}
+		return OperateResultService.configurateSuccessResult(true);
 	}
 }

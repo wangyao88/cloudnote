@@ -107,3 +107,5 @@ DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_bin
 COMMENT = '云盘文件信息表';
 
+ALTER TABLE `cloudnote`.`cn_image` 
+CHANGE COLUMN `alt` `alt` VARCHAR(300) NULL DEFAULT NULL ;

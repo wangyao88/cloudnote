@@ -33,7 +33,7 @@ body, html {
 	<table id="form1" border="0" style="width:100%;table-layout:fixed;">
 		<tr>
 			<td style="width:90%" colspan="2">
-				<input name="title"
+				<input name="title" id="title" onvaluechanged="checkTitle"
 					class="mini-textbox" style="width:100%;" required="true"
 					emptyText="请输入标题..." nullItemText="请输入标题..." />
 			</td>
@@ -72,29 +72,28 @@ body, html {
 </body>
 </html>
 <script type="text/javascript">
-
 	mini.parse();
-
 	var editor = UE.getEditor('editor_id');
-	
 	var form = new mini.Form("form1");
-
 	var isEdit = false;
 	var articleId;
+	var oldTitle;
 	
 	function SetDefaultFlagData(node){
-	    var nodeId = node.id;
-	    var nodeText = node.text;
-	    if(nodeId.indexOf("note") == 0){
-	    	var note = mini.get("note");
-			note.setValue(nodeId);
-			note.setText(nodeText);
-	    }
-	    if(nodeId.indexOf("flag") == 0){
-	    	var flag = mini.get("flags");
-			flag.setValue(nodeId);
-			flag.setText(nodeText);
-	    }
+		if(node){
+			var nodeId = node.id;
+		    var nodeText = node.text;
+		    if(nodeId.indexOf("note") == 0){
+		    	var note = mini.get("note");
+				note.setValue(nodeId);
+				note.setText(nodeText);
+		    }
+		    if(nodeId.indexOf("flag") == 0){
+		    	var flag = mini.get("flags");
+				flag.setValue(nodeId);
+				flag.setText(nodeText);
+		    }
+		}
 	}
 
 	function SetData(data) {
@@ -102,6 +101,7 @@ body, html {
 		form.setData(data);
 		if (data) {
 			isEdit = true;
+			oldTitle = $("input[name='title']").val();
 			var articleIdTemp = data.id
 			articleId = articleIdTemp;
 			$.ajax({
@@ -186,6 +186,26 @@ body, html {
 
 					btnEdit.setValue(data.id);
 					btnEdit.setText(data.text);
+				}
+			}
+		});
+	}
+	
+	function checkTitle(){
+		var title = $("input[name='title']").val();
+		if(oldTitle == title){
+			return;
+		}
+		$.ajax({
+			url : basePATH + "/article/checkTitle",
+			type : "post",
+			data : {
+				title : title
+			},
+			dataType : 'json',
+			success : function(result) {
+				if(!result.data){
+					mini.alert("标题已存在，请重新填写！");
 				}
 			}
 		});

@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sxkl.cloudnote.article.service.ArticleService;
 import com.sxkl.cloudnote.common.service.OperateResultService;
+import com.sxkl.cloudnote.user.entity.User;
+import com.sxkl.cloudnote.utils.UserUtil;
 
 @RestController
 @RequestMapping("/article")
@@ -60,6 +62,16 @@ public class ArticleController {
 	public String getArticleForEdit(HttpServletRequest request){
 		try {
 		    return articleService.getArticleForEdit(request);
+		} catch (Exception e) {
+			return OperateResultService.configurateFailureResult(e.getMessage());
+		}
+	}
+	
+	@RequestMapping(value = "/checkTitle", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	public String checkTitle(String title, HttpServletRequest request){
+		try {
+			User user = UserUtil.getSessionUser(request);
+		    return articleService.checkTitle(title,user.getId());
 		} catch (Exception e) {
 			return OperateResultService.configurateFailureResult(e.getMessage());
 		}
