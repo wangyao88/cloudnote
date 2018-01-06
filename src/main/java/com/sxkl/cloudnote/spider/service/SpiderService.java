@@ -1,6 +1,7 @@
 package com.sxkl.cloudnote.spider.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -11,6 +12,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
+import com.sun.tools.javac.code.Attribute.Array;
 import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.common.service.OperateResultService;
 import com.sxkl.cloudnote.log.annotation.Logger;
@@ -60,9 +62,10 @@ public class SpiderService {
 	}
 	
 	@Logger(message="删除订阅文章")
-	public void delete(String id) {
-		redisTemplate.opsForHash().delete(Constant.SIMPLE_NETARTICLE_KEY_IN_REDIS, id);
-		redisTemplate.opsForHash().delete(Constant.NETARTICLE_KEY_IN_REDIS, id);
+	public void delete(String ids) {
+		String[] idArr = ids.split(",");
+		redisTemplate.opsForHash().delete(Constant.SIMPLE_NETARTICLE_KEY_IN_REDIS, idArr);
+		redisTemplate.opsForHash().delete(Constant.NETARTICLE_KEY_IN_REDIS, idArr);
 	}
 	
 	@Logger(message="删除所有订阅文章")

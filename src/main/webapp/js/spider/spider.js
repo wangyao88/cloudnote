@@ -51,19 +51,30 @@ function reload(){
 
 function removeArticle(){
 	var grid = mini.get("articleGrid");
-	var record = grid.getSelected();
-	if (!record) {
+	var records = grid.getSelecteds();
+	if (!records) {
 		mini.alert("请选择需要删除的文章！");
 		return false;
 	}
-	mini.confirm("确定删除文章[" + record.title + "]吗？", "确定？",
+	var length = records.length;
+	var tip;
+	if(length == 1){
+		tip = "确定删除文章[" + records[0].title + "]吗？";
+	}else{
+		tip = "确定删除这"+length+"篇文章吗？";
+	}
+	mini.confirm(tip, "确定？",
 		function(action) {
 			if (action == "ok") {
+				var ids = "";
+				for(var i = 0; i < length; i++){
+					ids += records[i].id + ",";
+				}
 				$.ajax({
 					url : basePATH + "/spider/delete",
 					type : "post",
 					data : {
-						id : record.id
+						ids : ids
 					},
 					success : function() {
 						reload();

@@ -41,12 +41,13 @@
 		<div title="文章列表" region="west" width="400px" expanded="true">
 				<div id="articleGrid" class="mini-datagrid" style="width:395px;height:100%;" 
 			        url="<%=basePath%>spider/getAll" idField="id" allowResize="false" showPager="false"
-			        ajaxType="post" multiSelect="false" onRowClick="gridRowClick">
+			        ajaxType="post" multiSelect="true" onRowClick="gridRowClick">
 	            	<div property="columns">
-		            <div type="indexcolumn">序号</div>
-		            <div field="id"  headerAlign="center" allowSort="true" width="0px" >ID</div>
-		            <div field="title" headerAlign="center" allowSort="true" width="300px" >标题</div>
-	            </div>
+	            	    <div type="checkcolumn" ></div>
+			            <div type="indexcolumn">序号</div>
+			            <div field="id"  headerAlign="center" allowSort="true" width="0px" >ID</div>
+			            <div field="title" headerAlign="center" allowSort="true" width="300px" >标题</div>
+	                </div>
 	            </div>
         </div>
         <div title="文章内容" region="center">

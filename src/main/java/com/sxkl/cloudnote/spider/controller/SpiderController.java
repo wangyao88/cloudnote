@@ -47,8 +47,8 @@ public class SpiderController {
 	
 	@RequestMapping("/delete")
 	@ResponseBody
-	public void delete(String id){
-		spiderService.delete(id);
+	public void delete(String ids){
+		spiderService.delete(ids);
 	}
 	
 	@RequestMapping("/deleteAll")
