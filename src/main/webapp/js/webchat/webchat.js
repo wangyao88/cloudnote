@@ -138,7 +138,6 @@ $(document).keydown(function(e) {
 });
 
 function selectFriend(){
-	gotoMsgInput();
 	var userTo = mini.get("userTo").getValue();
 	$.ajax({
 		url : basePATH + "/msg/getHistory",
@@ -146,10 +145,33 @@ function selectFriend(){
 		data : {
 			userTo : userTo
 		},
-		success : function() {
-			
+		dataType : "json",
+		success : function(result) {
+			if(result){
+				$("#content").empty();
+				$(result).each(function(index,msg) { 
+					if(msg.to == userTo){
+						var text = msg.text;
+						if(text.length >= 25){
+							text = "&nbsp;&nbsp;&nbsp;&nbsp;" + text;
+						}
+						$("#content").append("<div class='tmsg'><label class='name'>我&nbsp;"+msg.dateStr+"</label><div class='tmsg_text'>"+text+"</div></div>");
+					}
+					if(msg.from == userTo){
+						var textCss = "fmsg_text";
+						var text = msg.text;
+						if(text.length >= 25){
+							text = "&nbsp;&nbsp;&nbsp;&nbsp;" + text;
+						}
+						$("#content").append("<div class='fmsg'><label class='name'>"+msg.fromName+"&nbsp;"+msg.dateStr+"</label><div class='"+textCss+"'>"+text+"</div></div>");
+					}
+				});
+				scrollToBottom();
+			}
 		}
 	});
+	$("#msg").val("");
+	gotoMsgInput();
 }
 
 $(document).ready(function(){

@@ -7,12 +7,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import lombok.Data;
+import com.sxkl.cloudnote.utils.DateUtils;
 
-@Data
 @Entity
 @Table(name="cn_message")
 @GenericGenerator(name = "uuid", strategy = "uuid")
@@ -25,22 +26,81 @@ public class Message {
 	
 	//发送者
 	@Column(name="fromId",unique=false,nullable=false)
-	public String from;
+	private String from;
 	
 	//发送者名称
 	@Column(name="fromName",unique=false,nullable=false)
-	public String fromName;
+	private String fromName;
 	
 	//接收者
 	@Column(name="toId",unique=false,nullable=false)
-	public String to;
+	private String to;
 	
 	//发送的文本
 	@Column(name="text",unique=false,nullable=false)
-	public String text;
+	private String text;
 	
 	//发送日期
+	@DateTimeFormat(pattern=DateUtils.DATE_TIME_PATTON_1)
 	@Column(name="date",unique=false,nullable=false)
-	public Date date;
+	private Date date;
+	
+	@Transient
+	private String dateStr;
 
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getFrom() {
+		return from;
+	}
+
+	public void setFrom(String from) {
+		this.from = from;
+	}
+
+	public String getFromName() {
+		return fromName;
+	}
+
+	public void setFromName(String fromName) {
+		this.fromName = fromName;
+	}
+
+	public String getTo() {
+		return to;
+	}
+
+	public void setTo(String to) {
+		this.to = to;
+	}
+
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public String getDateStr() {
+		return DateUtils.formatDate2Str(date);
+	}
+
+	public void setDateStr(String dateStr) {
+		this.dateStr = DateUtils.formatDate2Str(date);
+	}
 }
