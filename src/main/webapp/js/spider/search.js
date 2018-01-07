@@ -85,7 +85,6 @@ function news(){
 		url : basePATH + "/spider/news",
 		type : "post",
 		success : function(result) {
-			console.log(result);
 			$("#news").html(result);
 		},
 		error : function() {

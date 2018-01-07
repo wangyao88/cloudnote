@@ -143,4 +143,36 @@ function  isFlagTreeNode(node){
 	 return false;
 }
 
+function oneNews(){
+	$.ajax({
+		url : basePATH + "/spider/oneNews",
+		type : "get",
+		dataType : "json",
+		success : function(result) {
+			var content = '<font size="20"><strong>' + 
+						   		result.date + 
+						   		"<br>" + 
+						   		'<a target="_blank" href="' +result.href+'">'+
+						   		    result.content + 
+						   		'</a>' +
+						  '</strong></font>' +
+						  "<br>" + 
+						 '<img style="margin-top:3px" width="280px" height="200px" src="'+result.image+'"></img>';
+			mini.showMessageBox({
+	            showModal: false,
+	            width: 300,
+	            height: 280,
+	            title: result.source,
+	            message: content,
+	            timeout: 8000,
+	            x: "right",
+	            y: "bottom"
+	        });
+		}
+	});
+}
 
+$(document).ready(function(){
+	oneNews();
+	window.setInterval(oneNews, 180000); 
+});

@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.sxkl.cloudnote.article.service.ArticleService;
 import com.sxkl.cloudnote.spider.entity.NetArticle;
+import com.sxkl.cloudnote.spider.entity.News;
 import com.sxkl.cloudnote.spider.entity.SearchComplete;
 import com.sxkl.cloudnote.spider.manager.SearchSpider;
 import com.sxkl.cloudnote.spider.service.SpiderService;
@@ -91,5 +92,11 @@ public class SpiderController {
 	@ResponseBody
 	public String news() throws IOException{
 		return  searchSpider.news();
+	}
+	
+	@RequestMapping(value="/oneNews", method = RequestMethod.GET)
+	@ResponseBody
+	public News oneNews() throws IOException{
+		return  searchSpider.oneNews();
 	}
 }
