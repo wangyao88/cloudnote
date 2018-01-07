@@ -1,6 +1,5 @@
 mini.parse();
 
-
 function openWebchatPage(){
 	mini.open({
 		url : bootPATH + "webchat/webchat.jsp",
@@ -55,9 +54,14 @@ function sendMsg(){
 		data["to"]=userTo;
 		data["text"]=v;
 		websocket.send(JSON.stringify(data));
-		$("#content").append("<div class='tmsg'><label class='name'>我&nbsp;"+new Date().Format("yyyy-MM-dd hh:mm:ss")+"</label><div class='tmsg_text'>"+"&nbsp;&nbsp;&nbsp;&nbsp;"+data.text+"</div></div>");
+		var text = data.text;
+		if(text.length >= 25){
+			text = "&nbsp;&nbsp;&nbsp;&nbsp;" + text;
+		}
+		$("#content").append("<div class='tmsg'><label class='name'>我&nbsp;"+new Date().Format("yyyy-MM-dd hh:mm:ss")+"</label><div class='tmsg_text'>"+text+"</div></div>");
 		scrollToBottom();
 		$("#msg").val("");
+		gotoMsgInput();
 	}
 }
 
@@ -96,14 +100,18 @@ function linkToWebsocketServer(uid){
 	}
 	websocket.onopen = function(event) {
 		console.log("WebSocket:已连接");
-		console.log(event);
+		gotoMsgInput();
 	};
 	websocket.onmessage = function(event) {
 		var data=JSON.parse(event.data);
-		console.log("WebSocket:收到一条消息",data);
 		var textCss=data.from==-1?"sfmsg_text":"fmsg_text";
-		$("#content").append("<div class='fmsg'><label class='name'>"+data.fromName+"&nbsp;"+data.date+"</label><div class='"+textCss+"'>"+"&nbsp;&nbsp;&nbsp;&nbsp;"+data.text+"</div></div>");
+		var text = data.text;
+		if(text.length >= 25){
+			text = "&nbsp;&nbsp;&nbsp;&nbsp;" + text;
+		}
+		$("#content").append("<div class='fmsg'><label class='name'>"+data.fromName+"&nbsp;"+data.date+"</label><div class='"+textCss+"'>"+text+"</div></div>");
 		scrollToBottom();
+		gotoMsgInput();
 	};
 	websocket.onerror = function(event) {
 		console.log("WebSocket:发生错误 ");
@@ -111,11 +119,38 @@ function linkToWebsocketServer(uid){
 	};
 	websocket.onclose = function(event) {
 		console.log("WebSocket:已关闭");
-		console.log(event);
 	}
 }
 
+function gotoMsgInput(){
+	var msgWin = $("#msg");
+	msgWin.focus();
+}
+
 linkToWebsocketServer(from);
+
+$(document).keydown(function(e) {
+	var keyCode = e.keyCode || e.which || e.charCode;
+	if(keyCode == 13){
+		sendMsg();
+		return false;
+	}
+});
+
+function selectFriend(){
+	gotoMsgInput();
+	var userTo = mini.get("userTo").getValue();
+	$.ajax({
+		url : basePATH + "/msg/getHistory",
+		type : "post",
+		data : {
+			userTo : userTo
+		},
+		success : function() {
+			
+		}
+	});
+}
 
 $(document).ready(function(){
 	

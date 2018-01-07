@@ -44,7 +44,7 @@ var wsPath = '<%=wsPath%>';
 					valueField="id" emptyText="请选择好友..."
 					url="<%=basePath%>user/getAllFriendsFromCombo" ajaxType="get"
 					required="true" allowInput="true" showNullItem="true"
-					nullItemText="请选择好友..." />
+					nullItemText="请选择好友..." onitemclick="selectFriend"/>
 			    <a class="mini-button" iconCls="icon-goto" onclick="sendMsg">发送</a>
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-goto" onclick="clearAll">清空</a>

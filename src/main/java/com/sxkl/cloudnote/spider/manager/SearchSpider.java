@@ -169,48 +169,8 @@ public class SearchSpider {
 		return news.get(index);
 	}
 	
-	public static void main(String[] args) throws IOException {
-		Random random = new Random();
-		String date = DateUtils.getNowMonthDay();
-		List<News> news = new ArrayList<News>();
-		Map<String, String> cookies = getCookies();
-		Document document = Jsoup.connect("http://news.sina.com.cn/hotnews/").cookies(cookies).get();
-		Elements elements = document.getElementsByTag("tr");
-		for(Element tr : elements){
-			Elements tds = tr.getElementsByTag("td");
-			if(tds.size() >= 4){
-				String newsDate = tds.get(3).text();
-				if(date.contentEquals(newsDate.substring(0, 5))){
-					String source = tds.get(2).text();
-					if(StringUtils.isEmpty(source) || NumberUtils.isNumber(source.replaceAll(",", ""))){
-						continue;
-					}
-					String content = tds.get(1).text();
-					Elements as = tr.getElementsByTag("a");
-					String href = as.get(0).attr("href");
-					newsDate = newsDate.substring(0, newsDate.length()-1);
-					Document documentContent = Jsoup.connect(href).get();
-					Elements imgs = documentContent.getElementsByTag("img");
-					List<String> srcs = new ArrayList<String>();
-					for(Element img : imgs){
-						String src = img.attr("src");
-						if((src.startsWith("http")||src.startsWith("https")) && !src.contains("gif")){
-							srcs.add(src);
-						}
-					}
-					int index = random.nextInt(srcs.size());
-					String src = srcs.get(index);
-					News _news = new News();
-					_news.setContent(content);
-					_news.setSource(source);
-					_news.setDate(newsDate);
-					_news.setHref(href);
-					_news.setImage(src);
-					news.add(_news);
-					System.out.println(_news);
-				}
-			}
-		}
+	public static void main(String[] args)  {
+		System.out.println("点点滴滴的多多点点滴滴多多多点点滴滴的多多点点滴滴".length());
 	}
 	
 	private static Map<String, String> getCookies() {

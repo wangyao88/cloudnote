@@ -2,6 +2,7 @@ package com.sxkl.cloudnote.webchat.controller;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -41,5 +42,10 @@ public class MsgController {
 		msg.setText(text);
 		handler.broadcast(new TextMessage(new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(msg)));
 	}
-
+	
+	@RequestMapping(value = "/getHistory", method = RequestMethod.POST)
+	@ResponseBody
+	public List<Message> getHistory(String userTo){
+		return null;
+	}
 }
