@@ -41,8 +41,8 @@ public class SpiderSchedule {
 				ar.setTitle(article.getTitle());
 				simple.put(article.getId(),ar);
 			}
-			redisTemplate.expire(Constant.NETARTICLE_KEY_IN_REDIS, 17, TimeUnit.HOURS);
-			redisTemplate.expire(Constant.SIMPLE_NETARTICLE_KEY_IN_REDIS, 17, TimeUnit.HOURS);
+//			redisTemplate.expire(Constant.NETARTICLE_KEY_IN_REDIS, 17, TimeUnit.HOURS);
+//			redisTemplate.expire(Constant.SIMPLE_NETARTICLE_KEY_IN_REDIS, 17, TimeUnit.HOURS);
 			redisTemplate.opsForHash().putAll(Constant.NETARTICLE_KEY_IN_REDIS,whole);
 			redisTemplate.opsForHash().putAll(Constant.SIMPLE_NETARTICLE_KEY_IN_REDIS,simple);
 		} catch (IOException e) {
