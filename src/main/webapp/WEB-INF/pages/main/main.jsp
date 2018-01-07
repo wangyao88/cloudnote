@@ -45,10 +45,10 @@
 			    <a class="mini-button" iconCls="icon-remove" onclick="removeArticle">删除</a>
 			    <span class="separator"></span>
 			    <input class="mini-textbox" id="searchArticleByTitleText" emptyText="笔记标题"/>   
-			    <a class="mini-button" plain="true" id="searchArticleByTitleBtn" onclick="searchArticleByTitle">查询</a>
+			    <a class="mini-button" id="searchArticleByTitleBtn" iconCls="icon-search" onclick="searchArticleByTitle">查询</a>
 			    <span class="separator"></span>
 			    <input class="mini-textbox" width="400px" id="searchArticleByTitleOrContentText" emptyText="笔记标题或内容，以逗号分隔"/>   
-			    <a class="mini-button" plain="true" id="searchArticleByTitleOrContentBtn" onclick="searchArticleByTitleOrContentText">搜索</a>
+			    <a class="mini-button" id="searchArticleByTitleOrContentBtn" iconCls="icon-find" onclick="searchArticleByTitleOrContentText">搜索</a>
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-help" href="<%=basePath%>spider/searchPage" target="_blank">在线搜索</a>
 		    </div>
@@ -68,26 +68,24 @@
 			    
 			    <a class="mini-button" iconCls="icon-user" onclick="openWebchatPage">在线聊天</a>
 			    <span class="separator"></span>
-			    <a class="mini-button" iconCls="icon-undo" href="<%=basePath%>spider/index" target="_blank">订阅文章</a>
+			    <a class="mini-button" iconCls="icon-collapse" href="<%=basePath%>spider/index" target="_blank">订阅文章</a>
 			    <span class="separator"></span>
-			    <a class="mini-button" iconCls="icon-search" onclick="backupDB()">备份数据</a>
+			    <a class="mini-button" iconCls="icon-split" onclick="backupDB()">备份数据</a>
 			    <span class="separator"></span>
-			    <a class="mini-button" iconCls="icon-goto" onclick="openwaitingtask">待办任务</a>
+			    <a class="mini-button" iconCls="icon-node" onclick="openwaitingtask">待办任务</a>
 			    <span class="separator"></span>
-			    <a class="mini-button" iconCls="icon-goto" onclick="logout">退出</a>
+			    <a class="mini-button" iconCls="icon-downgrade" onclick="logout">退出</a>
 			    <span class="separator"></span>
 		    </div>
     	</div>
 		 <div title="笔记和标签" showProxyText="true" region="west" width="300px" expanded="true" showSplitIcon="true">
-			 <div region="north" showHeader="false" height="34px">
-				<div class="mini-toolbar" height="33px">
-				    <span class="separator"></span>
-				    <input type="text" id="flagNameInput" emptyText="标签名称"/>   
-				    <a class="mini-button" plain="true" id="searchArticleByTitleBtn" onclick="selectFlag">选中</a>
-				    <span class="separator"></span>
-			    </div>
-			 </div>
-			<ul id="menuTree" class="mini-tree" url="<%=basePath%>main/getTree" ajaxType="post" style="width:100%;height:95%;" 
+			<div class="mini-toolbar" height="33px">
+			    <span class="separator"></span>
+			    <input type="text" id="flagNameInput" width="100px"/>
+			    <span class="separator"></span>
+			    <a class="mini-button" id="searchArticleByTitleBtn" iconCls="icon-redo" onclick="selectFlag">选中</a>
+		    </div>
+			<ul id="menuTree" class="mini-tree" url="<%=basePath%>main/getTree" ajaxType="post" style="width:100%;height:94%" 
                     showTreeIcon="true" textField="text" idField="id" resultAsTree="false"   contextMenu="#treeMenu"
 				    expandOnLoad="true" onNodeClick="onNodeClick1" style="overflow:hidden;">
             </ul>
