@@ -174,5 +174,5 @@ function oneNews(){
 
 $(document).ready(function(){
 	oneNews();
-	window.setInterval(oneNews, 180000); 
+	window.setInterval(oneNews, 1800000); 
 });

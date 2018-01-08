@@ -35,59 +35,69 @@ input[type=button] {
 
 
 .from {
-	background-color: green;
+	background-color: white;
 	width: 80%;
 	border-radius: 10px;
-	height: 30px;
-	line-height: 30px;
-	margin: 5px;
+	height: 20px;
+	line-height: 20px;
 	float: left;
-	color: white;
-	padding: 5px;
+	color: black;
 	font-size: 22px;
 }
 
 .to {
-	background-color: gray;
+	background-color: white;
 	width: 80%;
 	border-radius: 10px;
-	height: 30px;
-	line-height: 30px;
-	margin: 5px;
+	height: 20px;
+	line-height: 20px;
 	float: right;
-	color: white;
-	padding: 5px;
+	color: black;
 	font-size: 22px;
 }
 
 .name {
 	color: gray;
 	font-size: 12px;
+	margin-left:10px;
+	margin-right:10px;
 }
 
 .tmsg_text {
-	color: white;
-	background-color: rgb(47, 47, 47);
+	color: black;
+	/* background-color: rgb(47, 47, 47); */
+	background-color:white;
 	font-size: 18px;
 	border-radius: 5px;
-	padding: 2px;
-	text-align: left;
+	padding: 2px; 
+	/* text-align: left; */
+	text-align: right;
+	margin-right:13px;
+	width : 450px;
+	float : right;
 }
 
 .fmsg_text {
-	color: white;
-	background-color: rgb(66, 138, 140);
+	color: black;
+	/* background-color: rgb(66, 138, 140); */
+	background-color:white;
 	font-size: 18px;
 	border-radius: 5px;
 	padding: 2px;
+	margin-left:13px;
+	width : 450px;
+	padding-top : 5px;
+	margin-top : 5px;
 }
 
 .sfmsg_text {
-	color: white;
-	background-color: rgb(148, 16, 16);
+	color: black;
+	/* background-color: rgb(148, 16, 16); */
+	background-color:white;
 	font-size: 18px;
 	border-radius: 5px;
 	padding: 2px;
+	margin-left:13px;
 }
 
 .tmsg {

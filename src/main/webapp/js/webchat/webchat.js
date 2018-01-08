@@ -4,8 +4,8 @@ function openWebchatPage(){
 	mini.open({
 		url : bootPATH + "webchat/webchat.jsp",
 		title : "聊天窗口",
-		width : 600,
-		height : 600,
+		width : 800,
+		height : 650,
 		allowResize: false,
 	    allowDrag: false,
 	    showMaxButton: true, 
@@ -39,8 +39,8 @@ function clearAll(){
 }
 
 function sendMsg(){
-	var v=$("#msg").val();
-	if(v==""){
+	var v = webchatInput.getContent();
+	if(v == ""){
 		return;
 	}else{
 		var userTo = mini.get("userTo").getValue();
@@ -55,12 +55,9 @@ function sendMsg(){
 		data["text"]=v;
 		websocket.send(JSON.stringify(data));
 		var text = data.text;
-		if(text.length >= 25){
-			text = "&nbsp;&nbsp;&nbsp;&nbsp;" + text;
-		}
-		$("#content").append("<div class='tmsg'><label class='name'>我&nbsp;"+new Date().Format("yyyy-MM-dd hh:mm:ss")+"</label><div class='tmsg_text'>"+text+"</div></div>");
+		$("#content").append("<div class='tmsg'><label class='to name'>我&nbsp;"+new Date().Format("yyyy-MM-dd hh:mm:ss")+"</label><div class='tmsg_text'>"+text+"</div></div>");
 		scrollToBottom();
-		$("#msg").val("");
+		webchatInput.setContent("");
 		gotoMsgInput();
 	}
 }
@@ -106,10 +103,7 @@ function linkToWebsocketServer(uid){
 		var data=JSON.parse(event.data);
 		var textCss=data.from==-1?"sfmsg_text":"fmsg_text";
 		var text = data.text;
-		if(text.length >= 25){
-			text = "&nbsp;&nbsp;&nbsp;&nbsp;" + text;
-		}
-		$("#content").append("<div class='fmsg'><label class='name'>"+data.fromName+"&nbsp;"+data.date+"</label><div class='"+textCss+"'>"+text+"</div></div>");
+		$("#content").append("<div class='fmsg'><label class='from name'>"+data.fromName+"&nbsp;"+data.date+"</label><div class='"+textCss+"'>"+text+"</div></div>");
 		scrollToBottom();
 		gotoMsgInput();
 	};
@@ -152,25 +146,19 @@ function selectFriend(){
 				$(result).each(function(index,msg) { 
 					if(msg.to == userTo){
 						var text = msg.text;
-						if(text.length >= 25){
-							text = "&nbsp;&nbsp;&nbsp;&nbsp;" + text;
-						}
-						$("#content").append("<div class='tmsg'><label class='name'>我&nbsp;"+msg.dateStr+"</label><div class='tmsg_text'>"+text+"</div></div>");
+						$("#content").append("<div class='tmsg'><label class='to name'>我&nbsp;"+msg.dateStr+"</label><div class='tmsg_text'>"+text+"</div></div>");
 					}
 					if(msg.from == userTo){
 						var textCss = "fmsg_text";
 						var text = msg.text;
-						if(text.length >= 25){
-							text = "&nbsp;&nbsp;&nbsp;&nbsp;" + text;
-						}
-						$("#content").append("<div class='fmsg'><label class='name'>"+msg.fromName+"&nbsp;"+msg.dateStr+"</label><div class='"+textCss+"'>"+text+"</div></div>");
+						$("#content").append("<div class='fmsg'><label class='from name'>"+msg.fromName+"&nbsp;"+msg.dateStr+"</label><div class='"+textCss+"'>"+text+"</div></div>");
 					}
 				});
 				scrollToBottom();
 			}
 		}
 	});
-	$("#msg").val("");
+	webchatInput.setContent("");
 	gotoMsgInput();
 }
 

@@ -21,24 +21,26 @@ import="com.sxkl.cloudnote.user.entity.User" pageEncoding="UTF-8"%>
 
 <script src="<%=basePath%>js/boot.js" type="text/javascript"></script>
 <script type="text/javascript" src="<%=basePath%>js/jquery.min.js"></script>
+<script src="<%=basePath%>js/ueditor-1.4.3.3/ueditor.webchat.config.js" type="text/javascript"></script>
+<script src="<%=basePath%>js/ueditor-1.4.3.3/ueditor.all.min.js" type="text/javascript"></script>
+
 <script type="text/javascript">
 var from='<%=uid%>';
 var fromName='<%=name%>';
 var wsPath = '<%=wsPath%>';
 </script>
-<script src="<%=basePath%>js/webchat/webchat.js" type="text/javascript"></script>
 
 </head>
 <body>
 	<div id="webchatLayout" class="mini-layout" style="width:100%;height:100%;"borderStyle="border:solid 1px #aaa;" >
-		<div title="笔记详情" region="center">
+		<div title="消息记录" region="center">
 		    <div id="content" style="overflow:auto"></div>
 		    <div><a id="msg_end" name="1" href="#1">&nbsp</a></div>
 		</div>
-		<div title="输入窗口" region="south" showSplit="false" showHeader="true" height="170px" showCollapseButton="false"
+		<div title="输入窗口" region="south" showSplit="false" showHeader="true" height="210px" showCollapseButton="false"
 		     showSplitIcon="false" >
 		    <textarea id="msg" name="msg" 
-					style="width:100%;height:108px;">
+					style="width:99%;height:117px;">
 		    		</textarea>
         	<div class="mini-toolbar">
         	    <input id="userTo" name="userTo"
@@ -56,3 +58,7 @@ var wsPath = '<%=wsPath%>';
   </div>
 </body>
 </html>
+<script type="text/javascript">
+	var webchatInput = UE.getEditor('msg');
+</script>
+<script src="<%=basePath%>js/webchat/webchat.js" type="text/javascript"></script>
