@@ -44,8 +44,13 @@ function editFlagNode(tree,node){
 		               				id : node.id,
 		               				name : value
 		               			},
-		               			success : function(){
-		               				tree.setNodeText(node,value);
+		               			dataType : "json",
+		               			success : function(result){
+		               				if(result.status){
+		               					tree.setNodeText(node,value);
+		               					return;
+		               				}
+		               				mini.alert("标签更新失败，标签名称过长！");
 		               	        },
 		               	        error : function(){
 		               	        	mini.alert("标签更新失败，请稍候重试！");

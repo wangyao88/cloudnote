@@ -40,8 +40,13 @@ function editNoteNode(tree,node){
 	               				id : node.id,
 	               				name : value
 	               			},
-	               			success : function(){
-	               				tree.setNodeText(node,value);
+	               			dataType : "json",
+	               			success : function(result){
+	               				if(result.status){
+	               					tree.setNodeText(node,value);
+	               					return;
+	               				}
+	               				mini.alert("笔记本更新失败，笔记本名称过长！");
 	               	        },
 	               	        error : function(){
 	               	        	mini.alert("笔记本更新失败，请稍候重试！");
