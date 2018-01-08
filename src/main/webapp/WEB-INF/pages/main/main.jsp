@@ -18,6 +18,7 @@
 <link href="<%=basePath%>js/miniui/res/demo.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="<%=basePath%>css/flag.jquery.autocomplete.css" />
 <link rel="stylesheet" href="<%=basePath%>css/a.css" />
+<link rel="stylesheet" href="<%=basePath%>css/scroller.css" />
 
 <script src="<%=basePath%>js/boot.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/jquery.min.js" type="text/javascript"></script>
