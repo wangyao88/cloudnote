@@ -11,21 +11,23 @@ import="com.sxkl.cloudnote.user.entity.User" pageEncoding="UTF-8"%>
     
     String wsPath = "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %>
-
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<link href="<%=basePath%>js/webchat/webchat.css" rel="stylesheet" type="text/css" />
+<link href="<%=basePath%>css/scroller.css" rel="stylesheet" type="text/css" />
+
 <script src="<%=basePath%>js/boot.js" type="text/javascript"></script>
 <script type="text/javascript" src="<%=basePath%>js/jquery.min.js"></script>
-<link href="<%=basePath%>js/webchat/webchat.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript">
 var from='<%=uid%>';
 var fromName='<%=name%>';
 var wsPath = '<%=wsPath%>';
 </script>
 <script src="<%=basePath%>js/webchat/webchat.js" type="text/javascript"></script>
+
 </head>
 <body>
 	<div id="webchatLayout" class="mini-layout" style="width:100%;height:100%;"borderStyle="border:solid 1px #aaa;" >

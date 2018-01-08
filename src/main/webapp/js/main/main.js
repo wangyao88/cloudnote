@@ -164,7 +164,7 @@ function oneNews(){
 	            height: 280,
 	            title: result.source,
 	            message: content,
-	            timeout: 8000,
+	            timeout: 10000,
 	            x: "right",
 	            y: "bottom"
 	        });
