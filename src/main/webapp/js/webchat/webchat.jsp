@@ -48,10 +48,10 @@ var wsPath = '<%=wsPath%>';
 					url="<%=basePath%>user/getAllFriendsFromCombo" ajaxType="get"
 					required="true" allowInput="true" showNullItem="true"
 					nullItemText="请选择好友..." onitemclick="selectFriend"/>
-			    <a class="mini-button" iconCls="icon-upload" onclick="sendMsg">发送</a>
-			    <span class="separator"></span>
-			    <a class="mini-button" iconCls="icon-no" onclick="clearAll">清空</a>
-			    <span class="separator"></span>
+			    <a class="mini-button" iconCls="icon-upload" onclick="sendMsg" style="float:right;margin-right:10px;">发送</a>
+			    <span class="separator" style="float:right;"></span>
+			    <a class="mini-button" iconCls="icon-no" onclick="clearAll" style="float:right;">清空</a>
+			    <span class="separator" style="float:right;"></span>
 		    </div>
     	</div>
   </div>
