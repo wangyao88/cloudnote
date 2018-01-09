@@ -55,7 +55,7 @@
 			    <a class="mini-button" iconCls="icon-help" href="<%=basePath%>spider/searchPage" target="_blank">在线搜索</a>
 		    </div>
 		 </div>
-		 <div title="south" region="south" showSplit="false" showHeader="false" height="32px" showSplitIcon="false" >
+		 <div title="south" region="south" showSplit="false" showHeader="false" height="35px" showSplitIcon="false" >
         		<div class="mini-toolbar">
 			    <%-- <a class="mini-button" iconCls="icon-date" onclick="openStatChart">报表</a>
 			    <span class="separator"></span>
