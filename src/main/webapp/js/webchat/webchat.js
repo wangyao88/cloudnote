@@ -117,8 +117,9 @@ function linkToWebsocketServer(uid){
 }
 
 function gotoMsgInput(){
-	var msgWin = $("#msg");
-	msgWin.focus();
+//	var msgWin = $("#msg");
+//	msgWin.focus();
+	webchatInput.focus();
 }
 
 linkToWebsocketServer(from);

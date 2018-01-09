@@ -60,5 +60,12 @@ var wsPath = '<%=wsPath%>';
 </html>
 <script type="text/javascript">
 	var webchatInput = UE.getEditor('msg');
+	webchatInput.addListener("keypress", function (type, event) {  //这里的focus可以视自己的情况定，可以使blur,keypress等等
+         if(event.keyCode == 13){
+        	 event.preventDefault(); 
+        	 event.stopPropagation();
+        	 sendMsg();
+         }
+    });
 </script>
 <script src="<%=basePath%>js/webchat/webchat.js" type="text/javascript"></script>
