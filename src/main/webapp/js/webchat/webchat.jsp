@@ -37,11 +37,10 @@ var wsPath = '<%=wsPath%>';
 		    <div id="content" style="overflow:auto"></div>
 		    <div><a id="msg_end" name="1" href="#1">&nbsp</a></div>
 		</div>
-		<div title="输入窗口" region="south" showSplit="false" showHeader="true" height="210px" showCollapseButton="false"
-		     showSplitIcon="false" >
-		    <textarea id="msg" name="msg" 
-					style="width:99%;height:117px;">
-		    		</textarea>
+		<div region="south" showSplit="false" showHeader="false" height="210px" showCollapseButton="false"
+		     showSplitIcon="false" style="overflow:hidden;">
+		    <textarea id="msg" name="msg" style="width:100%;height:140px;overflow:hidden;">
+		    </textarea>
         	<div class="mini-toolbar">
         	    <input id="userTo" name="userTo"
 					class="mini-combobox" style="width:30%;" textField="name"

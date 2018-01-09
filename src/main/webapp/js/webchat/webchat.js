@@ -39,27 +39,27 @@ function clearAll(){
 }
 
 function sendMsg(){
+	var userTo = mini.get("userTo").getValue();
+	if(!userTo){
+		mini.alert('请选择好友');
+		return;
+	}
 	var v = webchatInput.getContent();
 	if(v == ""){
+		mini.alert('请输入发送内容');
 		return;
-	}else{
-		var userTo = mini.get("userTo").getValue();
-		if(!userTo){
-			mini.alert('请选择好友');
-			return;
-		}
-		var data={};
-		data["from"]=from;
-		data["fromName"]=fromName;
-		data["to"]=userTo;
-		data["text"]=v;
-		websocket.send(JSON.stringify(data));
-		var text = data.text;
-		$("#content").append("<div class='tmsg'><label class='to name'>我&nbsp;"+new Date().Format("yyyy-MM-dd hh:mm:ss")+"</label><div class='tmsg_text'>"+text+"</div></div>");
-		scrollToBottom();
-		webchatInput.setContent("");
-		gotoMsgInput();
 	}
+	var data={};
+	data["from"]=from;
+	data["fromName"]=fromName;
+	data["to"]=userTo;
+	data["text"]=v;
+	websocket.send(JSON.stringify(data));
+	var text = data.text;
+	$("#content").append("<div class='tmsg'><label class='to name'>我&nbsp;"+new Date().Format("yyyy-MM-dd hh:mm:ss")+"</label><div class='tmsg_text'>"+text+"</div></div>");
+	scrollToBottom();
+	webchatInput.setContent("");
+	gotoMsgInput();
 }
 
 function scrollToBottom(){
@@ -124,13 +124,13 @@ function gotoMsgInput(){
 
 linkToWebsocketServer(from);
 
-$(document).keydown(function(e) {
-	var keyCode = e.keyCode || e.which || e.charCode;
-	if(keyCode == 13){
-		sendMsg();
-		return false;
-	}
-});
+//$(document).keydown(function(e) {
+//	var keyCode = e.keyCode || e.which || e.charCode;
+//	if(keyCode == 13){
+//		sendMsg();
+//		return false;
+//	}
+//});
 
 function selectFriend(){
 	var userTo = mini.get("userTo").getValue();
