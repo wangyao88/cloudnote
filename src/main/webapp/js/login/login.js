@@ -1,3 +1,5 @@
+var publicKey;
+
 var options={  
     beforeSerialize: modifySubmitData,  //提交到Action时，可以自己对某些值进行处理。  
     url : basePath+'login',    //默认是form的action，如果申明，则会覆盖  
@@ -7,12 +9,21 @@ var options={
     timeout : 10000,    // 限制请求的时间，当请求大于3秒后，跳出请求
     success : showResponse
 }  
-$("#submitBtn").click(function () {  
-     $("#loginForm").ajaxSubmit(options);
-     return false;
+
+$("#submitBtn").click(function () {
+	$.ajax({
+		url : basePath+"login/getPublicKey",
+		type : "post",
+		success : function(publicKey){
+			 publicKey = publicKey;
+			 $("#loginForm").ajaxSubmit(options);
+		     return false;
+        }
+	});
 });
 
 function modifySubmitData(){
+	console.log(publicKey);
 	var password = $("#password").val();
 	var encrypt = new JSEncrypt();
 	encrypt.setPublicKey(publicKey);

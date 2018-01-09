@@ -31,6 +31,7 @@ public class RSACoderTest {
         System.err.println("公钥加密——私钥解密");
         String inputStr = "abc";
         byte[] encodedData = RSACoder.encryptByPublicKey(inputStr, publicKey);
+        System.out.println(new String(encodedData));
         byte[] decodedData = RSACoder.decryptByPrivateKey(encodedData,privateKey);
         String outputStr = new String(decodedData);
         System.err.println("加密前: " + inputStr + "\n\r" + "解密后: " + outputStr);

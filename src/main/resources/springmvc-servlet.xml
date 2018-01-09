@@ -50,6 +50,7 @@
 			<mvc:exclude-mapping path="/login" />
 			<mvc:exclude-mapping path="/login/registe" />
 			<mvc:exclude-mapping path="/login/checkName" />
+			<mvc:exclude-mapping path="/login/getPublicKey" />
 			<mvc:exclude-mapping path="/log/power" />
 			<mvc:exclude-mapping path="/js/*/*" />
 			<mvc:exclude-mapping path="/images/*/*" />

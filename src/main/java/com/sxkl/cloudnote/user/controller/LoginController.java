@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
+import com.sxkl.cloudnote.listener.RsaKeyInitializer;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.user.service.UserService;
 import com.sxkl.cloudnote.utils.DESUtil;
@@ -90,5 +91,11 @@ public class LoginController {
 
 	private boolean checkPassword(String password, String repassword) {
 		return !StringUtils.isEmpty(password) && !StringUtils.isEmpty(repassword) && password.equals(repassword);
+	}
+	
+	@RequestMapping(value = "/login/getPublicKey", method = RequestMethod.POST)
+	@ResponseBody
+	public String getPublicKey(String name) {
+		return RsaKeyInitializer.getPublickey();
 	}
 }
