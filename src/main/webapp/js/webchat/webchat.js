@@ -7,9 +7,10 @@ function openWebchatPage(){
 		width : 800,
 		height : 650,
 		allowResize: false,
-	    allowDrag: false,
+	    allowDrag: true,
 	    showMaxButton: true, 
 	    showMinButton: true, 
+	    showModal: false,
 		onload : function() {
 		},
 		ondestroy : function(action) {

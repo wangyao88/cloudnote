@@ -39,7 +39,7 @@ var wsPath = '<%=wsPath%>';
 		</div>
 		<div region="south" showSplit="false" showHeader="false" height="210px" showCollapseButton="false"
 		     showSplitIcon="false" style="overflow:hidden;">
-		    <textarea id="msg" name="msg" style="width:100%;height:140px;overflow:hidden;">
+		    <textarea id="msg" name="msg" style="width:100%;height:144px;overflow:hidden;">
 		    </textarea>
         	<div class="mini-toolbar">
         	    <input id="userTo" name="userTo"
