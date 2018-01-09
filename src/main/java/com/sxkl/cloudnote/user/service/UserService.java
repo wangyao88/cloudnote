@@ -14,10 +14,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import com.google.gson.Gson;
 import com.sxkl.cloudnote.common.entity.Constant;
+import com.sxkl.cloudnote.listener.RsaKeyInitializer;
 import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.user.dao.UserDao;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.utils.DESUtil;
+import com.sxkl.cloudnote.utils.RSACoder;
 import com.sxkl.cloudnote.utils.StringAppendUtils;
 import com.sxkl.cloudnote.utils.UserUtil;
 
@@ -28,11 +30,14 @@ public class UserService {
 	private UserDao userDao;
 	
 	@Logger(message="跳转到登陆页面")
-	public ModelAndView login(HttpServletRequest request, RedirectAttributesModelMap modelMap){
+	public ModelAndView login(HttpServletRequest request, RedirectAttributesModelMap modelMap) throws Exception{
 		ModelAndView mv = new ModelAndView();
         String userName = request.getParameter("userName");
         String password = request.getParameter("password");
+        byte[] decodedData = RSACoder.decryptByPrivateKey(password,RsaKeyInitializer.getPrivateKey());
+        password = new String(decodedData);
         if(chackeLoginParams(userName,password)){
+        	
         	User user = validateLogin(userName,password);
         	if(user != null){
         		processLoginEvent(request, mv, user);
@@ -48,7 +53,7 @@ public class UserService {
 	}
 
 	private void processLoginEvent(HttpServletRequest request, ModelAndView mv, User user) {
-		mv.setViewName("redirect:/main");
+		mv.setViewName("main");
 		HttpSession session = request.getSession();
 		session.setAttribute(Constant.USER_IN_SESSION_KEY, user);
 		Constant.onLine(user.getId(), session);

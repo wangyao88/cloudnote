@@ -1,7 +1,8 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" import="com.sxkl.cloudnote.listener.RsaKeyInitializer" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+String publicKey = RsaKeyInitializer.getPublickey();
 %>
 
 <html lang="cn">
@@ -94,7 +95,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </div>
 <div class="tyg-div-denglv">
 	<div class="tyg-div-form">
-		<form action="<%=basePath %>login" method="post">
+		<form action="<%=basePath %>login" method="post" id="loginForm">
 			<h2>登录</h2>
 			<p class="tyg-p">
 			      欢迎访问  曼妙云端笔记
@@ -106,9 +107,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<input type="text" name="userName" placeholder="请输入账号..."/>
 			</div>
 			<div style="margin:5px 0px;">
-				<input type="text" name="password" placeholder="请输入密码..."/>
+				<input type="text" id="password" name="password" placeholder="请输入密码..."/>
 			</div>
-			<button type="submit" >登<span style="width:20px;"></span>录</button>
+			<button type="button" id="submitBtn">登<span style="width:20px;"></span>录</button>
 		</form>
 	</div>
 </div>
@@ -116,6 +117,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <script type="text/javascript" src="<%=basePath %>js/login/js/jquery-1.8.0.min.js"></script>
 <script type="text/javascript" src="<%=basePath %>js/login/js/com.js"></script>
+<script type="text/javascript">
+	var publicKey = "<%=publicKey%>";
+	var basePath = "<%=basePath%>";
+</script>
+<script type="text/javascript" src="<%=basePath %>js/jquery.form.js"></script>
+<script type="text/javascript" src="<%=basePath %>js/encrypt/jsencrypt.min.js"></script>
+<script type="text/javascript" src="<%=basePath %>js/login/login.js"></script>
 <!--[if IE 6]>
 <script language="javascript" type="text/javascript" src="<%=basePath %>js/login/script/ie6_png.js"></script>
 <script language="javascript" type="text/javascript">

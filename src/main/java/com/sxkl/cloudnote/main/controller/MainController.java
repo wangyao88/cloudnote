@@ -19,7 +19,7 @@ public class MainController {
 
 	@RequestMapping(value = "/main", method = {RequestMethod.GET, RequestMethod.HEAD})
 	@ResponseBody
-	public ModelAndView login(HttpServletRequest request){
+	public ModelAndView login(HttpServletRequest request) throws Exception{
 		ModelAndView modelAndView = new ModelAndView("main/main");
 		return modelAndView;
 	}

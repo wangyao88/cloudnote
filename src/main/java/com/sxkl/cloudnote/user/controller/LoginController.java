@@ -18,7 +18,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.user.service.UserService;
 import com.sxkl.cloudnote.utils.DESUtil;
-import com.sxkl.cloudnote.utils.UUIDUtil;
 
 @Controller
 public class LoginController {
@@ -43,10 +42,13 @@ public class LoginController {
 	 * @param httpServletRequest
 	 * @param modelMap
 	 * @return
+	 * @throws Exception 
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public ModelAndView login(HttpServletRequest httpServletRequest, RedirectAttributesModelMap modelMap) {
-		return userService.login(httpServletRequest, modelMap);
+	@ResponseBody
+	public String login(HttpServletRequest httpServletRequest, RedirectAttributesModelMap modelMap) throws Exception {
+		ModelAndView mv = userService.login(httpServletRequest, modelMap);
+		return mv.getViewName();
 	}
 	
 	@RequestMapping(value = "/logout", method = { RequestMethod.GET, RequestMethod.HEAD })
