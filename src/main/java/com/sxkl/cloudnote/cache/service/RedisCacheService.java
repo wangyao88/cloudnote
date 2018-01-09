@@ -16,14 +16,10 @@ import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import com.sxkl.cloudnote.cache.annotation.RedisCachable;
 import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.utils.UserUtil;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Service
 public class RedisCacheService {
 
@@ -45,14 +41,14 @@ public class RedisCacheService {
         });
     }
     
-    @RedisCachable(key=Constant.LOGIN_PAGE_KEY_IN_REDIS,dateTime=200)
+//    @RedisCachable(key=Constant.LOGIN_PAGE_KEY_IN_REDIS,dateTime=200)
     public String getHtmlFromCache(HttpServletResponse resp, HttpServletRequest req, FilterChain filterChain) throws IOException, ServletException {
         ResponseWrapper wrapper = new ResponseWrapper(resp);
         filterChain.doFilter(req, wrapper);
         String loginPage = wrapper.getResult();
         String domain = Constant.DOMAIN;
         loginPage = loginPage.replaceAll(domain, Constant.LOGIN_PAGE_DOMAIN);
-        log.info("登录页缓存不存在，生成缓存");
+//        log.info("登录页缓存不存在，生成缓存");
         return loginPage;
     }
 

@@ -1,7 +1,12 @@
 function logout() {
 	$.ajax({
 		url : basePATH + "/logout",
-		type : "get"
+		type : "get",
+		success : function(result){
+			if(result){
+				window.location.href = basePath + "login"; 
+			}
+        }
 	});
 }
 
