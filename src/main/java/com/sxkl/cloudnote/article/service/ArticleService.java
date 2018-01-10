@@ -250,4 +250,8 @@ public class ArticleService {
 		}
 		return OperateResultService.configurateSuccessResult(true);
 	}
+
+	public List<Article> getAllArticles(String userId) {
+		return articleDao.getAllArticles(userId);
+	}
 }

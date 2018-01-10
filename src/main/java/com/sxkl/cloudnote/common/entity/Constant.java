@@ -36,6 +36,8 @@ public class Constant {
 	
 	public static final long HOT_ARTICLE_EXPIRE_IN_REDIS = 1000*60*30;
 	
+	public static final String WORD_ARTICLE_MAPPING_IN_REDIS = "word_article_mapping";
+	
 	public static String DOMAIN = "";
 	
 	public static final String ONLINE_SESSION_PREFIX_IN_REDIS = "online_session";

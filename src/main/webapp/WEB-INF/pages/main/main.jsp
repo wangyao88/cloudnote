@@ -72,6 +72,8 @@
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-collapse" href="<%=basePath%>spider/index" target="_blank">订阅文章</a>
 			    <span class="separator"></span>
+			    <a class="mini-button" iconCls="icon-split" onclick="createIndexs()">创建索引</a>
+			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-split" onclick="backupDB()">备份数据</a>
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-node" onclick="openwaitingtask">待办任务</a>

@@ -9,8 +9,10 @@
   <url>http://maven.apache.org</url>
   
   
-  <properties>
+   <properties>
         <spring.version>4.3.9.RELEASE</spring.version>
+        <lucene.version>7.2.0</lucene.version>
+        <mmseg4j.version>1.9.1</mmseg4j.version>
     </properties>
     
     <dependencies>
@@ -418,6 +420,50 @@
             <artifactId>geoip2</artifactId>
             <version>2.8.1</version>
         </dependency>
+        
+        <!-- lucene核心包 -->
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-core</artifactId>
+            <version>${lucene.version}</version>
+        </dependency>
+        <!--QueryParser 查询类-->
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-queryparser</artifactId>
+            <version>${lucene.version}</version>
+        </dependency>
+        <!-- 分词器 -->
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-analyzers-common</artifactId>
+            <version>${lucene.version}</version>
+        </dependency>
+        <!-- 高亮显示 -->
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-highlighter</artifactId>
+            <version>${lucene.version}</version>
+        </dependency>
+        <!-- 庖丁解牛分词器 -->
+        <dependency>
+            <groupId>com.chenlb.mmseg4j</groupId>
+            <artifactId>mmseg4j-core</artifactId>
+            <version>${mmseg4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.chenlb.mmseg4j</groupId>
+            <artifactId>mmseg4j-analysis</artifactId>
+            <version>${mmseg4j.version}</version>
+        </dependency>
+        <!-- ikanalyzer 分词器 -->
+        <dependency>
+            <groupId>com.janeluo</groupId>
+            <artifactId>ikanalyzer</artifactId>
+            <version>2012_u6</version>
+        </dependency>
+        
     </dependencies>
     
   <build>
