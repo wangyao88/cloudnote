@@ -39,7 +39,7 @@ var wsPath = '<%=wsPath%>';
 		 <div title="任务列表" region="west" width="800px" expanded="true">
 				<div id="waitingtaskGrid" class="mini-datagrid" style="width:795px;height:100%;" 
 			        url="<%=basePath%>waitingtask/findPage" idField="id" allowResize="false" 
-			        pageSize="10" sizeList="[20,50,100]" ajaxType="post" multiSelect="false"
+			        pageSize="15" sizeList="[15,30,60]" ajaxType="post" multiSelect="false"
 			        ondrawcell="onDrawCell">
 	            	<div property="columns">
 			            <div type="indexcolumn">序号</div>

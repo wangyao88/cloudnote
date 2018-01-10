@@ -1,5 +1,7 @@
 package com.sxkl.cloudnote.main.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.sxkl.cloudnote.main.entity.Weather;
 import com.sxkl.cloudnote.main.service.MainService;
 
 @Controller
@@ -28,5 +31,11 @@ public class MainController {
 	@ResponseBody
 	public String getTree(HttpServletRequest request){
 		return mainService.getTree(request);
+	}
+	
+	@RequestMapping(value = "/main/getWeather", method = RequestMethod.GET)
+	@ResponseBody
+	public List<Weather> getWeather(HttpServletRequest request) throws Exception{
+		return mainService.getWeather(request);
 	}
 }

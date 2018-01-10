@@ -172,7 +172,39 @@ function oneNews(){
 	});
 }
 
+function getWeather(){
+	$.ajax({
+		url : basePATH + "/main/getWeather",
+		type : "get",
+		dataType : "json",
+		timeout: 100000,
+		success : function(result) {
+			console.log(result);
+			var title = "";
+			var content = "<table>";
+			$(result).each(function(index,weather) { 
+				if(index == 0){
+					title = weather.city + "-未来七天天气预报";
+				}
+				content += "<tr><td>"+weather.date+"</td><td>"+weather.status+"</td><td>"+weather.temprature+"</td><td>"+weather.wind+"</td><td></tr>"
+			});
+			content += "</table>";
+			mini.showMessageBox({
+	            showModal: false,
+	            width: 340,
+	            height: 280,
+	            title: title,
+	            message: content,
+	            timeout: 8000,
+	            x: "right",
+	            y: "bottom"
+	        });
+		}
+	});
+}
+
 $(document).ready(function(){
-	oneNews();
+	getWeather();
+	window.setTimeout(oneNews, 10000)
 	window.setInterval(oneNews, 1800000); 
 });

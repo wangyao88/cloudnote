@@ -1,19 +1,35 @@
 package com.sxkl.cloudnote.main.service;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.Lists;
 import com.sxkl.cloudnote.cache.annotation.RedisCachable;
 import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.flag.service.FlagService;
 import com.sxkl.cloudnote.log.annotation.Logger;
+import com.sxkl.cloudnote.main.entity.Weather;
 import com.sxkl.cloudnote.note.service.NoteService;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.user.service.UserService;
+import com.sxkl.cloudnote.utils.IPUtils;
+import com.sxkl.cloudnote.utils.PropertyUtil;
+import com.sxkl.cloudnote.utils.StringAppendUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class MainService {
 	
@@ -51,6 +67,57 @@ public class MainService {
 		String treeStr = treeJson.toString();
 		if(treeStr.substring(treeStr.length()-1, treeStr.length()).equals(Constant.COMMA)){
 			treeJson.deleteCharAt(treeJson.length()-1);
+		}
+	}
+	
+	@Logger(message="获取本地天气信息")
+	public List<Weather> getWeather(HttpServletRequest request) throws Exception{
+		List<Weather> weathers = Lists.newArrayList();
+		getWeatherCycle(request,weathers);
+        return weathers;
+	}
+	
+	private void getWeatherCycle(HttpServletRequest request,List<Weather> weathers){
+		if(!weathers.isEmpty()){
+			return;
+		}
+		String city = StringUtils.EMPTY;
+		try {
+			city = IPUtils.getCityForWeather(request);
+		} catch (Exception e) {
+			log.error("获取IP归属地失败!错误信息:{}",e.getMessage());
+			return;
+		}
+		try {
+			Map<String,String> map = PropertyUtil.getPropertiesAllValue("cityCode.properties");
+			String cityCode = map.get(city);
+			String url = StringAppendUtils.append("http://www.weather.com.cn/weather/", cityCode,".shtml"); 
+	        Document doc = Jsoup.connect(url).timeout(100000).get();
+	        Elements content = doc.getElementsByAttributeValue("id", "7d");
+	        for (Element e : content) {  
+	            Document conDoc = Jsoup.parse(e.toString());
+	            Elements uls = conDoc.getElementsByTag("ul");
+	            Elements lis = uls.get(0).getElementsByTag("li");
+	            for (Element wt : lis) {
+	            	Elements h1s = wt.getElementsByTag("h1");
+	            	String date = h1s.get(0).text();
+	            	Elements weas = wt.getElementsByClass("wea");
+	            	String wea = weas.get(0).text();
+	            	Elements tems = wt.getElementsByClass("tem");
+	            	String temprature = tems.get(0).text();
+	            	Elements winds = wt.getElementsByClass("win");
+	            	String wind = winds.get(0).text();
+	            	Weather weather = new Weather();
+	            	weather.setCity(city);
+	            	weather.setDate(date);
+	            	weather.setStatus(wea);
+	            	weather.setTemprature(temprature);
+	            	weather.setWind(wind);
+	                weathers.add(weather);
+	            }  
+	        }
+		} catch (Exception e) {
+			getWeatherCycle(request,weathers);
 		}
 	}
 	

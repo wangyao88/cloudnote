@@ -1,7 +1,6 @@
 package com.sxkl.cloudnote.spider.manager;
 
 import java.io.IOException;
-import java.net.SocketTimeoutException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,14 +26,10 @@ import com.sxkl.cloudnote.spider.entity.News;
 import com.sxkl.cloudnote.utils.DateUtils;
 import com.sxkl.cloudnote.utils.StringAppendUtils;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Service
 public class SearchSpider {
 	
 	private static final int NEW_BEGIN = 35;
-	private static final int NEW_END = 40;
 	
 	@Logger(message="搜索文章")
 	public List<NetArticle> spider(int page, String key) throws IOException{
@@ -120,7 +115,17 @@ public class SearchSpider {
 	@Logger(message="获取最新一条新闻")
 	public News oneNews(){
 		Random random = new Random();
-		List<News> news = new ArrayList<News>();
+		List<News> news = Lists.newArrayList();
+		getOneNews(news);
+		int index = random.nextInt(news.size());
+		return news.get(index);
+	}
+	
+	private void getOneNews(List<News> news){
+		if(!news.isEmpty()){
+			return;
+		}
+		Random random = new Random();
 		try {
 			String date = DateUtils.getNowMonthDay();
 			Map<String, String> cookies = getCookies();
@@ -160,17 +165,9 @@ public class SearchSpider {
 					}
 				}
 			}
-		} catch (SocketTimeoutException e) {
-			log.error("获取单条新闻访问超时");
-		} catch (IOException e) {
-			log.error("获取单条新闻访问IO异常");
+		} catch (Exception e) {
+			getOneNews(news);
 		}
-		int index = random.nextInt(news.size());
-		return news.get(index);
-	}
-	
-	public static void main(String[] args)  {
-		System.out.println("点点滴滴的多多点点滴滴多多多点点滴滴的多多点点滴滴".length());
 	}
 	
 	private static Map<String, String> getCookies() {

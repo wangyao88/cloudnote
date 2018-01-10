@@ -411,6 +411,13 @@
 		    <artifactId>spring-data-solr</artifactId>
 		    <version>3.0.1.RELEASE</version>
 		</dependency>
+		
+		<!-- IP归属地 -->
+		<dependency>
+            <groupId>com.maxmind.geoip2</groupId>
+            <artifactId>geoip2</artifactId>
+            <version>2.8.1</version>
+        </dependency>
     </dependencies>
     
   <build>
