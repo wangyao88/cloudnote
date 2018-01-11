@@ -3,14 +3,16 @@ package com.sxkl.cloudnote.article.search.lucene;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
 import com.sxkl.cloudnote.article.entity.Article;
+import com.sxkl.cloudnote.article.search.lucene.scorefilter.ScoreFilterManager;
+import com.sxkl.cloudnote.article.search.lucene.scorefilter.impl.ContentScoreFilter;
+import com.sxkl.cloudnote.article.search.lucene.scorefilter.impl.HitnumScoreFilter;
+import com.sxkl.cloudnote.article.search.lucene.scorefilter.impl.TitleScoreFilter;
 import com.sxkl.cloudnote.log.annotation.Logger;
 
 /**
@@ -21,13 +23,7 @@ import com.sxkl.cloudnote.log.annotation.Logger;
 @Service
 public class ScoreHandler {
 	
-	private static final int TITLE_WEIGHT = 70;
-	private static final int CONTENTS_WEIGHT = 10;
-	private static final int HITNUM_WEIGHT = 2;
 	private static final int PAGE_SIZE = 20;
-	
-	@Autowired
-	private WordAnalyzer analyzer;
 	
 	@Logger(message="创建云笔记搜索关键词与文章映射关系")
 	public Map<String,List<Article>> createWordArticleMapping(List<Article> articles){
@@ -49,33 +45,11 @@ public class ScoreHandler {
 	
 	private Map<String,Article> calculateArticleScore(Article article){
 		Map<String,Article> result = Maps.newHashMap();
-		Map<String,Integer> titleScore = calculateScore(article.getTitle(),TITLE_WEIGHT);
-		Map<String,Integer> contentScore = calculateScore(article.getContent(),CONTENTS_WEIGHT);
-		for(Map.Entry<String, Integer> entry : contentScore.entrySet()){
-			String word = entry.getKey();
-			if(titleScore.containsKey(word)){
-				entry.setValue(entry.getValue() + titleScore.get(word));
-			}
-			entry.setValue(entry.getValue() + article.getHitNum()*HITNUM_WEIGHT);
-			Article simpleArticle = new Article();
-			simpleArticle.setId(article.getId());
-			simpleArticle.setTitle(article.getTitle());
-			simpleArticle.setHitNum(article.getHitNum());
-			simpleArticle.setWeight(entry.getValue());
-			result.put(word, simpleArticle);
-		}
-		for(Map.Entry<String, Integer> entry : titleScore.entrySet()){
-			String word = entry.getKey();
-			if(!result.containsKey(word)){
-				entry.setValue(entry.getValue() + article.getHitNum()*HITNUM_WEIGHT);
-				Article simpleArticle = new Article();
-				simpleArticle.setId(article.getId());
-				simpleArticle.setTitle(article.getTitle());
-				simpleArticle.setHitNum(article.getHitNum());
-				simpleArticle.setWeight(entry.getValue());
-				result.put(word, simpleArticle);
-			}
-		}
+		ScoreFilterManager scoreFilterManager = new ScoreFilterManager();
+		scoreFilterManager.addFilter(new TitleScoreFilter())
+						  .addFilter(new ContentScoreFilter())
+						  .addFilter(new HitnumScoreFilter())
+						  .doFilter(result, article);
 		return result;
 	}
 	
@@ -96,16 +70,5 @@ public class ScoreHandler {
 			}
 		}
 		return result;
-	}
-	
-	private Map<String,Integer> calculateScore(String content, int weight) {
-		Map<String,Integer> words = analyzer.analysis(content);
-		Map<String,Integer> scores = Maps.newHashMap();
-		for(Map.Entry<String, Integer> entry : words.entrySet()){
-			String word = entry.getKey();
-			int score = entry.getValue() * weight;
-			scores.put(word, score);
-		}
-		return scores;
 	}
 }

@@ -1,0 +1,27 @@
+package com.sxkl.cloudnote.article.search.lucene.scorefilter.impl;
+
+import java.util.Map;
+
+import com.sxkl.cloudnote.article.entity.Article;
+import com.sxkl.cloudnote.article.search.lucene.scorefilter.AbstractScoreFilter;
+import com.sxkl.cloudnote.article.search.lucene.scorefilter.ScoreFilter;
+
+/**
+ * @author: wangyao
+ * @date:2018年1月11日 下午2:28:18
+ */
+public class TitleScoreFilter extends AbstractScoreFilter implements ScoreFilter {
+
+	private static final int TITLE_WEIGHT = 70;
+	
+	@Override
+	public void doFilte(Map<String, Article> result, Article article) {
+		doTextFilte(result,article.getTitle(),article);
+	}
+
+	@Override
+	protected int getWeight() {
+		return TITLE_WEIGHT;
+	}
+
+}
