@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -30,15 +31,19 @@ public class LuceneSearcher implements ArticleSeracher{
 	@Override
 	public List<Article> search(String searchKeys, String userId) {
 		List<Article> result = Lists.newArrayList();
-		String[] keys = searchKeys.split(",");
+		if(StringUtils.isEmpty(searchKeys)){
+			return result;
+		}
+		String[] keys = searchKeys.toLowerCase().split(",");
 		Set<Object> keysInRedis = Sets.newHashSet(Arrays.asList(keys));
 		List articles = redisTemplate.opsForHash().multiGet(Constant.WORD_ARTICLE_MAPPING_IN_REDIS, keysInRedis);
 		if(articles.isEmpty()){
 			return result;
 		}
-		Object objs = articles.get(0);
-		for(Object obj : (List)objs){
-			result.add((Article)obj);
+		for(Object objs : articles){
+			for(Object obj : (List)objs){
+				result.add((Article)obj);
+			}
 		}
 		Ordering<Article> articleAscOrdering = new Ordering<Article>() {
 			public int compare(Article left, Article right) {

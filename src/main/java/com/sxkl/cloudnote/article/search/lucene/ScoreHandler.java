@@ -42,12 +42,6 @@ public class ScoreHandler {
 			String word = entry.getKey();
 			List<Article> unSortedArticles = entry.getValue();
 			List<Article> sortedArticles = articleOrdering.greatestOf(unSortedArticles, PAGE_SIZE);
-//			List<String> ids = Lists.newArrayList();
-			for(Article article : sortedArticles){
-				article.setContent(StringUtils.EMPTY);
-			}
-//			indexs.put(word, ids);
-			System.out.println(word + "--" + sortedArticles.size());
 			indexs.put(word, sortedArticles);
 		}
 		return indexs;
