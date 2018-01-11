@@ -7,9 +7,6 @@ import java.util.Set;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 import com.sxkl.cloudnote.article.entity.Article;
-import com.sxkl.cloudnote.article.search.lucene.scorefilter.impl.ContentScoreFilter;
-import com.sxkl.cloudnote.article.search.lucene.scorefilter.impl.HitnumScoreFilter;
-import com.sxkl.cloudnote.article.search.lucene.scorefilter.impl.TitleScoreFilter;
 
 /**
  * @author: wangyao
