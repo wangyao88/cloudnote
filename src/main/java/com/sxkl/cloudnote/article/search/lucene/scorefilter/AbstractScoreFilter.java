@@ -10,7 +10,9 @@ import com.sxkl.cloudnote.article.search.lucene.WordAnalyzer;
  * @author: wangyao
  * @date:2018年1月11日 下午2:26:26
  */
-public abstract class AbstractScoreFilter {
+public abstract class AbstractScoreFilter implements ScoreFilter{
+	
+	protected int priority;
 	
 	protected void doTextFilte(Map<String, Article> result, String text, Article article) {
 		Map<String,Integer> words = WordAnalyzer.analysis(text);
@@ -46,5 +48,26 @@ public abstract class AbstractScoreFilter {
 	}
 	
 	abstract protected int getWeight();
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + getPriority();
+		return result;
+	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AbstractScoreFilter other = (AbstractScoreFilter) obj;
+		if (getPriority() != other.getPriority())
+			return false;
+		return true;
+	}
 }

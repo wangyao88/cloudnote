@@ -11,5 +11,6 @@ import com.sxkl.cloudnote.article.entity.Article;
 public interface ScoreFilter {
 	
 	void doFilte(Map<String,Article> result, Article article);
-
+	
+	int getPriority();
 }

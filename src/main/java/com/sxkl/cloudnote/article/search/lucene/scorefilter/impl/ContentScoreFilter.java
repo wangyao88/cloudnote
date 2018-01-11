@@ -13,6 +13,7 @@ import com.sxkl.cloudnote.article.search.lucene.scorefilter.ScoreFilter;
 public class ContentScoreFilter extends AbstractScoreFilter implements ScoreFilter {
 
 	private static final int CONTENTS_WEIGHT = 10;
+	private final int priority = 10;
 	
 	@Override
 	public void doFilte(Map<String, Article> result,Article article) {
@@ -22,6 +23,11 @@ public class ContentScoreFilter extends AbstractScoreFilter implements ScoreFilt
 	@Override
 	protected int getWeight() {
 		return CONTENTS_WEIGHT;
+	}
+
+	@Override
+	public int getPriority() {
+		return 2;
 	}
 
 }

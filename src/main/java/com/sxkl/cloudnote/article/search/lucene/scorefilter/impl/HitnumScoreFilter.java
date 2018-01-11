@@ -27,4 +27,9 @@ public class HitnumScoreFilter extends AbstractScoreFilter implements ScoreFilte
 		return HITNUM_WEIGHT;
 	}
 
+	@Override
+	public int getPriority() {
+		return 0;
+	}
+
 }

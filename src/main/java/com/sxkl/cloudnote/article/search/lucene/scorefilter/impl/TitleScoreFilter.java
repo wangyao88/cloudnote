@@ -24,4 +24,9 @@ public class TitleScoreFilter extends AbstractScoreFilter implements ScoreFilter
 		return TITLE_WEIGHT;
 	}
 
+	@Override
+	public int getPriority() {
+		return 1;
+	}
+
 }
