@@ -15,6 +15,7 @@ import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 import com.sxkl.cloudnote.article.entity.Article;
 import com.sxkl.cloudnote.article.search.handler.ArticleSeracher;
+import com.sxkl.cloudnote.article.search.lucene.WordAnalyzer;
 import com.sxkl.cloudnote.common.entity.Constant;
 
 /**
@@ -25,6 +26,8 @@ import com.sxkl.cloudnote.common.entity.Constant;
 public class LuceneSearcher implements ArticleSeracher{
 	
 	@Autowired
+	private WordAnalyzer wordAnalyzer;
+	@Autowired
     private RedisTemplate<String, List<Article>> redisTemplate;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -34,8 +37,7 @@ public class LuceneSearcher implements ArticleSeracher{
 		if(StringUtils.isEmpty(searchKeys)){
 			return result;
 		}
-		String[] keys = searchKeys.toLowerCase().split(",");
-		Set<Object> keysInRedis = Sets.newHashSet(Arrays.asList(keys));
+		Set keysInRedis = wordAnalyzer.analysis(searchKeys).keySet();
 		List articles = redisTemplate.opsForHash().multiGet(Constant.WORD_ARTICLE_MAPPING_IN_REDIS, keysInRedis);
 		if(articles.isEmpty()){
 			return result;

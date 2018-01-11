@@ -47,7 +47,7 @@ public class WordAnalyzer {
 	}
 	
 	public static void main(String[] args) {
-		String text = "KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);";
+		String text = "spring 分页 aop mysql";
 		WordAnalyzer wordAnalyzer = new WordAnalyzer();
 		System.out.println(wordAnalyzer.analysis(text));
 	}
