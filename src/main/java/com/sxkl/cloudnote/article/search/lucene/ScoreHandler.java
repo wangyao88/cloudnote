@@ -43,7 +43,7 @@ public class ScoreHandler {
 		return indexs;
 	}
 	
-	private Map<String,Article> calculateArticleScore(Article article){
+	public Map<String,Article> calculateArticleScore(Article article){
 		Map<String,Article> result = Maps.newHashMap();
 		ScoreFilterManager scoreFilterManager = new ScoreFilterManager();
 		scoreFilterManager.addFilter(new TitleScoreFilter())

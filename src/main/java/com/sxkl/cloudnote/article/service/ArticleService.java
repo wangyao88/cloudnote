@@ -52,7 +52,6 @@ public class ArticleService {
 //	@Qualifier("luceneSearcher")
 	@Autowired
 	private LuceneSearcher articleSeracher;
-	
 
 	@Logger(message="添加笔记")
 	@RedisDisCachable(key={Constant.TREE_MENU_KEY_IN_REDIS,Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,})
@@ -90,6 +89,11 @@ public class ArticleService {
 		article.setContent(contentFilted);
 		articleDao.saveOrUpdateArticle(article);
 		PublishManager.getPublishManager().getArticlePublisher().establishLinkagesBetweenArticleAndImage(article);
+		if(Boolean.valueOf(isEdit)){
+			PublishManager.getPublishManager().getArticlePublisher().updateIndexByUpdate(article, user.getId());
+		}else{
+			PublishManager.getPublishManager().getArticlePublisher().updateIndexByAdd(article, user.getId());
+		}
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -165,12 +169,14 @@ public class ArticleService {
 	@RedisDisCachable(key={Constant.TREE_MENU_KEY_IN_REDIS,Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,})
 	public void deleteArticle(HttpServletRequest request) {
 		String id = request.getParameter("id");
+		User user = UserUtil.getSessionUser(request);
 		Article article = articleDao.selectArticleById(id);
 		article.setNote(null);
 		article.setUser(null);
 		article.setFlags(null);
 		articleDao.deleteArticle(article);
 		imageService.deleteImageByArticleId(id);
+		PublishManager.getPublishManager().getArticlePublisher().updateIndexByDelete(article, user.getId());
 	}
 
     @Logger(message="获取待修改笔记")

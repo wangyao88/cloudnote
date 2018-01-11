@@ -13,8 +13,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.sxkl.cloudnote.article.entity.Article;
 import com.sxkl.cloudnote.article.search.handler.ArticleSeracher;
+import com.sxkl.cloudnote.article.search.lucene.IndexManager;
 import com.sxkl.cloudnote.article.search.lucene.WordAnalyzer;
-import com.sxkl.cloudnote.common.entity.Constant;
 
 /**
  * @author: wangyao
@@ -23,6 +23,8 @@ import com.sxkl.cloudnote.common.entity.Constant;
 @Service("luceneSearcher")
 public class LuceneSearcher implements ArticleSeracher{
 	
+	@Autowired
+	private IndexManager indexManager;
 	@Autowired
     private RedisTemplate<String, List<Article>> redisTemplate;
 
@@ -34,7 +36,7 @@ public class LuceneSearcher implements ArticleSeracher{
 			return result;
 		}
 		Set keysInRedis = WordAnalyzer.analysis(searchKeys).keySet();
-		List articles = redisTemplate.opsForHash().multiGet(Constant.WORD_ARTICLE_MAPPING_IN_REDIS, keysInRedis);
+		List articles = redisTemplate.opsForHash().multiGet(indexManager.getWordArticleMappingKey(userId), keysInRedis);
 		if(articles.isEmpty()){
 			return result;
 		}

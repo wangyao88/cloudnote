@@ -14,14 +14,13 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Service;
 
 import com.sxkl.cloudnote.article.dao.ArticleDao;
+import com.sxkl.cloudnote.article.entity.Article;
+import com.sxkl.cloudnote.article.search.lucene.IndexManager;
 import com.sxkl.cloudnote.eventdriven.entity.ArticlePublisherBean;
 import com.sxkl.cloudnote.eventdriven.entity.ArticlePublisherEvent;
 import com.sxkl.cloudnote.image.service.ImageService;
 import com.sxkl.cloudnote.log.annotation.Logger;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Service
 public class ArticleListener implements ApplicationListener<ApplicationEvent>{
 	
@@ -29,6 +28,8 @@ public class ArticleListener implements ApplicationListener<ApplicationEvent>{
 	private ImageService imageService;
 	@Autowired
 	private ArticleDao articleDao;
+	@Autowired
+	private IndexManager indexManager;
 
 	@Override
 	public void onApplicationEvent(ApplicationEvent event) {
@@ -37,12 +38,21 @@ public class ArticleListener implements ApplicationListener<ApplicationEvent>{
 		}
 		ArticlePublisherBean article = (ArticlePublisherBean) event.getSource();
 		switch (article.getDutype()) {
-		case LINK_ARTICLE_IMAGE:
-			linkArticleImage(article);
-			break;
-        case INCREASE_HITNUM:
-			increaseHitNum(article);
-			break;
+			case LINK_ARTICLE_IMAGE:
+				linkArticleImage(article);
+				break;
+	        case INCREASE_HITNUM:
+				increaseHitNum(article);
+				break;
+	        case UPDATE_INDEX_BY_ADD_OPERATION:
+	        	indexManager.updateIndexByAdd(convertArticle(article),article.getUserId());
+				break;
+	        case UPDATE_INDEX_BY_UPDATE_OPERATION:
+	        	indexManager.updateIndexByUpdate(convertArticle(article),article.getUserId());
+				break;
+	        case UPDATE_INDEX_BY_DELETE_OPERATION:
+	        	indexManager.updateIndexByDelete(convertArticle(article),article.getUserId());
+				break;
 		}
 	}
 	
@@ -72,6 +82,15 @@ public class ArticleListener implements ApplicationListener<ApplicationEvent>{
 
 	private boolean isNotDuty(ApplicationEvent event){
 		return !event.getClass().toString().equals(ArticlePublisherEvent.class.toString());
+	}
+	
+	private Article convertArticle(ArticlePublisherBean articlePublisherBean){
+		Article article = new Article();
+		article.setId(articlePublisherBean.getArticleId());
+		article.setTitle(articlePublisherBean.getArticleTitle());
+		article.setContent(articlePublisherBean.getArticleContent());
+		article.setHitNum(articlePublisherBean.getHitNum());
+		return article;
 	}
 	
 	public void cacheAddArticleTreeMenu(HttpServletRequest request) {
