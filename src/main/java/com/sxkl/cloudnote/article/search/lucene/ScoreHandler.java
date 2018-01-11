@@ -1,8 +1,9 @@
-package com.sxkl.cloudnote.article.search;
+package com.sxkl.cloudnote.article.search.lucene;
 
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +30,8 @@ public class ScoreHandler {
 	private WordAnalyzer analyzer;
 	
 	@Logger(message="创建云笔记搜索关键词与文章映射关系")
-	public Map<String,List<String>> createWordArticleMapping(List<Article> articles){
-		Map<String,List<String>> indexs = Maps.newHashMap();
+	public Map<String,List<Article>> createWordArticleMapping(List<Article> articles){
+		Map<String,List<Article>> indexs = Maps.newHashMap();
 		Map<String,List<Article>> scores = batchCalculateArticleScore(articles);
 		Ordering<Article> articleOrdering = new Ordering<Article>() {
 			public int compare(Article left, Article right) {
@@ -41,11 +42,13 @@ public class ScoreHandler {
 			String word = entry.getKey();
 			List<Article> unSortedArticles = entry.getValue();
 			List<Article> sortedArticles = articleOrdering.greatestOf(unSortedArticles, PAGE_SIZE);
-			List<String> ids = Lists.newArrayList();
+//			List<String> ids = Lists.newArrayList();
 			for(Article article : sortedArticles){
-				ids.add(article.getId());
+				article.setContent(StringUtils.EMPTY);
 			}
-			indexs.put(word, ids);
+//			indexs.put(word, ids);
+			System.out.println(word + "--" + sortedArticles.size());
+			indexs.put(word, sortedArticles);
 		}
 		return indexs;
 	}
@@ -62,6 +65,8 @@ public class ScoreHandler {
 			entry.setValue(entry.getValue() + article.getHitNum()*HITNUM_WEIGHT);
 			Article simpleArticle = new Article();
 			simpleArticle.setId(article.getId());
+			simpleArticle.setTitle(article.getTitle());
+			simpleArticle.setHitNum(article.getHitNum());
 			simpleArticle.setWeight(entry.getValue());
 			result.put(word, simpleArticle);
 		}

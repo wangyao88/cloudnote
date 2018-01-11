@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sxkl.cloudnote.article.search.IndexManager;
+import com.sxkl.cloudnote.article.search.lucene.IndexManager;
 import com.sxkl.cloudnote.article.service.ArticleService;
 import com.sxkl.cloudnote.common.service.OperateResultService;
 import com.sxkl.cloudnote.user.entity.User;

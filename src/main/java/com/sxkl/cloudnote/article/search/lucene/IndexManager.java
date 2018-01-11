@@ -1,4 +1,4 @@
-package com.sxkl.cloudnote.article.search;
+package com.sxkl.cloudnote.article.search.lucene;
 
 import java.util.List;
 import java.util.Map;
@@ -30,7 +30,7 @@ public class IndexManager {
 	@Logger(message="创建云笔记搜索索引")
 	public void createIndex(String userId){
 		List<Article> articles = articleService.getAllArticles(userId);
-		Map<String,List<String>> mappings = scoreHandler.createWordArticleMapping(articles);
+		Map<String,List<Article>> mappings = scoreHandler.createWordArticleMapping(articles);
 		redisTemplate.delete(Constant.WORD_ARTICLE_MAPPING_IN_REDIS);
 		redisTemplate.opsForHash().putAll(Constant.WORD_ARTICLE_MAPPING_IN_REDIS, mappings);
 	}

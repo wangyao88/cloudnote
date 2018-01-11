@@ -1,37 +1,36 @@
-package com.sxkl.cloudnote.article.service;
+package com.sxkl.cloudnote.article.search.handler.impl;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.sxkl.cloudnote.article.dao.ArticleDao;
 import com.sxkl.cloudnote.article.entity.Article;
+import com.sxkl.cloudnote.article.search.handler.ArticleSeracher;
 
-public class ArticleSearcher {
+/**
+ * @author: wangyao
+ * @date:2018年1月11日 上午9:33:00
+ */
+@Service("customSearcher")
+public class CustomSearcher implements ArticleSeracher{
 
+	@Autowired
 	private ArticleDao articleDao;
-	private String userId;
 	private static final int PAGE_INDEX = 0;
 	private static final int PAGE_SIZE = 20;
 	private static final int TITLE_WEIGHT = 70;
 	private static final int CONTENTS_WEIGHT = 10;
 	private static final int HITNUM_WEIGHT = 2;
 	
-	private ArticleSearcher(ArticleDao articleDao, String userId) {
-		super();
-		this.articleDao = articleDao;
-		this.userId = userId;
-	}
-
-	public static ArticleSearcher build(ArticleDao articleDao, String userId){
-		return new ArticleSearcher(articleDao,userId);
-	}
-	
-	public List<Article> search(String searchKeys){
+	@Override
+	public List<Article> search(String searchKeys, String userId) {
 		Set<Article> temps = new HashSet<Article>();
 		String[] keys = searchKeys.split(",");
 		for(String key : keys){

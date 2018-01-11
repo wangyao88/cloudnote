@@ -27,8 +27,6 @@ public class SpiderService {
     private RedisTemplate<Object, NetArticle> redisTemplate;
 	@Autowired
 	private SpiderSchedule spiderSchedule;
-	@Autowired
-	private SearchSpider searchSpider;
 	
 	@Logger(message="获取所有订阅文章")
 	@SuppressWarnings({ "unchecked", "rawtypes" })

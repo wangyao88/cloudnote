@@ -1,10 +1,11 @@
-package com.sxkl.cloudnote.article.search;
+package com.sxkl.cloudnote.article.search.lucene;
 
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.stereotype.Service;
 import org.wltea.analyzer.core.IKSegmenter;
 import org.wltea.analyzer.core.Lexeme;
@@ -30,6 +31,9 @@ public class WordAnalyzer {
 			String word;
 			while ((lexeme = ik.next()) != null){
 				word = lexeme.getLexemeText();
+				if(NumberUtils.isNumber(word)){
+					continue;
+				}
 				int count = 1;
 				if(result.containsKey(word)){
 					count = result.get(word) + 1;

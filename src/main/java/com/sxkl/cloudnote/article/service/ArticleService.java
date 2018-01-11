@@ -19,6 +19,7 @@ import com.sxkl.cloudnote.article.entity.Article;
 import com.sxkl.cloudnote.article.entity.ArticleForCache;
 import com.sxkl.cloudnote.article.entity.ArticleForEdit;
 import com.sxkl.cloudnote.article.entity.ArticleForHtml;
+import com.sxkl.cloudnote.article.search.handler.impl.LuceneSearcher;
 import com.sxkl.cloudnote.cache.annotation.RedisDisCachable;
 import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.common.service.OperateResultService;
@@ -48,6 +49,10 @@ public class ArticleService {
 	private UserService userService;
 	@Autowired
 	private ImageService imageService;
+//	@Qualifier("luceneSearcher")
+	@Autowired
+	private LuceneSearcher articleSeracher;
+	
 
 	@Logger(message="添加笔记")
 	@RedisDisCachable(key={Constant.TREE_MENU_KEY_IN_REDIS,Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,})
@@ -108,7 +113,7 @@ public class ArticleService {
 			articles = articleDao.selectAllArticlesByNameOrderByHitNum(title,Integer.parseInt(pageIndex),Integer.parseInt(pageSize),userId);
 			total = articleDao.selectAllArticlesByNameOrderByCreateTimeAndHitNumCount(title,userId);
 		}else if(!StringUtils.isEmpty(titleOrContent)){
-			articles = ArticleSearcher.build(articleDao, userId).search(titleOrContent);
+			articles = articleSeracher.search(titleOrContent,userId);
 			total = articles.size();
 		}else{
 			String flagId = request.getParameter("flagId");
@@ -251,6 +256,7 @@ public class ArticleService {
 		return OperateResultService.configurateSuccessResult(true);
 	}
 
+    @Logger(message="获取用户名下所有笔记")
 	public List<Article> getAllArticles(String userId) {
 		return articleDao.getAllArticles(userId);
 	}
