@@ -1,6 +1,5 @@
 package com.sxkl.cloudnote.article.search.handler.impl;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
-import com.google.common.collect.Sets;
 import com.sxkl.cloudnote.article.entity.Article;
 import com.sxkl.cloudnote.article.search.handler.ArticleSeracher;
 import com.sxkl.cloudnote.article.search.lucene.WordAnalyzer;

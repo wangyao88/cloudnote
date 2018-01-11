@@ -64,6 +64,18 @@ public class ScoreHandler {
 			simpleArticle.setWeight(entry.getValue());
 			result.put(word, simpleArticle);
 		}
+		for(Map.Entry<String, Integer> entry : titleScore.entrySet()){
+			String word = entry.getKey();
+			if(!result.containsKey(word)){
+				entry.setValue(entry.getValue() + article.getHitNum()*HITNUM_WEIGHT);
+				Article simpleArticle = new Article();
+				simpleArticle.setId(article.getId());
+				simpleArticle.setTitle(article.getTitle());
+				simpleArticle.setHitNum(article.getHitNum());
+				simpleArticle.setWeight(entry.getValue());
+				result.put(word, simpleArticle);
+			}
+		}
 		return result;
 	}
 	
