@@ -50,10 +50,11 @@ public class ArticleFilter {
 		return result;
 	}
 
-	public static List<Article> doFilte(List<Article> result) {
+	public static List<Article> doFilte(List<Article> result, int size) {
 		List<Article> sortAscArticles = sortAsc(result, result.size());
 		List<Article> filtedResult = unique(sortAscArticles);
-		List<Article> sortDescArticles = sortDesc(filtedResult, filtedResult.size());
+		int realSize = Math.min(size, filtedResult.size());
+		List<Article> sortDescArticles = sortDesc(filtedResult, realSize);
 		return sortDescArticles;
 	}
 }

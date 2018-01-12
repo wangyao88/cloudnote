@@ -1,6 +1,5 @@
 package com.sxkl.cloudnote.eventdriven.listener;
 
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
@@ -58,11 +57,6 @@ public class ArticleListener implements ApplicationListener<ApplicationEvent>{
 	
 	@Logger(message="增加笔记点击量")
 	public void increaseHitNum(ArticlePublisherBean bean) {
-		try {
-			TimeUnit.SECONDS.sleep(1);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 		articleDao.increaseHitNum(bean.getArticleId());
 	}
 

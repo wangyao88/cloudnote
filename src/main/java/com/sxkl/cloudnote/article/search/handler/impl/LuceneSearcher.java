@@ -23,6 +23,7 @@ public class LuceneSearcher implements ArticleSeracher{
 	
 	@Autowired
 	private RedisResultConver redisResultConver;
+	private static final int PAGE_SIZE = 20;
 
 	@SuppressWarnings("rawtypes")
 	@Override
@@ -33,7 +34,7 @@ public class LuceneSearcher implements ArticleSeracher{
 		}
 		Set keysInRedis = WordAnalyzer.analysis(searchKeys).keySet();
 		result = redisResultConver.convertMulti(userId, keysInRedis);
-		return ArticleFilter.doFilte(result);
+		return ArticleFilter.doFilte(result,PAGE_SIZE);
 	}
 
 }

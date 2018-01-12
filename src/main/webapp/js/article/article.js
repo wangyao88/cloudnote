@@ -34,9 +34,6 @@ function addArticleAction(data) {
 		cls : 'mini-mask-loading',
 		html : '笔记保存中...'
 	});
-	
-	
-	
 	$.ajax({
 		url : basePATH + "/article/addArticle",
 		type : "post",
@@ -68,7 +65,6 @@ function addArticleAction(data) {
 			mini.unmask(document.body);
 		}
 	});
-
 }
 
 function loadArticles(data) {
@@ -103,7 +99,15 @@ function getArticleById(articleId) {
 		},
 		dataType : 'json',
 		success : function(result) {
-			document.getElementById("articleContainer").innerHTML = result.data;
+			if(!result.data){
+				mini.alert("笔记已删除，请重建索引，再搜索。或者忽略此条笔记！");
+				return;
+			}
+			var grid = mini.get("articleGrid");
+			var record = grid.getSelected();
+			var title = record.title;
+			var content = '<marquee direction="right"><h1>'+title+'</h1></marquee><br>'+result.data;
+			document.getElementById("articleContainer").innerHTML = content;
 			mini.unmask(document.body);
 		},
 		error : function() {
