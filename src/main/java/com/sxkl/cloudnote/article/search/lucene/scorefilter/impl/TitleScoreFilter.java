@@ -12,7 +12,7 @@ import com.sxkl.cloudnote.article.search.lucene.scorefilter.ScoreFilter;
  */
 public class TitleScoreFilter extends AbstractScoreFilter implements ScoreFilter {
 
-	private static final int TITLE_WEIGHT = 70;
+	private static final int TITLE_WEIGHT = 200;
 	
 	@Override
 	public void doFilte(Map<String, Article> result, Article article) {

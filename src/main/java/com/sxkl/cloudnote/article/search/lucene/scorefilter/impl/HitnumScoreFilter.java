@@ -12,7 +12,7 @@ import com.sxkl.cloudnote.article.search.lucene.scorefilter.ScoreFilter;
  */
 public class HitnumScoreFilter extends AbstractScoreFilter implements ScoreFilter {
 
-	private static final int HITNUM_WEIGHT = 2;
+	private static final int HITNUM_WEIGHT = 1;
 	
 	@Override
 	public void doFilte(Map<String, Article> result, Article article) {
