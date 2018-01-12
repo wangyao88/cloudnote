@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.sxkl.cloudnote.article.entity.Article;
 import com.sxkl.cloudnote.article.service.ArticleService;
 import com.sxkl.cloudnote.common.entity.Constant;
-import com.sxkl.cloudnote.eventdriven.entity.ArticlePublisherBean;
 import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.utils.StringAppendUtils;
 

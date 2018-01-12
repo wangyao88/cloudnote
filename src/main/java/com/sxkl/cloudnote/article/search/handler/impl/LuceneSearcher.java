@@ -1,19 +1,17 @@
 package com.sxkl.cloudnote.article.search.handler.impl;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Ordering;
 import com.sxkl.cloudnote.article.entity.Article;
+import com.sxkl.cloudnote.article.search.handler.ArticleFilter;
 import com.sxkl.cloudnote.article.search.handler.ArticleSeracher;
-import com.sxkl.cloudnote.article.search.lucene.IndexManager;
+import com.sxkl.cloudnote.article.search.handler.RedisResultConver;
 import com.sxkl.cloudnote.article.search.lucene.WordAnalyzer;
 
 /**
@@ -24,11 +22,9 @@ import com.sxkl.cloudnote.article.search.lucene.WordAnalyzer;
 public class LuceneSearcher implements ArticleSeracher{
 	
 	@Autowired
-	private IndexManager indexManager;
-	@Autowired
-    private RedisTemplate<String, List<Article>> redisTemplate;
+	private RedisResultConver redisResultConver;
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings("rawtypes")
 	@Override
 	public List<Article> search(String searchKeys, String userId) {
 		List<Article> result = Lists.newArrayList();
@@ -36,34 +32,8 @@ public class LuceneSearcher implements ArticleSeracher{
 			return result;
 		}
 		Set keysInRedis = WordAnalyzer.analysis(searchKeys).keySet();
-		List articles = redisTemplate.opsForHash().multiGet(indexManager.getWordArticleMappingKey(userId), keysInRedis);
-		if(articles.isEmpty()){
-			return result;
-		}
-		for(Object objs : articles){
-			for(Object obj : (List)objs){
-				result.add((Article)obj);
-			}
-		}
-		Ordering<Article> articleAscOrdering = new Ordering<Article>() {
-			public int compare(Article left, Article right) {
-				return right.getWeight() - left.getWeight();
-			}
-		};
-		List<Article> sortedArticles = articleAscOrdering.greatestOf(result, result.size());
-		Set temp = new HashSet();
-		for(Article article : sortedArticles){
-			temp.add(article);
-		}
-		List filtedResult = Lists.newArrayList(temp);
-		Ordering<Article> articleDescOrdering = new Ordering<Article>() {
-			public int compare(Article left, Article right) {
-				return left.getWeight() - right.getWeight();
-			}
-		};
-		int size = Math.min(filtedResult.size(), 20);
-		List<Article> sortedResults = articleDescOrdering.greatestOf(filtedResult, size);
-		return sortedResults;
+		result = redisResultConver.convert(userId, keysInRedis);
+		return ArticleFilter.doFilte(result);
 	}
 
 }
