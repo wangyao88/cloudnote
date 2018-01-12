@@ -16,7 +16,9 @@ public class TitleScoreFilter extends AbstractScoreFilter implements ScoreFilter
 	
 	@Override
 	public void doFilte(Map<String, Article> result, Article article) {
-		doTextFilte(result,article.getTitle(),article);
+		String title = article.getTitle();
+		title = title.replaceAll("-", ",");
+		doTextFilte(result,title,article);
 	}
 
 	@Override

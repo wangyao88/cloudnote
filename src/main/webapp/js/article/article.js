@@ -262,23 +262,29 @@ function quickKeyForNormalPage(shiftKey,keyCode){
 }
 
 function createIndexs(){
-	$.ajax({
-		url : basePATH + "/article/createIndex",
-		type : "post",
-		success : function() {
-			mini.showTips({
-	            showModal: false,
-	            state : "info",
-	            content: "创建搜索索引成功",
-	            timeout: 3000,
-	            x: 'center',
-	            y: 'center'
-	        });
-		},
-		error : function() {
-			mini.alert("创建搜索索引失败，请稍候重试！");
-		}
-	});
+	mini.confirm("创建笔记搜索索引比较耗时，确定创建吗？", "确定？",
+			function(action) {
+				if (action == "ok") {
+					$.ajax({
+						url : basePATH + "/article/createIndex",
+						type : "post",
+						success : function() {
+							mini.showTips({
+					            showModal: false,
+					            state : "info",
+					            content: "创建搜索索引成功",
+					            timeout: 3000,
+					            x: 'center',
+					            y: 'center'
+					        });
+						},
+						error : function() {
+							mini.alert("创建搜索索引失败，请稍候重试！");
+						}
+					});
+				}
+			}
+		);
 }
 
 $(document).ready(function() {

@@ -1,7 +1,6 @@
 package com.sxkl.cloudnote.spider.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -12,13 +11,11 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
-import com.sun.tools.javac.code.Attribute.Array;
 import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.common.service.OperateResultService;
 import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.schedule.spider.SpiderSchedule;
 import com.sxkl.cloudnote.spider.entity.NetArticle;
-import com.sxkl.cloudnote.spider.manager.SearchSpider;
 
 @Service
 public class SpiderService {

@@ -32,7 +32,7 @@ public class LuceneSearcher implements ArticleSeracher{
 			return result;
 		}
 		Set keysInRedis = WordAnalyzer.analysis(searchKeys).keySet();
-		result = redisResultConver.convert(userId, keysInRedis);
+		result = redisResultConver.convertMulti(userId, keysInRedis);
 		return ArticleFilter.doFilte(result);
 	}
 

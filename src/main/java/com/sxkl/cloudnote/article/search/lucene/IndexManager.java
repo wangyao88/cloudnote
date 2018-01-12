@@ -8,6 +8,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.sxkl.cloudnote.article.entity.Article;
+import com.sxkl.cloudnote.article.search.handler.ArticleFilter;
+import com.sxkl.cloudnote.article.search.handler.RedisResultConver;
 import com.sxkl.cloudnote.article.service.ArticleService;
 import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.log.annotation.Logger;
@@ -27,6 +29,8 @@ public class IndexManager {
 	private ScoreHandler scoreHandler;
 	@Autowired
     private RedisTemplate<Object, Object> redisTemplate;
+	@Autowired
+	private RedisResultConver redisResultConver;
 	
 	@Logger(message="创建云笔记搜索索引")
 	public void createIndex(String userId){
@@ -37,22 +41,46 @@ public class IndexManager {
 		redisTemplate.opsForHash().putAll(getWordArticleMappingKey(userId), mappings);
 	}
 	
-	public String getWordArticleMappingKey(String userId){
-		return StringAppendUtils.append(userId,Constant.WORD_ARTICLE_MAPPING_IN_REDIS);
-	}
-
+	@Logger(message="创建-新增笔记的搜索索引")
 	public void updateIndexByAdd(Article article, String userId) {
-		Map<String,Article> result = scoreHandler.calculateArticleScore(article);
-		
+		Map<String,Article> scores = scoreHandler.calculateArticleScore(article);
+		for(Map.Entry<String, Article> entry : scores.entrySet()){
+			String key = entry.getKey();
+			Article temp = entry.getValue();
+			List<Article> articles = redisResultConver.convertSingle(userId, key);
+			if(articles.contains(article)){
+				Article elem = articles.get(articles.indexOf(article));
+				temp.setWeight(elem.getWeight()+temp.getWeight());
+				handleResult(userId, key, articles);
+				continue;
+			}
+			Article result = new Article();
+			result.setId(temp.getId());
+			result.setTitle(temp.getTitle());
+			result.setHitNum(temp.getHitNum());
+			result.setWeight(temp.getWeight());
+			articles.add(result);
+			handleResult(userId, key, articles);
+		}
 	}
 
+	@Logger(message="更新-编辑笔记的搜索索引-带建设")
 	public void updateIndexByUpdate(Article article, String userId) {
-		// TODO Auto-generated method stub
 		
 	}
 
+	@Logger(message="删除-删除笔记的搜索索引-带建设")
 	public void updateIndexByDelete(Article article, String userId) {
-		// TODO Auto-generated method stub
 		
+	}
+	
+	public String getWordArticleMappingKey(String userId){
+		return StringAppendUtils.append(Constant.WORD_ARTICLE_MAPPING_IN_REDIS,"-",userId);
+	}
+	
+	private void handleResult(String userId, String key, List<Article> articles) {
+		List<Article> reuslts = ArticleFilter.sortDesc(articles, articles.size());
+		redisTemplate.opsForHash().delete(getWordArticleMappingKey(userId), key);
+		redisTemplate.opsForHash().put(getWordArticleMappingKey(userId),key,reuslts);
 	}
 }
