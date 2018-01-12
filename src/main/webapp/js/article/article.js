@@ -106,7 +106,7 @@ function getArticleById(articleId) {
 			var grid = mini.get("articleGrid");
 			var record = grid.getSelected();
 			var title = record.title;
-			var content = '<marquee direction="right"><h1>'+title+'</h1></marquee><br>'+result.data;
+			var content = '<marquee direction="left"><h1>'+title+'</h1></marquee><br>'+result.data;
 			document.getElementById("articleContainer").innerHTML = content;
 			mini.unmask(document.body);
 		},

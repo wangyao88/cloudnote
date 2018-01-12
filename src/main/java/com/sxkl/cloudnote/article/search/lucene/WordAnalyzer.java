@@ -45,8 +45,7 @@ public class WordAnalyzer {
 	}
 	
 	public static void main(String[] args) {
-		String text = "spring 分页 aop mysql";
+		String text = "微信 跳一跳 外挂";
 		System.out.println(WordAnalyzer.analysis(text));
 	}
-
 }
