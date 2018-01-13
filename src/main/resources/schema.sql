@@ -110,20 +110,12 @@ COMMENT = '云盘文件信息表';
 ALTER TABLE `cloudnote`.`cn_image` 
 CHANGE COLUMN `alt` `alt` VARCHAR(300) NULL DEFAULT NULL ;
 
-CREATE TABLE `cloudnote`.`cn_extLexicon` (
+CREATE TABLE `cloudnote`.`cn_lexicon` (
   `id` VARCHAR(36) NOT NULL COMMENT '主键',
   `name` VARCHAR(20) NULL COMMENT '分词名称',
   `uId` VARCHAR(36) NULL COMMENT '用户主键',
+  `discriminator` VARCHAR(36) NULL COMMENT '词库类别',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
-COMMENT = '中文分词器之扩展词';
-
-CREATE TABLE `cloudnote`.`cn_stopLexicon` (
-  `id` VARCHAR(36) NOT NULL COMMENT '主键',
-  `name` VARCHAR(20) NULL COMMENT '分词名称',
-  `uId` VARCHAR(36) NULL COMMENT '用户主键',
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COMMENT = '中文分词器之停用词';
+COMMENT = '中文分词器之词库';

@@ -2,8 +2,8 @@ package com.sxkl.cloudnote.lexicon.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Table;
 
 /**
  * @author wangyao
@@ -11,9 +11,8 @@ import javax.persistence.Table;
  * @description: 中文分词器之停用词
  */
 @Entity
-@Table(name="cn_stopLexicon")
+@DiscriminatorValue("stopLexicon")
 public class StopLexicon extends Lexicon implements Serializable{
 
 	private static final long serialVersionUID = 9175364095514385547L;
-
 }

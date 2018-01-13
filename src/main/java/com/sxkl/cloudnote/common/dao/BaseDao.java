@@ -1,11 +1,13 @@
 package com.sxkl.cloudnote.common.dao;
 
+import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import com.sxkl.cloudnote.common.entity.Page;
 import com.sxkl.cloudnote.utils.StringAppendUtils;
 
 /**
@@ -13,14 +15,14 @@ import com.sxkl.cloudnote.utils.StringAppendUtils;
  * @date 2018年1月13日 下午12:44:56
  * @description: hibernate抽象Dao
  */
-public class BaseDao<E> extends AbstractBaseDao{
+public class BaseDao<ID extends Serializable,E> extends AbstractBaseDao{
 	
-	private Class<E> clazz; //T的具体类
+	private Class<E> clazz;
 
     @SuppressWarnings("unchecked")
     public BaseDao() {
         ParameterizedType type = (ParameterizedType) this.getClass().getGenericSuperclass();
-        clazz = (Class<E>) type.getActualTypeArguments()[0];
+        clazz = (Class<E>) type.getActualTypeArguments()[1];
     }
     
     public String getClassName() {
@@ -33,7 +35,7 @@ public class BaseDao<E> extends AbstractBaseDao{
         return this.getSessionFactory().getCurrentSession();
     }
 
-	public E findOne(String id){
+	public E findOne(ID id){
 		return getSession().load(clazz, id);
 	}
 	
@@ -53,6 +55,10 @@ public class BaseDao<E> extends AbstractBaseDao{
 		getSession().delete(e);
 	}
 	
+	public void deleteById(ID id){
+		getSession().delete(clazz.getName(),id);
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<E> findAll(){
 		String hql = StringAppendUtils.append("from ",getClassName());
@@ -61,11 +67,19 @@ public class BaseDao<E> extends AbstractBaseDao{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<E> findPage(int pageIndex, int pageSize){
-		String hql = StringAppendUtils.append("from ",getClassName());
-		Query query = getSession().createQuery(hql);  
-	    query.setFirstResult(pageIndex*pageSize);
-	    query.setMaxResults(pageSize);
+	public List<E> findPage(Page page){
+		String hql;
+		if(page.isUseDefaultHql()){
+			hql = StringAppendUtils.append("from ",getClassName(), " e where e.userId=:userId");
+		}else{
+			hql = page.getHql();
+		}
+		Query query = getSession().createQuery(hql);
+		if(page.isUseDefaultHql()){
+			query.setString("userId", page.getUserId());
+		}
+		query.setFirstResult(page.getIndex()*page.getSize());
+	    query.setMaxResults(page.getSize());
 		return query.list();
 	}
 }
