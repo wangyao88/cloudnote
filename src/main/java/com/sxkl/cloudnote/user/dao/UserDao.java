@@ -7,13 +7,13 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
-import com.sxkl.cloudnote.common.dao.BaseDao;
+import com.sxkl.cloudnote.common.dao.AbstractBaseDao;
 import com.sxkl.cloudnote.flag.entity.Flag;
 import com.sxkl.cloudnote.note.entity.Note;
 import com.sxkl.cloudnote.user.entity.User;
 
 @Repository
-public class UserDao extends BaseDao {
+public class UserDao extends AbstractBaseDao {
 
 	public List<User> getUserByNameAndPass(String userName, String password) {
 		User user = new User();

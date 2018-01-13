@@ -9,11 +9,11 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
-import com.sxkl.cloudnote.common.dao.BaseDao;
+import com.sxkl.cloudnote.common.dao.AbstractBaseDao;
 import com.sxkl.cloudnote.waitingtask.entity.WaitingTask;
 
 @Repository
-public class WaitingTaskDao extends BaseDao{
+public class WaitingTaskDao extends AbstractBaseDao{
 
 	public void insert(WaitingTask waitingTask) {
 		Session session = this.getSessionFactory().getCurrentSession();

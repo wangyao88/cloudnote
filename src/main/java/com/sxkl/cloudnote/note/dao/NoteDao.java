@@ -6,11 +6,11 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
-import com.sxkl.cloudnote.common.dao.BaseDao;
+import com.sxkl.cloudnote.common.dao.AbstractBaseDao;
 import com.sxkl.cloudnote.note.entity.Note;
 
 @Repository
-public class NoteDao extends BaseDao {
+public class NoteDao extends AbstractBaseDao {
 
 	public void saveOrUpdate(Note note) {
 		this.getHibernateTemplate().saveOrUpdate(note);

@@ -4,11 +4,11 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
-import com.sxkl.cloudnote.common.dao.BaseDao;
+import com.sxkl.cloudnote.common.dao.AbstractBaseDao;
 import com.sxkl.cloudnote.image.entity.Image;
 
 @Repository
-public class ImageDao extends BaseDao {
+public class ImageDao extends AbstractBaseDao {
 
 	public Image getImageById(String id) {
 		Session session = this.getSessionFactory().getCurrentSession();

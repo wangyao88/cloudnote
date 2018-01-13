@@ -3,7 +3,7 @@ package com.sxkl.cloudnote.disk.dao;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
-import com.sxkl.cloudnote.common.dao.BaseDao;
+import com.sxkl.cloudnote.common.dao.AbstractBaseDao;
 import com.sxkl.cloudnote.disk.entity.DiskInfo;
 
 /**
@@ -11,7 +11,7 @@ import com.sxkl.cloudnote.disk.entity.DiskInfo;
  * @date:2018年1月4日 下午4:57:04
  */
 @Repository
-public class DiskInfoDao extends BaseDao{
+public class DiskInfoDao extends AbstractBaseDao{
 
 	public void save(DiskInfo diskInfo){
 		Session session = this.getSessionFactory().getCurrentSession();

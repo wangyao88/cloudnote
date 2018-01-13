@@ -1,33 +1,71 @@
 package com.sxkl.cloudnote.common.dao;
 
-import javax.annotation.Resource;
+import java.lang.reflect.ParameterizedType;
+import java.util.List;
 
-import org.hibernate.SessionFactory;
-import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
-import org.springframework.stereotype.Repository;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
-@Repository
-public class BaseDao extends HibernateDaoSupport{  
-    /** 
-     * 说明: 
-     * 1.在既使用注解又使用HibernateDaoSupport的情况下,只能这么写, 
-     * 原因是HibernateDaoSupport是抽象类,且方法都是final修饰的, 
-     * 这样就不能为其注入sessionFactory或者hibernateTemplate 
-     * 2.若使用xml配置的话,就可以直接给HibernateDaoSupport注入. 
-     */  
-    //而使用HibernateDaosupport,又必须为其注入sessionFactory或者hibernateTemplate  
-      
-    //这里为其注入sessionFactory,最后只需要让自己的Dao继承这个MyDaoSupport.  
-    //不直接在自己的Dao里继承HibernateDaoSupport的原因是这样可以简化代码,  
-    //不用每次都为其注入sessionFactory或者hibernateTemplate了,在这里注入一次就够了.  
-    @Resource(name="sessionFactory")  
-    public void setSuperSessionFactory(SessionFactory sessionFactory){  
-        super.setSessionFactory(sessionFactory);  
-    }  
-      
-//  或者为其注入hibernateTemplate  
-//  @Resource(name="hibernateTemplate")  
-//  public void setSuperHibernateTemplate(HibernateTemplate hibernateTemplate){  
-//      super.setHibernateTemplate(hibernateTemplate);  
-//  }  
-}  
+import com.sxkl.cloudnote.utils.StringAppendUtils;
+
+/**
+ * @author wangyao
+ * @date 2018年1月13日 下午12:44:56
+ * @description: hibernate抽象Dao
+ */
+public class BaseDao<E> extends AbstractBaseDao{
+	
+	private Class<E> clazz; //T的具体类
+
+    @SuppressWarnings("unchecked")
+    public BaseDao() {
+        ParameterizedType type = (ParameterizedType) this.getClass().getGenericSuperclass();
+        clazz = (Class<E>) type.getActualTypeArguments()[0];
+    }
+    
+    public String getClassName() {
+    	String className = clazz.getName();
+    	className = className.substring(className.lastIndexOf(".")+1,className.length());
+		return className;
+	}
+
+	protected Session getSession(){
+        return this.getSessionFactory().getCurrentSession();
+    }
+
+	public E findOne(String id){
+		return getSession().load(clazz, id);
+	}
+	
+	public void save(E e){
+		getSession().save(e);
+	}
+	
+	public void update(E e){
+		getSession().update(e);
+	}
+	
+	public void saveOrUpdate(E e){
+		getSession().saveOrUpdate(e);
+	}
+	
+	public void delete(E e){
+		getSession().delete(e);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<E> findAll(){
+		String hql = StringAppendUtils.append("from ",getClassName());
+		Query query = getSession().createQuery(hql);  
+		return query.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<E> findPage(int pageIndex, int pageSize){
+		String hql = StringAppendUtils.append("from ",getClassName());
+		Query query = getSession().createQuery(hql);  
+	    query.setFirstResult(pageIndex*pageSize);
+	    query.setMaxResults(pageSize);
+		return query.list();
+	}
+}

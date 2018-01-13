@@ -7,11 +7,11 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
-import com.sxkl.cloudnote.common.dao.BaseDao;
+import com.sxkl.cloudnote.common.dao.AbstractBaseDao;
 import com.sxkl.cloudnote.flag.entity.Flag;
 
 @Repository
-public class FlagDao extends BaseDao {
+public class FlagDao extends AbstractBaseDao {
 
 	public Flag selectFlagById(String pid) {
 		Session session = this.getSessionFactory().getCurrentSession();

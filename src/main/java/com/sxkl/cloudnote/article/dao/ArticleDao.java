@@ -9,10 +9,10 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.sxkl.cloudnote.article.entity.Article;
-import com.sxkl.cloudnote.common.dao.BaseDao;
+import com.sxkl.cloudnote.common.dao.AbstractBaseDao;
 
 @Repository
-public class ArticleDao extends BaseDao {
+public class ArticleDao extends AbstractBaseDao {
 
 	public void insertArticle(Article article) {
 		Session session = this.getSessionFactory().getCurrentSession();
@@ -38,9 +38,6 @@ public class ArticleDao extends BaseDao {
 		BigInteger bInt = (BigInteger) query.uniqueResult();
 	    return bInt.intValue();
 	}
-	
-	
-	
 	
 	@SuppressWarnings("unchecked")
 	public List<Article> selectAllArticlesByNameOrderByHitNum(String articleTitle, int pageIndex,int pageSize,String userId) {
