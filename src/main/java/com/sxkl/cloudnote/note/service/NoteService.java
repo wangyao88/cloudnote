@@ -68,13 +68,13 @@ public class NoteService {
 	@RedisDisCachable(key={Constant.TREE_MENU_KEY_IN_REDIS,Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,})
 	public void deleteNote(HttpServletRequest request) {
 		String id = getNoteIdFromFront(request);
-		Note note = noteDao.findById(id);
+		Note note = noteDao.findOne(id);
 		User sessionUser = UserUtil.getSessionUser(request);
 		User user = userDao.selectUser(sessionUser);
 		user.getNotes().remove(note);
-		userDao.updateUser(user);
+		userDao.update(user);
 		note.setArticles(null);
-		noteDao.deleteNote(note);
+		noteDao.delete(note);
 	}
 	
 	@Logger(message="更新笔记本")
@@ -82,9 +82,9 @@ public class NoteService {
 	public void updateNote(HttpServletRequest request) {
 		String id = getNoteIdFromFront(request);
 		String name = request.getParameter("name");
-		Note note = noteDao.findById(id);
+		Note note = noteDao.findOne(id);
 		note.setName(name);
-		noteDao.updateNote(note);
+		noteDao.update(note);
 	}
 
 	private String getNoteIdFromFront(HttpServletRequest request) {
@@ -102,13 +102,13 @@ public class NoteService {
 
 	@Logger(message="根据主键获取笔记本")
 	public Note selectNoteById(String noteId) {
-		return noteDao.selectNoteById(noteId);
+		return noteDao.findOne(noteId);
 	}
 
 	@Logger(message="根据文章主键获取笔记本")
 	public Note getNoteByArticleId(HttpServletRequest request) {
 		String articleId = request.getParameter("articleId");
-		Article article = articleDao.selectArticleById(articleId);
+		Article article = articleDao.findOne(articleId);
 		Note note = article.getNote();
 		Note result = new Note();
 		result.setId(note.getId());

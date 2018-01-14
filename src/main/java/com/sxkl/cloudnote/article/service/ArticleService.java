@@ -74,7 +74,7 @@ public class ArticleService {
 		Note note = noteService.selectNoteById(noteId);
 		Article article = null;
 		if(Boolean.valueOf(isEdit)){
-			article = articleDao.selectArticleById(articleId);
+			article = articleDao.findOne(articleId);
 		}else{
 			article = new Article();
 			article.setHitNum(0);
@@ -87,7 +87,7 @@ public class ArticleService {
 		String contentFilted = FileUtils.saveHtmlImgToDB(content,imageService);
 		contentFilted = FileUtils.filterDraft(contentFilted);
 		article.setContent(contentFilted);
-		articleDao.saveOrUpdateArticle(article);
+		articleDao.saveOrUpdate(article);
 		PublishManager.getPublishManager().getArticlePublisher().establishLinkagesBetweenArticleAndImage(article);
 		if(Boolean.valueOf(isEdit)){
 			PublishManager.getPublishManager().getArticlePublisher().updateIndexByUpdate(article, user.getId());
@@ -158,7 +158,7 @@ public class ArticleService {
 //			Article article = articleDao.selectArticleById(id);
 //			content = article.getContent();
 //		}
-		Article article = articleDao.selectArticleById(id);
+		Article article = articleDao.findOne(id);
 		String content = article.getContent();
 		content = content.replaceAll(Constant.ARTICLE_CONTENT_DOMAIN, Constant.DOMAIN);
 		PublishManager.getPublishManager().getArticlePublisher().increaseArticleHitNum(id);
@@ -170,11 +170,11 @@ public class ArticleService {
 	public void deleteArticle(HttpServletRequest request) {
 		String id = request.getParameter("id");
 		User user = UserUtil.getSessionUser(request);
-		Article article = articleDao.selectArticleById(id);
+		Article article = articleDao.findOne(id);
 		article.setNote(null);
 		article.setUser(null);
 		article.setFlags(null);
-		articleDao.deleteArticle(article);
+		articleDao.delete(article);
 		imageService.deleteImageByArticleId(id);
 		PublishManager.getPublishManager().getArticlePublisher().updateIndexByDelete(article, user.getId());
 	}
@@ -182,7 +182,7 @@ public class ArticleService {
     @Logger(message="获取待修改笔记")
 	public String getArticleForEdit(HttpServletRequest request) {
 		String articleId = request.getParameter("articleId");
-		Article article = articleDao.selectArticleById(articleId);
+		Article article = articleDao.findOne(articleId);
 		
 		Note note = article.getNote();
 		Note noteResult = new Note();
@@ -212,7 +212,7 @@ public class ArticleService {
 		}
 		
 		article.setHitNum(article.getHitNum()+1);
-		articleDao.updateArticle(article);
+		articleDao.update(article);
 		String content = article.getContent();
 		content = content.replaceAll(Constant.ARTICLE_CONTENT_DOMAIN, Constant.DOMAIN);
 		

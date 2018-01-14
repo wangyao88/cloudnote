@@ -9,15 +9,15 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.sxkl.cloudnote.article.entity.Article;
-import com.sxkl.cloudnote.common.dao.AbstractBaseDao;
+import com.sxkl.cloudnote.common.dao.BaseDao;
 
 @Repository
-public class ArticleDao extends AbstractBaseDao {
+public class ArticleDao extends BaseDao<String,Article> {
 
-	public void insertArticle(Article article) {
-		Session session = this.getSessionFactory().getCurrentSession();
-		session.save(article);
-	}
+//	public void insertArticle(Article article) {
+//		Session session = this.getSessionFactory().getCurrentSession();
+//		session.save(article);
+//	}
 
 	@SuppressWarnings("unchecked")
 	public List<Article> selectAllArticlesOrderByCreateTimeAndHitNum(int pageIndex, int pageSize,String userId) {
@@ -61,14 +61,14 @@ public class ArticleDao extends AbstractBaseDao {
 	    return bInt.intValue();
 	}
 	
-	public Article selectArticleById(String articleId) {
-		String hql = "from Article a where a.id=:articleId";
-		Session session = this.getSessionFactory().getCurrentSession();
-	    Query query = session.createQuery(hql);
-	    query.setString("articleId", articleId);
-	    query.setCacheable(true);
-		return (Article) query.uniqueResult();
-	}
+//	public Article selectArticleById(String articleId) {
+//		String hql = "from Article a where a.id=:articleId";
+//		Session session = this.getSessionFactory().getCurrentSession();
+//	    Query query = session.createQuery(hql);
+//	    query.setString("articleId", articleId);
+//	    query.setCacheable(true);
+//		return (Article) query.uniqueResult();
+//	}
 
 	public List selectAllFlagArticlesOrderByCreateTimeAndHitNum(String flagId, int pageIndex, int pageSize) {
 		StringBuilder sql = new StringBuilder();
@@ -114,26 +114,26 @@ public class ArticleDao extends AbstractBaseDao {
 	    return bInt.intValue();
 	}
 
-	public void updateArticle(Article article) {
-		Session session = this.getSessionFactory().getCurrentSession();
-		session.update(article);
-		session.flush();
-	}
+//	public void updateArticle(Article article) {
+//		Session session = this.getSessionFactory().getCurrentSession();
+//		session.update(article);
+//		session.flush();
+//	}
 
-	public void saveOrUpdateArticle(Article article) {
-		Session session = this.getSessionFactory().getCurrentSession();
-		session.saveOrUpdate(article);
-		session.flush();
-	}
+//	public void saveOrUpdateArticle(Article article) {
+//		Session session = this.getSessionFactory().getCurrentSession();
+//		session.saveOrUpdate(article);
+//		session.flush();
+//	}
 
-	public void deleteArticle(Article article) {
-		String hql = "delete from Article a where a.id=:articleId";
-		Session session = this.getSessionFactory().getCurrentSession();
-	    Query query = session.createQuery(hql);
-	    query.setString("articleId", article.getId());
-	    query.executeUpdate();
-		session.flush();
-	}
+//	public void deleteArticle(Article article) {
+//		String hql = "delete from Article a where a.id=:articleId";
+//		Session session = this.getSessionFactory().getCurrentSession();
+//	    Query query = session.createQuery(hql);
+//	    query.setString("articleId", article.getId());
+//	    query.executeUpdate();
+//		session.flush();
+//	}
 
 	@SuppressWarnings("unchecked")
 	public List<Article> selectAllArticlesOrderByHitNum(int pageIndex, int pageSize, String userId) {

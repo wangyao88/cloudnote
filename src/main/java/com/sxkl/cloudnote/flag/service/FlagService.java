@@ -119,7 +119,7 @@ public class FlagService {
 			User user = userDao.selectUser(sessionUser);
 			user.getFlags().remove(flag);
 			flag.setUser(null);
-			userDao.updateUser(user);
+			userDao.update(user);
 			flag.setArticles(null);
 			flagDao.deleteFlag(flag);
 		} catch (Exception e) {
@@ -163,7 +163,7 @@ public class FlagService {
 	@Logger(message="根据文章主键获取标签")
 	public Flag getFlagByArticleId(HttpServletRequest request) {
 		String articleId = request.getParameter("articleId");
-		Article article = articleDao.selectArticleById(articleId);
+		Article article = articleDao.findOne(articleId);
 		Set<Flag> flags = article.getFlags();
 		String flagIds = "";
 		String flagNames = "";

@@ -37,7 +37,6 @@ public class UserService {
         byte[] decodedData = RSACoder.decryptByPrivateKey(password,RsaKeyInitializer.getPrivateKey());
         password = new String(decodedData);
         if(chackeLoginParams(userName,password)){
-        	
         	User user = validateLogin(userName,password);
         	if(user != null){
         		processLoginEvent(request, mv, user);
@@ -94,7 +93,7 @@ public class UserService {
 
 	@Logger(message="获取所有用户")
 	public List<User> getAllUsers() {
-		return userDao.getAllUsers();
+		return userDao.findAll();
 	}
 
 	@Logger(message="获取好友下拉框")
@@ -110,7 +109,6 @@ public class UserService {
 	}
 
 	public void registe(User user) {
-		userDao.insert(user);
+		userDao.save(user);
 	}
-
 }

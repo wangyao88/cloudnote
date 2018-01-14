@@ -6,9 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.sxkl.cloudnote.common.entity.OperateResult;
 import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.webchat.dao.MessageDao;
 import com.sxkl.cloudnote.webchat.entity.Message;
@@ -21,7 +18,7 @@ public class MessageService {
 	
 	@Logger(message="保存在线聊天消息")
 	public void saveMessage(Message message){
-		messageDao.saveMessage(message);
+		messageDao.save(message);
 	}
 	
 	@Logger(message="获取在线聊天历史消息")

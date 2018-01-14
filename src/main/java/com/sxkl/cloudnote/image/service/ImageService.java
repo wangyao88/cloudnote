@@ -27,7 +27,7 @@ public class ImageService {
 	@Logger(message="保存图片")
 	public void saveImage(Image image) {
 		try {
-			imageDao.saveImage(image);
+			imageDao.save(image);
 		} catch (Exception e) {
 			log.error("保存图片失败!"+e.getMessage());
 		}
@@ -44,6 +44,4 @@ public class ImageService {
 		int num = imageDao.deleteImageByArticleId(articleId);
 		log.info("Image 删除"+num+"条数据");
 	}
-
-
 }

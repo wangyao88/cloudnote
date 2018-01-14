@@ -42,9 +42,9 @@ public class ArticleExecutor {
 
 		@Override
 		public void run() {
-			Article article = articleDao.selectArticleById(articleId);
+			Article article = articleDao.findOne(articleId);
 		    article.setHitNum(article.getHitNum()+1);
-			articleDao.updateArticle(article);
+			articleDao.update(article);
 			log.info("更新笔记阅读次数");
 		}
 	}

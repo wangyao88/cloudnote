@@ -34,7 +34,7 @@ public class WaitingTaskService {
 
 	@Logger(message="保存待办任务")
 	public void insert(WaitingTask waitingTask){
-		waitingTaskDao.insert(waitingTask);
+		waitingTaskDao.save(waitingTask);
 	}
 	
 	@Logger(message="更新待办任务")
@@ -44,7 +44,7 @@ public class WaitingTaskService {
 	
 	@Logger(message="查询待办任务")
 	public WaitingTask find(String id){
-		return waitingTaskDao.find(id);
+		return waitingTaskDao.findOne(id);
 	}
 	
 	@Logger(message="删除待办任务")

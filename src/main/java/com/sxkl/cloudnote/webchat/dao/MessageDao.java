@@ -6,16 +6,11 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
-import com.sxkl.cloudnote.common.dao.AbstractBaseDao;
+import com.sxkl.cloudnote.common.dao.BaseDao;
 import com.sxkl.cloudnote.webchat.entity.Message;
 
 @Repository
-public class MessageDao extends AbstractBaseDao {
-
-	public void saveMessage(Message message){
-		Session session = this.getSessionFactory().getCurrentSession();
-		session.save(message);
-	}
+public class MessageDao extends BaseDao<String,Message> {
 
 	@SuppressWarnings("unchecked")
 	public List<Message> getHistory(String userFrom, String userTo) {

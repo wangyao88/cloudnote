@@ -9,27 +9,12 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
-import com.sxkl.cloudnote.common.dao.AbstractBaseDao;
+import com.sxkl.cloudnote.common.dao.BaseDao;
 import com.sxkl.cloudnote.waitingtask.entity.WaitingTask;
 
 @Repository
-public class WaitingTaskDao extends AbstractBaseDao{
+public class WaitingTaskDao extends BaseDao<String,WaitingTask>{
 
-	public void insert(WaitingTask waitingTask) {
-		Session session = this.getSessionFactory().getCurrentSession();
-		session.save(waitingTask);
-	}
-	
-	public void update(WaitingTask waitingTask) {
-		Session session = this.getSessionFactory().getCurrentSession();
-		session.update(waitingTask);
-	}
-	
-	public void delete(WaitingTask waitingTask) {
-		Session session = this.getSessionFactory().getCurrentSession();
-		session.delete(waitingTask);
-	}
-	
 	@SuppressWarnings("unchecked")
 	public List<WaitingTask> findPage(int pageIndex, int pageSize,String userId) {
 		String hql = "select new WaitingTask(id,name,createDate,beginDate,expireDate,process,content,taskType) from WaitingTask w where w.user.id=:userId order by w.createDate desc";
@@ -48,11 +33,6 @@ public class WaitingTaskDao extends AbstractBaseDao{
 		query.setString("userId", userId);
 		BigInteger bInt = (BigInteger) query.uniqueResult();
 	    return bInt.intValue();
-	}
-
-	public WaitingTask find(String id) {
-		Session session = this.getSessionFactory().getCurrentSession();
-		return session.get(WaitingTask.class, id);
 	}
 
 	@SuppressWarnings("unchecked")
