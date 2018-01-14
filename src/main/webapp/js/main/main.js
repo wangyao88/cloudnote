@@ -203,8 +203,20 @@ function getWeather(){
 	});
 }
 
+function selectSkin(){
+	var skin = mini.get("skin").getValue();
+	document.cookie="miniuiSkin="+skin;
+	location.reload();
+}
+
+function setSkin(){
+	var skin = getCookie("miniuiSkin");
+	mini.get("skin").setValue(skin);
+}
+
 $(document).ready(function(){
 	getWeather();
 	window.setTimeout(oneNews, 10000)
-	window.setInterval(oneNews, 1800000); 
+	window.setInterval(oneNews, 1800000);
+	setSkin();
 });

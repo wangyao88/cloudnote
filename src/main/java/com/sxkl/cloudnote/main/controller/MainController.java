@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.sxkl.cloudnote.main.entity.Skin;
 import com.sxkl.cloudnote.main.entity.Weather;
 import com.sxkl.cloudnote.main.service.MainService;
 
@@ -37,5 +38,11 @@ public class MainController {
 	@ResponseBody
 	public List<Weather> getWeather(HttpServletRequest request) throws Exception{
 		return mainService.getWeather(request);
+	}
+	
+	@RequestMapping(value = "/main/getAllSkinsFromCombo", method = RequestMethod.GET)
+	@ResponseBody
+	public List<Skin> getAllSkinsFromCombo() throws Exception{
+		return mainService.getAllSkinsFromCombo();
 	}
 }

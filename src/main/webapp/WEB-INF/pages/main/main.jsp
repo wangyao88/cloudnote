@@ -68,7 +68,13 @@
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-goto" onclick="onLineNum">在线用户数</a>
 			    <span class="separator"></span>--%>
-			    
+			    <input id="skin" name="skin"
+					class="mini-combobox" style="width:155px;" textField="name"
+					valueField="id" emptyText="请选择皮肤..."
+					url="<%=basePath%>main/getAllSkinsFromCombo" ajaxType="get"
+					required="true" allowInput="true" showNullItem="true"
+					nullItemText="请选择皮肤..." onitemclick="selectSkin"/>
+				<span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-user" onclick="openWebchatPage">在线聊天</a>
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-collapse" href="<%=basePath%>spider/index" target="_blank">订阅文章</a>

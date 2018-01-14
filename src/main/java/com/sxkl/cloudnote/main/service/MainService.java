@@ -19,6 +19,7 @@ import com.sxkl.cloudnote.cache.annotation.RedisCachable;
 import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.flag.service.FlagService;
 import com.sxkl.cloudnote.log.annotation.Logger;
+import com.sxkl.cloudnote.main.entity.Skin;
 import com.sxkl.cloudnote.main.entity.Weather;
 import com.sxkl.cloudnote.note.service.NoteService;
 import com.sxkl.cloudnote.user.entity.User;
@@ -119,6 +120,32 @@ public class MainService {
 		} catch (Exception e) {
 			getWeatherCycle(request,weathers);
 		}
+	}
+
+	@Logger(message="获取皮肤列表")
+	public List<Skin> getAllSkinsFromCombo() {
+		List<Skin> skins = Lists.newArrayList();
+		skins.add(getSkin("default"));
+		skins.add(getSkin("blue2003"));
+		skins.add(getSkin("blue2010"));
+		skins.add(getSkin("bootstrap"));
+		skins.add(getSkin("gray"));
+		skins.add(getSkin("jqueryui-cupertino"));
+		skins.add(getSkin("jqueryui-smoothness"));
+		skins.add(getSkin("metro"));
+		skins.add(getSkin("metro-green"));
+		skins.add(getSkin("metro-orange"));
+		skins.add(getSkin("olive2003"));
+		skins.add(getSkin("pure"));
+		return skins;
+	}
+	
+	private Skin getSkin(String name){
+		Skin skin = new Skin();
+		skin.setId(name);
+		skin.setName(name);
+		skin.setPath(name);
+		return skin;
 	}
 	
 }
