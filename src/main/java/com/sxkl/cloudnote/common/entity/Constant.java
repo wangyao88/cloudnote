@@ -66,6 +66,10 @@ public class Constant {
 	
 	public static final String SIMPLE_NETARTICLE_KEY_IN_REDIS = "simple_net_article";
 	
+	public static final String DEFAULT_SESSION_FACTORY = "sessionFactory";
+	
+	public static final String CVM_SESSION_FACTORY = "cvmSessionFactory";
+	
 	public static void onLine(String userId, HttpSession session){
 		onLineSession.put(userId, session);
 	}

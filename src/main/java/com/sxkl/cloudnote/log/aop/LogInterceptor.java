@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -38,7 +39,8 @@ public class LogInterceptor {
 		long start = System.currentTimeMillis();
 		Object object = pjp.proceed();
 		long end = System.currentTimeMillis();
-		long costTime = end - start;
+		long costTimeTemp = end - start;
+		int costTime = NumberUtils.toInt(costTimeTemp+"");
 		log.setLogLevel(logLevel);
 		log.setCostTime(costTime);
 		logService.showLogInConsole(log);

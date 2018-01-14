@@ -2,19 +2,26 @@ package com.sxkl.cloudnote.common.dao;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.orm.hibernate5.SessionFactoryUtils;
 
 import com.sxkl.cloudnote.common.entity.Page;
 import com.sxkl.cloudnote.utils.StringAppendUtils;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author wangyao
  * @date 2018年1月13日 下午12:44:56
  * @description: hibernate抽象Dao
  */
+@Slf4j
 public class BaseDao<ID extends Serializable,E> extends AbstractBaseDao{
 	
 	private Class<E> clazz;
@@ -32,8 +39,18 @@ public class BaseDao<ID extends Serializable,E> extends AbstractBaseDao{
 	}
 
 	protected Session getSession(){
-        return this.getSessionFactory().getCurrentSession();
+        return this.getDynamicSessionFactory(this.getClass()).getCurrentSession();
     }
+	
+	public Connection getConnection(){
+		Connection connection = null;
+		try {
+			connection = SessionFactoryUtils.getDataSource(this.getDynamicSessionFactory(this.getClass())).getConnection();
+		} catch (SQLException e) {
+			log.error("获取数据库连接失败！出错误信息:{}",e.getMessage());
+		}
+		return connection;
+	}
 
 	public E findOne(ID id){
 		return getSession().load(clazz, id);

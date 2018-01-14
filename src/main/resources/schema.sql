@@ -110,12 +110,32 @@ COMMENT = '云盘文件信息表';
 ALTER TABLE `cloudnote`.`cn_image` 
 CHANGE COLUMN `alt` `alt` VARCHAR(300) NULL DEFAULT NULL ;
 
+
+
 CREATE TABLE `cloudnote`.`cn_lexicon` (
   `id` VARCHAR(36) NOT NULL COMMENT '主键',
-  `name` VARCHAR(20) NULL COMMENT '分词名称',
+  `name` VARCHAR(200) NULL COMMENT '分词名称',
   `uId` VARCHAR(36) NULL COMMENT '用户主键',
   `discriminator` VARCHAR(36) NULL COMMENT '词库类别',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COMMENT = '中文分词器之词库';
+
+CREATE TABLE `cloudnote`.`cn_log` (
+  `id` VARCHAR(36) NOT NULL COMMENT '日志表主键',
+  `level` VARCHAR(10) NULL COMMENT '日志级别',
+  `className` VARCHAR(100) NULL COMMENT '方法类名',
+  `methodName` VARCHAR(45) NULL COMMENT '方法名',
+  `message` VARCHAR(200) NULL COMMENT '信息',
+  `errorMsg` VARCHAR(200) NULL COMMENT '异常信息',
+  `date` DATE NULL COMMENT '日期',
+  `costTime` INT NULL COMMENT '耗时',
+  `prettyTime` VARCHAR(45) NULL COMMENT '耗时，友好格式',
+  `ip` VARCHAR(15) NULL COMMENT '操作ip',
+  `userId` VARCHAR(36) NULL COMMENT '用户主键',
+  `userName` VARCHAR(45) NULL COMMENT '用户名',
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COMMENT = '日志记录表';

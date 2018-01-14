@@ -2,12 +2,22 @@ package com.sxkl.cloudnote.common.dao;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 
+import com.sxkl.cloudnote.common.entity.Constant;
+import com.sxkl.cloudnote.sessionfactory.DynamicSessionFactoryHolder;
+import com.sxkl.cloudnote.sessionfactory.ParseAnnotation;
+
 @Repository
-public class AbstractBaseDao extends HibernateDaoSupport{  
+public class AbstractBaseDao extends HibernateDaoSupport{ 
+	
+	@Autowired
+	private ApplicationContext applicationContext;
     /** 
      * 说明: 
      * 1.在既使用注解又使用HibernateDaoSupport的情况下,只能这么写, 
@@ -23,7 +33,13 @@ public class AbstractBaseDao extends HibernateDaoSupport{
     @Resource(name="sessionFactory")  
     public void setSuperSessionFactory(SessionFactory sessionFactory){  
         super.setSessionFactory(sessionFactory);  
-    }  
+    } 
+    
+    @SuppressWarnings("rawtypes")
+	public SessionFactory getDynamicSessionFactory(Class clazz){
+    	String sessionFactoryName = ParseAnnotation.getSessionFactoryName(clazz);
+    	return (SessionFactory) applicationContext.getBean(sessionFactoryName);
+    }
       
 //  或者为其注入hibernateTemplate  
 //  @Resource(name="hibernateTemplate")  

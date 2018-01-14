@@ -5,9 +5,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.sxkl.cloudnote.common.entity.Page;
 import com.sxkl.cloudnote.lexicon.entity.ExtLexicon;
@@ -22,14 +23,20 @@ import com.sxkl.cloudnote.utils.UserUtil;
 /**
  * @author wangyao
  * @date 2018年1月13日 下午5:34:47
- * @description:
+ * @description: 词库控制层
  */
-@RestController
+@Controller
 @RequestMapping("/lexicon")
 public class LexiconController {
 	
 	@Autowired
 	private LexiconService lexiconService;
+	
+	@RequestMapping("/lexicon")
+	public ModelAndView index(){
+		ModelAndView modelAndView = new ModelAndView("lexicon/lexicon");
+		return modelAndView;
+	}
 	
 	@RequestMapping("/saveExtLexicon")
 	@ResponseBody
@@ -70,7 +77,7 @@ public class LexiconController {
 	@RequestMapping("/findAllExt")
 	@ResponseBody
 	public List<Lexicon> findAllExt(HttpServletRequest request){
-		return findPage("StopLexicon",request);
+		return findPage("ExtLexicon",request);
 	}
 	
 	@RequestMapping("/findAllStop")
@@ -90,5 +97,22 @@ public class LexiconController {
 		String hql = StringAppendUtils.append("from ",entityName," e where e.userId='",page.getUserId(),"'");
 		page.setHql(hql);
 		return lexiconService.findPage(page);
+	}
+	
+	@RequestMapping("/changeToStop")
+	@ResponseBody
+	public void changeToStop(String id, String name, HttpServletRequest request){
+		User user = UserUtil.getSessionUser(request);
+		Lexicon lexicon = new StopLexicon();
+		lexicon.setName(name);
+		lexicon.setUserId(user.getId());
+		lexiconService.changeToStop(id,lexicon);
+	}
+	
+	@RequestMapping("/initKey")
+	@ResponseBody
+	public void initKey(HttpServletRequest request){
+		User user = UserUtil.getSessionUser(request);
+		lexiconService.initKey(user.getId());
 	}
 }

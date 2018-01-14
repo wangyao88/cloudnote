@@ -1,13 +1,20 @@
 package com.sxkl.cloudnote.log.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sxkl.cloudnote.common.dao.BaseDao;
+import com.sxkl.cloudnote.common.service.BaseService;
+import com.sxkl.cloudnote.log.dao.LogDao;
 import com.sxkl.cloudnote.log.entity.Log;
 import com.sxkl.cloudnote.log.entity.LogLevel;
 import com.sxkl.cloudnote.utils.DateUtils;
 
 @Service
-public class LogService {
+public class LogService extends BaseService<String,Log>{
+	
+	@Autowired
+	private LogDao logDao;
 	
 	public void showLogInConsole(Log logger){
 		StringBuilder consoleLog = new StringBuilder();
@@ -31,5 +38,11 @@ public class LogService {
 				   .append(" ")
 				   .append(logger.getIp());
 		System.out.println(consoleLog.toString());
+		save(logger);
+	}
+	
+	@Override
+	protected BaseDao<String, Log> getDao() {
+		return logDao;
 	}
 }

@@ -36,7 +36,6 @@ public class IndexManager {
 	public void createIndex(String userId){
 		List<Article> articles = articleService.getAllArticles(userId);
 		Map<String,List<Article>> mappings = scoreHandler.createWordArticleMapping(articles);
-		redisTemplate.delete(Constant.WORD_ARTICLE_MAPPING_IN_REDIS);
 		redisTemplate.delete(getWordArticleMappingKey(userId));
 		redisTemplate.opsForHash().putAll(getWordArticleMappingKey(userId), mappings);
 	}
