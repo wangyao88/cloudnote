@@ -7,42 +7,11 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
-import com.sxkl.cloudnote.common.dao.AbstractBaseDao;
+import com.sxkl.cloudnote.common.dao.BaseDao;
 import com.sxkl.cloudnote.flag.entity.Flag;
 
 @Repository
-public class FlagDao extends AbstractBaseDao {
-
-	public Flag selectFlagById(String pid) {
-		Session session = this.getSessionFactory().getCurrentSession();
-		try {
-			return session.get(Flag.class, pid);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-		
-	}
-
-	public void saveFlag(Flag flag) {
-		Session session = this.getSessionFactory().getCurrentSession();
-		session.save(flag);
-	}
-
-	public void deleteFlag(Flag flag) {
-		Session session = this.getSessionFactory().getCurrentSession();
-		session.delete(flag);
-	}
-
-	public void updateFlag(Flag flag) {
-		Session session = this.getSessionFactory().getCurrentSession();
-		session.update(flag);
-	}
-
-	public void clearSession(){
-		Session session = this.getSessionFactory().getCurrentSession();
-		session.clear();
-	}
+public class FlagDao extends BaseDao<String,Flag> {
 
 	@SuppressWarnings("unchecked")
 	public List<Flag> selectFlagsByIds(String[] flags) {

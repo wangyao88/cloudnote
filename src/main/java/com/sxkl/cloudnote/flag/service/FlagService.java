@@ -82,13 +82,13 @@ public class FlagService {
 		
 		//根节点
 		if(isRootFlag(level)){
-			flagDao.saveFlag(flag);
+			flagDao.save(flag);
 			return;
 		}
-		Flag parent = flagDao.selectFlagById(id);
+		Flag parent = flagDao.findOne(id);
 		flag.setParent(parent);
 		parent.getChildren().add(flag);
-		flagDao.saveFlag(parent);
+		flagDao.save(parent);
 	}
 	
 	@Logger(message="更新标签")
@@ -96,9 +96,9 @@ public class FlagService {
 	public void updateFlag(HttpServletRequest request) {
 		String id = getFlagIdFromFront(request);
 		String name = request.getParameter("name");
-		Flag flag = flagDao.selectFlagById(id);
+		Flag flag = flagDao.findOne(id);
 		flag.setName(name);
-		flagDao.updateFlag(flag);
+		flagDao.update(flag);
 	}
 	
 	@Logger(message="删除标签")
@@ -106,14 +106,14 @@ public class FlagService {
 	public void deleteFlag(HttpServletRequest request) {
 		try {
 			String id = getFlagIdFromFront(request);
-			Flag flag = flagDao.selectFlagById(id);
+			Flag flag = flagDao.findOne(id);
 			Flag parentTemp = flag.getParent();
 			if(parentTemp != null){
-				Flag parent = flagDao.selectFlagById(parentTemp.getId());
+				Flag parent = flagDao.findOne(parentTemp.getId());
 				flag.setParent(null);
 				System.out.println(parent.getChildren().remove(flag));
 				System.out.println(parent.getChildren().size());
-				flagDao.updateFlag(parent);
+				flagDao.update(parent);
 			}
 			User sessionUser = UserUtil.getSessionUser(request);
 			User user = userDao.selectUser(sessionUser);
@@ -121,7 +121,7 @@ public class FlagService {
 			flag.setUser(null);
 			userDao.update(user);
 			flag.setArticles(null);
-			flagDao.deleteFlag(flag);
+			flagDao.delete(flag);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
