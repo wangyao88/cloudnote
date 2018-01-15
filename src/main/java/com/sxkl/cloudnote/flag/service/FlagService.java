@@ -111,8 +111,7 @@ public class FlagService {
 			if(parentTemp != null){
 				Flag parent = flagDao.findOne(parentTemp.getId());
 				flag.setParent(null);
-				System.out.println(parent.getChildren().remove(flag));
-				System.out.println(parent.getChildren().size());
+				parent.getChildren().remove(flag);
 				flagDao.update(parent);
 			}
 			User sessionUser = UserUtil.getSessionUser(request);
