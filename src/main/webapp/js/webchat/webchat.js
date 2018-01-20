@@ -1,3 +1,32 @@
+function notifyMe(text) {
+   if (!("Notification" in window)) {
+//     alert("This browser does not support desktop notification");
+   }else if (Notification.permission === "granted") {
+	   showWin(text);
+   }else if (Notification.permission !== 'denied') {
+     Notification.requestPermission(function (permission) {
+       if(!('permission' in Notification)) {
+         Notification.permission = permission;
+       }
+       if (permission === "granted") {
+    	   showWin(text);
+       }
+     });
+   }
+ }
+
+function showWin(text){
+    var notification = new Notification(text+"给您发来一条新消息");
+    notification.onshow = function() {  
+        setTimeout(function() {  
+        	notification.close();  
+        }, 5000);  
+    };  
+    notification.onclick = function() {  
+    	notification.close();  
+    };  
+}
+
 mini.parse();
 
 function openWebchatPage(){
@@ -107,6 +136,8 @@ function linkToWebsocketServer(uid){
 		$("#content").append("<div class='fmsg'><label class='from name'>"+data.fromName+"&nbsp;"+data.date+"</label><div class='"+textCss+"'>"+text+"</div></div>");
 		scrollToBottom();
 		gotoMsgInput();
+		
+		notifyMe(data.fromName);
 	};
 	websocket.onerror = function(event) {
 		console.log("WebSocket:发生错误 ");
