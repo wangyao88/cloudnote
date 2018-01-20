@@ -1,18 +1,22 @@
 package com.sxkl.cloudnote.utils;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.UUID;
 import java.util.regex.Pattern;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -27,6 +31,8 @@ import org.springframework.http.ResponseEntity;
 import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.image.entity.Image;
 import com.sxkl.cloudnote.image.service.ImageService;
+
+import lombok.Cleanup;
 
 public class FileUtils extends org.apache.commons.io.FileUtils {
 	public static void writeFileToDisk(byte[] data, String filePath) throws Exception {
@@ -266,5 +272,29 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		header.setContentDispositionFormData("attachment",fileName);
 		header.setContentType(MediaType.APPLICATION_OCTET_STREAM);
 		return new ResponseEntity<byte[]>(org.apache.commons.io.FileUtils.readFileToByteArray(file),header,HttpStatus.CREATED);
+	}
+
+	public static void downloadBigFile(String fileName, String filePath, HttpServletResponse response) throws Exception {
+		try {
+			File file = new File(filePath);
+			@Cleanup
+			InputStream fis = new BufferedInputStream(new FileInputStream(file));
+			response.reset();
+			response.setContentType("application/x-download");
+			response.addHeader("Content-Disposition","attachment;filename=" + new String(fileName.getBytes(), "iso-8859-1"));
+			response.addHeader("Content-Length", "" + file.length());
+			@Cleanup
+			OutputStream toClient = new BufferedOutputStream(response.getOutputStream());
+			response.setContentType("application/octet-stream");
+			byte[] buffer = new byte[1024 * 1024 * 4];
+			int i = -1;
+			while ((i = fis.read(buffer)) != -1) {
+				toClient.write(buffer, 0, i);
+			}
+			toClient.flush();
+			response.wait();
+		} catch (Exception e) {
+			throw new Exception(e);
+		}
 	}
 }

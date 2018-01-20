@@ -57,6 +57,4 @@
     function onCancel() {
         CloseWindow("cancel");
     }
-
-    
 </script>

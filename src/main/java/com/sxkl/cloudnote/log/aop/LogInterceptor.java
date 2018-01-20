@@ -48,7 +48,15 @@ public class LogInterceptor {
 	}
 	
 	@AfterThrowing(pointcut="execution(* com.sxkl.cloudnote.*.service.*.*(..))", throwing="e")
-    public void doAfterThrowing(JoinPoint jp,Throwable e){
+    public void doServiceAfterThrowing(JoinPoint jp,Throwable e){
+		Log log = configurateLog(jp);
+		log.setLogLevel(LogLevel.ERROR);
+		log.setErrorMsg(e.getMessage());
+		logService.showLogInConsole(log);
+	}
+	
+	@AfterThrowing(pointcut="execution(* com.sxkl.cloudnote.*.controller.*.*(..))", throwing="e")
+    public void doControllerAfterThrowing(JoinPoint jp,Throwable e){
 		Log log = configurateLog(jp);
 		log.setLogLevel(LogLevel.ERROR);
 		log.setErrorMsg(e.getMessage());

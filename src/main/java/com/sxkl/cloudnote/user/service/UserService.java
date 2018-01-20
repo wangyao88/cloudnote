@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import com.google.gson.Gson;
 import com.sxkl.cloudnote.common.entity.Constant;
-import com.sxkl.cloudnote.listener.RsaKeyInitializer;
+import com.sxkl.cloudnote.listener.RsaKeyManager;
 import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.user.dao.UserDao;
 import com.sxkl.cloudnote.user.entity.User;
@@ -34,7 +34,7 @@ public class UserService {
 		ModelAndView mv = new ModelAndView();
         String userName = request.getParameter("userName");
         String password = request.getParameter("password");
-        byte[] decodedData = RSACoder.decryptByPrivateKey(password,RsaKeyInitializer.getPrivateKey());
+        byte[] decodedData = RSACoder.decryptByPrivateKey(password,RsaKeyManager.getPrivateKey());
         password = new String(decodedData);
         if(chackeLoginParams(userName,password)){
         	User user = validateLogin(userName,password);

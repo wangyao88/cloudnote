@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
-import com.sxkl.cloudnote.listener.RsaKeyInitializer;
+import com.sxkl.cloudnote.listener.RsaKeyManager;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.user.service.UserService;
 import com.sxkl.cloudnote.utils.DESUtil;
@@ -97,6 +97,6 @@ public class LoginController {
 	@RequestMapping(value = "/login/getPublicKey", method = RequestMethod.POST)
 	@ResponseBody
 	public String getPublicKey(String name) {
-		return RsaKeyInitializer.getPublickey();
+		return RsaKeyManager.getPublickey();
 	}
 }

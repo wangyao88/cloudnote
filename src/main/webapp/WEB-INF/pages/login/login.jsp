@@ -1,8 +1,8 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" import="com.sxkl.cloudnote.listener.RsaKeyInitializer" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" import="com.sxkl.cloudnote.listener.RsaKeyManager" %>
 <%
-String path = request.getContextPath();
+	String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-String publicKey = RsaKeyInitializer.getPublickey();
+String publicKey = RsaKeyManager.getPublickey();
 %>
 
 <html lang="cn">

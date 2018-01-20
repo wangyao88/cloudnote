@@ -15,7 +15,7 @@ import com.sxkl.cloudnote.utils.RSACoder;
  * @date:2018年1月9日 下午1:48:30
  */
 @Service
-public class RsaKeyInitializer {
+public class RsaKeyManager {
 	
 	private static Map<String,String> key = new HashMap<String,String>();
 	private static final String PUBLIC_KEY = "publicKey";
