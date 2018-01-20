@@ -115,6 +115,27 @@ function getArticleById(articleId) {
 			mini.alert("获取笔记详情失败，请稍候重试！");
 		}
 	});
+	
+	$.ajax({
+		url : basePATH + "/flag/getFlagByArticleId",
+		type : "post",
+		data : {
+			articleId : articleId
+		},
+		dataType : 'json',
+		success : function(result) {
+			var flagIds = result.data.id;
+			if(!flagIds){
+				return;
+			}
+			var flagIdArr = flagIds.split(",");
+			var tree = mini.get("menuTree");
+			var node = tree.getNode(flagIdArr[0]);
+			if(node){
+				tree.scrollIntoView(node);
+			}
+		}
+	});
 }
 
 function removeArticle() {
