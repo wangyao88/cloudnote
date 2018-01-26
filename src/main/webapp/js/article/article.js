@@ -106,13 +106,34 @@ function getArticleById(articleId) {
 			var grid = mini.get("articleGrid");
 			var record = grid.getSelected();
 			var title = record.title;
-			var content = '<marquee direction="left"><h1>'+title+'</h1></marquee><br>'+result.data;
+			var content = '<center><h1>'+title+'</h1></center><br>'+result.data;
 			document.getElementById("articleContainer").innerHTML = content;
 			mini.unmask(document.body);
 		},
 		error : function() {
 			mini.unmask(document.body);
 			mini.alert("获取笔记详情失败，请稍候重试！");
+		}
+	});
+	
+	$.ajax({
+		url : basePATH + "/flag/getFlagByArticleId",
+		type : "post",
+		data : {
+			articleId : articleId
+		},
+		dataType : 'json',
+		success : function(result) {
+			var flagIds = result.data.id;
+			if(!flagIds){
+				return;
+			}
+			var flagIdArr = flagIds.split(",");
+			var tree = mini.get("menuTree");
+			var node = tree.getNode(flagIdArr[0]);
+			if(node){
+				tree.scrollIntoView(node);
+			}
 		}
 	});
 }

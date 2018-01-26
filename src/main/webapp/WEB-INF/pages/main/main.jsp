@@ -79,8 +79,8 @@
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-collapse" href="<%=basePath%>spider/index" target="_blank">订阅文章</a>
 			    <span class="separator"></span>
-			    <!-- <a class="mini-button" iconCls="icon-sort" onclick="createIndexs">创建索引</a> -->
-			    <a class="mini-button" iconCls="icon-sort" href="<%=basePath%>lexicon/lexicon" target="_blank">索引管理</a>
+			    <a class="mini-button" iconCls="icon-sort" onclick="createIndexs">创建索引</a>
+			    <!-- <a class="mini-button" iconCls="icon-sort" href="<%=basePath%>lexicon/lexicon" target="_blank">索引管理</a> -->
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-split" onclick="backupDB()">备份数据</a>
 			    <span class="separator"></span>
