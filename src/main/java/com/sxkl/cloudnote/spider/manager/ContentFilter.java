@@ -5,6 +5,11 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.StringUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
 import com.sxkl.cloudnote.utils.StringAppendUtils;
@@ -39,7 +44,19 @@ public class ContentFilter {
 			content = content.substring(0, endIndex+END_TAG.length());
 			content = StringAppendUtils.append(content,endContent);
 		}
-		return content;
+		Document document = Jsoup.parse(content);
+		Elements scripts = document.getElementsByTag("script");
+		for(Element script : scripts){
+			script.remove();
+		}
+//		Elements imgs = document.getElementsByAttributeValue("src", StringUtils.EMPTY);
+		Elements imgs = document.getElementsByTag("img");
+		for(Element img : imgs){
+			if(StringUtils.EMPTY.equals(img.attr("src"))){
+				img.remove();
+			}
+		}
+		return document.html();
 	}
 
 }
