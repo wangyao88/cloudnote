@@ -4,16 +4,16 @@ function notifyMe(text) {
    }else if (Notification.permission === "granted") {
 	   showWin(text);
    }else if (Notification.permission !== 'denied') {
-     Notification.requestPermission(function (permission) {
-       if(!('permission' in Notification)) {
-         Notification.permission = permission;
-       }
-       if (permission === "granted") {
-    	   showWin(text);
-       }
-     });
+	   Notification.requestPermission(function (permission) {
+	       if(!('permission' in Notification)) {
+	    	   Notification.permission = permission;
+	       }
+	       if (permission === "granted") {
+	    	   showWin(text);
+	       }
+	   });
    }
- }
+}
 
 function showWin(text){
     var notification = new Notification(text+"给您发来一条新消息");
