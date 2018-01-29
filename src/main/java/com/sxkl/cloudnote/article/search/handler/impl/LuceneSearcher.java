@@ -1,18 +1,23 @@
 package com.sxkl.cloudnote.article.search.handler.impl;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.sxkl.cloudnote.article.entity.Article;
-import com.sxkl.cloudnote.article.search.handler.ArticleFilter;
 import com.sxkl.cloudnote.article.search.handler.ArticleSeracher;
 import com.sxkl.cloudnote.article.search.handler.RedisResultConver;
+import com.sxkl.cloudnote.article.search.lucene.LuceneManager;
 import com.sxkl.cloudnote.article.search.lucene.WordAnalyzer;
+import com.sxkl.cloudnote.article.service.ArticleService;
 
 /**
  * @author: wangyao
@@ -22,18 +27,42 @@ import com.sxkl.cloudnote.article.search.lucene.WordAnalyzer;
 public class LuceneSearcher implements ArticleSeracher{
 	
 	@Autowired
+	private LuceneManager luceneManager;
+	@Autowired
+	private ArticleService articleService;
+	@Autowired
 	private RedisResultConver redisResultConver;
 	private static final int PAGE_SIZE = 20;
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public List<Article> search(String searchKeys, String userId) {
+		Map<String,Integer> keys = WordAnalyzer.analysis(searchKeys);
+		Set<String> keySet = keys.keySet();
 		List<Article> result = Lists.newArrayList();
 		if(StringUtils.isEmpty(searchKeys)){
 			return result;
 		}
-		Set keysInRedis = WordAnalyzer.analysis(searchKeys).keySet();
-		result = redisResultConver.convertMulti(userId, keysInRedis);
-		return ArticleFilter.doFilte(result,PAGE_SIZE);
+		result = luceneManager.search(searchKeys, userId,PAGE_SIZE);
+		Iterator<Article> it = result.iterator();
+		while(it.hasNext()){
+			Article article = it.next();
+			if(Objects.isNull(article)){
+				it.remove();
+				continue;
+			}
+			Article temp = articleService.getArticle(article.getId());
+			if(StringUtils.isEmpty(article.getTitle())){
+				article.setTitle(temp.getTitle());
+			}
+			String content = temp.getContent();
+			for(String key : keySet){
+				content = content.replaceAll(key,Joiner.on("").join("<b><font color='red'>",key,"</font></b>"));
+			}
+			article.setContent(content);
+		}
+		return result;
+//		Set keysInRedis = WordAnalyzer.analysis(searchKeys).keySet();
+//		result = redisResultConver.convertMulti(userId, keysInRedis);
+//		return ArticleFilter.doFilte(result,PAGE_SIZE);
 	}
 }

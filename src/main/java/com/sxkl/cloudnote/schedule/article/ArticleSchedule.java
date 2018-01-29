@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.sxkl.cloudnote.article.entity.ArticleForCache;
-import com.sxkl.cloudnote.article.search.lucene.IndexManager;
+import com.sxkl.cloudnote.article.search.lucene.LuceneManager;
 import com.sxkl.cloudnote.article.service.ArticleService;
 import com.sxkl.cloudnote.cache.service.RedisCacheService;
 import com.sxkl.cloudnote.common.entity.Constant;
@@ -29,7 +29,7 @@ public class ArticleSchedule {
 	@Autowired
 	private UserService userService;
 	@Autowired
-	private IndexManager indexManager;
+	private LuceneManager luceneManager;
 	
 	@Logger(message="定时缓存用户热门笔记")
 //	@Scheduled(fixedRate=Constant.HOT_ARTICLE_EXPIRE_IN_REDIS)
@@ -48,9 +48,6 @@ public class ArticleSchedule {
 	@Logger(message="定时创建用户笔记索引")
 	@Scheduled(cron="0 0 1 * * ?")
 	public void createIndex(){
-		List<User> users = userService.getAllUsers();
-		for(User user : users){
-			indexManager.createIndex(user.getId());
-		}
+		luceneManager.initAllUserArticleIndex();
     }
 }

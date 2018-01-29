@@ -5,11 +5,9 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-
-import javax.annotation.PostConstruct;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
@@ -40,162 +38,195 @@ import org.apache.lucene.store.IOContext;
 import org.apache.lucene.store.RAMDirectory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.wltea.analyzer.lucene.IKAnalyzer;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import com.sxkl.cloudnote.article.entity.Article;
 import com.sxkl.cloudnote.article.service.ArticleService;
+import com.sxkl.cloudnote.ikanalyzer.lucene.IKAnalyzer;
+import com.sxkl.cloudnote.log.annotation.Logger;
+import com.sxkl.cloudnote.user.entity.User;
+import com.sxkl.cloudnote.user.service.UserService;
+
+import lombok.Cleanup;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author: wangyao
  * @date: 2018年1月29日 下午1:04:34
  * @description:
  */
+@Slf4j
 @Service
 public class LuceneManager {
 	
-	private static final String INDEXPATH = "c:\\lucene";
-	private static RAMDirectory ramDirectory;
-	private static IndexWriter ramWriter;
-
 	@Autowired
 	private ArticleService articleService;
-
-	static {
-		try {
-			FSDirectory fsDirectory = FSDirectory.open(Paths.get(INDEXPATH));
-			ramDirectory = new RAMDirectory(fsDirectory, IOContext.READONCE);
-			fsDirectory.close();
-//			Analyzer analyzer = new StandardAnalyzer();
-			Analyzer analyzer = new IKAnalyzer(true);// 中文分词器
-			IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);// 中文分词器
-			// new SmartChineseAnalyzer());//中文分词器
-			indexWriterConfig.setIndexDeletionPolicy(new SnapshotDeletionPolicy(new KeepOnlyLastCommitDeletionPolicy()));
-			ramWriter = new IndexWriter(ramDirectory, indexWriterConfig);
-		} catch (IOException e) {
-			e.printStackTrace();
+	@Autowired
+	private UserService userService;
+	
+	private String getPath(String userId){
+		String path = LuceneManager.class.getClassLoader().getResource("").getPath();
+		path = Joiner.on("").join(Arrays.asList(path,"index/",userId));
+		if(path.contains(":")){
+			path = path.substring(1);
 		}
+		return path;
 	}
 	
-	@PostConstruct
-	public void init() throws IOException, ParseException, InvalidTokenOffsetsException{
-//		reCreatIndex();
-//		List<Article> list = search("mysql 排序 分页");
-//		for(Article article : list){
-//			System.out.println(article.getTitle());
-//		}
+	private RAMDirectory getRAMDirectory(String userId) throws IOException{
+		@Cleanup
+		FSDirectory fsDirectory = FSDirectory.open(Paths.get(getPath(userId)));
+		return new RAMDirectory(fsDirectory, IOContext.READONCE);
+	}
+	
+	private IndexWriter getIndexWriter(String userId) throws IOException{
+		Analyzer analyzer = new IKAnalyzer(true);
+		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
+		indexWriterConfig.setIndexDeletionPolicy(new SnapshotDeletionPolicy(new KeepOnlyLastCommitDeletionPolicy()));
+		return new IndexWriter(getRAMDirectory(userId), indexWriterConfig);
+	}
+	
+	@Logger(message="于磁盘创建所有用户笔记索引")
+	public void initAllUserArticleIndex() {
+		try {
+			List<User> users = userService.getAllUsers();
+			for(User user : users){
+				creatIndexOnDisk(user.getId());
+			}
+		} catch (Exception e) {
+			log.error("于磁盘创建所有用户笔记索引失败！错误信息：{}",e.getMessage());
+		}
 	}
 
-	// 于磁盘创建索引
-	public void reCreatIndex() {
+	@Logger(message="于磁盘创建笔记索引")
+	public void creatIndexOnDisk(String userId) {
 		try {
-			Path path = Paths.get(INDEXPATH);
-			// 删除原有索引文件
-			for (File file : path.toFile().listFiles()) {
+			Path path = Paths.get(getPath(userId));
+			File temp = path.toFile();
+			if(!temp.exists()){
+				temp.mkdirs();
+			}
+			for (File file : temp.listFiles()) {
 				file.delete();
 			}
 			FSDirectory fsDirectory = FSDirectory.open(path);
-			Analyzer analyzer = new IKAnalyzer(true);// 中文分词器
+			Analyzer analyzer = new IKAnalyzer(true);
 			IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
+			@Cleanup
 			IndexWriter writer = new IndexWriter(fsDirectory, indexWriterConfig);
-			List<Article> articles = articleService.getAllArticles("sdfweqsd");
+			List<Article> articles = articleService.getAllArticles(userId);
 			for (Article article : articles) {
 				writer.addDocument(toDocument(article));
 			}
-			writer.close();
-			System.out.println("-----创建索引成功---");
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (IOException e) {
+			log.error("于磁盘创建笔记索引失败！错误信息：{}",e.getMessage());
 		}
+		
 	}
 
-	// 实体article对象转document索引对象
+	@Logger(message="实体article对象转document笔记索引对象")
 	public Document toDocument(Article article) {
 		Document doc = new Document();
 		doc.add(new StringField("id", String.valueOf(article.getId()), Field.Store.YES));
 		doc.add(new Field("title", article.getTitle(), TextField.TYPE_STORED));
+		doc.add(new Field("hitNum", String.valueOf(article.getHitNum()), TextField.TYPE_STORED));
 		doc.add(new Field("content", article.getContent(), TextField.TYPE_STORED));
 		return doc;
 	}
 
-	// 添加索引
-	public synchronized void addDocument(Article article) throws IOException {
-		ramWriter.addDocument(toDocument(article));
-		ramWriter.commit();
+	@Logger(message="添加笔记索引")
+	public synchronized void addDocument(Article article, String userId){
+		try {
+			IndexWriter ramWriter = getIndexWriter(userId);
+			ramWriter.addDocument(toDocument(article));
+			ramWriter.commit();
+		} catch (IOException e) {
+			log.error("添加笔记索引失败！错误信息：{}",e.getMessage());
+		}
 	}
 
-	// 删除索引
-	public synchronized void deleteDocument(Long id) throws IOException {
-		Term term = new Term("id", String.valueOf(id));
-		ramWriter.deleteDocuments(term);
-		ramWriter.commit();
+	@Logger(message="删除笔记索引")
+	public synchronized void deleteDocument(String articleId, String userId){
+		try {
+			Term term = new Term("id", articleId);
+			IndexWriter ramWriter = getIndexWriter(userId);
+			ramWriter.deleteDocuments(term);
+			ramWriter.commit();
+		} catch (IOException e) {
+			log.error("删除笔记索引失败！错误信息：{}",e.getMessage());
+		}
 	}
 
-	// 搜索
-	public List<Article> search(String keyword) throws IOException, ParseException, InvalidTokenOffsetsException {
-		List<Article> list = new ArrayList<Article>();
-		IndexSearcher indexSearcher = new IndexSearcher(DirectoryReader.open(ramDirectory));
-		String[] fields = { "title", "content" };
-//		Analyzer analyzer = new StandardAnalyzer();
-		Analyzer analyzer = new IKAnalyzer(true);// 中文分词器
-		QueryParser queryParser = new MultiFieldQueryParser(fields, analyzer);
-		Query query = queryParser.parse(keyword);
-		// BooleanClause.Occur[] clauses = {BooleanClause.Occur.SHOULD,
-		// BooleanClause.Occur.SHOULD};
-		// Query query = MultiFieldQueryParser.parse(keyword, fields, clauses,
-		// analyzer);
-		TopDocs hits = indexSearcher.search(query, 20);
+	@Logger(message="搜索笔记")
+	public List<Article> search(String keyword, String userId, int pageSize){
+		List<Article> list = Lists.newArrayList();
+		try {
+			IndexSearcher indexSearcher = new IndexSearcher(DirectoryReader.open(getRAMDirectory(userId)));
+			String[] fields = { "title", "content" };
+			Analyzer analyzer = new IKAnalyzer(true);
+			QueryParser queryParser = new MultiFieldQueryParser(fields, analyzer);
+			Query query = queryParser.parse(keyword);
+			TopDocs hits = indexSearcher.search(query, pageSize);
 
-		// 高亮
-		SimpleHTMLFormatter simpleHTMLFormatter = new SimpleHTMLFormatter("<b><font color='red'>", "</font></b>");
-		Highlighter highlighter = new Highlighter(simpleHTMLFormatter, new QueryScorer(query));
+			// 高亮
+			SimpleHTMLFormatter simpleHTMLFormatter = new SimpleHTMLFormatter("<b><font color='red'>", "</font></b>");
+			Highlighter highlighter = new Highlighter(simpleHTMLFormatter, new QueryScorer(query));
 
-		for (ScoreDoc scoreDoc : hits.scoreDocs) {
-			Article article = new Article();
-			Document doc = indexSearcher.doc(scoreDoc.doc);
-			article.setId(doc.get("id"));
-			String title = doc.get("title");
-			String content = doc.get("content");
-			article.setTitle(
-					highlighter.getBestFragment(analyzer.tokenStream("title", new StringReader(title)), title));
-			article.setContent(
-					highlighter.getBestFragment(analyzer.tokenStream("content", new StringReader(content)), content));
-			list.add(article);
+			for (ScoreDoc scoreDoc : hits.scoreDocs) {
+				Article article = new Article();
+				Document doc = indexSearcher.doc(scoreDoc.doc);
+				article.setId(doc.get("id"));
+				String title = doc.get("title");
+				String content = doc.get("content");
+				article.setTitle(highlighter.getBestFragment(analyzer.tokenStream("title", new StringReader(title)), title));
+				article.setContent(highlighter.getBestFragment(analyzer.tokenStream("content", new StringReader(content)), content));
+				list.add(article);
+			}
+		} catch (Exception e) {
+			log.error("搜索笔记失败！错误信息：{}",e.getMessage());
 		}
 		return list;
 	}
 
-	// 更新索引
-	public void updateDocument(Article article) throws IOException {
-		Term term = new Term("id", String.valueOf(article.getId()));
-		ramWriter.updateDocument(term, toDocument(article));
-		ramWriter.commit();
+	@Logger(message="更新笔记索引")
+	public void updateDocument(Article article, String userId){
+		try {
+			Term term = new Term("id", String.valueOf(article.getId()));
+			IndexWriter ramWriter = getIndexWriter(userId);
+			ramWriter.updateDocument(term, toDocument(article));
+			ramWriter.commit();
+		} catch (IOException e) {
+			log.error("更新笔记索引失败！错误信息：{}",e.getMessage());
+		}
 	}
 
-	// 同步索引至磁盘
-	public void indexSync() {
-		IndexWriterConfig config = null;
-		SnapshotDeletionPolicy snapshotDeletionPolicy = null;
-		IndexCommit indexCommit = null;
+	@Logger(message="同步笔记索引至磁盘")
+	public void indexSync(String userId) {
 		try {
+			IndexWriterConfig config = null;
+			SnapshotDeletionPolicy snapshotDeletionPolicy = null;
+			IndexCommit indexCommit = null;
+			IndexWriter ramWriter = getIndexWriter(userId);
 			config = (IndexWriterConfig) ramWriter.getConfig();
 			snapshotDeletionPolicy = (SnapshotDeletionPolicy) config.getIndexDeletionPolicy();
 			indexCommit = snapshotDeletionPolicy.snapshot();
 			config.setIndexCommit(indexCommit);
 			Collection<String> fileNames = indexCommit.getFileNames();
-			Path toPath = Paths.get(INDEXPATH);
+			Path toPath = Paths.get(getPath(userId));
+			@Cleanup
 			Directory toDir = FSDirectory.open(toPath);
-			// 删除所有原有索引文件
+			// 删除所有原有笔记索引文件
 			for (File file : toPath.toFile().listFiles()) {
 				file.delete();
 			}
-			// 从ramdir复制新索引文件至磁盘
+			// 从ramdir复制新笔记索引文件至磁盘
 			for (String fileName : fileNames) {
-				toDir.copyFrom(ramDirectory, fileName, fileName, IOContext.DEFAULT);
+				toDir.copyFrom(getRAMDirectory(userId), fileName, fileName, IOContext.DEFAULT);
 			}
-			toDir.close();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (IOException e) {
+			log.error("同步笔记索引至磁盘失败！错误信息：{}",e.getMessage());
 		}
-		System.out.println("-----索引同步完成------");
+		
 	}
 }

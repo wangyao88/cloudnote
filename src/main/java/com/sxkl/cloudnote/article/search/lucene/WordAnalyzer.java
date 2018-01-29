@@ -6,8 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.math.NumberUtils;
-import org.wltea.analyzer.core.IKSegmenter;
-import org.wltea.analyzer.core.Lexeme;
+
+import com.sxkl.cloudnote.ikanalyzer.core.IKSegmenter;
+import com.sxkl.cloudnote.ikanalyzer.core.Lexeme;
 
 import lombok.Cleanup;
 

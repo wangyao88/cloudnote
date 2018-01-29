@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.sxkl.cloudnote.article.dao.ArticleDao;
 import com.sxkl.cloudnote.article.entity.Article;
-import com.sxkl.cloudnote.article.search.lucene.IndexManager;
+import com.sxkl.cloudnote.article.search.lucene.LuceneManager;
 import com.sxkl.cloudnote.eventdriven.entity.ArticlePublisherBean;
 import com.sxkl.cloudnote.eventdriven.entity.ArticlePublisherEvent;
 import com.sxkl.cloudnote.image.service.ImageService;
@@ -28,7 +28,7 @@ public class ArticleListener implements ApplicationListener<ApplicationEvent>{
 	@Autowired
 	private ArticleDao articleDao;
 	@Autowired
-	private IndexManager indexManager;
+	private LuceneManager luceneManager;
 
 	@Override
 	public void onApplicationEvent(ApplicationEvent event) {
@@ -44,13 +44,16 @@ public class ArticleListener implements ApplicationListener<ApplicationEvent>{
 				increaseHitNum(article);
 				break;
 	        case UPDATE_INDEX_BY_ADD_OPERATION:
-	        	indexManager.updateIndexByAdd(convertArticle(article),article.getUserId());
+//	        	indexManager.updateIndexByAdd(convertArticle(article),article.getUserId());
+	        	luceneManager.addDocument(convertArticle(article), article.getUserId());
 				break;
 	        case UPDATE_INDEX_BY_UPDATE_OPERATION:
-	        	indexManager.updateIndexByUpdate(convertArticle(article),article.getUserId());
+//	        	indexManager.updateIndexByUpdate(convertArticle(article),article.getUserId());
+	        	luceneManager.updateDocument(convertArticle(article), article.getUserId());
 				break;
 	        case UPDATE_INDEX_BY_DELETE_OPERATION:
-	        	indexManager.updateIndexByDelete(convertArticle(article),article.getUserId());
+//	        	indexManager.updateIndexByDelete(convertArticle(article),article.getUserId());
+	        	luceneManager.deleteDocument(article.getArticleId(), article.getUserId());
 				break;
 		}
 	}

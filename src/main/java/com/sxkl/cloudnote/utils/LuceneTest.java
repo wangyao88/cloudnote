@@ -6,8 +6,9 @@ import java.io.StringReader;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
-import org.wltea.analyzer.core.IKSegmenter;
-import org.wltea.analyzer.core.Lexeme;
+
+import com.sxkl.cloudnote.ikanalyzer.core.IKSegmenter;
+import com.sxkl.cloudnote.ikanalyzer.core.Lexeme;
 
 /**
  * @author wangyao

@@ -164,6 +164,11 @@ public class ArticleService {
 		PublishManager.getPublishManager().getArticlePublisher().increaseArticleHitNum(id);
 		return content;
 	}
+    
+    @Logger(message="获取笔记")
+    public Article getArticle(String id) {
+		return articleDao.findOne(id);
+	}
 	
     @Logger(message="删除笔记")
 	@RedisDisCachable(key={Constant.TREE_MENU_KEY_IN_REDIS,Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,})

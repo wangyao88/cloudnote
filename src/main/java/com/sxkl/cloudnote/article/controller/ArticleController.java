@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sxkl.cloudnote.article.search.lucene.IndexManager;
+import com.sxkl.cloudnote.article.search.lucene.LuceneManager;
 import com.sxkl.cloudnote.article.service.ArticleService;
 import com.sxkl.cloudnote.common.service.OperateResultService;
 import com.sxkl.cloudnote.user.entity.User;
@@ -21,6 +22,8 @@ public class ArticleController {
 	private ArticleService articleService;
 	@Autowired
 	private IndexManager indexManager;
+	@Autowired
+	private LuceneManager luceneManager;
 	
 	@RequestMapping(value = "/addArticle", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
 	public String addArticle(HttpServletRequest request){
@@ -84,7 +87,8 @@ public class ArticleController {
 	public String createIndex(HttpServletRequest request){
 		try {
 			User user = UserUtil.getSessionUser(request);
-			indexManager.createIndex(user.getId());
+//			indexManager.createIndex(user.getId());
+			luceneManager.creatIndexOnDisk(user.getId());
 			return OperateResultService.configurateSuccessResult();
 		} catch (Exception e) {
 			return OperateResultService.configurateFailureResult(e.getMessage());
