@@ -11,7 +11,7 @@
   
    <properties>
         <spring.version>4.3.9.RELEASE</spring.version>
-        <lucene.version>7.2.0</lucene.version>
+        <lucene.version>6.4.0</lucene.version><!-- 7.2.1 -->
         <mmseg4j.version>1.9.1</mmseg4j.version>
     </properties>
     
@@ -458,11 +458,17 @@
             <version>${mmseg4j.version}</version>
         </dependency>
         <!-- ikanalyzer 分词器 -->
-        <dependency>
+        <!-- <dependency>
             <groupId>com.janeluo</groupId>
             <artifactId>ikanalyzer</artifactId>
             <version>2012_u6</version>
-        </dependency>
+        </dependency> -->
+        
+        <dependency> 			
+		  <groupId>com.seaboat</groupId> 			
+		  <artifactId>IKAnalyzer</artifactId> 			
+		  <version>6.4.0</version> 		
+		</dependency>
         
     </dependencies>
     
