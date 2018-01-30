@@ -178,8 +178,10 @@ public class LuceneManager {
 				article.setId(doc.get("id"));
 				String title = doc.get("title");
 				String content = doc.get("content");
+				String hitNum = doc.get("hitNum");
 				article.setTitle(highlighter.getBestFragment(analyzer.tokenStream("title", new StringReader(title)), title));
 				article.setContent(highlighter.getBestFragment(analyzer.tokenStream("content", new StringReader(content)), content));
+				article.setHitNum(Integer.valueOf(hitNum));
 				list.add(article);
 			}
 		} catch (Exception e) {

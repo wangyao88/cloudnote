@@ -78,11 +78,7 @@ public class LogInterceptor {
 		log.setDate(happenTime);
 		HttpServletRequest request = RequestUtils.getRequest();
 		if(request != null){
-			try {
-				log.setIp(IPUtils.getIPAddr(request));
-			} catch (Exception e) {
-				System.out.println("获取用户IP失败！错误信息："+e.getMessage());
-			}
+			log.setIp(IPUtils.getIPAddr(request));
 			User user = UserUtil.getSessionUser(request);
 			if(user != null){
 				log.setUserId(user.getId());

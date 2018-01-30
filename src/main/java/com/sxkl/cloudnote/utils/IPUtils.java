@@ -19,7 +19,7 @@ import com.sxkl.cloudnote.common.entity.Address;
 
 public class IPUtils {
 	
-	public static final String getIPAddr(final HttpServletRequest request) throws Exception{
+	public static final String getIPAddr(final HttpServletRequest request){
 //		if(request == null){
 //			throw (new Exception("getIpAddr method HttpServletRequest Object is null"));
 //		}
