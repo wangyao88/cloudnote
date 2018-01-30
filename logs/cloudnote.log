@@ -1,4 +1,0 @@
-2017-12-06 23:27:17[com.sxkl.cloudnote.backup.service.MysqlBackupService] [main:0] - [INFO]  删除备份数据文件:1.txt
-2017-12-06 23:27:23[com.sxkl.cloudnote.backup.service.MysqlBackupService] [main:6772] - [INFO]  删除备份数据文件:2.txt
-2017-12-06 23:27:23[com.sxkl.cloudnote.backup.service.MysqlBackupService] [main:6773] - [INFO]  删除备份数据文件:3.txt
-2017-12-06 23:27:23[com.sxkl.cloudnote.backup.service.MysqlBackupService] [main:6774] - [INFO]  删除备份数据文件:4.txt
