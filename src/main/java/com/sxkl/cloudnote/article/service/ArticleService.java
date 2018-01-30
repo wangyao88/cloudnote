@@ -167,7 +167,11 @@ public class ArticleService {
     
     @Logger(message="获取笔记")
     public Article getArticle(String id) {
-		return articleDao.findOne(id);
+    	Article article = articleDao.findOne(id);
+    	String content = article.getContent();
+		content = content.replaceAll(Constant.ARTICLE_CONTENT_DOMAIN, Constant.DOMAIN);
+		article.setContent(content);
+		return article;
 	}
 	
     @Logger(message="删除笔记")
@@ -270,5 +274,10 @@ public class ArticleService {
     @Logger(message="获取用户名下所有笔记")
 	public List<Article> getAllArticles(String userId) {
 		return articleDao.getAllArticles(userId);
+	}
+
+    @Logger(message="根据主键集合获取所有笔记")
+	public List<Article> getArticlesByIds(List<String> ids,String userId) {
+		return articleDao.getArticlesByIds(ids,userId);
 	}
 }

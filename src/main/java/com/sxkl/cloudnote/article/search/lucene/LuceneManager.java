@@ -22,14 +22,12 @@ import org.apache.lucene.index.KeepOnlyLastCommitDeletionPolicy;
 import org.apache.lucene.index.SnapshotDeletionPolicy;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
-import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.highlight.Highlighter;
-import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 import org.apache.lucene.search.highlight.QueryScorer;
 import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.lucene.store.Directory;
@@ -141,6 +139,7 @@ public class LuceneManager {
 			IndexWriter ramWriter = getIndexWriter(userId);
 			ramWriter.addDocument(toDocument(article));
 			ramWriter.commit();
+			indexSync(userId);
 		} catch (IOException e) {
 			log.error("添加笔记索引失败！错误信息：{}",e.getMessage());
 		}
@@ -153,6 +152,7 @@ public class LuceneManager {
 			IndexWriter ramWriter = getIndexWriter(userId);
 			ramWriter.deleteDocuments(term);
 			ramWriter.commit();
+			indexSync(userId);
 		} catch (IOException e) {
 			log.error("删除笔记索引失败！错误信息：{}",e.getMessage());
 		}
@@ -168,7 +168,6 @@ public class LuceneManager {
 			QueryParser queryParser = new MultiFieldQueryParser(fields, analyzer);
 			Query query = queryParser.parse(keyword);
 			TopDocs hits = indexSearcher.search(query, pageSize);
-
 			// 高亮
 			SimpleHTMLFormatter simpleHTMLFormatter = new SimpleHTMLFormatter("<b><font color='red'>", "</font></b>");
 			Highlighter highlighter = new Highlighter(simpleHTMLFormatter, new QueryScorer(query));
@@ -196,6 +195,7 @@ public class LuceneManager {
 			IndexWriter ramWriter = getIndexWriter(userId);
 			ramWriter.updateDocument(term, toDocument(article));
 			ramWriter.commit();
+			indexSync(userId);
 		} catch (IOException e) {
 			log.error("更新笔记索引失败！错误信息：{}",e.getMessage());
 		}

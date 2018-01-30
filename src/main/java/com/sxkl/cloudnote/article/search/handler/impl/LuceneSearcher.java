@@ -43,6 +43,16 @@ public class LuceneSearcher implements ArticleSeracher{
 			return result;
 		}
 		result = luceneManager.search(searchKeys, userId,PAGE_SIZE);
+		if(result.isEmpty()){
+			return result;
+		}
+		List<String> ids = Lists.newArrayList();
+		for(Article article : result){
+			if(!Objects.isNull(article) && !StringUtils.isEmpty(article.getId())){
+				ids.add(article.getId());
+			}
+		}
+		List<Article> temps = articleService.getArticlesByIds(ids,userId);
 		Iterator<Article> it = result.iterator();
 		while(it.hasNext()){
 			Article article = it.next();
@@ -50,15 +60,25 @@ public class LuceneSearcher implements ArticleSeracher{
 				it.remove();
 				continue;
 			}
-			Article temp = articleService.getArticle(article.getId());
-			if(StringUtils.isEmpty(article.getTitle())){
-				article.setTitle(temp.getTitle());
+			Article temp = null;
+			Iterator<Article> tempsIt = temps.iterator();
+			while(tempsIt.hasNext()){
+				temp = tempsIt.next();
+				if(temp.getId().equals(article.getId())){
+					tempsIt.remove();
+					break;
+				}
 			}
-			String content = temp.getContent();
-			for(String key : keySet){
-				content = content.replaceAll(key,Joiner.on("").join("<b><font color='red'>",key,"</font></b>"));
+			if(!Objects.isNull(temp)){
+				if(StringUtils.isEmpty(article.getTitle())){
+					article.setTitle(temp.getTitle());
+				}
+				String content = temp.getContent();
+				for(String key : keySet){
+					content = content.replaceAll(key,Joiner.on("").join("<b><font color='red'>",key,"</font></b>"));
+				}
+				article.setContent(content);
 			}
-			article.setContent(content);
 		}
 		return result;
 //		Set keysInRedis = WordAnalyzer.analysis(searchKeys).keySet();

@@ -218,4 +218,14 @@ public class ArticleDao extends BaseDao<String,Article> {
 		return query.list();
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Article> getArticlesByIds(List<String> ids, String userId) {
+		String hql = "select new Article(id,title,content,hitNum) from Article a where uId=:uId and a.id in (:ids)";
+		Session session = this.getSessionFactory().getCurrentSession();
+	    Query query = session.createQuery(hql);
+	    query.setString("uId", userId);
+	    query.setParameterList("ids", ids);
+		return query.list();
+	}
+
 }
