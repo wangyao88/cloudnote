@@ -71,8 +71,6 @@ public class Article implements Serializable{
 	private int weight;
 	
 	@Transient
-	private boolean isSearch = false;
-	@Transient
 	private String searchKeys;
 	
 	public Article() {

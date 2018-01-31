@@ -63,28 +63,6 @@ public class LuceneManager {
 	@Autowired
 	private UserService userService;
 	
-	private String getPath(String userId){
-		String path = LuceneManager.class.getClassLoader().getResource("").getPath();
-		path = Joiner.on("").join(Arrays.asList(path,"index/",userId));
-		if(path.contains(":")){
-			path = path.substring(1);
-		}
-		return path;
-	}
-	
-	private RAMDirectory getRAMDirectory(String userId) throws IOException{
-		@Cleanup
-		FSDirectory fsDirectory = FSDirectory.open(Paths.get(getPath(userId)));
-		return new RAMDirectory(fsDirectory, IOContext.READONCE);
-	}
-	
-	private IndexWriter getIndexWriter(String userId) throws IOException{
-		Analyzer analyzer = new IKAnalyzer(true);
-		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
-		indexWriterConfig.setIndexDeletionPolicy(new SnapshotDeletionPolicy(new KeepOnlyLastCommitDeletionPolicy()));
-		return new IndexWriter(getRAMDirectory(userId), indexWriterConfig);
-	}
-	
 	@Logger(message="于磁盘创建所有用户笔记索引")
 	public void initAllUserArticleIndex() {
 		try {
@@ -120,7 +98,6 @@ public class LuceneManager {
 		} catch (IOException e) {
 			log.error("于磁盘创建笔记索引失败！错误信息：{}",e.getMessage());
 		}
-		
 	}
 
 	@Logger(message="实体article对象转document笔记索引对象")
@@ -136,10 +113,10 @@ public class LuceneManager {
 	@Logger(message="添加笔记索引")
 	public synchronized void addDocument(Article article, String userId){
 		try {
-			IndexWriter ramWriter = getIndexWriter(userId);
+			@Cleanup
+			IndexWriter ramWriter = getFSIndexWriter(userId);
 			ramWriter.addDocument(toDocument(article));
 			ramWriter.commit();
-			indexSync(userId);
 		} catch (IOException e) {
 			log.error("添加笔记索引失败！错误信息：{}",e.getMessage());
 		}
@@ -149,15 +126,30 @@ public class LuceneManager {
 	public synchronized void deleteDocument(String articleId, String userId){
 		try {
 			Term term = new Term("id", articleId);
-			IndexWriter ramWriter = getIndexWriter(userId);
+			@Cleanup
+			IndexWriter ramWriter = getFSIndexWriter(userId);
 			ramWriter.deleteDocuments(term);
 			ramWriter.commit();
-			indexSync(userId);
 		} catch (IOException e) {
+			e.printStackTrace();
 			log.error("删除笔记索引失败！错误信息：{}",e.getMessage());
 		}
 	}
 
+	@Logger(message="更新笔记索引")
+	public void updateDocument(Article article, String userId){
+		try {
+			Term term = new Term("id", String.valueOf(article.getId()));
+			@Cleanup
+			IndexWriter ramWriter = getFSIndexWriter(userId);
+			ramWriter.updateDocument(term, toDocument(article));
+			ramWriter.commit();
+		} catch (IOException e) {
+			e.printStackTrace();
+			log.error("更新笔记索引失败！错误信息：{}",e.getMessage());
+		}
+	}
+	
 	@Logger(message="搜索笔记")
 	public List<Article> search(String keyword, String userId, int pageSize){
 		List<Article> list = Lists.newArrayList();
@@ -190,26 +182,13 @@ public class LuceneManager {
 		return list;
 	}
 
-	@Logger(message="更新笔记索引")
-	public void updateDocument(Article article, String userId){
-		try {
-			Term term = new Term("id", String.valueOf(article.getId()));
-			IndexWriter ramWriter = getIndexWriter(userId);
-			ramWriter.updateDocument(term, toDocument(article));
-			ramWriter.commit();
-			indexSync(userId);
-		} catch (IOException e) {
-			log.error("更新笔记索引失败！错误信息：{}",e.getMessage());
-		}
-	}
-
 	@Logger(message="同步笔记索引至磁盘")
 	public void indexSync(String userId) {
 		try {
 			IndexWriterConfig config = null;
 			SnapshotDeletionPolicy snapshotDeletionPolicy = null;
 			IndexCommit indexCommit = null;
-			IndexWriter ramWriter = getIndexWriter(userId);
+			IndexWriter ramWriter = getRAMIndexWriter(userId);
 			config = (IndexWriterConfig) ramWriter.getConfig();
 			snapshotDeletionPolicy = (SnapshotDeletionPolicy) config.getIndexDeletionPolicy();
 			indexCommit = snapshotDeletionPolicy.snapshot();
@@ -227,8 +206,38 @@ public class LuceneManager {
 				toDir.copyFrom(getRAMDirectory(userId), fileName, fileName, IOContext.DEFAULT);
 			}
 		} catch (IOException e) {
+			e.printStackTrace();
 			log.error("同步笔记索引至磁盘失败！错误信息：{}",e.getMessage());
 		}
-		
+	}
+	
+	private String getPath(String userId){
+		String path = LuceneManager.class.getClassLoader().getResource("").getPath();
+		path = Joiner.on("").join(Arrays.asList(path,"index/",userId));
+		if(path.contains(":")){
+			path = path.substring(1);
+		}
+		return path;
+	}
+	
+	private RAMDirectory getRAMDirectory(String userId) throws IOException{
+		@Cleanup
+		FSDirectory fsDirectory = FSDirectory.open(Paths.get(getPath(userId)));
+		return new RAMDirectory(fsDirectory, IOContext.READONCE);
+	}
+	
+	private IndexWriter getRAMIndexWriter(String userId) throws IOException{
+		Analyzer analyzer = new IKAnalyzer(true);
+		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
+		indexWriterConfig.setIndexDeletionPolicy(new SnapshotDeletionPolicy(new KeepOnlyLastCommitDeletionPolicy()));
+		return new IndexWriter(getRAMDirectory(userId), indexWriterConfig);
+	}
+	
+	private IndexWriter getFSIndexWriter(String userId) throws IOException{
+		Path path = Paths.get(getPath(userId));
+		FSDirectory fsDirectory = FSDirectory.open(path);
+		Analyzer analyzer = new IKAnalyzer(true);
+		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
+		return new IndexWriter(fsDirectory, indexWriterConfig);
 	}
 }

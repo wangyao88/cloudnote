@@ -13,6 +13,7 @@ import com.sxkl.cloudnote.article.entity.Article;
 import com.sxkl.cloudnote.article.search.handler.ArticleSeracher;
 import com.sxkl.cloudnote.article.search.lucene.LuceneManager;
 import com.sxkl.cloudnote.article.service.ArticleService;
+import com.sxkl.cloudnote.log.annotation.Logger;
 
 /**
  * @author: wangyao
@@ -27,6 +28,7 @@ public class LuceneSearcher implements ArticleSeracher{
 	private ArticleService articleService;
 	private static final int PAGE_SIZE = 20;
 
+	@Logger(message="搜索笔记，并且优化搜索结果")
 	@Override
 	public List<Article> search(String searchKeys, String userId) {
 		List<Article> result = Lists.newArrayList();
@@ -64,7 +66,6 @@ public class LuceneSearcher implements ArticleSeracher{
 				if(StringUtils.isEmpty(article.getTitle())){
 					article.setTitle(temp.getTitle());
 				}
-				article.setSearch(true);
 				article.setSearchKeys(searchKeys);
 			}
 		}
