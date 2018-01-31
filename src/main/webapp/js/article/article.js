@@ -88,39 +88,34 @@ function gridRowdblclick() {
 function getArticleById(articleId) {
 	var grid = mini.get("articleGrid");
 	var record = grid.getSelected();
-	var title = record.title;
-	var content = record.content;
-	if(content){
-		content = '<center><h1>'+title+'</h1></center><br>'+content;
-		document.getElementById("articleContainer").innerHTML = content;
-	}else{
-		mini.mask({
-			el : document.body,
-			cls : 'mini-mask-loading',
-			html : '加载中...'
-		});
-		$.ajax({
-			url : basePATH + "/article/getArticle",
-			type : "post",
-			data : {
-				id : articleId
-			},
-			dataType : 'json',
-			success : function(result) {
-				if(!result.data){
-					mini.alert("笔记已删除，请重建索引，再搜索。或者忽略此条笔记！");
-					return;
-				}
-				content = '<center><h1>'+title+'</h1></center><br>'+result.data;
-				document.getElementById("articleContainer").innerHTML = content;
-				mini.unmask(document.body);
-			},
-			error : function() {
-				mini.unmask(document.body);
-				mini.alert("获取笔记详情失败，请稍候重试！");
+	mini.mask({
+		el : document.body,
+		cls : 'mini-mask-loading',
+		html : '加载中...'
+	});
+	$.ajax({
+		url : basePATH + "/article/getArticle",
+		type : "post",
+		data : {
+			id : articleId,
+			searchKeys : record.searchKeys
+		},
+		dataType : 'json',
+		success : function(result) {
+			if(!result.data){
+				mini.alert("笔记已删除，请重建索引，再搜索。或者忽略此条笔记！");
+				return;
 			}
-		});
-	}
+			var title = record.title;
+			var content = '<center><h1>'+title+'</h1></center><br>'+result.data;
+			document.getElementById("articleContainer").innerHTML = content;
+			mini.unmask(document.body);
+		},
+		error : function() {
+			mini.unmask(document.body);
+			mini.alert("获取笔记详情失败，请稍候重试！");
+		}
+	});
 	
 	$.ajax({
 		url : basePATH + "/flag/getFlagByArticleId",

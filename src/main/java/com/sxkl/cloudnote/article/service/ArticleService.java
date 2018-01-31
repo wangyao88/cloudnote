@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.base.Joiner;
 import com.google.gson.Gson;
 import com.sxkl.cloudnote.article.dao.ArticleDao;
 import com.sxkl.cloudnote.article.entity.Article;
@@ -20,6 +22,7 @@ import com.sxkl.cloudnote.article.entity.ArticleForCache;
 import com.sxkl.cloudnote.article.entity.ArticleForEdit;
 import com.sxkl.cloudnote.article.entity.ArticleForHtml;
 import com.sxkl.cloudnote.article.search.handler.impl.LuceneSearcher;
+import com.sxkl.cloudnote.article.search.lucene.WordAnalyzer;
 import com.sxkl.cloudnote.cache.annotation.RedisDisCachable;
 import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.common.service.OperateResultService;
@@ -153,14 +156,23 @@ public class ArticleService {
     @Logger(message="获取笔记")
 	public String getArticle(HttpServletRequest request) {
 		String id = request.getParameter("id");
+		String searchKeys = request.getParameter("searchKeys");
 //		String content = redisCacheService.getValueFromHash(Constant.HOT_ARTICLE_KEY_IN_REDIS,id,request);
 //		if(StringUtils.isEmpty(content)){
 //			Article article = articleDao.selectArticleById(id);
 //			content = article.getContent();
 //		}
+		
 		Article article = articleDao.findOne(id);
 		String content = article.getContent();
 		content = content.replaceAll(Constant.ARTICLE_CONTENT_DOMAIN, Constant.DOMAIN);
+		if(!StringUtils.isEmpty(searchKeys)){
+			Map<String,Integer> keys = WordAnalyzer.analysis(searchKeys);
+			Set<String> keySet = keys.keySet();
+			for(String key : keySet){
+				content = content.replaceAll(key,Joiner.on("").join("<b><font color='red'>",key,"</font></b>"));
+			}
+		}
 		PublishManager.getPublishManager().getArticlePublisher().increaseArticleHitNum(id);
 		return content;
 	}
