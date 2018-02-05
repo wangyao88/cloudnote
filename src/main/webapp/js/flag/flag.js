@@ -119,6 +119,7 @@ function selectFlag(){
 			var node = tree.getNode(flagId);
 			if(node){
 				tree.scrollIntoView(node);
+				tree.selectNode(node);
 			}
 		},
 		error : function() {
