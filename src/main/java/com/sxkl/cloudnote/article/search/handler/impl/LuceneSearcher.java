@@ -66,7 +66,7 @@ public class LuceneSearcher implements ArticleSeracher{
 				if(StringUtils.isEmpty(article.getTitle())){
 					article.setTitle(temp.getTitle());
 				}
-				article.setSearchKeys(searchKeys);
+//				article.setSearchKeys(searchKeys);
 			}
 		}
 		return result;
