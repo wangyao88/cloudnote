@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -62,6 +63,7 @@ public class LuceneManager {
 	private ArticleService articleService;
 	@Autowired
 	private UserService userService;
+	private static final int PAGE_SIZE = 50;
 	
 	@Logger(message="于磁盘创建所有用户笔记索引")
 	public void initAllUserArticleIndex() {
@@ -91,7 +93,14 @@ public class LuceneManager {
 			IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
 			@Cleanup
 			IndexWriter writer = new IndexWriter(fsDirectory, indexWriterConfig);
-			List<Article> articles = articleService.getAllArticles(userId);
+			int articleTotal = articleService.getArticleTotal(userId);
+			List<Article> articles = new ArrayList<Article>(articleTotal);
+			int currentPage = 0;
+			while(currentPage*PAGE_SIZE < articleTotal){
+				articles.addAll(articleService.findPage(currentPage,PAGE_SIZE,userId));
+				currentPage++;
+			}
+			
 			for (Article article : articles) {
 				writer.addDocument(toDocument(article));
 			}

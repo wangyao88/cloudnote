@@ -228,4 +228,15 @@ public class ArticleDao extends BaseDao<String,Article> {
 		return query.list();
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Article> findPage(int currentPage, int pageSize, String userId) {
+		String hql = "select new Article(id,title,content,hitNum) from Article a where a.user.id=:userId order by a.hitNum desc";
+		Session session = this.getSessionFactory().getCurrentSession();
+	    Query query = session.createQuery(hql);
+	    query.setString("userId", userId);
+	    query.setFirstResult(currentPage*pageSize);
+        query.setMaxResults(pageSize);
+		return query.list();
+	}
+
 }

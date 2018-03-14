@@ -1,6 +1,7 @@
 package com.sxkl.cloudnote.article.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -291,5 +292,13 @@ public class ArticleService {
     @Logger(message="根据主键集合获取所有笔记")
 	public List<Article> getArticlesByIds(List<String> ids,String userId) {
 		return articleDao.getArticlesByIds(ids,userId);
+	}
+
+	public int getArticleTotal(String userId) {
+		return articleDao.selectAllArticlesOrderByCreateTimeAndHitNumCount(userId);
+	}
+
+	public List<Article> findPage(int currentPage, int pageSize, String userId) {
+		return articleDao.findPage(currentPage,pageSize,userId);
 	}
 }
