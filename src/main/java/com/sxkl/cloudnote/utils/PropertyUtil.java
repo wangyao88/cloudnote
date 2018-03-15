@@ -42,4 +42,9 @@ public class PropertyUtil {
 		return cachePages;
 	}
 	
+	public static String getDomain(){
+		Map<String,String> map = PropertyUtil.getPropertiesAllValue("init.properties");
+		return map.get("cloudnote_domain");
+	}
+	
 }

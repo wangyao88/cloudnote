@@ -28,7 +28,6 @@ public class CacheFilter  implements Filter, ApplicationContextAware {
     private WebApplicationContext springContext;
     private RedisCacheService redisCacheService;
     
-    @SuppressWarnings("unchecked")
     @Override
     public void init(FilterConfig config) throws ServletException {
         springContext = WebApplicationContextUtils.getWebApplicationContext(config.getServletContext());
@@ -43,7 +42,7 @@ public class CacheFilter  implements Filter, ApplicationContextAware {
         String cachePages = PropertyUtil.getCachePages();
         //访问登录页，并且是GET请求，则拦截
         if(cachePages.contains(requestUrl)){
-        	Constant.DOMAIN = getDomain(req);
+//        	Constant.DOMAIN = getDomain(req);
         	String html = redisCacheService.getHtmlFromCache(resp,req,filterChain);
         	html = html.replaceAll(Constant.LOGIN_PAGE_DOMAIN, Constant.DOMAIN);
             // 返回响应

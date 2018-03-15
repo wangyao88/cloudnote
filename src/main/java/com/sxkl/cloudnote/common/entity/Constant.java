@@ -4,6 +4,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpSession;
 
+import com.sxkl.cloudnote.utils.PropertyUtil;
+
 public class Constant {
 	
 	public static final String PROJECT_NAME = "cloudnote";
@@ -38,7 +40,7 @@ public class Constant {
 	
 	public static final String WORD_ARTICLE_MAPPING_IN_REDIS = "word_article_mapping";
 	
-	public static String DOMAIN = "";
+	public static final String DOMAIN = PropertyUtil.getDomain();
 	
 	public static final String ONLINE_SESSION_PREFIX_IN_REDIS = "online_session";
 	
