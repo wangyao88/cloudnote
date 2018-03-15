@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.Future;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
@@ -41,6 +43,7 @@ import org.springframework.stereotype.Service;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.sxkl.cloudnote.article.entity.Article;
+import com.sxkl.cloudnote.article.service.ArticleRecursiveTask;
 import com.sxkl.cloudnote.article.service.ArticleService;
 import com.sxkl.cloudnote.ikanalyzer.lucene.IKAnalyzer;
 import com.sxkl.cloudnote.log.annotation.Logger;
@@ -93,14 +96,28 @@ public class LuceneManager {
 			IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
 			@Cleanup
 			IndexWriter writer = new IndexWriter(fsDirectory, indexWriterConfig);
-			int articleTotal = articleService.getArticleTotal(userId);
-			List<Article> articles = new ArrayList<Article>(articleTotal);
-			int currentPage = 0;
-			while(currentPage*PAGE_SIZE < articleTotal){
-				articles.addAll(articleService.findPage(currentPage,PAGE_SIZE,userId));
-				currentPage++;
-			}
 			
+			
+			List<Article> articles = articleService.getAllArticles(userId);
+			
+//			int articleTotal = articleService.getArticleTotal(userId);
+//			List<Article> articles = new ArrayList<Article>(articleTotal);
+//			ForkJoinPool forkJoinPool = new ForkJoinPool();  
+//			int start = 0;
+//			int end = articleTotal/PAGE_SIZE;
+//			ArticleRecursiveTask task = new ArticleRecursiveTask(start,end,userId,PAGE_SIZE,articleService);
+//	        Future<List<Article>> result = forkJoinPool.submit(task);  
+//	        try {  
+//	            articles.addAll(result.get());
+//	        } catch (Exception e) { 
+//	        	e.printStackTrace();
+//	        }  
+			
+//			int currentPage = 0;
+//			while(currentPage*PAGE_SIZE < articleTotal){
+//				articles.addAll(articleService.findPage(currentPage,PAGE_SIZE,userId));
+//				currentPage++;
+//			}
 			for (Article article : articles) {
 				writer.addDocument(toDocument(article));
 			}
