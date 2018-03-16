@@ -139,3 +139,7 @@ CREATE TABLE `cloudnote`.`cn_log` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COMMENT = '日志记录表';
+
+
+ALTER TABLE `cloudnote`.`cn_image` 
+ADD INDEX `IDX_NAME` (`name` ASC);
