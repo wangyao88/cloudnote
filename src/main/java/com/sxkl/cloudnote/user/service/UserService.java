@@ -19,7 +19,6 @@ import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.user.dao.UserDao;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.utils.DESUtil;
-import com.sxkl.cloudnote.utils.IPUtils;
 import com.sxkl.cloudnote.utils.RSACoder;
 import com.sxkl.cloudnote.utils.StringAppendUtils;
 import com.sxkl.cloudnote.utils.UserUtil;
@@ -37,6 +36,7 @@ public class UserService {
         String password = request.getParameter("password");
         byte[] decodedData = RSACoder.decryptByPrivateKey(password,RsaKeyManager.getPrivateKey());
         password = new String(decodedData);
+        System.out.println(userName + "----" + password);
         if(chackeLoginParams(userName,password)){
         	User user = validateLogin(userName,password);
         	if(user != null){

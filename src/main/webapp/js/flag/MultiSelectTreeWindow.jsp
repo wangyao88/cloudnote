@@ -9,7 +9,7 @@
 <html>
 <head>
     <title></title>
-    
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <script src="<%=basePath %>js/boot.js" type="text/javascript"></script>
     
         

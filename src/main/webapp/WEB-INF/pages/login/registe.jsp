@@ -8,10 +8,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <head>
     <base href="<%=basePath%>">
     <title>曼妙云端笔记|注册</title>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
-	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
 	<link href="<%=basePath%>css/registe/style.css" rel='stylesheet' type='text/css' />
 	<script type="text/javascript">

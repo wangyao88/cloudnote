@@ -9,6 +9,7 @@
 <html>
 <head>
 <title>增加节点</title>
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 <script src="<%=basePath%>js/boot.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/ueditor-1.4.3.3/ueditor.config.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/ueditor-1.4.3.3/ueditor.all.min.js" type="text/javascript"></script>
