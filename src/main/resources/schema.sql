@@ -1,4 +1,4 @@
-CREATE database `cloudnote` DEFAULT CHARACTER SET utf8 ;
+CREATE database `cloudnote` DEFAULT CHARACTER SET utf8;
 
 use cloudnote;
 

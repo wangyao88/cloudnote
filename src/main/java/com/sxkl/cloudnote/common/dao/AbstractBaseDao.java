@@ -2,15 +2,12 @@ package com.sxkl.cloudnote.common.dao;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 
-import com.sxkl.cloudnote.common.entity.Constant;
-import com.sxkl.cloudnote.sessionfactory.DynamicSessionFactoryHolder;
 import com.sxkl.cloudnote.sessionfactory.ParseAnnotation;
 
 @Repository

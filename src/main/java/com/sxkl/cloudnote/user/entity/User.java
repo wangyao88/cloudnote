@@ -16,7 +16,6 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
 
-import com.google.gson.Gson;
 import com.sxkl.cloudnote.flag.entity.Flag;
 import com.sxkl.cloudnote.note.entity.Note;
 
