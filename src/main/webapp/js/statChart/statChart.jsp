@@ -9,7 +9,6 @@
 <html>
 <head>
 <title>报表</title>
-<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 <link href="<%=basePath%>js/miniui/themes/default/large-mode.css"
 	rel="stylesheet" type="text/css" />
 <link href="<%=basePath%>js/miniui/themes/bootstrap/skin.css"

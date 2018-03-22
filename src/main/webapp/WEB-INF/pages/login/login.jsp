@@ -6,9 +6,9 @@ String publicKey = RsaKeyManager.getPublickey();
 %>
 
 <html lang="cn">
-<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 <title>曼妙云端笔记平台</title>
 <link rel="stylesheet" type="text/css" href="<%=basePath %>js/login/css/style2.0.css">
 <style type="text/css">

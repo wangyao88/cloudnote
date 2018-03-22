@@ -36,7 +36,6 @@ public class UserService {
         String password = request.getParameter("password");
         byte[] decodedData = RSACoder.decryptByPrivateKey(password,RsaKeyManager.getPrivateKey());
         password = new String(decodedData);
-        System.out.println(userName + "----" + password);
         if(chackeLoginParams(userName,password)){
         	User user = validateLogin(userName,password);
         	if(user != null){

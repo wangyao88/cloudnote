@@ -9,7 +9,6 @@
 <html>
 <head>
     <title>增加节点</title>
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <script src="<%=basePath %>js/boot.js" type="text/javascript"></script>
     <style type="text/css">
     body,html{
