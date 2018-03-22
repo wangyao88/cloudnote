@@ -43,7 +43,8 @@ function addArticleAction(data) {
 			note : data.note,
 			flags : data.flags,
 			articleId : data.articleId,
-			isEdit : data.isEdit
+			isEdit : data.isEdit,
+			isShared : data.isShared
 		},
 		success : function() {
 			var tree = mini.get("menuTree")

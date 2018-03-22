@@ -32,7 +32,7 @@ body, html {
 	</div>
 	<table id="form1" border="0" style="width:100%;table-layout:fixed;">
 		<tr>
-			<td style="width:90%" colspan="2">
+			<td style="width:90%" colspan="3">
 				<input name="title" id="title" onvaluechanged="checkTitle"
 					class="mini-textbox" style="width:100%;" required="true"
 					emptyText="请输入标题..." nullItemText="请输入标题..." />
@@ -41,7 +41,7 @@ body, html {
 		<tr>
 			<td style="width:30%">
 				<input id="note" name="note"
-					class="mini-combobox" style="width:30%;" textField="name"
+					class="mini-combobox" style="width:70%;" textField="name"
 					valueField="id" emptyText="请选择笔记本..."
 					url="<%=basePath%>note/getNoteDataFromCombo" ajaxType="get"
 					required="true" allowInput="true" showNullItem="true"
@@ -53,9 +53,14 @@ body, html {
 					emptyText="请选择标签..." nullItemText="请选择标签..."
 					allowInput=“false” onbuttonclick="onButtonEdit" />
 			</td>
+			<td style="width:30%">
+			    <div name="isShared" id="isShared" class="mini-checkbox" readOnly="false" 
+			    	 text="分享到博客">
+			    </div>
+			</td>
 		</tr>
 		<tr>
-			<td colspan="2">
+			<td colspan="3">
 			     <textarea id="editor_id" name="content"
 					style="width:100%;height:455px;">
 			     </textarea>
@@ -120,6 +125,9 @@ body, html {
 					flag.setValue(result.flag.id);
 					flag.setText(result.flag.name);
 					
+					var isShared = mini.get("isShared");
+					isShared.setChecked(result.isShared);
+					
 					editor.setContent(result.content);
 				}
 			});
@@ -135,6 +143,8 @@ body, html {
 		}
 		options.isEdit = isEdit;
 		options.content = editor.getContent();
+		var isShared = mini.get("isShared");
+		options.isShared = isShared.getChecked();
 		return options;
 	}
 
@@ -156,6 +166,10 @@ body, html {
 	    var options = form.getData();
 	    if(!options.title){
 	         mini.alert("标题不允许为空！");
+	         return false;
+	    }
+	    if(!options.flags){
+	         mini.alert("标签不允许为空！");
 	         return false;
 	    }
 		CloseWindow("ok");

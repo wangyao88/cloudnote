@@ -73,6 +73,9 @@ public class Article implements Serializable{
 	@Transient
 	private String searchKeys;
 	
+	@Column(name="is_shared",nullable=true)
+	private boolean isShared;
+	
 	public Article() {
 		super();
 	}

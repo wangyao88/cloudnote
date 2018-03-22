@@ -143,3 +143,6 @@ COMMENT = '日志记录表';
 
 ALTER TABLE `cloudnote`.`cn_image` 
 ADD INDEX `IDX_NAME` (`name` ASC);
+
+ALTER TABLE `cloudnote`.`cn_article` 
+ADD COLUMN `is_shared` TINYINT(1) NULL COMMENT '是否分享到博客' AFTER `uId`;

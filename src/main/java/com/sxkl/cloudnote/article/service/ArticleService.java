@@ -66,6 +66,7 @@ public class ArticleService {
 		String flagsStr = request.getParameter("flags");
 		String articleId = request.getParameter("articleId");
 		String isEdit = request.getParameter("isEdit");
+		String isShared = request.getParameter("isShared");
 		String[] flagIdTemps = flagsStr.split(",");
 		String[] flags = new String[flagIdTemps.length];
 		for(int  i = 0; i < flags.length; i++){
@@ -87,6 +88,7 @@ public class ArticleService {
 		article.setTitle(title);
 		article.setNote(note);
 		article.setFlags(new HashSet<Flag>(flagBeans));
+		article.setShared(Boolean.parseBoolean(isShared));
 		String contentFilted = FileUtils.saveHtmlImgToDB(content,imageService);
 		contentFilted = FileUtils.filterDraft(contentFilted);
 		article.setContent(contentFilted);
@@ -237,7 +239,8 @@ public class ArticleService {
 		String content = article.getContent();
 		content = content.replaceAll(Constant.ARTICLE_CONTENT_DOMAIN, Constant.DOMAIN);
 		
-		ArticleForEdit articleForEdit = new ArticleForEdit(noteResult,flagResult,content);
+//		ArticleForEdit articleForEdit = new ArticleForEdit(noteResult,flagResult,content);
+		ArticleForEdit articleForEdit = new ArticleForEdit(noteResult,flagResult,content,article.isShared());
 		
 		return new Gson().toJson(articleForEdit);
 	}
