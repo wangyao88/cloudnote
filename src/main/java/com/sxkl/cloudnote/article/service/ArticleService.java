@@ -11,16 +11,20 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.sxkl.cloudnote.article.dao.ArticleDao;
 import com.sxkl.cloudnote.article.entity.Article;
 import com.sxkl.cloudnote.article.entity.ArticleForCache;
 import com.sxkl.cloudnote.article.entity.ArticleForEdit;
 import com.sxkl.cloudnote.article.entity.ArticleForHtml;
+import com.sxkl.cloudnote.article.entity.Blog;
 import com.sxkl.cloudnote.article.search.handler.impl.LuceneSearcher;
 import com.sxkl.cloudnote.article.search.lucene.WordAnalyzer;
 import com.sxkl.cloudnote.cache.annotation.RedisDisCachable;
@@ -36,6 +40,7 @@ import com.sxkl.cloudnote.note.service.NoteService;
 import com.sxkl.cloudnote.spider.entity.SearchComplete;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.user.service.UserService;
+import com.sxkl.cloudnote.utils.DateUtils;
 import com.sxkl.cloudnote.utils.FileUtils;
 import com.sxkl.cloudnote.utils.UserUtil;
 
@@ -296,11 +301,54 @@ public class ArticleService {
 		return articleDao.getArticlesByIds(ids,userId);
 	}
 
+    @Logger(message="获取笔记数量")
 	public int getArticleTotal(String userId) {
 		return articleDao.selectAllArticlesOrderByCreateTimeAndHitNumCount(userId);
 	}
 
+	@Logger(message="分页查询笔记")
 	public List<Article> findPage(int currentPage, int pageSize, String userId) {
 		return articleDao.findPage(currentPage,pageSize,userId);
+	}
+
+	@Logger(message="获取博客首页推荐文章")
+	public String getRecommend() {
+		Article article = new Article();
+		article.setShared(true);
+		List<Article> articles = articleDao.getRecommend(article);
+		
+		List<Blog> blogs = Lists.newArrayList();
+		for(Article temp : articles){
+			blogs.add(transform(temp));
+		}
+		return OperateResultService.configurateSuccessResult(blogs);
+	}
+
+	private Blog transform(Article article) {
+		Blog blog = new Blog();
+		blog.setId(article.getId());
+		blog.setAuthor(article.getUser().getName());
+		String content = article.getContent();
+		content = content.replaceAll(Constant.ARTICLE_CONTENT_DOMAIN, Constant.DOMAIN);
+		blog.setContent(content);
+		blog.setCreateDate(DateUtils.formatDate2Str(article.getCreateTime()));
+		blog.setHitNum(article.getHitNum());
+		blog.setTitle(article.getTitle());
+		Set<Flag> flags = article.getFlags();
+		String flagStr = StringUtils.EMPTY;
+		for(Flag flag : flags){
+			flagStr += flag.getName() + ",";
+		}
+		if(flagStr.endsWith(",")){
+			flagStr = flagStr.substring(0, flagStr.length()-1);
+		}
+		blog.setFlags(flagStr);
+		Document contentDoc = Jsoup.parse(content);
+		String text = contentDoc.text();
+		if(text.length() > 140){
+			text = text.substring(0, 140);
+		}
+		blog.setGeneralization(text);
+		return blog;
 	}
 }

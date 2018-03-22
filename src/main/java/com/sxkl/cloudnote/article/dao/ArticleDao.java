@@ -239,4 +239,15 @@ public class ArticleDao extends BaseDao<String,Article> {
 		return query.list();
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Article> getRecommend(Article article) {
+		String hql = "from Article a where a.isShared=:isShared order by a.hitNum desc";
+		Session session = this.getSessionFactory().getCurrentSession();
+	    Query query = session.createQuery(hql);
+	    query.setBoolean("isShared", article.isShared());
+	    query.setFirstResult(0);
+        query.setMaxResults(5);
+		return query.list();
+	}
+
 }

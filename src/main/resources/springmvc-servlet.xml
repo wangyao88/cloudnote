@@ -55,6 +55,7 @@
 			<mvc:exclude-mapping path="/js/*/*" />
 			<mvc:exclude-mapping path="/images/*/*" />
 			<mvc:exclude-mapping path="/mywebsocket" />
+			<mvc:exclude-mapping path="/blog/*" />
 			<beans:bean class="com.sxkl.cloudnote.interceptor.SecurityInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>
