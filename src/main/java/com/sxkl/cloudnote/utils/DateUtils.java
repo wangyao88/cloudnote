@@ -122,6 +122,10 @@ public class DateUtils {
 		return formatDate2Str(new java.util.Date());
 	}
 
+	public static String formatDate2YMDStr(java.util.Date date) {
+		return formatDate2Str(date, "yyyy-MM-dd");
+	}
+	
 	public static String formatDate2Str(java.util.Date date) {
 		return formatDate2Str(date, "yyyy-MM-dd HH:mm:ss");
 	}

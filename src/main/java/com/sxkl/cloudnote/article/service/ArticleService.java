@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -319,19 +320,23 @@ public class ArticleService {
 		
 		List<Blog> blogs = Lists.newArrayList();
 		for(Article temp : articles){
-			blogs.add(transform(temp));
+			blogs.add(transform(temp,false));
 		}
 		return OperateResultService.configurateSuccessResult(blogs);
 	}
+	
+	@Logger(message="获取博客详情")
+	public String getBlog(String id) {
+		Article article = articleDao.getArticleById(id);
+		Blog blog = transform(article,true);
+		return OperateResultService.configurateSuccessResult(blog); 
+	}
 
-	private Blog transform(Article article) {
+	private Blog transform(Article article, boolean containsContent) {
 		Blog blog = new Blog();
 		blog.setId(article.getId());
 		blog.setAuthor(article.getUser().getName());
-		String content = article.getContent();
-		content = content.replaceAll(Constant.ARTICLE_CONTENT_DOMAIN, Constant.DOMAIN);
-		blog.setContent(content);
-		blog.setCreateDate(DateUtils.formatDate2Str(article.getCreateTime()));
+		blog.setCreateDate(DateUtils.formatDate2YMDStr(article.getCreateTime()));
 		blog.setHitNum(article.getHitNum());
 		blog.setTitle(article.getTitle());
 		Set<Flag> flags = article.getFlags();
@@ -343,7 +348,17 @@ public class ArticleService {
 			flagStr = flagStr.substring(0, flagStr.length()-1);
 		}
 		blog.setFlags(flagStr);
+		String content = article.getContent();
+		content = content.replaceAll(Constant.ARTICLE_CONTENT_DOMAIN, Constant.DOMAIN);
+		if(containsContent){
+			blog.setContent(content);
+		}
 		Document contentDoc = Jsoup.parse(content);
+		Elements imgs = contentDoc.getElementsByTag("img");
+		if(!imgs.isEmpty()){
+			String imgUrl = imgs.get(0).attr("src");
+			blog.setImgUrl(imgUrl);
+		}
 		String text = contentDoc.text();
 		if(text.length() > 140){
 			text = text.substring(0, 140);

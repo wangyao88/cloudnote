@@ -23,4 +23,9 @@ public class BlogController {
 	public String getRecommend(){
 		return articleService.getRecommend();
 	}
+	
+	@RequestMapping(value = "/getBlog", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	public String getBlog(String id){
+		return articleService.getBlog(id);
+	}
 }

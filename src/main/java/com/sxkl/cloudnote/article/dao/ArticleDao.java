@@ -70,6 +70,7 @@ public class ArticleDao extends BaseDao<String,Article> {
 //		return (Article) query.uniqueResult();
 //	}
 
+	@SuppressWarnings("rawtypes")
 	public List selectAllFlagArticlesOrderByCreateTimeAndHitNum(String flagId, int pageIndex, int pageSize) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("select a.id,a.title,a.hitNum from cn_flag_artile f left join cn_article a on f.article_id=a.id ")
@@ -248,6 +249,11 @@ public class ArticleDao extends BaseDao<String,Article> {
 	    query.setFirstResult(0);
         query.setMaxResults(5);
 		return query.list();
+	}
+
+	public Article getArticleById(String id) {
+		Session session = this.getSessionFactory().getCurrentSession();
+		return session.load(Article.class, id);
 	}
 
 }

@@ -18,4 +18,5 @@ public class Blog {
 	private String author;
 	private String flags;
 	private int hitNum;
+	private String imgUrl;
 }
