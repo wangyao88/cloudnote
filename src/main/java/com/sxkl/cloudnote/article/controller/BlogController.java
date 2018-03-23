@@ -19,13 +19,28 @@ public class BlogController {
 	@Autowired
 	private ArticleService articleService;
 	
-	@RequestMapping(value = "/getRecommend", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+	@RequestMapping(value = "/getRecommend", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
 	public String getRecommend(){
 		return articleService.getRecommend();
+	}
+	
+	@RequestMapping(value = "/getRecent", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	public String getRecent(){
+		return articleService.getRecent();
 	}
 	
 	@RequestMapping(value = "/getBlog", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
 	public String getBlog(String id){
 		return articleService.getBlog(id);
+	}
+	
+	@RequestMapping(value = "/getTotal", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	public String getTotal(){
+		return articleService.getTotal();
+	}
+	
+	@RequestMapping(value = "/getBlogList", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	public String getBlogList(int page, int pageSize){
+		return articleService.getBlogList(page,pageSize);
 	}
 }

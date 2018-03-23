@@ -256,4 +256,34 @@ public class ArticleDao extends BaseDao<String,Article> {
 		return session.load(Article.class, id);
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Article> getRecent(Article article) {
+		String hql = "select new Article(id,title,hitNum) from Article a where a.isShared=:isShared order by a.createTime desc";
+		Session session = this.getSessionFactory().getCurrentSession();
+	    Query query = session.createQuery(hql);
+	    query.setBoolean("isShared", article.isShared());
+	    query.setFirstResult(0);
+        query.setMaxResults(10);
+		return query.list();
+	}
+
+	public int getBlogTotal() {
+		String sql = "select count(1) from cn_article where is_shared = 1";
+		Session session = this.getSessionFactory().getCurrentSession();
+		SQLQuery query = session.createSQLQuery(sql);
+		BigInteger bInt = (BigInteger) query.uniqueResult();
+	    return bInt.intValue();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Article> getBlogList(Article article, int page, int pageSize) {
+		String hql = "from Article a where a.isShared=:isShared order by a.hitNum desc";
+		Session session = this.getSessionFactory().getCurrentSession();
+	    Query query = session.createQuery(hql);
+	    query.setBoolean("isShared", article.isShared());
+	    query.setFirstResult(page*pageSize);
+        query.setMaxResults(pageSize);
+		return query.list();
+	}
+
 }

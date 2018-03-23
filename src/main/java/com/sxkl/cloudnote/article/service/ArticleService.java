@@ -317,7 +317,6 @@ public class ArticleService {
 		Article article = new Article();
 		article.setShared(true);
 		List<Article> articles = articleDao.getRecommend(article);
-		
 		List<Blog> blogs = Lists.newArrayList();
 		for(Article temp : articles){
 			blogs.add(transform(temp,false));
@@ -325,11 +324,46 @@ public class ArticleService {
 		return OperateResultService.configurateSuccessResult(blogs);
 	}
 	
+	public String getRecent() {
+		Article article = new Article();
+		article.setShared(true);
+		List<Article> articles = articleDao.getRecent(article);
+		List<Blog> blogs = Lists.newArrayList();
+		for(Article temp : articles){
+			Blog blog = new Blog();
+			blog.setId(temp.getId());
+			blog.setTitle(temp.getTitle());
+			blogs.add(blog);
+		}
+		return OperateResultService.configurateSuccessResult(blogs);
+	}
+	
 	@Logger(message="获取博客详情")
 	public String getBlog(String id) {
 		Article article = articleDao.getArticleById(id);
+		int hitNum = article.getHitNum() + 1;
+		article.setHitNum(hitNum);
+		articleDao.update(article);
 		Blog blog = transform(article,true);
 		return OperateResultService.configurateSuccessResult(blog); 
+	}
+	
+	@Logger(message="获取博客总数量")
+	public String getTotal() {
+		int total = articleDao.getBlogTotal();
+		return OperateResultService.configurateSuccessResult(total); 
+	}
+
+	@Logger(message="分页获取博客列表")
+	public String getBlogList(int page, int pageSize) {
+		Article article = new Article();
+		article.setShared(true);
+		List<Article> articles = articleDao.getBlogList(article,(page-1),pageSize);
+		List<Blog> blogs = Lists.newArrayList();
+		for(Article temp : articles){
+			blogs.add(transform(temp,false));
+		}
+		return OperateResultService.configurateSuccessResult(blogs);
 	}
 
 	private Blog transform(Article article, boolean containsContent) {

@@ -62,6 +62,7 @@ public class BaseDao<ID extends Serializable,E> extends AbstractBaseDao{
 	
 	public void update(E e){
 		getSession().update(e);
+		getSession().flush();
 	}
 	
 	public void saveOrUpdate(E e){
