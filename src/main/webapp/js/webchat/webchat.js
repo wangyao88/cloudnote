@@ -119,11 +119,11 @@ Date.prototype.Format = function (fmt) { //author: meizz
 
 function linkToWebsocketServer(uid){
 	if ('WebSocket' in window) {
-		websocket = new WebSocket("ws"+wsPath+"mywebsocket?uid="+uid);
+		websocket = new WebSocket("wss"+wsPath+"mywebsocket?uid="+uid);
 	} else if ('MozWebSocket' in window) {
-		websocket = new MozWebSocket("ws"+wsPath+"mywebsocket?uid="+uid);
+		websocket = new MozWebSocket("wss"+wsPath+"mywebsocket?uid="+uid);
 	} else {
-		websocket = new SockJS("http"+wsPath+"mywebsocket/sockjs?uid="+uid);
+		websocket = new SockJS("https"+wsPath+"mywebsocket/sockjs?uid="+uid);
 	}
 	websocket.onopen = function(event) {
 		console.log("WebSocket:已连接");
