@@ -1,6 +1,10 @@
 package com.sxkl.cloudnote.image.dao;
 
+import java.math.BigInteger;
+import java.util.List;
+
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
@@ -33,5 +37,21 @@ public class ImageDao extends BaseDao<String,Image> {
 		Query query = session.createQuery(hql);
 		query.setString("articleId", articleId);
 		return query.executeUpdate();
+	}
+
+	public int getTotal() {
+		String hql = "select count(1) from cn_image";
+		Session session = this.getSessionFactory().getCurrentSession();
+		SQLQuery query = session.createSQLQuery(hql);
+		BigInteger bInt = (BigInteger) query.uniqueResult();
+		return bInt.intValue();
+	}
+
+	public void deleteAll(List<Image> results) {
+		Session session = this.getSession();
+		for(Image image : results){
+			session.delete(image);
+		}
+		session.flush();
 	}
 }

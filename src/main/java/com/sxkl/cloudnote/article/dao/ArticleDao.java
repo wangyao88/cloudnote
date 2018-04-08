@@ -8,6 +8,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
+import com.google.common.base.Joiner;
 import com.sxkl.cloudnote.article.entity.Article;
 import com.sxkl.cloudnote.common.dao.BaseDao;
 
@@ -277,13 +278,21 @@ public class ArticleDao extends BaseDao<String,Article> {
 
 	@SuppressWarnings("unchecked")
 	public List<Article> getBlogList(Article article, int page, int pageSize) {
-		String hql = "from Article a where a.isShared=:isShared order by a.hitNum desc";
+		String sql = "from Article a where a.isShared=:isShared order by a.hitNum desc";
 		Session session = this.getSessionFactory().getCurrentSession();
-	    Query query = session.createQuery(hql);
+		SQLQuery query = session.createSQLQuery(sql);
 	    query.setBoolean("isShared", article.isShared());
 	    query.setFirstResult(page*pageSize);
         query.setMaxResults(pageSize);
 		return query.list();
 	}
-
+	
+	public int getArticleNumByImageName(String name) {
+		String sql = "select count(1) from cn_article where content like :name";
+		Session session = this.getSessionFactory().getCurrentSession();
+		SQLQuery query = session.createSQLQuery(sql);
+	    query.setString("name", Joiner.on(name).join("%","%"));
+	    BigInteger bInt = (BigInteger) query.uniqueResult();
+	    return bInt.intValue();
+	}
 }

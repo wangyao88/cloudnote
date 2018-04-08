@@ -2,7 +2,6 @@ package com.sxkl.cloudnote.image.entity;
 
 import java.io.InputStream;
 import java.io.Serializable;
-import java.sql.Blob;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -52,5 +51,11 @@ public class Image implements Serializable{
 		this.name = name;
 		this.alt = alt;
 	}
-	
+
+	public Image(String id, String name, String aId) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.aId = aId;
+	}
 }

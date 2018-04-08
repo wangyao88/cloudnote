@@ -400,4 +400,13 @@ public class ArticleService {
 		blog.setGeneralization(text);
 		return blog;
 	}
+
+	public boolean containsImage(String name) {
+		int num = articleDao.getArticleNumByImageName(name);
+		return num > 0;
+	}
+	
+	public boolean notContainsImage(String name) {
+		return !containsImage(name);
+	}
 }
