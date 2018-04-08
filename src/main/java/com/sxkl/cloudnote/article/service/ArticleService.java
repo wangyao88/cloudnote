@@ -401,12 +401,7 @@ public class ArticleService {
 		return blog;
 	}
 
-	public boolean containsImage(String name) {
-		int num = articleDao.getArticleNumByImageName(name);
-		return num > 0;
-	}
-	
-	public boolean notContainsImage(String name) {
-		return !containsImage(name);
+	public Article getArticleByImageName(String name) {
+		return articleDao.getArticleByImageName(name);
 	}
 }

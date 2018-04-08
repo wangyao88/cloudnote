@@ -67,4 +67,8 @@ public class ImageService {
 	public void deleteAll(List<Image> results) {
 		imageDao.deleteAll(results);
 	}
+
+	public void updateAll(List<Image> updateImages) {
+		imageDao.updateAll(updateImages);
+	}
 }

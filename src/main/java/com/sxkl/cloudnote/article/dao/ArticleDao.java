@@ -287,12 +287,11 @@ public class ArticleDao extends BaseDao<String,Article> {
 		return query.list();
 	}
 	
-	public int getArticleNumByImageName(String name) {
-		String sql = "select count(1) from cn_article where content like :name";
+	public Article getArticleByImageName(String name) {
+		String hql = "select new Article(id,title,hitNum) from Article a where a.content like :name";
 		Session session = this.getSessionFactory().getCurrentSession();
-		SQLQuery query = session.createSQLQuery(sql);
+		Query query = session.createQuery(hql);
 	    query.setString("name", Joiner.on(name).join("%","%"));
-	    BigInteger bInt = (BigInteger) query.uniqueResult();
-	    return bInt.intValue();
+	    return (Article) query.uniqueResult();
 	}
 }

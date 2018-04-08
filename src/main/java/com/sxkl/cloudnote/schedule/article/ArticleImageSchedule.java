@@ -1,12 +1,12 @@
 package com.sxkl.cloudnote.schedule.article;
 
-import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -17,6 +17,7 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
+import com.sxkl.cloudnote.article.entity.Article;
 import com.sxkl.cloudnote.article.service.ArticleService;
 import com.sxkl.cloudnote.image.entity.Image;
 import com.sxkl.cloudnote.image.service.ImageService;
@@ -108,13 +109,21 @@ public class ArticleImageSchedule {
 		@Override
 		public Integer call() throws Exception {
 			List<Image> delImages = Lists.newArrayList();
+			List<Image> updateImages = Lists.newArrayList();
 			List<Image> images = imageService.findPage(pageIndex, PAGE_SIZE);
 			for(Image image : images){
-				if(articleService.notContainsImage(image.getName())){
+				Article article = articleService.getArticleByImageName(image.getName());
+				if(Objects.isNull(article)){
 					delImages.add(image);
+					continue;
+				}
+				if(StringUtils.isEmpty(image.getAId())){
+					image.setAId(article.getId());
+					updateImages.add(image);
 				}
 			}
 			imageService.deleteAll(delImages);
+			imageService.updateAll(updateImages);
 			return delImages.size();
 		}
 	}

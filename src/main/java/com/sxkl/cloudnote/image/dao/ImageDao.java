@@ -1,15 +1,21 @@
 package com.sxkl.cloudnote.image.dao;
 
 import java.math.BigInteger;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
 import com.sxkl.cloudnote.common.dao.BaseDao;
 import com.sxkl.cloudnote.image.entity.Image;
+
+import lombok.Cleanup;
 
 @Repository
 public class ImageDao extends BaseDao<String,Image> {
@@ -53,5 +59,36 @@ public class ImageDao extends BaseDao<String,Image> {
 			session.delete(image);
 		}
 		session.flush();
+	}
+
+	public void updateAll(List<Image> results) {
+		if(results.isEmpty()){
+			return;
+		}
+		Transaction tx = null;
+		try {
+			String sql = "update cn_image set aId = ? where id = ?";
+			@Cleanup
+			Session session = this.getSession();
+			tx = session.beginTransaction();
+			@Cleanup
+			Connection conn = this.getConnection();
+			@Cleanup
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			int size = results.size();
+			for(int i = 0; i < size; i++){
+				Image image = results.get(i);
+				stmt.setString(1,image.getAId());
+				stmt.setString(2,image.getId());
+				stmt.addBatch();
+				if(i%50 == 0){
+					stmt.executeBatch();
+				}
+			}
+			stmt.executeBatch();
+			tx.commit();
+		} catch (SQLException e) {
+			tx.rollback();
+		}
 	}
 }
