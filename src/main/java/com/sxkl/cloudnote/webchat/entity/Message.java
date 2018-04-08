@@ -47,6 +47,9 @@ public class Message {
 	
 	@Transient
 	private String dateStr;
+	
+	@Transient
+	private MsgType msgType;
 
 	public String getId() {
 		return id;
@@ -102,5 +105,13 @@ public class Message {
 
 	public void setDateStr(String dateStr) {
 		this.dateStr = DateUtils.formatDate2Str(date);
+	}
+
+	public MsgType getMsgType() {
+		return msgType;
+	}
+
+	public void setMsgType(MsgType msgType) {
+		this.msgType = msgType;
 	}
 }

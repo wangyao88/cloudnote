@@ -27,7 +27,7 @@ import com.sxkl.cloudnote.webchat.websocket.MyWebSocketHandler;
 public class MsgController {
 
 	@Resource
-	MyWebSocketHandler handler;
+	private MyWebSocketHandler handler;
 	@Autowired
 	private MessageService messageService;
 

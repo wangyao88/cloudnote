@@ -56,8 +56,10 @@ public class MyWebSocketHandler implements WebSocketHandler {
 	 * 消息处理，在客户端通过Websocket API发送的消息会经过这里，然后进行相应的处理
 	 */
 	public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
-			if(message.getPayloadLength()==0)return;
-			Message msg=new Gson().fromJson(message.getPayload().toString(),Message.class);
+			if(message.getPayloadLength() == 0){
+				return;
+			}
+			Message msg = new Gson().fromJson(message.getPayload().toString(),Message.class);
 			msg.setDate(new Date());
 			messageService.saveMessage(msg);
 			sendMessageToUser(msg.getTo(), new TextMessage(new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(msg)));
@@ -71,8 +73,7 @@ public class MyWebSocketHandler implements WebSocketHandler {
 		if (session.isOpen()) {
 			session.close();
 		}
-		Iterator<Entry<String, WebSocketSession>> it = userSocketSessionMap
-				.entrySet().iterator();
+		Iterator<Entry<String, WebSocketSession>> it = userSocketSessionMap.entrySet().iterator();
 		// 移除Socket会话
 		while (it.hasNext()) {
 			Entry<String, WebSocketSession> entry = it.next();
@@ -87,11 +88,9 @@ public class MyWebSocketHandler implements WebSocketHandler {
 	/**
 	 * 关闭连接后
 	 */
-	public void afterConnectionClosed(WebSocketSession session,
-			CloseStatus closeStatus) throws Exception {
+	public void afterConnectionClosed(WebSocketSession session,CloseStatus closeStatus) throws Exception {
 		System.out.println("Websocket:" + session.getId() + "已经关闭");
-		Iterator<Entry<String, WebSocketSession>> it = userSocketSessionMap
-				.entrySet().iterator();
+		Iterator<Entry<String, WebSocketSession>> it = userSocketSessionMap.entrySet().iterator();
 		// 移除Socket会话
 		while (it.hasNext()) {
 			Entry<String, WebSocketSession> entry = it.next();
@@ -114,18 +113,13 @@ public class MyWebSocketHandler implements WebSocketHandler {
 	 * @throws IOException
 	 */
 	public void broadcast(final TextMessage message) throws IOException {
-		Iterator<Entry<String, WebSocketSession>> it = userSocketSessionMap
-				.entrySet().iterator();
-
+		Iterator<Entry<String, WebSocketSession>> it = userSocketSessionMap.entrySet().iterator();
 		// 多线程群发
 		while (it.hasNext()) {
-
 			final Entry<String, WebSocketSession> entry = it.next();
-
 			if (entry.getValue().isOpen()) {
 				// entry.getValue().sendMessage(message);
 				new Thread(new Runnable() {
-
 					public void run() {
 						try {
 							if (entry.getValue().isOpen()) {
@@ -138,7 +132,6 @@ public class MyWebSocketHandler implements WebSocketHandler {
 
 				}).start();
 			}
-
 		}
 	}
 
