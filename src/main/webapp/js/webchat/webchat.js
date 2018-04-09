@@ -16,7 +16,13 @@ function notifyMe(text) {
 }
 
 function showWin(text){
-    var notification = new Notification(text+"给您发来一条新消息");
+	var content = text+"给您发来一条新消息";
+	var num = getRandom(0,27);
+	var url = bootPATH + "images/webchat/"+num+".jpg";
+    var notification = new Notification("提醒",{
+    	body : content,
+    	icon : url
+    });
     notification.onshow = function() {  
         setTimeout(function() {  
         	notification.close();  
@@ -25,6 +31,13 @@ function showWin(text){
     notification.onclick = function() {  
     	notification.close();  
     };  
+}
+
+function getRandom(min, max){
+    var r = Math.random() * (max - min);
+    var re = Math.round(r + min);
+    re = Math.max(Math.min(re, max), min)
+    return re;
 }
 
 mini.parse();
