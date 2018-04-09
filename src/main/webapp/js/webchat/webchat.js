@@ -18,7 +18,7 @@ function notifyMe(text) {
 function showWin(text){
 	var content = text+"给您发来一条新消息";
 	var num = getRandom(0,27);
-	var url = bootPATH + "images/webchat/"+num+".jpg";
+	var url = basePATH + "/images/webchat"+num+".jpg";
     var notification = new Notification("提醒",{
     	body : content,
     	icon : url
