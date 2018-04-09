@@ -23,7 +23,6 @@ $("#submitBtn").click(function () {
 });
 
 function modifySubmitData(){
-	console.log(publicKey);
 	var password = $("#password").val();
 	var encrypt = new JSEncrypt();
 	encrypt.setPublicKey(publicKey);

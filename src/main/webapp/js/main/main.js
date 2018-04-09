@@ -179,7 +179,6 @@ function getWeather(){
 		dataType : "json",
 		timeout: 100000,
 		success : function(result) {
-			console.log(result);
 			var title = "";
 			var content = "<table>";
 			$(result).each(function(index,weather) { 
@@ -212,6 +211,42 @@ function selectSkin(){
 function setSkin(){
 	var skin = getCookie("miniuiSkin");
 	mini.get("skin").setValue(skin);
+}
+
+function openwaitingtask(){
+	mini.open({
+		url : bootPATH + "waitingtask/waitingtask.jsp",
+		title : "待办任务",
+		width : 1200,
+		height : 700,
+		onload : function() {
+            
+		},
+		ondestroy : function(action) {
+			
+		}
+	})
+}
+
+function openWebchatPage(){
+	mini.open({
+		url : bootPATH + "webchat/webchat.jsp",
+		title : "聊天窗口",
+		width : 800,
+		height : 650,
+		allowResize: false,
+	    allowDrag: true,
+	    showMaxButton: true, 
+	    showMinButton: true, 
+	    showModal: false,
+		onload : function() {
+		},
+		ondestroy : function(action) {
+			if (action == "ok") {
+				
+			}
+		}
+	})
 }
 
 $(document).ready(function(){

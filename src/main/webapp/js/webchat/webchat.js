@@ -18,7 +18,7 @@ function notifyMe(text) {
 function showWin(text){
 	var content = text+"给您发来一条新消息";
 	var num = getRandom(0,27);
-	var url = basePATH + "/images/webchat"+num+".jpg";
+	var url = basePATH + "/images/webchat/"+num+".jpg";
     var notification = new Notification("提醒",{
     	body : content,
     	icon : url
@@ -41,27 +41,6 @@ function getRandom(min, max){
 }
 
 mini.parse();
-
-function openWebchatPage(){
-	mini.open({
-		url : bootPATH + "webchat/webchat.jsp",
-		title : "聊天窗口",
-		width : 800,
-		height : 650,
-		allowResize: false,
-	    allowDrag: true,
-	    showMaxButton: true, 
-	    showMinButton: true, 
-	    showModal: false,
-		onload : function() {
-		},
-		ondestroy : function(action) {
-			if (action == "ok") {
-				
-			}
-		}
-	})
-}
 
 var websocket;
 
@@ -167,7 +146,7 @@ function gotoMsgInput(){
 	webchatInput.focus();
 }
 
-linkToWebsocketServer(from);
+//linkToWebsocketServer(from);
 
 //$(document).keydown(function(e) {
 //	var keyCode = e.keyCode || e.which || e.charCode;
@@ -209,6 +188,10 @@ function selectFriend(){
 }
 
 $(document).ready(function(){
-	
+	try {
+		linkToWebsocketServer(from);
+    } catch (e) {
+		console.log(e);
+    }
 });
 			

@@ -12,21 +12,6 @@ var TaskTypes = [ {
 var grid;
 var finishedRateChart;
 
-function openwaitingtask(){
-	mini.open({
-		url : bootPATH + "waitingtask/waitingtask.jsp",
-		title : "待办任务",
-		width : 1200,
-		height : 700,
-		onload : function() {
-            
-		},
-		ondestroy : function(action) {
-			
-		}
-	})
-}
-
 ///////////////////////////////////////////////////////
 function onTaskTypeRenderer(e) {
 	for (var i = 0, l = TaskTypes.length; i < l; i++) {
@@ -184,7 +169,11 @@ function drawFinishedRateChart(rate){
 $(document).ready(function(){
 	mini.parse();
 	grid = mini.get("waitingtaskGrid");
-	grid.load();
+	try {
+		grid.load();
+    } catch (e) {
+		console.log(e);
+    }
 	//绑定表单
 	var db = new mini.DataBinding();
 	db.bindForm("waitingtaskEditForm", grid);

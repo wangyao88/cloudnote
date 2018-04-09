@@ -27,11 +27,8 @@
 <script src="<%=basePath%>js/flag/flag.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/article/article.js" type="text/javascript"></script> 
 <script src="<%=basePath%>js/user/user.js" type="text/javascript"></script>
-<script src="<%=basePath%>js/webchat/webchat.js" type="text/javascript"></script>
-<script src="<%=basePath%>js/statChart/statChart.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/main/main.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/backup/backup.js" type="text/javascript"></script>
-<script src="<%=basePath%>js/waitingtask/waitingtask.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/lexicon/lexicon.js" type="text/javascript"></script>
 <script type="text/javascript" src="<%=basePath%>js/jquery.autocomplete-min.js"></script>
 <script type="text/javascript">
