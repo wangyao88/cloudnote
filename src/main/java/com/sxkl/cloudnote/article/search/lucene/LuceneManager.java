@@ -21,6 +21,7 @@ import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexCommit;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.KeepOnlyLastCommitDeletionPolicy;
 import org.apache.lucene.index.SnapshotDeletionPolicy;
 import org.apache.lucene.index.Term;
@@ -94,6 +95,7 @@ public class LuceneManager {
 			FSDirectory fsDirectory = FSDirectory.open(path);
 			Analyzer analyzer = new IKAnalyzer(true);
 			IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
+			indexWriterConfig.setOpenMode(OpenMode.CREATE_OR_APPEND);
 			@Cleanup
 			IndexWriter writer = new IndexWriter(fsDirectory, indexWriterConfig);
 			
@@ -155,6 +157,7 @@ public class LuceneManager {
 			@Cleanup
 			IndexWriter ramWriter = getFSIndexWriter(userId);
 			ramWriter.deleteDocuments(term);
+			ramWriter.flush();
 			ramWriter.commit();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -169,6 +172,7 @@ public class LuceneManager {
 			@Cleanup
 			IndexWriter ramWriter = getFSIndexWriter(userId);
 			ramWriter.updateDocument(term, toDocument(article));
+			ramWriter.flush();
 			ramWriter.commit();
 		} catch (IOException e) {
 			e.printStackTrace();

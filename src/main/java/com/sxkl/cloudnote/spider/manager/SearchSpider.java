@@ -84,7 +84,7 @@ public class SearchSpider {
 		}
 		return result.toString();
 	}
-
+	
 	private void getNews(Elements elements,Set<String> news) {
 		if(news.size() >= 4){
 			return;
