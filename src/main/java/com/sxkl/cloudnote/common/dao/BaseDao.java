@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.orm.hibernate5.SessionFactoryUtils;
 
 import com.sxkl.cloudnote.common.entity.Page;
@@ -58,6 +57,7 @@ public class BaseDao<ID extends Serializable,E> extends AbstractBaseDao{
 	
 	public void save(E e){
 		getSession().save(e);
+		getSession().flush();
 	}
 	
 	public void update(E e){
@@ -67,14 +67,17 @@ public class BaseDao<ID extends Serializable,E> extends AbstractBaseDao{
 	
 	public void saveOrUpdate(E e){
 		getSession().saveOrUpdate(e);
+		getSession().flush();
 	}
 	
 	public void delete(E e){
 		getSession().delete(e);
+		getSession().flush();
 	}
 	
 	public void deleteById(ID id){
 		getSession().delete(clazz.getName(),id);
+		getSession().flush();
 	}
 	
 	@SuppressWarnings("unchecked")

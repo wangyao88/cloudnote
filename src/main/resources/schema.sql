@@ -146,3 +146,34 @@ ADD INDEX `IDX_NAME` (`name` ASC);
 
 ALTER TABLE `cloudnote`.`cn_article` 
 ADD COLUMN `is_shared` TINYINT(1) NULL COMMENT '是否分享到博客' AFTER `uId`;
+
+CREATE TABLE `cloudnote`.`cn_account_book` (
+  `id` VARCHAR(36) NOT NULL COMMENT '主键',
+  `name` VARCHAR(45) NULL COMMENT '账本名称',
+  `mark` VARCHAR(100) NULL COMMENT '账本备注',
+  `create_date` DATE NULL COMMENT '创建日期',
+  `user_id` VARCHAR(36) NULL COMMENT '创建人',
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COMMENT = '记账系统-账本表';
+
+CREATE TABLE `cloudnote`.`cn_category` (
+  `id` VARCHAR(36) NOT NULL COMMENT '主键',
+  `name` VARCHAR(45) NULL COMMENT '名称',
+  `type` VARCHAR(10) NULL COMMENT '收支类型',
+  `account_book_id` VARCHAR(36) NULL COMMENT '账本主键',
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COMMENT = '记账系统-收支类别';
+
+CREATE TABLE `cloudnote`.`cn_tally` (
+  `id` VARCHAR(36) NOT NULL COMMENT '主键',
+  `money` FLOAT NULL COMMENT '金额',
+  `mark` VARCHAR(100) NULL COMMENT '备注',
+  `category_id` VARCHAR(36) NULL COMMENT '收支类别主键',
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COMMENT = '记账系统-记账条目';

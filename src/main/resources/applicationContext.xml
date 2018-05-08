@@ -162,7 +162,7 @@
             </props>
         </property>
         <!-- 扫描hibernate注解配置的entity -->
-        <property name="packagesToScan" value="com.sxkl.cloudnote.*.entity" />
+        <property name="packagesToScan" value="com.sxkl.cloudnote.*.entity,com.sxkl.cloudnote.accountsystem.*.entity" />
     </bean>
     <bean id="cvmSessionFactory"
         class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
@@ -184,7 +184,7 @@
             </props>
         </property>
         <!-- 扫描hibernate注解配置的entity -->
-        <property name="packagesToScan" value="com.sxkl.cloudnote.*.entity" />
+        <property name="packagesToScan" value="com.sxkl.cloudnote.*.entity,com.sxkl.cloudnote.accountsystem.*.entity" />
     </bean>
     
     <bean id="hibernateDaoSupport"  

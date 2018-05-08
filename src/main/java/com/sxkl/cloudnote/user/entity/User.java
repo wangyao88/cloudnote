@@ -16,6 +16,7 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
 
+import com.sxkl.cloudnote.accountsystem.accountbook.entity.AccountBook;
 import com.sxkl.cloudnote.flag.entity.Flag;
 import com.sxkl.cloudnote.note.entity.Note;
 
@@ -50,6 +51,10 @@ public class User implements Serializable{
 	@OneToMany(fetch=FetchType.LAZY,mappedBy="user")
 	@Cascade(value={CascadeType.ALL})
 	private Set<Flag> flags = new HashSet<Flag>();
+	
+	@OneToMany(fetch=FetchType.LAZY,mappedBy="user")
+	@Cascade(value={CascadeType.ALL})
+	private Set<AccountBook> accountBooks = new HashSet<AccountBook>();
 	
 	public User() {
 		super();

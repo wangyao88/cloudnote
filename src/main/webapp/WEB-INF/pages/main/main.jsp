@@ -10,7 +10,6 @@
 <head>
 <base href="<%=basePath%>">
 <title>曼妙云端笔记首页</title>
-<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="cache-control" content="no-cache">
 <meta http-equiv="expires" content="0">
@@ -72,6 +71,8 @@
 					url="<%=basePath%>main/getAllSkinsFromCombo" ajaxType="get"
 					required="true" allowInput="true" showNullItem="true"
 					nullItemText="请选择皮肤..." onitemclick="selectSkin"/>
+					<span class="separator"></span>
+			    <a class="mini-button" iconCls="icon-goto" href="<%=basePath%>accountsystem/main/index" target="_blank">记账管理</a>
 				<span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-user" onclick="openWebchatPage">在线聊天</a>
 			    <span class="separator"></span>

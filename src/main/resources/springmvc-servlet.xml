@@ -30,7 +30,7 @@
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 	
-	<context:component-scan base-package="com.sxkl.cloudnote.*.controller" />
+	<context:component-scan base-package="com.sxkl.cloudnote.*.controller,com.sxkl.cloudnote.*.*.controller" />
 	
 	<beans:bean class="org.springframework.http.converter.StringHttpMessageConverter">
 		<beans:constructor-arg value="UTF-8" />

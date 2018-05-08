@@ -264,6 +264,7 @@ public class LuceneManager {
 		FSDirectory fsDirectory = FSDirectory.open(path);
 		Analyzer analyzer = new IKAnalyzer(true);
 		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
+		indexWriterConfig.setOpenMode(OpenMode.CREATE_OR_APPEND);
 		return new IndexWriter(fsDirectory, indexWriterConfig);
 	}
 }
