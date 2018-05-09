@@ -1,0 +1,1 @@
+var Type = [{ id: 'INCOME', text: '收入' }, { id: 'OUTCOME', text: '支出'}];

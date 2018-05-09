@@ -86,7 +86,7 @@ function removeAccountBook(){
 		return false;
 	}
 	$.ajax({
-    	url : basePath + "accountsystem/accountbook/remove",
+    	url : basePath + "accountsystem/accountbook/delete",
         data: { 
         	id : record.id
         },

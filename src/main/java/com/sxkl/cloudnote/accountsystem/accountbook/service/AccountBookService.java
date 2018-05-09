@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.gson.Gson;
 import com.sxkl.cloudnote.accountsystem.accountbook.dao.AccountBookDao;
 import com.sxkl.cloudnote.accountsystem.accountbook.entity.AccountBook;
 import com.sxkl.cloudnote.common.service.OperateResultService;
@@ -26,13 +27,13 @@ import net.sf.json.JSONObject;
  * @description: 
  */
 @Service
+@Transactional(value = "transactionManager")
 public class AccountBookService {
 	
 	@Autowired
 	private AccountBookDao accountBookDao;
 
-	@Logger(message="获取所有账本")
-	@Transactional(value = "transactionManager")
+	@Logger(message="分页查询账本")
 	public String getAccountBookList(HttpServletRequest request) {
 		try {
 			String pageIndex = request.getParameter("pageIndex");
@@ -47,9 +48,17 @@ public class AccountBookService {
 			return OperateResultService.configurateFailureResult(e.getMessage());
 		}
 	}
+	
+	@Logger(message="获取所有账本")
+	public String getAll(HttpServletRequest request) {
+		User sessionUser = UserUtil.getSessionUser(request);
+		String userId = sessionUser.getId();
+		List<AccountBook> accountBooks = accountBookDao.findAllSimple(userId);
+		Gson gson = new Gson();
+		return gson.toJson(accountBooks);
+	}
 
 	@Logger(message="新增账本")
-	@Transactional(value = "transactionManager")
 	public String add(AccountBook accountBook, HttpServletRequest request) {
 		try {
 			User user = UserUtil.getSessionUser(request);
@@ -63,7 +72,6 @@ public class AccountBookService {
 	}
 
 	@Logger(message="更新账本")
-	@Transactional(value = "transactionManager")
 	@SuppressWarnings("unchecked")
 	public String saveChanges(String data, HttpServletRequest request) {
 		try {
@@ -86,14 +94,13 @@ public class AccountBookService {
 	}
 
 	@Logger(message="删除账本")
-	@Transactional(value = "transactionManager")
-	public String remove(String id, HttpServletRequest request) {
+	public String delete(String id, HttpServletRequest request) {
 		try {
-			accountBookDao.deleteById(id);
+			AccountBook accountBook = accountBookDao.findOne(id);
+			accountBookDao.delete(accountBook);
 			return OperateResultService.configurateSuccessResult();
 		} catch (Exception e) {
 			return OperateResultService.configurateFailureResult(e.getMessage());
 		}
 	}
-
 }

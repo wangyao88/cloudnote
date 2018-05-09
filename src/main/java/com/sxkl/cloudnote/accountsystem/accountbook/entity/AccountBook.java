@@ -71,7 +71,12 @@ public class AccountBook {
 	public AccountBook() {
 		
 	}
-
+	
+	public AccountBook(String id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+	
 	public AccountBook(String id, String name, String mark, Date createDate) {
 		this.id = id;
 		this.name = name;

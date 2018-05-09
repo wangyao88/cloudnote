@@ -44,7 +44,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div title="" region="center">
 		    <div id="accountbookGrid" class="mini-datagrid" style="width:100%;height:100%;" 
 		        url="<%=basePath%>accountsystem/accountbook/getAccountBookList" idField="id" allowResize="false" 
-		        pageSize="2" sizeList="[20,50,100]" ajaxType="post" multiSelect="true" autoLoad=true
+		        pageSize="20" sizeList="[20,50,100]" ajaxType="post" multiSelect="true" autoLoad=true
 		        allowCellEdit="true" allowCellSelect="true" >
             	<div property="columns">
 	            <div type="indexcolumn">序号</div>

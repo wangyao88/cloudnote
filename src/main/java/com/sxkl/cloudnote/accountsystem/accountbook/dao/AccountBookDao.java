@@ -51,4 +51,13 @@ public class AccountBookDao extends BaseDao<String,AccountBook> {
 		BigInteger bInt = (BigInteger) query.uniqueResult();
 	    return bInt.intValue();
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<AccountBook> findAllSimple(String userId) {
+		String hql = "select new AccountBook(id,name) from AccountBook a where a.user.id=:userId";
+		Session session = this.getSession();
+		Query query = session.createQuery(hql);
+		query.setString("userId", userId);
+		return query.list();
+	}
 }

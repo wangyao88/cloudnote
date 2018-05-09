@@ -177,3 +177,6 @@ CREATE TABLE `cloudnote`.`cn_tally` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COMMENT = '记账系统-记账条目';
+
+ALTER TABLE `cloudnote`.`cn_category` 
+ADD COLUMN `parent_id` VARCHAR(36) NULL AFTER `account_book_id`;

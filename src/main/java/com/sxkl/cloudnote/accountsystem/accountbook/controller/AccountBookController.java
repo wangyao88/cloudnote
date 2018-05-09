@@ -36,6 +36,12 @@ public class AccountBookController {
 		return accountBookService.getAccountBookList(request);
 	}
 	
+	@RequestMapping(value = "/getAll", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	@ResponseBody
+	public String getAll(HttpServletRequest request){
+		return accountBookService.getAll(request);
+	}
+	
 	@RequestMapping(value = "/add", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
 	@ResponseBody
 	public String add(AccountBook accountBook, HttpServletRequest request){
@@ -48,9 +54,9 @@ public class AccountBookController {
 		return accountBookService.saveChanges(data,request);
 	}
 	
-	@RequestMapping(value = "/remove", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
 	@ResponseBody
-	public String remove(String id, HttpServletRequest request){
-		return accountBookService.remove(id,request);
+	public String delete(String id, HttpServletRequest request){
+		return accountBookService.delete(id,request);
 	}
 }

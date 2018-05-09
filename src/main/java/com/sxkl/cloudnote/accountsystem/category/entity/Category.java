@@ -1,5 +1,6 @@
 package com.sxkl.cloudnote.accountsystem.category.entity;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -42,6 +43,14 @@ public class Category {
 	
 	@Column(name = "type", unique = false, nullable = false)
 	private String type;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "parent_id")
+	private Category parent;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
+	@Cascade(value = { CascadeType.ALL, CascadeType.DELETE, CascadeType.SAVE_UPDATE })
+	private Set<Category> children = new HashSet<Category>();
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "account_book_id")
@@ -50,4 +59,29 @@ public class Category {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
 	@Cascade(value = { CascadeType.ALL })
 	private Set<Tally> tallies;
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Category other = (Category) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
 }
