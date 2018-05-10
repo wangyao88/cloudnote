@@ -180,3 +180,13 @@ COMMENT = '记账系统-记账条目';
 
 ALTER TABLE `cloudnote`.`cn_category` 
 ADD COLUMN `parent_id` VARCHAR(36) NULL AFTER `account_book_id`;
+
+ALTER TABLE `cloudnote`.`cn_tally` 
+ADD COLUMN `create_date` DATETIME NULL COMMENT '记账日期' AFTER `category_id`;
+
+ALTER TABLE `cloudnote`.`cn_tally` 
+ADD COLUMN `account_book_id` VARCHAR(36) NULL AFTER `create_date`,
+ADD COLUMN `type` VARCHAR(10) NULL AFTER `account_book_id`;
+
+ALTER TABLE `cloudnote`.`cn_tally` 
+ADD COLUMN `user_id` VARCHAR(36) NULL COMMENT '记账人' AFTER `type`;

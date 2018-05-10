@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.sxkl.cloudnote.accountsystem.tally.entity.Tally;
 import com.sxkl.cloudnote.accountsystem.tally.service.TallyService;
 
 /**
@@ -33,5 +34,17 @@ public class TallyController {
 	@ResponseBody
 	public String getTallyList(HttpServletRequest request){
 		return tallyService.getTallyList(request);
+	}
+	
+	@RequestMapping(value = "/saveChanges", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	@ResponseBody
+	public String saveChanges(HttpServletRequest request){
+		return tallyService.saveChanges(request);
+	}
+	
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	@ResponseBody
+	public String delete(HttpServletRequest request){
+		return tallyService.delete(request);
 	}
 }

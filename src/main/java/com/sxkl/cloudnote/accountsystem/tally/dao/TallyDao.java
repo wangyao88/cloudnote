@@ -1,11 +1,16 @@
 package com.sxkl.cloudnote.accountsystem.tally.dao;
 
 import java.util.List;
+import java.util.Objects;
 
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.sxkl.cloudnote.accountsystem.category.dao.CategoryDao;
+import com.sxkl.cloudnote.accountsystem.category.entity.Category;
 import com.sxkl.cloudnote.accountsystem.tally.entity.Tally;
 import com.sxkl.cloudnote.common.dao.BaseDao;
 
@@ -16,16 +21,43 @@ import com.sxkl.cloudnote.common.dao.BaseDao;
  */
 @Repository
 public class TallyDao extends BaseDao<String,Tally> {
+	
+	@Autowired
+	private CategoryDao categoryDao;
 
-//	@SuppressWarnings("rawtypes")
-//	public List findAllByAccountBookId(String accountBookId, String type) {
-//		StringBuilder sql = new StringBuilder();
-//		sql.append("select f.id,f.name,f.parent_id from cn_category f ")
-//		   .append("where f.account_book_id = :accountBookId and f.type=:type");
-//		Session session = this.getSessionFactory().getCurrentSession();
-//		SQLQuery query = session.createSQLQuery(sql.toString());
-//		query.setString("accountBookId", accountBookId);
-//		query.setString("type", type);
-//		return query.list();
-//	}
+	public int getTallyListCount(Tally tally) {
+		// TODO Auto-generated method stub
+		return 1;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Tally> getTallyList(int pageIndex, int pageSize, Tally tally) {
+		Criteria criteria = this.getSession().createCriteria(Tally.class);
+		if(!StringUtils.isEmpty(tally.getMark())){
+			criteria.add(Restrictions.like("mark",'%'+tally.getMark()+'%'));
+		}
+		if(!Objects.isNull(tally.getBeginDate())){
+			criteria.add(Restrictions.ge("createDate", tally.getBeginDate()));
+		}
+		if(!Objects.isNull(tally.getEndDate())){
+			criteria.add(Restrictions.le("createDate", tally.getEndDate()));
+		}
+		if(!StringUtils.isEmpty(tally.getAccountBook())){
+			criteria.add(Restrictions.eq("accountBook",tally.getAccountBook()));
+		}
+		if(!StringUtils.isEmpty(tally.getType())){
+			criteria.add(Restrictions.eq("type",tally.getType()));
+		}
+		if(!StringUtils.isEmpty(tally.getCategoryId())){
+			String categoryId = tally.getCategoryId();
+			Category category = categoryDao.findOne(categoryId);
+			criteria.add(Restrictions.eq("category",category));
+		}
+		if(!StringUtils.isEmpty(tally.getUserId())){
+			criteria.add(Restrictions.eq("userId",tally.getUserId()));
+		}
+		criteria.setFirstResult(pageIndex*pageSize);
+		criteria.setMaxResults(pageSize);
+		return criteria.list();
+	}
 }

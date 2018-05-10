@@ -59,6 +59,14 @@ public class Category {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
 	@Cascade(value = { CascadeType.ALL })
 	private Set<Tally> tallies;
+	
+	public Category() {
+	}
+	
+	public Category(String id, String name) {
+		this.id = id;
+		this.name = name;
+	}
 
 	@Override
 	public boolean equals(Object obj) {

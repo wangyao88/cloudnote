@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.sxkl.cloudnote.accountsystem.accountbook.dao.AccountBookDao;
 import com.sxkl.cloudnote.accountsystem.accountbook.entity.AccountBook;
@@ -158,5 +161,23 @@ public class CategoryService {
 		} catch (Exception e) {
 			return OperateResultService.configurateFailureResult(e.getMessage());
 		}
+	}
+
+	public String getCategory(HttpServletRequest request) {
+		String accountBookId = request.getParameter("accountBookId");
+		String type = request.getParameter("type");
+		List<Category> categories = categoryDao.getCategory(accountBookId,type);
+		Predicate<Category> filter = new Predicate<Category>() {
+			@Override
+			public boolean apply(Category category) {
+				return category.getChildren().isEmpty();
+			}
+		};
+		FluentIterable<Category> datas = FluentIterable.from(categories).filter(filter);
+		List<Category> result = Lists.newArrayList();
+		if(!datas.isEmpty()){
+			result = datas.toList();
+		}
+		return new Gson().toJson(result);
 	}
 }

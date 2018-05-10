@@ -43,7 +43,8 @@ function openTab(node){
 function initTab(tabsEle,node){
 	var tab = {
 			title: node.text,
-			url : node.url
+			url : node.url,
+			showCloseButton : true
     };
     tab = tabsEle.addTab(tab);            
 //    var el = tabsEle.getTabBodyEl(tab);

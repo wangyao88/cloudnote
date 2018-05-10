@@ -42,6 +42,12 @@ public class CategoryController {
 		return categoryService.getOutcomeCategoryTree(request);
 	}
 	
+	@RequestMapping(value = "/getCategory", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+	@ResponseBody
+	public String getCategory(HttpServletRequest request){
+		return categoryService.getCategory(request);
+	}
+	
 	@RequestMapping(value = "/add", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
 	@ResponseBody
 	public String add(CategoryFront categoryFront, HttpServletRequest request){
