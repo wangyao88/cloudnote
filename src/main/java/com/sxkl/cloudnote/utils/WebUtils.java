@@ -37,7 +37,6 @@ public class WebUtils {
 			while (parameterNames.hasMoreElements()) {
 				String searchName = parameterNames.nextElement();
 				String value = request.getParameter(searchName);
-				System.out.println(searchName + "," + value);
 				if(filedSet.contains(searchName) && !StringUtils.isEmpty(value)){
 					BeanUtils.setProperty(t, searchName, value);
 				}

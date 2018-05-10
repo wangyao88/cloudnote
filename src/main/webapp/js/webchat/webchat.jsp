@@ -14,6 +14,7 @@ import="com.sxkl.cloudnote.user.entity.User" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="<%=basePath%>js/webchat/webchat.css" rel="stylesheet" type="text/css" />
 <link href="<%=basePath%>css/scroller.css" rel="stylesheet" type="text/css" />
