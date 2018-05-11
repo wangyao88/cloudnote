@@ -8,6 +8,12 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.Future;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
@@ -94,9 +100,31 @@ public class LuceneManager {
 			indexWriterConfig.setOpenMode(OpenMode.CREATE_OR_APPEND);
 			@Cleanup
 			IndexWriter writer = new IndexWriter(fsDirectory, indexWriterConfig);
+			int articleTotal = articleService.getArticleTotal(userId);
+			int pageTotal = getPageTotal(articleTotal);
 			
+			ExecutorCompletionService<List<Article>> executorCompletionService = new ExecutorCompletionService<List<Article>>(
+	                Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()*2));
 			
-			List<Article> articles = articleService.getAllArticles(userId);
+			for (int i = 0; i < pageTotal; i++) {
+				int pageIndex = i;
+                executorCompletionService.submit(new Callable<List<Article>>() {
+                    @Override
+                    public List<Article> call() throws Exception {
+                    	return articleService.findPage(pageIndex,PAGE_SIZE,userId);
+                    }
+                });
+            }
+			
+			for (int i = 0; i < pageTotal; i++) {
+				Future<List<Article>> take = executorCompletionService.take();
+                List<Article> articles = take.get();
+                for (Article article : articles) {
+    				writer.addDocument(toDocument(article));
+    			}
+            }
+			
+//			List<Article> articles = articleService.getAllArticles(userId);
 			
 //			int articleTotal = articleService.getArticleTotal(userId);
 //			List<Article> articles = new ArrayList<Article>(articleTotal);
@@ -105,8 +133,11 @@ public class LuceneManager {
 //			int end = articleTotal/PAGE_SIZE;
 //			ArticleRecursiveTask task = new ArticleRecursiveTask(start,end,userId,PAGE_SIZE,articleService);
 //	        Future<List<Article>> result = forkJoinPool.submit(task);  
-//	        try {  
-//	            articles.addAll(result.get());
+//	        try {
+//	        	List<Article> articles = result.get();
+//	        	for(Article article : articles){
+//	        		writer.addDocument(toDocument(article));
+//	        	}
 //	        } catch (Exception e) { 
 //	        	e.printStackTrace();
 //	        }  
@@ -116,14 +147,19 @@ public class LuceneManager {
 //				articles.addAll(articleService.findPage(currentPage,PAGE_SIZE,userId));
 //				currentPage++;
 //			}
-			for (Article article : articles) {
-				writer.addDocument(toDocument(article));
-			}
-		} catch (IOException e) {
+//			for (Article article : articles) {
+//				writer.addDocument(toDocument(article));
+//			}
+		} catch (Exception e) {
 			log.error("于磁盘创建笔记索引失败！错误信息：{}",e.getMessage());
 		}
 	}
 
+	private int getPageTotal(int articleTotal) {
+		int temp = articleTotal/PAGE_SIZE;
+		return temp*PAGE_SIZE < articleTotal ? temp+1 : temp;
+	}
+	
 	@Logger(message="实体article对象转document笔记索引对象")
 	public Document toDocument(Article article) {
 		Document doc = new Document();

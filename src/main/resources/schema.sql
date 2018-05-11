@@ -190,3 +190,6 @@ ADD COLUMN `type` VARCHAR(10) NULL AFTER `account_book_id`;
 
 ALTER TABLE `cloudnote`.`cn_tally` 
 ADD COLUMN `user_id` VARCHAR(36) NULL COMMENT '记账人' AFTER `type`;
+
+ALTER TABLE `cloudnote`.`cn_article` 
+ADD INDEX `article_user_id` USING BTREE (`uId` ASC);

@@ -5,6 +5,7 @@ import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -26,13 +27,22 @@ public class TallyDao extends BaseDao<String,Tally> {
 	private CategoryDao categoryDao;
 
 	public int getTallyListCount(Tally tally) {
-		// TODO Auto-generated method stub
-		return 1;
+		Criteria criteria = this.getSession().createCriteria(Tally.class);
+		configurateCondition(tally, criteria);
+		criteria.setProjection(Projections.rowCount());  
+		return Integer.parseInt(criteria.uniqueResult().toString());
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Tally> getTallyList(int pageIndex, int pageSize, Tally tally) {
 		Criteria criteria = this.getSession().createCriteria(Tally.class);
+		configurateCondition(tally, criteria);
+		criteria.setFirstResult(pageIndex*pageSize);
+		criteria.setMaxResults(pageSize);
+		return criteria.list();
+	}
+
+	private void configurateCondition(Tally tally, Criteria criteria) {
 		if(!StringUtils.isEmpty(tally.getMark())){
 			criteria.add(Restrictions.like("mark",'%'+tally.getMark()+'%'));
 		}
@@ -56,8 +66,5 @@ public class TallyDao extends BaseDao<String,Tally> {
 		if(!StringUtils.isEmpty(tally.getUserId())){
 			criteria.add(Restrictions.eq("userId",tally.getUserId()));
 		}
-		criteria.setFirstResult(pageIndex*pageSize);
-		criteria.setMaxResults(pageSize);
-		return criteria.list();
 	}
 }
