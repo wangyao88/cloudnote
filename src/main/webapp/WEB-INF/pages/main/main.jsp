@@ -22,6 +22,8 @@
 
 <script src="<%=basePath%>js/boot.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/jquery.min.js" type="text/javascript"></script>
+<script src="<%=basePath%>js/ueditor-1.4.3.3/ueditor.config.js" type="text/javascript"></script>
+<script src="<%=basePath%>js/ueditor-1.4.3.3/ueditor.all.min.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/note/note.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/flag/flag.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/article/article.js" type="text/javascript"></script> 
@@ -41,6 +43,8 @@
 			    <a class="mini-button" iconCls="icon-addnew" onclick="addArticle">增加</a>
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-edit" onclick="editArticle">修改</a>
+			    <span class="separator"></span>
+			    <a class="mini-button" iconCls="icon-save" onclick="contentChange">快速保存</a>
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-remove" onclick="removeArticle">删除</a>
 			    <span class="separator"></span>
@@ -111,7 +115,9 @@
 			</ul>
 		</div>
 		<div title="笔记详情" region="center">
-		    <div id="articleContainer" style="margin-left:10px"></div>
+		  <textarea id="articleContainer" 
+		            name="articleContainer" 
+		            style="width:100%;height:100%;overflow-x:hidden;"></textarea>
 		</div>
 		<div title="笔记列表" region="east" width="400px" expanded="true">
 				<div id="articleGrid" class="mini-datagrid" style="width:395px;height:100%;" 
@@ -128,3 +134,7 @@
 	</div>
 </body>
 </html>
+<script type="text/javascript">
+mini.parse();
+var editor = UE.getEditor('articleContainer');
+</script>

@@ -401,7 +401,19 @@ public class ArticleService {
 		return blog;
 	}
 
+	@Logger(message="根据图片名获取笔记")
 	public Article getArticleByImageName(String name) {
 		return articleDao.getArticleByImageName(name);
+	}
+
+	@Logger(message="快速修改笔记")
+	public void quickupdate(HttpServletRequest request) {
+		String articleId = request.getParameter("articleId");
+		String content = request.getParameter("content");
+		Article article = articleDao.getArticleById(articleId);
+		String contentFilted = FileUtils.saveHtmlImgToDB(content,imageService);
+		contentFilted = FileUtils.filterDraft(contentFilted);
+		article.setContent(contentFilted);
+		articleDao.saveOrUpdate(article);
 	}
 }

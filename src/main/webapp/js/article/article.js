@@ -1,3 +1,5 @@
+var fisrt = true;
+var load = false;
 function addArticle() {
 	var tree = mini.get("menuTree");
 	var node = tree.getSelectedNode();
@@ -86,6 +88,24 @@ function gridRowdblclick() {
 	editArticle();
 }
 
+function contentChange(){
+	var content = editor.getContent();
+	var grid = mini.get("articleGrid");
+	var record = grid.getSelected();
+	$.ajax({
+		url : basePATH + "/article/quickupdate",
+		type : "post",
+		data : {
+			articleId : record.id,
+			content : content
+		},
+		dataType : 'json',
+		success : function(result) {
+//			getArticleById(record.id);
+		}
+	});
+}
+
 function getArticleById(articleId) {
 	var grid = mini.get("articleGrid");
 	var record = grid.getSelected();
@@ -94,49 +114,60 @@ function getArticleById(articleId) {
 		cls : 'mini-mask-loading',
 		html : '加载中...'
 	});
-	$.ajax({
-		url : basePATH + "/article/getArticle",
-		type : "post",
-		data : {
-			id : articleId,
-			searchKeys : record.searchKeys
-		},
-		dataType : 'json',
-		success : function(result) {
-			if(!result.data){
-				mini.alert("笔记已删除，请重建索引，再搜索。或者忽略此条笔记！");
-				return;
+	editor.ready(function(){
+		$.ajax({
+			url : basePATH + "/article/getArticle",
+			type : "post",
+			data : {
+				id : articleId,
+				searchKeys : record.searchKeys
+			},
+			dataType : 'json',
+			success : function(result) {
+				load = true;
+				if(!result.data){
+					mini.alert("笔记已删除，请重建索引，再搜索。或者忽略此条笔记！");
+					return;
+				}
+				var title = record.title;
+//				var content = '<center><h1>'+title+'</h1></center><br>'+result.data;
+				var content = result.data;
+				if(fisrt){
+					setTimeout(function() {
+						editor.setContent(content);
+						fisrt = false;
+					}, 500)
+				}else{
+					editor.setContent(content);
+				}
+				mini.unmask(document.body);
+			},
+			error : function() {
+//				mini.unmask(document.body);
+				mini.alert("获取笔记详情失败，请稍候重试！");
 			}
-			var title = record.title;
-			var content = '<center><h1>'+title+'</h1></center><br>'+result.data;
-			document.getElementById("articleContainer").innerHTML = content;
-			mini.unmask(document.body);
-		},
-		error : function() {
-			mini.unmask(document.body);
-			mini.alert("获取笔记详情失败，请稍候重试！");
-		}
-	});
-	
-	$.ajax({
-		url : basePATH + "/flag/getFlagByArticleId",
-		type : "post",
-		data : {
-			articleId : articleId
-		},
-		dataType : 'json',
-		success : function(result) {
-			var flagIds = result.data.id;
-			if(!flagIds){
-				return;
+		});
+		
+		$.ajax({
+			url : basePATH + "/flag/getFlagByArticleId",
+			type : "post",
+			data : {
+				articleId : articleId
+			},
+			dataType : 'json',
+			success : function(result) {
+				var flagIds = result.data.id;
+				if(!flagIds){
+					return;
+				}
+				var flagIdArr = flagIds.split(",");
+				var tree = mini.get("menuTree");
+				var node = tree.getNode(flagIdArr[0]);
+				if(node){
+					tree.scrollIntoView(node);
+				}
 			}
-			var flagIdArr = flagIds.split(",");
-			var tree = mini.get("menuTree");
-			var node = tree.getNode(flagIdArr[0]);
-			if(node){
-				tree.scrollIntoView(node);
-			}
-		}
+		});
 	});
 }
 
@@ -257,9 +288,11 @@ function addListener(){
 	$(document).keydown(function(e) {
 		var keyCode = e.keyCode || e.which || e.charCode;
 		var shiftKey = e.shiftKey || e.metaKey;
+		console.log(keyCode);
 		quickKeyForAddArticle(shiftKey,keyCode);
 		quickKeyForWholePage(shiftKey,keyCode);
 		quickKeyForNormalPage(shiftKey,keyCode);
+		quickKeyForContentChange(shiftKey,keyCode);
 	});
 }
 
@@ -287,6 +320,13 @@ function quickKeyForNormalPage(shiftKey,keyCode){
 		layout.updateRegion("east", { expanded: true });
 	}
 }
+
+function quickKeyForContentChange(shiftKey,keyCode){
+	if (shiftKey && keyCode == 83) {
+		contentChange();
+	}
+}
+
 
 $(document).ready(function() {
 	firstLoadArticles();

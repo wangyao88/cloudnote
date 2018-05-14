@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sxkl.cloudnote.article.search.lucene.IndexManager;
 import com.sxkl.cloudnote.article.search.lucene.LuceneManager;
 import com.sxkl.cloudnote.article.service.ArticleService;
 import com.sxkl.cloudnote.common.service.OperateResultService;
@@ -20,8 +19,6 @@ public class ArticleController {
 	
 	@Autowired
 	private ArticleService articleService;
-	@Autowired
-	private IndexManager indexManager;
 	@Autowired
 	private LuceneManager luceneManager;
 	
@@ -89,6 +86,16 @@ public class ArticleController {
 			User user = UserUtil.getSessionUser(request);
 //			indexManager.createIndex(user.getId());
 			luceneManager.creatIndexOnDisk(user.getId());
+			return OperateResultService.configurateSuccessResult();
+		} catch (Exception e) {
+			return OperateResultService.configurateFailureResult(e.getMessage());
+		}
+	}
+	
+	@RequestMapping(value = "/quickupdate", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	public String quickupdate(HttpServletRequest request){
+		try {
+		    articleService.quickupdate(request);
 			return OperateResultService.configurateSuccessResult();
 		} catch (Exception e) {
 			return OperateResultService.configurateFailureResult(e.getMessage());
