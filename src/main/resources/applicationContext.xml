@@ -307,8 +307,8 @@
 	<bean id="rabbitConnectionFactory"
         class="org.springframework.amqp.rabbit.connection.CachingConnectionFactory">
         <constructor-arg value="${mq.host}"/>
-        <property name="username" value="wy"/>
-        <property name="password" value="wy"/>
+        <property name="username" value="${mq.username}"/>
+        <property name="password" value="${mq.password}"/>
         <property name="channelCacheSize" value="8"/>
         <property name="port" value="${mq.port}"></property>
     </bean>
