@@ -20,7 +20,7 @@
 		http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
-		http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit.xsd"
+		http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit-2.0.xsd"
 		default-lazy-init="false">
     <!-- 属性文件位置 -->
     <bean id="annotationPropertyConfigurer"
@@ -296,20 +296,49 @@
 	</aop:config>
 	
 	<!-- 连接配置 -->
-	<rabbit:connection-factory id="connectionFactory" 
+	<rabbit:connection-factory id="rabbitmqConnectionFactory" 
 		host="${mq.host}" 
 		username="${mq.username}"
 	    password="${mq.password}" 
 	    port="${mq.port}"  />
-	<rabbit:admin connection-factory="connectionFactory"/>
-	
-	<rabbit:template id="amqpTemplate" exchange="news_exchange" connection-factory="connectionFactory"/>
-	
-	<rabbit:topic-exchange name="news_exchange" durable="true" auto-delete="false">
-	    <rabbit:bindings>
-	        <rabbit:binding queue="news_queue" pattern="news_patt"/>
-	    </rabbit:bindings>
-	</rabbit:topic-exchange>
-	
-	<rabbit:queue id="news_queue" name="news_queue" durable="false" auto-delete="false" exclusive="false" />
+	    
+	    
+	<!-- rabbitMQ配置 -->
+	<bean id="rabbitConnectionFactory"
+        class="org.springframework.amqp.rabbit.connection.CachingConnectionFactory">
+        <constructor-arg value="${mq.host}"/>
+        <property name="username" value="wy"/>
+        <property name="password" value="wy"/>
+        <property name="channelCacheSize" value="8"/>
+        <property name="port" value="${mq.port}"></property>
+    </bean>
+    <!--Spring的rabbitmq admin-->
+    <rabbit:admin connection-factory="rabbitConnectionFactory"/>
+
+	<!--生产者创建队列-->
+    <rabbit:queue name="info_log_queue" durable="false"/>
+    <rabbit:queue name="error_log_queue" durable="false"/>
+    <rabbit:queue name="other_log_queue" durable="false"/>
+
+	<!--topic交换器-->
+    <rabbit:topic-exchange name="log_exchange"
+         xmlns="http://www.springframework.org/schema/rabbit" durable="false">
+         <rabbit:bindings>
+            <rabbit:binding queue="info_log_queue" pattern="info_log_queue"></rabbit:binding>
+            <rabbit:binding queue="error_log_queue" pattern="error_log_queue"></rabbit:binding>
+            <rabbit:binding queue="other_log_queue" pattern="other_log_queue"></rabbit:binding>
+        </rabbit:bindings>
+    </rabbit:topic-exchange>
+	<!-- rabbitTemplate 消息模板类 -->
+
+    <bean id="rabbitTemplate" class="org.springframework.amqp.rabbit.core.RabbitTemplate">
+        <constructor-arg ref="rabbitConnectionFactory"></constructor-arg>
+    </bean>
+    
+    <!--监听容器-->
+    <rabbit:listener-container connection-factory="rabbitConnectionFactory">
+        <rabbit:listener ref="infoLogCosumer" queues="info_log_queue" method="onMessage" />
+        <rabbit:listener ref="errorLogCosumer" queues="error_log_queue" method="onMessage" />
+        <rabbit:listener ref="otherLogCosumer" queues="other_log_queue" method="onMessage" />
+    </rabbit:listener-container>
 </beans>

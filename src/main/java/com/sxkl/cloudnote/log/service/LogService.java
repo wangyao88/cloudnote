@@ -1,48 +1,62 @@
 package com.sxkl.cloudnote.log.service;
 
+import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sxkl.cloudnote.common.dao.BaseDao;
-import com.sxkl.cloudnote.common.service.BaseService;
-import com.sxkl.cloudnote.log.dao.LogDao;
+import com.google.common.base.Charsets;
 import com.sxkl.cloudnote.log.entity.Log;
 import com.sxkl.cloudnote.log.entity.LogLevel;
 import com.sxkl.cloudnote.utils.DateUtils;
+import com.sxkl.cloudnote.utils.StringUtils;
+
+import net.sf.json.JSONObject;
 
 @Service
-public class LogService extends BaseService<String,Log>{
+public class LogService{
 	
 	@Autowired
-	private LogDao logDao;
-	
-	public void showLogInConsole(Log logger){
+	private AmqpTemplate amqpTemplate;
+
+	public void showLogInConsole(Log log){
 		StringBuilder consoleLog = new StringBuilder();
-		consoleLog.append(DateUtils.formatDate2Str(logger.getDate()))
+		consoleLog.append(DateUtils.formatDate2Str(log.getDate()))
 				  .append(" ")
-				  .append(logger.getLogLevel().toString())
+				  .append(log.getLogLevel().toString())
 				  .append(" ")
-				  .append(logger.getClassName())
+				  .append(log.getClassName())
 				  .append(" ")
-				  .append(logger.getMethodName())
+				  .append(log.getMethodName())
 				  .append(" ")
-				  .append(logger.getMessage())
+				  .append(log.getMessage())
 				  .append(" ");
-		 if(LogLevel.ERROR.equals(logger.getLogLevel())){
-			 consoleLog.append(logger.getErrorMsg())
+		 if(LogLevel.ERROR.equals(log.getLogLevel())){
+			 consoleLog.append(log.getErrorMsg())
 			           .append(" ");
 		 }
-		 consoleLog.append(logger.getCostTime())
+		 consoleLog.append(log.getCostTime())
 				   .append(" ")
-				   .append(logger.getUserName())
+				   .append(log.getUserName())
 				   .append(" ")
-				   .append(logger.getIp());
+				   .append(log.getIp());
 		System.out.println(consoleLog.toString());
-		save(logger);
+//		save(logger);
+		String routeKey = getRouteKey(log.getLevel());
+		JSONObject json = JSONObject.fromObject(log);
+		Message message = new Message(json.toString().getBytes(Charsets.UTF_8),new MessageProperties());
+		sendQueue("log_exchange", routeKey, message);
 	}
 	
-	@Override
-	protected BaseDao<String, Log> getDao() {
-		return logDao;
+	private String getRouteKey(String level) {
+		if(StringUtils.isEmpty(level)){
+			return "other_log_queue";
+		}
+		return StringUtils.appendJoinEmpty(level.toLowerCase(),"_log_queue");
+	}
+
+	private void sendQueue(String exchange_key, String route_key, Object object) {
+		amqpTemplate.convertAndSend(exchange_key, route_key, object);
 	}
 }

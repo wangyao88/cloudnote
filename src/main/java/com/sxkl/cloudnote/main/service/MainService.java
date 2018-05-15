@@ -78,7 +78,7 @@ public class MainService {
         return weathers;
 	}
 	
-	private void getWeatherCycle(HttpServletRequest request,List<Weather> weathers){
+	private void getWeatherCycle(HttpServletRequest request,List<Weather> weathers) throws Exception{
 		if(!weathers.isEmpty()){
 			return;
 		}
@@ -86,8 +86,7 @@ public class MainService {
 		try {
 			city = IPUtils.getCityForWeather(request);
 		} catch (Exception e) {
-			log.error("获取IP归属地失败!错误信息:{}",e.getMessage());
-			return;
+			throw new Exception("获取IP归属地失败!错误信息:{}"+e.getMessage());
 		}
 		try {
 			Map<String,String> map = PropertyUtil.getPropertiesAllValue("cityCode.properties");
