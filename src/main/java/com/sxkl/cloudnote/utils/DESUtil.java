@@ -48,7 +48,7 @@ public class DESUtil {
         }
     }
 
-    public String decrypt(String text) throws Exception{
+    public String decrypt(String text){
         try{
             Cipher cipher = makeCipher();
             SecretKey secretKey = makeKeyFactory();
@@ -74,11 +74,7 @@ public class DESUtil {
 
         String descript =null;
 
-        try {
-            descript = tool.decrypt(encrpt);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        descript = tool.decrypt(encrpt);
 
         System.out.println("解密后：" + descript);
     }

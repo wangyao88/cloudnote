@@ -23,14 +23,19 @@
 		http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit-2.0.xsd"
 		default-lazy-init="false">
     <!-- 属性文件位置 -->
-    <bean id="annotationPropertyConfigurer"
+    <!-- <bean id="annotationPropertyConfigurer"
         class="com.sxkl.cloudnote.utils.CustomizedPropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
                 <value>classpath:init.properties</value>
             </list>
         </property>
-    </bean>
+    </bean> -->
+    
+    <bean id="zooKeeperPropertyPlaceholderConfigurer" class="com.sxkl.cloudnote.config.service.ZooKeeperPropertyPlaceholderConfigurer">  
+	    <property name="order" value="1" />  
+	    <property name="ignoreUnresolvablePlaceholders" value="true" />  
+	</bean>
     
     <!-- 使用Annotation自动注册Bean，解决事物失效问题：在主容器中不扫描@Controller注解，在SpringMvc中只扫描@Controller注解。  -->
     <context:component-scan base-package="com.sxkl.cloudnote"><!-- base-package 如果多个，用“,”分隔 -->

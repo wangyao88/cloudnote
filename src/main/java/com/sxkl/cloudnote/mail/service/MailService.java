@@ -60,12 +60,7 @@ public class MailService {
                 public PasswordAuthentication getPasswordAuthentication(){
                     DESUtil desUtil = new DESUtil();
                     //qq邮箱服务器账户、第三方登录授权码
-                    try{
-                        return new PasswordAuthentication(fromUser.getUsername(), desUtil.decrypt(fromUser.getPassword())); //发件人邮件用户名、密码
-                    }catch (Exception e){
-                        log.error("创建PasswordAuthentication失败！错误信息:{}",e.getMessage());
-                    }
-                    return null;
+                    return new PasswordAuthentication(fromUser.getUsername(), desUtil.decrypt(fromUser.getPassword())); //发件人邮件用户名、密码
                 }
             });
             // 创建默认的 MimeMessage 对象
