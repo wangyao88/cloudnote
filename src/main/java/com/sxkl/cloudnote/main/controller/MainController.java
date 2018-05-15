@@ -14,6 +14,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.sxkl.cloudnote.main.entity.Skin;
 import com.sxkl.cloudnote.main.entity.Weather;
 import com.sxkl.cloudnote.main.service.MainService;
+import com.sxkl.cloudnote.utils.PropertyUtil;
+import com.sxkl.cloudnote.utils.StringUtils;
 
 @Controller
 public class MainController {
@@ -24,7 +26,7 @@ public class MainController {
 	@RequestMapping(value = "/main", method = {RequestMethod.GET, RequestMethod.HEAD})
 	@ResponseBody
 	public ModelAndView login(HttpServletRequest request) throws Exception{
-		ModelAndView modelAndView = new ModelAndView("main/main");
+		ModelAndView modelAndView = new ModelAndView(StringUtils.appendJoinEmpty("main/main","_",PropertyUtil.getMode()));
 		return modelAndView;
 	}
 	

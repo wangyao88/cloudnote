@@ -18,8 +18,6 @@ import com.sxkl.cloudnote.utils.StringUtils;
  */
 public class ZooKeeperPropertyPlaceholderConfigurer extends PropertyPlaceholderConfigurer {
 	
-	private Properties properties;
-	      
     @Override  
     protected void processProperties(ConfigurableListableBeanFactory beanFactoryToProcess, Properties props)  
             throws BeansException { 
@@ -32,7 +30,6 @@ public class ZooKeeperPropertyPlaceholderConfigurer extends PropertyPlaceholderC
     			value = desUtil.decrypt(value.toString());
     		}
     		props.put(key,value);
-    		properties.put(key,value);
     		System.out.println("---------------------" + StringUtils.append("=", key,value.toString()));
     	}
         super.processProperties(beanFactoryToProcess, props);  

@@ -4,7 +4,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpSession;
 
-import com.sxkl.cloudnote.utils.PropertyUtil;
+import com.sxkl.cloudnote.config.zkclient.ZKClientConfig;
 
 public class Constant {
 	
@@ -40,7 +40,7 @@ public class Constant {
 	
 	public static final String WORD_ARTICLE_MAPPING_IN_REDIS = "word_article_mapping";
 	
-	public static final String DOMAIN = PropertyUtil.getDomain();
+	public static final String DOMAIN = ZKClientConfig.getDomain();
 	
 	public static final String ONLINE_SESSION_PREFIX_IN_REDIS = "online_session";
 	

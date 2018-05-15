@@ -16,6 +16,8 @@ import com.sxkl.cloudnote.spider.entity.News;
 import com.sxkl.cloudnote.spider.entity.SearchComplete;
 import com.sxkl.cloudnote.spider.manager.SearchSpider;
 import com.sxkl.cloudnote.spider.service.SpiderService;
+import com.sxkl.cloudnote.utils.PropertyUtil;
+import com.sxkl.cloudnote.utils.StringUtils;
 
 @Controller
 @RequestMapping("/spider")
@@ -30,7 +32,7 @@ public class SpiderController {
 	
 	@RequestMapping("/index")
 	public ModelAndView index(){
-		ModelAndView modelAndView = new ModelAndView("spider/index");
+		ModelAndView modelAndView = new ModelAndView(StringUtils.appendJoinEmpty("spider/index","_",PropertyUtil.getMode()));
 		return modelAndView;
 	}
 	

@@ -47,4 +47,9 @@ public class PropertyUtil {
 		return map.get("cloudnote_domain");
 	}
 	
+	public static String getMode(){
+		Map<String,String> map = PropertyUtil.getPropertiesAllValue("init.properties");
+		return map.get("mode");
+	}
+	
 }

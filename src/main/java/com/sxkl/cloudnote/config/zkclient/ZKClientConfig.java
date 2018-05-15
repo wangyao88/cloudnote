@@ -1,7 +1,11 @@
 package com.sxkl.cloudnote.config.zkclient;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
@@ -9,7 +13,9 @@ import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.curator.shaded.com.google.common.collect.Lists;
 import org.apache.curator.shaded.com.google.common.collect.Maps;
+import org.apache.zookeeper.CreateMode;
 
+import com.sxkl.cloudnote.utils.PropertyUtil;
 import com.sxkl.cloudnote.utils.StringUtils;
 
 import lombok.Cleanup;
@@ -24,7 +30,7 @@ public class ZKClientConfig {
 	private static final String DEFAULT_SERVER_HOST = "123.206.20.115:2181";
 	private static final int DEFAULT_SESSION_TIMEOUTMS = 30000;
 	private static final int DEFAULT_CONNECTION_TIMEOUTMS = 3000;
-	public static final String BASE_PATH = "/config";
+	public static final String BASE_PATH = StringUtils.appendJoinEmpty("/config/",PropertyUtil.getMode());
 	
 	public static CuratorFramework getClient(){
 		return getClient(DEFAULT_SERVER_HOST,DEFAULT_SESSION_TIMEOUTMS,DEFAULT_CONNECTION_TIMEOUTMS);
@@ -47,13 +53,6 @@ public class ZKClientConfig {
         return client;
 	}
 
-	public static void main(String[] args) throws Exception {
-        Map<String,Object> map =ZKClientConfig.getChildrenData(ZKClientConfig.BASE_PATH);
-        for(Map.Entry<String, Object> entry : map.entrySet()){
-    		System.out.println(entry.getKey()+"="+entry.getValue()); 
-    	}
-	}
-	
 	public static List<String> getPathChildren(String path){
 		@Cleanup
 		CuratorFramework client = getClient();
@@ -78,5 +77,36 @@ public class ZKClientConfig {
 			
 		}  
 		return map;
+	}
+	
+	public static String getDomain(){
+		try {
+			String mode = PropertyUtil.getMode();
+			@Cleanup
+			CuratorFramework client = getClient();
+			return new String(client.getData().forPath(StringUtils.appendJoinEmpty("/config/",mode,"/cloudnote_domain")));
+		} catch (Exception e) {
+			return StringUtils.EMPTY;
+		}
+	}
+	
+	public static void main(String[] args) throws Exception {
+		@Cleanup
+		CuratorFramework client = getClient();
+		String filePath = "C:\\wangyao\\workspace\\cis\\cloudnote\\src\\main\\resources\\init.properties"; 
+		@Cleanup
+		InputStream is = new FileInputStream(filePath);
+		Properties properties = new Properties();
+		properties.load(is);
+		Enumeration<Object> keys = properties.keys();
+	    while(keys.hasMoreElements()){
+			String key = (String) keys.nextElement();
+			String path = "/config/produce/"+key;
+			client.create()
+            .creatingParentsIfNeeded()
+            .withMode(CreateMode.PERSISTENT)
+            .forPath(path, new String(properties.getProperty(key).getBytes("ISO8859-1"),"UTF-8").getBytes());
+		}
+		
 	}
 }
