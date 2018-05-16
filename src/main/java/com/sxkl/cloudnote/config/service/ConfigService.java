@@ -41,4 +41,14 @@ public class ConfigService {
 		}
 	}
 
+	public String getCachePages() {
+		String page = StringUtils.EMPTY;
+		try {
+			String path = StringUtils.appendJoinEmpty(ZKClientConfig.BASE_PATH,"/","cache.page.keys");
+			page = ZKClientConfig.getPathData(path);
+		} catch (Exception e) {
+		}
+		return page;
+	}
+
 }

@@ -120,6 +120,7 @@ function selectFlag(){
 			if(node){
 				tree.scrollIntoView(node);
 				tree.selectNode(node);
+				onNodeClick1();
 			}
 		},
 		error : function() {

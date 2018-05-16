@@ -116,6 +116,17 @@ public class ZKClientConfig {
 		}
 	}
 	
+	public static String getPathData(String path) throws Exception {
+		@Cleanup
+		CuratorFramework client = getClient();
+		Stat stat = client.checkExists().forPath(path);
+		String data = StringUtils.EMPTY;
+		if(ObjectUtils.isNotNull(stat)){
+			data = new String(client.getData().forPath(path),Charsets.UTF_8);
+		}
+		return data;
+	}
+	
 	public static void main(String[] args) throws Exception {
 		@Cleanup
 		CuratorFramework client = getClient();

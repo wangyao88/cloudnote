@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
@@ -20,13 +21,16 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.sxkl.cloudnote.cache.service.RedisCacheService;
 import com.sxkl.cloudnote.common.entity.Constant;
-import com.sxkl.cloudnote.utils.PropertyUtil;
+import com.sxkl.cloudnote.config.service.ConfigService;
+import com.sxkl.cloudnote.utils.SpringContextUtil;
 
 @Component
 public class CacheFilter  implements Filter, ApplicationContextAware {
 	
     private WebApplicationContext springContext;
     private RedisCacheService redisCacheService;
+    @Autowired
+	private ConfigService configService;
     
     @Override
     public void init(FilterConfig config) throws ServletException {
@@ -39,10 +43,10 @@ public class CacheFilter  implements Filter, ApplicationContextAware {
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         String requestUrl = req.getRequestURI()+"-"+req.getMethod();
-        String cachePages = PropertyUtil.getCachePages();
+        configService = (ConfigService) SpringContextUtil.getBean("configService",ConfigService.class);
+        String cachePages = configService.getCachePages();
         //访问登录页，并且是GET请求，则拦截
         if(cachePages.contains(requestUrl)){
-//        	Constant.DOMAIN = getDomain(req);
         	String html = redisCacheService.getHtmlFromCache(resp,req,filterChain);
         	html = html.replaceAll(Constant.LOGIN_PAGE_DOMAIN, Constant.DOMAIN);
             // 返回响应
@@ -62,15 +66,15 @@ public class CacheFilter  implements Filter, ApplicationContextAware {
         
     }
     
-    private String getDomain(HttpServletRequest request){
-		StringBuilder domain = new StringBuilder();
-		domain.append(request.getScheme())
-			  .append("://")
-			  .append(request.getServerName())
-			  .append(":")
-			  .append(request.getServerPort())
-			  .append(request.getContextPath());
-		return domain.toString();
-	}
+//    private String getDomain(HttpServletRequest request){
+//		StringBuilder domain = new StringBuilder();
+//		domain.append(request.getScheme())
+//			  .append("://")
+//			  .append(request.getServerName())
+//			  .append(":")
+//			  .append(request.getServerPort())
+//			  .append(request.getContextPath());
+//		return domain.toString();
+//	}
 }
 
