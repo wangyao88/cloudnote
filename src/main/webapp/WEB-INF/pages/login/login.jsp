@@ -105,16 +105,16 @@ String publicKey = RsaKeyManager.getPublickey();
 			    </span>
 			</p>
 			<div style="margin:5px 0px;">
-				<input type="text" name="userName" placeholder="请输入账号..."/>
+				<input type="text" id="userName" name="userName" placeholder="请输入账号..."/>
 			</div>
 			<div style="margin:5px 0px;">
-				<input type="text" id="password" name="password" placeholder="请输入密码..."/>
+				<input type="password" id="password" name="password" placeholder="请输入密码..." style="width:270px;height:30px;"/>
+				<input type="hidden" id="passwordFront" name="passwordFront" />
 			</div>
 			<button type="button" id="submitBtn">登<span style="width:20px;"></span>录</button>
 		</form>
 	</div>
 </div>
-
 
 <script type="text/javascript" src="<%=basePath %>js/login/js/jquery-1.8.0.min.js"></script>
 <script type="text/javascript" src="<%=basePath %>js/login/js/com.js"></script>

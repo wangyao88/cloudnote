@@ -22,6 +22,7 @@ import com.sxkl.cloudnote.log.entity.LogLevel;
 import com.sxkl.cloudnote.log.service.LogService;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.utils.IPUtils;
+import com.sxkl.cloudnote.utils.ObjectUtils;
 import com.sxkl.cloudnote.utils.RequestUtils;
 import com.sxkl.cloudnote.utils.UserUtil;
 
@@ -50,6 +51,9 @@ public class LogInterceptor {
 	@AfterThrowing(pointcut="execution(* com.sxkl.cloudnote.*.service.*.*(..))", throwing="e")
     public void doServiceAfterThrowing(JoinPoint jp,Throwable e){
 		Log log = configurateLog(jp);
+		if(ObjectUtils.isNull(log)){
+			return;
+		}
 		log.setLogLevel(LogLevel.ERROR);
 		log.setErrorMsg(e.getMessage());
 		logService.showLogInConsole(log);
@@ -68,6 +72,9 @@ public class LogInterceptor {
 		MethodSignature methodSignature = (MethodSignature)signature;
 		Method method = methodSignature.getMethod();
 		String methodName = method.getName();
+		if(methodName.contains("onMessage")){
+			return null;
+		}
 		String className = jp.getTarget().getClass().getName();
 		String message = getServiceMethodDescription(method);
 		Date happenTime = new Date();

@@ -247,6 +247,7 @@
             <tx:method name="load*" propagation="SUPPORTS" read-only="true" />
             <!-- 其他采用默认事务方式 -->
             <tx:method name="*" />
+            <tx:method name="onMessage" propagation="REQUIRED" />
         </tx:attributes>
     </tx:advice>
     <!-- Spring aop事务管理 -->
