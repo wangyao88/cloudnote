@@ -14,7 +14,10 @@ import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.curator.shaded.com.google.common.collect.Lists;
 import org.apache.curator.shaded.com.google.common.collect.Maps;
 import org.apache.zookeeper.CreateMode;
+import org.apache.zookeeper.data.Stat;
 
+import com.google.common.base.Charsets;
+import com.sxkl.cloudnote.utils.ObjectUtils;
 import com.sxkl.cloudnote.utils.PropertyUtil;
 import com.sxkl.cloudnote.utils.StringUtils;
 
@@ -87,6 +90,29 @@ public class ZKClientConfig {
 			return new String(client.getData().forPath(StringUtils.appendJoinEmpty("/config/",mode,"/cloudnote_domain")));
 		} catch (Exception e) {
 			return StringUtils.EMPTY;
+		}
+	}
+
+	public static void saveOrUpdateNode(String path, String data) throws Exception {
+		@Cleanup
+		CuratorFramework client = getClient();
+		Stat stat = client.checkExists().forPath(path);
+		if(ObjectUtils.isNull(stat)){
+			client.create()
+	              .creatingParentsIfNeeded()
+	              .withMode(CreateMode.PERSISTENT)
+	              .forPath(path, data.getBytes(Charsets.UTF_8));
+		}else{
+			client.setData().forPath(path, data.getBytes(Charsets.UTF_8));
+		}
+	}
+	
+	public static void deleteNode(String path) throws Exception {
+		@Cleanup
+		CuratorFramework client = getClient();
+		Stat stat = client.checkExists().forPath(path);
+		if(ObjectUtils.isNotNull(stat)){
+			client.delete().forPath(path);
 		}
 	}
 	
