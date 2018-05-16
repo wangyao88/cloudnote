@@ -288,7 +288,6 @@ function addListener(){
 	$(document).keydown(function(e) {
 		var keyCode = e.keyCode || e.which || e.charCode;
 		var shiftKey = e.shiftKey || e.metaKey;
-		console.log(keyCode);
 		quickKeyForAddArticle(shiftKey,keyCode);
 		quickKeyForWholePage(shiftKey,keyCode);
 		quickKeyForNormalPage(shiftKey,keyCode);
