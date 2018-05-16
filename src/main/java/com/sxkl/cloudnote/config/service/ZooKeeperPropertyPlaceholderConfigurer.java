@@ -9,7 +9,6 @@ import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 
 import com.sxkl.cloudnote.config.zkclient.ZKClientConfig;
 import com.sxkl.cloudnote.utils.DESUtil;
-import com.sxkl.cloudnote.utils.StringUtils;
 
 /**
  * @author: wangyao
@@ -30,7 +29,6 @@ public class ZooKeeperPropertyPlaceholderConfigurer extends PropertyPlaceholderC
     			value = desUtil.decrypt(value.toString());
     		}
     		props.put(key,value);
-    		System.out.println("---------------------" + StringUtils.append("=", key,value.toString()));
     	}
         super.processProperties(beanFactoryToProcess, props);  
     }
