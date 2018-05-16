@@ -101,7 +101,14 @@ function contentChange(){
 		},
 		dataType : 'json',
 		success : function(result) {
-//			getArticleById(record.id);
+			mini.showTips({
+	            showModal: false,
+	            state : "info",
+	            content: "快速保存笔记成功！",
+	            timeout: 2000,
+	            x: 'center',
+	            y: 'center'
+	        });
 		}
 	});
 }
