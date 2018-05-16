@@ -51,10 +51,11 @@
 			    <input class="mini-textbox" id="searchArticleByTitleText" emptyText="笔记标题"/>   
 			    <a class="mini-button" id="searchArticleByTitleBtn" iconCls="icon-search" onclick="searchArticleByTitle">查询</a>
 			    <span class="separator"></span>
-			    <input class="mini-textbox" width="400px" id="searchArticleByTitleOrContentText" emptyText="笔记标题或内容，以逗号分隔"/>   
+			    <input class="mini-textbox" width="200px" id="searchArticleByTitleOrContentText" emptyText="笔记标题或内容，以逗号分隔"/>   
 			    <a class="mini-button" id="searchArticleByTitleOrContentBtn" iconCls="icon-find" onclick="searchArticleByTitleOrContentText">搜索</a>
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-help" href="<%=basePath%>spider/searchPage" target="_blank">在线搜索</a>
+			    <span id="clock" style="float: right;margin-right:20px;"></span>
 		    </div>
 		 </div>
 		 <div title="south" region="south" showSplit="false" showHeader="false" height="35px" showSplitIcon="false" >
