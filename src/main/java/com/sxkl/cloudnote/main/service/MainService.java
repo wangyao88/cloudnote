@@ -28,9 +28,6 @@ import com.sxkl.cloudnote.utils.IPUtils;
 import com.sxkl.cloudnote.utils.PropertyUtil;
 import com.sxkl.cloudnote.utils.StringAppendUtils;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Service
 public class MainService {
 	

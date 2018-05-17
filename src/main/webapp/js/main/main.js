@@ -180,21 +180,45 @@ function getWeather(){
 		timeout: 100000,
 		success : function(result) {
 			var title = "";
-			var content = "<table>";
+			var content = "<table align='center' border='1px' style='width:480px;margin-left=20px;'>" +
+			                  "<thead>"+
+				                  "<th>日期</th>"+
+				                  "<th>天气</th>"+
+				                  "<th>温度</th>"+
+				                  "<th>风力</th>"+
+			                  "</thead>"+
+			                  "<tbody>";
 			$(result).each(function(index,weather) { 
 				if(index == 0){
 					title = weather.city + "-未来七天天气预报";
 				}
-				content += "<tr><td>"+weather.date+"</td><td>"+weather.status+"</td><td>"+weather.temprature+"</td><td>"+weather.wind+"</td><td></tr>"
+				content += "<tr align='center'>"+
+								"<td style='width=90px;'>"+weather.date+"</td>"+
+								"<td style='width=250px;'>"+weather.status+"</td>"+
+								"<td style='width=70px;'>"+weather.temprature+"</td>"+
+								"<td style='width=100px;'>"+weather.wind+"</td>"+
+								"</tr>";
 			});
-			content += "</table>";
+			content += "</tbody></table>";
 			mini.showMessageBox({
 	            showModal: false,
-	            width: 340,
+	            width: 500,
 	            height: 280,
 	            title: title,
 	            message: content,
-	            timeout: 8000,
+	            timeout: 10000,
+	            x: "right",
+	            y: "bottom"
+	        });
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown){
+			mini.showMessageBox({
+	            showModal: false,
+	            width: 300,
+	            height: 280,
+	            title: '天气预报',
+	            message: '<center>暂无天气预报信息</center>',
+	            timeout: 3000,
 	            x: "right",
 	            y: "bottom"
 	        });
@@ -268,8 +292,8 @@ function showClock() {
 
 $(document).ready(function(){
 	getWeather();
-	window.setTimeout(oneNews, 10000)
-	window.setInterval(oneNews, 1800000);
+//	window.setTimeout(oneNews, 10000)
+//	window.setInterval(oneNews, 1800000);
 	setSkin();
 	setInterval(showClock,1000);
 });
