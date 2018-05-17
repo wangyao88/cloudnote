@@ -118,7 +118,7 @@
 		<div title="笔记详情" region="center">
 		  <textarea id="articleContainer" 
 		            name="articleContainer" 
-		            style="width:100%;height:100%;overflow-x:hidden;"></textarea>
+		            style="width:100%;height:90%;overflow-x:hidden;overflow-y:hidden;"></textarea>
 		</div>
 		<div title="笔记列表" region="east" width="400px" expanded="true">
 				<div id="articleGrid" class="mini-datagrid" style="width:395px;height:100%;" 
