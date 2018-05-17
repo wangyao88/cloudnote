@@ -276,12 +276,11 @@ function addListener(){
 		grid.select(0);
 		var record = grid.getSelected();
 		if(!record || !record.id){
-			document.getElementById("articleContainer").innerHTML = '';
+			editor.setContent('');
 		}else{
 			getArticleById(record.id);
 		}
 		//grid.updateRow(record,{hitNum : record.hitNum+1});
-		grid.unmask();
 	});
 
 	var searchArticleByTitleText = mini.get("searchArticleByTitleText");
