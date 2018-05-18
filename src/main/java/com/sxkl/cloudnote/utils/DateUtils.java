@@ -12,6 +12,7 @@ public class DateUtils {
 	public static final String DATE_PATTON_2 = "yyyy/MM/dd";
 	public static final String DATE_PATTON_3 = "yyyyMMdd";
 	public static final String DATE_PATTON_4 = "MM-dd";
+	public static final String DATE_PATTON_5 = "MMdd";
 	public static final String DATE_TIME_PATTON_1 = "yyyy-MM-dd HH:mm:ss";
 	public static final String DATE_TIME_PATTON_2 = "yyyy/MM/dd HH:mm:ss";
 	public static final String DATE_TIME_PATTON_3 = "yyyyMMddHHmmss";
@@ -392,5 +393,18 @@ public class DateUtils {
 		DateFormat format = new SimpleDateFormat(DATE_PATTON_4);
 		Date date = new Date();
 		return format.format(date);
+	}
+	
+	public static String getNowMonthDay(String pattern) {
+		DateFormat format = new SimpleDateFormat(pattern);
+		Date date = new Date();
+		return format.format(date);
+	}
+
+	public static String getYear() {
+		Date date = new Date();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		return calendar.get(Calendar.YEAR)+"";
 	}
 }

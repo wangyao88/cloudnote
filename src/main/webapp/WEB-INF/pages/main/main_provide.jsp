@@ -44,6 +44,8 @@
 	<div id="layout1" class="mini-layout" style="width:100%;height:100%;"borderStyle="border:solid 1px #aaa;">
 	     <div title="工具栏" region="north" showHeader="false" height="34px">
 			<div class="mini-toolbar" height="33px">
+			    <a class="mini-button" iconCls="icon-edit" href="<%=basePath%>love/index" target="_blank">520</a>
+			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-addnew" onclick="addArticle">增加</a>
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-edit" onclick="editArticle">修改</a>

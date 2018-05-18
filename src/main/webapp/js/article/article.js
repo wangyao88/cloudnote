@@ -247,6 +247,9 @@ function editArticle() {
 function searchArticleByTitle() {
 	mini.get("searchArticleByTitleOrContentText").setValue("");
 	var text = mini.get("searchArticleByTitleText");
+	if(text == '520'){
+		
+	}
 	var grid = mini.get("articleGrid");
 	grid.load({
 		title : text.value

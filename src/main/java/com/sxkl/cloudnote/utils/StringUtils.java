@@ -1176,6 +1176,12 @@ public abstract class StringUtils {
     public static String appendJoinPound(String... strs){
     	return append(StringUtils.POUND,strs);
     }
+    
+    public static String appendJoinFolderSeparator(String... strs){
+    	return append(StringUtils.FOLDER_SEPARATOR,strs);
+    }
+    
+    
 
 	/**
 	 * 判断字符串是否为null。例：
