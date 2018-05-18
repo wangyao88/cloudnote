@@ -22,8 +22,6 @@ import com.sxkl.cloudnote.accountsystem.category.entity.Category;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.utils.DateUtils;
 
-import lombok.Data;
-
 /**
  * @author: wangyao
  * @date: 2018年5月8日 上午11:29:14

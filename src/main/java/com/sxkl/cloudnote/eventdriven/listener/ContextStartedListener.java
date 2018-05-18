@@ -15,9 +15,6 @@ import com.sxkl.cloudnote.main.service.MainService;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.user.service.UserService;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Service
 public class ContextStartedListener implements ApplicationListener<ContextRefreshedEvent>{
 	

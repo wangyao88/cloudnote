@@ -9,6 +9,7 @@ import java.util.concurrent.RecursiveTask;
  * @date: 2018年3月15日 上午10:28:48
  * @description: 
  */
+@SuppressWarnings("serial")
 public class CountTaskTmp extends RecursiveTask<Integer>{  
   
     private static final int THRESHOLD = 2;  

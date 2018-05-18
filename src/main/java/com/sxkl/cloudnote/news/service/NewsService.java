@@ -151,7 +151,7 @@ public class NewsService {
 //		}
 //		Files.append("</html></body>", file, Charsets.UTF_8);
 		
-		NewsService service = new NewsService();
+//		NewsService service = new NewsService();
 //		service.getTopAll();
 	}
 }

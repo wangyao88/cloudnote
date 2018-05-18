@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.sxkl.cloudnote.accountsystem.tally.entity.Tally;
 import com.sxkl.cloudnote.accountsystem.tally.service.TallyService;
 
 /**

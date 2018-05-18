@@ -8,16 +8,12 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import com.sxkl.cloudnote.cache.annotation.RedisCachable;
 import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.eventdriven.entity.FlagPublisherBean;
 import com.sxkl.cloudnote.eventdriven.entity.FlagPublisherEvent;
 import com.sxkl.cloudnote.flag.service.FlagService;
 import com.sxkl.cloudnote.log.annotation.Logger;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Service
 public class FlagListener implements ApplicationListener<ApplicationEvent>{
 	

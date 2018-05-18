@@ -1,7 +1,5 @@
 package com.sxkl.cloudnote.disk.dao;
 
-import java.util.List;
-
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 

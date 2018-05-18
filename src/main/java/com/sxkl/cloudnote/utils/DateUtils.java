@@ -212,6 +212,7 @@ public class DateUtils {
 		return (String) dayBefore2Object(days, null, string);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> T dayBefore2Object(int days, String format, T instance) {
 		Calendar calendar = Calendar.getInstance();
 		if (days == 0) {
@@ -241,6 +242,7 @@ public class DateUtils {
 		return (String) defineDayBefore2Object(date, days, null, stringInstance);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> T defineDayBefore2Object(java.util.Date date, int days, String format, T instance) {
 		if ((date == null) || (days == 0)) {
 			return null;
@@ -270,6 +272,7 @@ public class DateUtils {
 		return (String) monthBefore2Object(months, null, string);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> T monthBefore2Object(int months, String format, T instance) {
 		if (months == 0) {
 			return null;
@@ -300,6 +303,7 @@ public class DateUtils {
 		return (String) defineMonthBefore2Object(date, months, null, stringInstance);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> T defineMonthBefore2Object(java.util.Date date, int months, String format, T instance) {
 		if (months == 0) {
 			return null;

@@ -1,6 +1,5 @@
 package com.sxkl.cloudnote.editor.define;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.curator.shaded.com.google.common.collect.Maps;

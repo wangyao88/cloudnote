@@ -9,6 +9,7 @@ import lombok.Cleanup;
 
 public class DeepCopy<V> {
 
+	@SuppressWarnings("unchecked")
 	public V copy(V v) {
 		try {
 			@Cleanup

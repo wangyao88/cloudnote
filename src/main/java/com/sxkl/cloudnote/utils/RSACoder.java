@@ -211,7 +211,7 @@ public class RSACoder {
                 .getInstance(KEY_ALGORITHM);
         keyPairGen.initialize(1024);
         KeyPair keyPair = keyPairGen.generateKeyPair();
-        Map<String, Key> keyMap = new HashMap(2);
+        Map<String, Key> keyMap = new HashMap<String, Key>(2);
         keyMap.put(PUBLIC_KEY, keyPair.getPublic());// 公钥
         keyMap.put(PRIVATE_KEY, keyPair.getPrivate());// 私钥
         return keyMap;
