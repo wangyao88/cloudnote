@@ -247,13 +247,25 @@ function editArticle() {
 function searchArticleByTitle() {
 	mini.get("searchArticleByTitleOrContentText").setValue("");
 	var text = mini.get("searchArticleByTitleText");
-	if(text == '520'){
-		
+	var key = text.value;
+	if(key == '520'){
+		$.ajax({
+			url : basePATH + "/love/index",
+			type : "post",
+			data : {
+				key : key
+			},
+			success : function(result) {
+				var openUrl = basePATH + "/love/page?path=" + result;
+				window.open(openUrl,"_blank"); 
+			}
+		});
+	}else{
+		var grid = mini.get("articleGrid");
+		grid.load({
+			title : key
+		});
 	}
-	var grid = mini.get("articleGrid");
-	grid.load({
-		title : text.value
-	});
 }
 
 function searchArticleByTitleOrContentText() {
