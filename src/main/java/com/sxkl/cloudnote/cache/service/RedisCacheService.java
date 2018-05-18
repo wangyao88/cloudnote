@@ -45,16 +45,26 @@ public class RedisCacheService {
         });
     }
     
-//    @RedisCachable(key=Constant.LOGIN_PAGE_KEY_IN_REDIS,dateTime=200)
-    public String getHtmlFromCache(HttpServletResponse resp, HttpServletRequest req, FilterChain filterChain) throws IOException, ServletException {
-        ResponseWrapper wrapper = new ResponseWrapper(resp);
+    @RedisCachable(key=Constant.LOGIN_PAGE_KEY_IN_REDIS_PRODUCE,dateTime=200)
+    public String getProduceLoginPageFromCache(HttpServletResponse resp, HttpServletRequest req, FilterChain filterChain) throws IOException, ServletException {
+        return getPageFromCache(resp, req, filterChain);
+    }
+
+    @RedisCachable(key=Constant.LOGIN_PAGE_KEY_IN_REDIS_PROVIDE,dateTime=200)
+    public String getProvideLoginPageFromCache(HttpServletResponse resp, HttpServletRequest req, FilterChain filterChain) throws IOException, ServletException {
+        return getPageFromCache(resp, req, filterChain);
+    }
+    
+    private String getPageFromCache(HttpServletResponse resp, HttpServletRequest req, FilterChain filterChain)
+			throws IOException, ServletException {
+		ResponseWrapper wrapper = new ResponseWrapper(resp);
         filterChain.doFilter(req, wrapper);
         String loginPage = wrapper.getResult();
         String domain = Constant.DOMAIN;
         loginPage = loginPage.replaceAll(domain, Constant.LOGIN_PAGE_DOMAIN);
         log.info("<--------------------登录页缓存不存在，生成缓存-------------------->");
         return loginPage;
-    }
+	}
 
 	public void cacheMap(String hotArticleKeyInRedis, Map<String, String> result) {
 		redisTemplate.opsForHash().putAll(hotArticleKeyInRedis, result);

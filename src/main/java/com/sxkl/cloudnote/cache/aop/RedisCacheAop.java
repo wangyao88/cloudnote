@@ -43,7 +43,7 @@ public class RedisCacheAop {
 		}
 		Object[] objs = pjp.getArgs();
 		String key = redisCachable.key();
-		if(!Constant.LOGIN_PAGE_KEY_IN_REDIS.equals(key)){
+		if(!Constant.LOGIN_PAGE_KEY_IN_REDIS_PRODUCE.equals(key) && !Constant.LOGIN_PAGE_KEY_IN_REDIS_PROVIDE.equals(key)){
 			HttpServletRequest request = (HttpServletRequest) objs[i];
 			if(request == null){
 				request = getRequest();
@@ -102,7 +102,7 @@ public class RedisCacheAop {
 	}
 	
 	private Object loginPageFilter(String cacheKey, Object value){
-		if(Constant.LOGIN_PAGE_KEY_IN_REDIS.equals(cacheKey)){
+		if(Constant.LOGIN_PAGE_KEY_IN_REDIS_PRODUCE.equals(cacheKey) || Constant.LOGIN_PAGE_KEY_IN_REDIS_PROVIDE.equals(cacheKey)){
 			String page = String.valueOf(value);
 			page = page.replaceAll(Constant.LOGIN_PAGE_DOMAIN,Constant.DOMAIN);
 			return page;

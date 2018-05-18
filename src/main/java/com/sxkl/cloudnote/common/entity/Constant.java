@@ -26,7 +26,9 @@ public class Constant {
 
 	public static final String CACHE_PAGE_KEYS = "cache.page.keys";
 
-	public static final String LOGIN_PAGE_KEY_IN_REDIS = "login_page";
+	public static final String LOGIN_PAGE_KEY_IN_REDIS_PROVIDE = "provide_login_page";
+	
+	public static final String LOGIN_PAGE_KEY_IN_REDIS_PRODUCE = "produce_login_page";
 
 	public static final String TREE_FOR_ARTICLE_KEY_IN_REDIS = "tree_article";
 
