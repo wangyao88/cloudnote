@@ -94,7 +94,7 @@ $(function() {
         delimiter: /(,|;)\s*/,//分隔符
         onSelect: onAutocompleteSelect,//选中之后的回调函数
         deferRequestBy: 0, //单位微秒
-        noCache: true //是否启用缓存 默认是开启缓存的
+        noCache: false //是否启用缓存 默认是开启缓存的
     };
     a1 = $('#flagNameInput').autocomplete(options);
                 

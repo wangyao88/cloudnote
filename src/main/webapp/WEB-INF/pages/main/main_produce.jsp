@@ -97,7 +97,6 @@
     	</div>
 		 <div title="笔记和标签" showProxyText="true" region="west" width="300px" expanded="true" showSplitIcon="true">
 			<div class="mini-toolbar" height="33px">
-			    <span class="separator"></span>
 			    <input type="text" id="flagNameInput" width="100px"/>
 			    <span class="separator"></span>
 			    <a class="mini-button" id="searchArticleByTitleBtn" iconCls="icon-redo" onclick="selectFlag">选中</a>
