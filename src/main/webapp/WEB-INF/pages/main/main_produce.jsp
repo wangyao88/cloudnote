@@ -80,7 +80,7 @@
 					<span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-goto" href="<%=basePath%>accountsystem/main/index" target="_blank">记账管理</a>
 				<span class="separator"></span>
-			    <a class="mini-button" iconCls="icon-user" onclick="openWebchatPage">在线聊天</a>
+			    <a class="mini-button" iconCls="icon-user" href="<%=basePath%>js/webchat/webchat.jsp" target="_blank">在线聊天</a><!-- onclick="openWebchatPage" -->
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-collapse" href="<%=basePath%>spider/index" target="_blank">订阅文章</a>
 			    <span class="separator"></span>

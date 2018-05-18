@@ -2,6 +2,8 @@ package com.sxkl.cloudnote.utils;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Maps;
+import com.sxkl.cloudnote.config.zkclient.ZKClientConfig;
+
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Method;
@@ -15,14 +17,15 @@ import java.util.Map;
 public class MapToBeanUtils<T> {
 
     public void mapToBean(T t, String prefix){
-        Map<String,String> map = PropertyUtil.getPropertiesAllValue("init.properties");
+//        Map<String,String> map = PropertyUtil.getPropertiesAllValue("init.properties");
+        Map<String,Object> map =ZKClientConfig.getChildrenData(ZKClientConfig.BASE_PATH);
         Predicate<String> filter = new Predicate<String>() {
             @Override
             public boolean apply(String key) {
                 return key.startsWith(prefix);
             }
         };
-        Map<String,String> filteredMap = Maps.filterKeys(map, filter);
+        Map<String,Object> filteredMap = Maps.filterKeys(map, filter);
         Method[] methods = t.getClass().getDeclaredMethods();
         try{
             for (Method method : methods){

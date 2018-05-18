@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -40,10 +41,10 @@ public class SpiderSchedule {
 				ar.setTitle(article.getTitle());
 				simple.put(article.getId(),ar);
 			}
-//			redisTemplate.expire(Constant.NETARTICLE_KEY_IN_REDIS, 17, TimeUnit.HOURS);
-//			redisTemplate.expire(Constant.SIMPLE_NETARTICLE_KEY_IN_REDIS, 17, TimeUnit.HOURS);
 			redisTemplate.opsForHash().putAll(Constant.NETARTICLE_KEY_IN_REDIS,whole);
 			redisTemplate.opsForHash().putAll(Constant.SIMPLE_NETARTICLE_KEY_IN_REDIS,simple);
+			redisTemplate.expire(Constant.NETARTICLE_KEY_IN_REDIS, 19, TimeUnit.HOURS);
+			redisTemplate.expire(Constant.SIMPLE_NETARTICLE_KEY_IN_REDIS, 19, TimeUnit.HOURS);
 		} catch (IOException e) {
 			log.error("爬取文章失败！",e.getMessage());
 		}
