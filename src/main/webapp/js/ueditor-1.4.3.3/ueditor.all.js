@@ -5,7 +5,6 @@
  */
 
 (function(){
-
 // editor.js
 UEDITOR_CONFIG = window.UEDITOR_CONFIG || {};
 
@@ -24526,6 +24525,8 @@ UE.plugin.register('simpleupload', function (){
                             loader = me.document.getElementById(loadingId);
                             loader.setAttribute('src', link);
                             loader.setAttribute('_src', link);
+//                            loader.setAttribute('src', doMain + json.url);
+//                            loader.setAttribute('_src', doMain + json.url);
                             loader.setAttribute('title', json.title || '');
                             loader.setAttribute('alt', json.original || '');
                             loader.removeAttribute('id');

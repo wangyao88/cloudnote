@@ -1,8 +1,12 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ page language="java"
+	import="java.util.*" 
+	import="com.sxkl.cloudnote.common.entity.Constant"
+	pageEncoding="UTF-8"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
+	String doMain = Constant.DOMAIN;
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -20,6 +24,9 @@
 <link rel="stylesheet" href="<%=basePath%>css/a.css" />
 <link rel="stylesheet" href="<%=basePath%>css/scroller.css" />
 
+<script type="text/javascript">
+   var basePath = "<%=basePath%>";
+</script>
 <script src="<%=basePath%>js/boot.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/jquery.min.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/ueditor-1.4.3.3/ueditor.config.js" type="text/javascript"></script>
@@ -32,9 +39,6 @@
 <script src="<%=basePath%>js/backup/backup.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/lexicon/lexicon.js" type="text/javascript"></script>
 <script type="text/javascript" src="<%=basePath%>js/jquery.autocomplete-min.js"></script>
-<script type="text/javascript">
-   var basePath = "<%=basePath%>";
-</script>
 </head>
 <body id="globalKeyEvent">
 	<div id="layout1" class="mini-layout" style="width:100%;height:100%;"borderStyle="border:solid 1px #aaa;">
