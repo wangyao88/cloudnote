@@ -291,14 +291,16 @@ function showClock() {
 }
 
 function addQuickKey(){
-	var keyCode = e.keyCode || e.which || e.charCode;
-	var shiftKey = e.shiftKey || e.metaKey;
-	if (shiftKey && keyCode == 84) {//w
-		getWeather();
-	}
-	if (shiftKey && keyCode == 84) {//n
-		oneNews();
-	}
+	$(document).keydown(function(e) {
+		var keyCode = e.keyCode || e.which || e.charCode;
+		var shiftKey = e.shiftKey || e.metaKey;
+		if (shiftKey && keyCode == 84) {//t
+			getWeather();
+		}
+		if (shiftKey && keyCode == 78) {//n
+			oneNews();
+		}
+	});
 }
 
 $(document).ready(function(){
