@@ -341,12 +341,12 @@ function quickKeyForNormalPage(shiftKey,keyCode){
 	}
 }
 
+//ctrl+S
 function quickKeyForContentChange(shiftKey,keyCode){
 	if (shiftKey && keyCode == 83) {
 		contentChange();
 	}
 }
-
 
 $(document).ready(function() {
 	firstLoadArticles();
