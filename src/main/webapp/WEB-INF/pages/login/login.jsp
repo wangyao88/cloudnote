@@ -124,6 +124,7 @@ String publicKey = RsaKeyManager.getPublickey();
 </script>
 <script type="text/javascript" src="<%=basePath %>js/jquery.form.js"></script>
 <script type="text/javascript" src="<%=basePath %>js/encrypt/jsencrypt.min.js"></script>
+<script type="text/javascript" src="<%=basePath %>js/layer/layer.js"></script>
 <script type="text/javascript" src="<%=basePath %>js/login/login.js"></script>
 <!--[if IE 6]>
 <script language="javascript" type="text/javascript" src="<%=basePath %>js/login/script/ie6_png.js"></script>

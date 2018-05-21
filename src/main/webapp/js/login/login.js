@@ -16,6 +16,14 @@ function doLogin(){
 						password : $("#passwordFront").val()
 					},
 					success : function(result){
+						if("login/login" == result){
+							layer.alert("用户名或密码错误", {
+				    			skin : 'layui-layer-lan',
+				    			closeBtn : 1,
+				    			anim : 4 //动画类型
+				    		}) ;
+							return false;
+						}
 						window.location.href = basePath + result; 
 			        }
 				});
