@@ -286,7 +286,6 @@ function firstLoadArticles(){
 
 var isEditorReady = true;
 function changeEditorMode(){
-	console.log("changeEditorMode");
 	if(isEditorReady){
 		var content = editor.getContent();
 		$("#articleContainer").hide();
@@ -296,6 +295,7 @@ function changeEditorMode(){
 		return;
 	}
 	$("#articleContainerSimple").hide();
+	$("#articleContainerSimple").html('');
 	$("#articleContainer").show();
 	isEditorReady = true;
 }
