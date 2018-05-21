@@ -284,6 +284,22 @@ function firstLoadArticles(){
 		loadArticles(data);
 }
 
+var isEditorReady = true;
+function changeEditorMode(){
+	console.log("changeEditorMode");
+	if(isEditorReady){
+		var content = editor.getContent();
+		$("#articleContainer").hide();
+		$("#articleContainerSimple").html(content);
+		$("#articleContainerSimple").show();
+		isEditorReady = false;
+		return;
+	}
+	$("#articleContainerSimple").hide();
+	$("#articleContainer").show();
+	isEditorReady = true;
+}
+
 function addListener(){
 	mini.parse();
 	var grid = mini.get("articleGrid");
@@ -312,18 +328,19 @@ function addListener(){
 		quickKeyForAddArticle(shiftKey,keyCode);
 		quickKeyForWholePage(shiftKey,keyCode);
 		quickKeyForNormalPage(shiftKey,keyCode);
+		quickKeyForChangeEditorMode(shiftKey,keyCode);
 		quickKeyForContentChange(shiftKey,keyCode);
 	});
 }
 
-//ctrl+Q
+//shift+Q
 function quickKeyForAddArticle(shiftKey,keyCode){
 	if (shiftKey && keyCode == 81) {
 		addArticle();
 	}
 }
 
-//ctrl+W
+//shift+W
 function quickKeyForWholePage(shiftKey,keyCode){
 	if (shiftKey && keyCode == 87) {
 		var layout = mini.get("layout1");
@@ -332,7 +349,7 @@ function quickKeyForWholePage(shiftKey,keyCode){
 	}
 }
 
-//ctrl+C
+//shift+C
 function quickKeyForNormalPage(shiftKey,keyCode){
 	if (shiftKey && keyCode == 69) {
 		var layout = mini.get("layout1");
@@ -341,7 +358,14 @@ function quickKeyForNormalPage(shiftKey,keyCode){
 	}
 }
 
-//ctrl+S
+//shift+A
+function quickKeyForChangeEditorMode(shiftKey,keyCode){
+	if (shiftKey && keyCode == 65) {
+		changeEditorMode();
+	}
+}
+
+//shift+S
 function quickKeyForContentChange(shiftKey,keyCode){
 	if (shiftKey && keyCode == 83) {
 		contentChange();
