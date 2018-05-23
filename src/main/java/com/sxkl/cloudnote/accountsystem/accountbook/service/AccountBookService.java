@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.curator.shaded.com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +42,8 @@ public class AccountBookService {
 			String name = request.getParameter("name");
 			User sessionUser = UserUtil.getSessionUser(request);
 			String userId = sessionUser.getId();
-			List<AccountBook> accountBooks = accountBookDao.getAccountBookList(Integer.parseInt(pageIndex),Integer.parseInt(pageSize),userId,name);
+			List<Object[]> results = accountBookDao.getAccountBookList(Integer.parseInt(pageIndex),Integer.parseInt(pageSize),userId,name);
+			List<AccountBook> accountBooks = convert2AccountBook(results);
 			int total = accountBookDao.getAccountBookListCount(userId,name);
 			return OperateResultService.configurateSuccessDataGridResult(accountBooks,total);
 		} catch (Exception e) {
@@ -49,6 +51,22 @@ public class AccountBookService {
 		}
 	}
 	
+	private List<AccountBook> convert2AccountBook(List<Object[]> results) {
+		List<AccountBook> accountBooks = Lists.newArrayList();
+		for(Object[] objs : results){
+			AccountBook accountBook = new AccountBook();
+			accountBook.setId(objs[0].toString());
+			accountBook.setName(objs[1].toString());
+			accountBook.setMark(objs[2].toString());
+			accountBook.setCreateDate((Date)objs[3]);
+			accountBook.setIncome(Float.parseFloat(objs[4].toString()));
+			accountBook.setOutcome(Float.parseFloat(objs[5].toString()));
+			accountBook.setRemainingSum(Float.parseFloat(objs[6].toString()));
+			accountBooks.add(accountBook);
+		}
+		return accountBooks;
+	}
+
 	@Logger(message="获取所有账本")
 	public String getAll(HttpServletRequest request) {
 		User sessionUser = UserUtil.getSessionUser(request);
