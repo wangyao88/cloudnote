@@ -21,7 +21,7 @@ import lombok.Cleanup;
 public class ImageDao extends BaseDao<String,Image> {
 
 	public Image getImageByName(String name) {
-		String hql = "from Image i where i.name = :name";
+		String hql = "select new Image(id, name, aId) from Image where name = :name";
 		Session session = this.getSessionFactory().getCurrentSession();
 		Query query = session.createQuery(hql);
 		query.setString("name", name);

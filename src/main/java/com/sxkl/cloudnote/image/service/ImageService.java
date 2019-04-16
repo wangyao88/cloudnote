@@ -31,10 +31,11 @@ public class ImageService {
 		try {
 			String name = request.getParameter("name");
 			Image image = imageDao.getImageByName(name);
-			byte[] content = image.getContent();
-			if(ObjectUtils.isNull(content) || content.length == 0) {
-				content = getImageContentFromDisk(image.getName());
-			}
+//			byte[] content = image.getContent();
+//			if(ObjectUtils.isNull(content) || content.length == 0) {
+//				content = getImageContentFromDisk(image.getName());
+//			}
+			byte[] content = getImageContentFromDisk(image.getName());
 			image.setContent(content);
 			return image;
 		} catch (Exception e) {
