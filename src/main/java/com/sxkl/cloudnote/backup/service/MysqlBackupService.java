@@ -1,11 +1,14 @@
 package com.sxkl.cloudnote.backup.service;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import com.sxkl.cloudnote.image.entity.Image;
+import com.sxkl.cloudnote.image.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +36,8 @@ public class MysqlBackupService extends AbstractBackupDB {
 
     @Autowired
     private MailService mailService;
+    @Autowired
+    private ImageService imageService;
 
     @Logger(message="获取数据库信息")
     @Override
@@ -47,6 +52,7 @@ public class MysqlBackupService extends AbstractBackupDB {
     @Logger(message="备份数据库")
 	@Override
 	public String backup(DataBaseInfo dataBaseInfo) {
+//        etlImage();
 		String savePath = dataBaseInfo.getPath();
         File saveFile = new File(savePath);
         if (!saveFile.exists()) {
@@ -78,6 +84,20 @@ public class MysqlBackupService extends AbstractBackupDB {
         }
 		return path;
 	}
+
+    @Logger(message="etlImage")
+    public void etlImage() {
+        List<Image> images = imageService.getAll();
+        images.forEach(image -> {
+            try {
+                Image temp = imageService.getOne(image.getId());
+                imageService.saveToDisk(temp.getName(), temp.getContent());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        log.info("etlImage成功!");
+    }
 
     @Logger(message="调用邮件服务")
 	@Override

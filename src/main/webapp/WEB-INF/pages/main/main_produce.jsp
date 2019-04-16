@@ -99,11 +99,11 @@
 			<div class="mini-toolbar" height="33px">
 			    <input type="text" id="flagNameInput" width="100px"/>
 			    <span class="separator"></span>
-			    <a class="mini-button" id="searchArticleByTitleBtn" iconCls="icon-redo" onclick="selectFlag">选中</a>
+			    <a class="mini-button" id="selectFlagBtn" iconCls="icon-redo" onclick="selectFlag">选中</a>
 		    </div>
 			<ul id="menuTree" class="mini-tree" url="<%=basePath%>main/getTree" ajaxType="post" style="width:100%;height:94%" 
                     showTreeIcon="true" textField="text" idField="id" resultAsTree="false"   contextMenu="#treeMenu"
-				    expandOnLoad="true" onNodeClick="onNodeClick1" style="overflow:hidden;">
+				    expandOnLoad="false" onNodeClick="onNodeClick1" style="overflow:hidden;">
             </ul>
             <ul id="treeMenu" class="mini-contextmenu"  onbeforeopen="onBeforeOpen">        
 			    <li class="separator"/>

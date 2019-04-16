@@ -91,4 +91,20 @@ public class ImageDao extends BaseDao<String,Image> {
 			tx.rollback();
 		}
 	}
+
+	public List<Image> getAll() {
+		Session session = this.getSessionFactory().getCurrentSession();
+		String hql = "select new Image(id, name, aId) from Image";
+		Query query = session.createQuery(hql);
+		List<Image> images = query.list();
+		return images;
+	}
+
+	public Image getOne(String id) {
+		String hql = "from Image i where i.id = :id";
+		Session session = this.getSessionFactory().getCurrentSession();
+		Query query = session.createQuery(hql);
+		query.setString("id", id);
+		return (Image) query.uniqueResult();
+	}
 }

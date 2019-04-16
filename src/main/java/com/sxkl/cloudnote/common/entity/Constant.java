@@ -61,8 +61,11 @@ public class Constant {
 	public static final String FILE_SEPARATOR = "/";
 
 	public static final String WAITING_TASK_PREFIX_FOR_WEBSOCKET = "waitingtask-";
-	
-	public static String REAL_DRAFT_PATH = STRING_EMPTY;//seted in login
+
+	public static final String IMAGE_SAVED_PATH = "/home/wy/backup/images";
+//	public static final String IMAGE_SAVED_PATH = "/Users/localadmin/temp/images";
+
+    public static String REAL_DRAFT_PATH = STRING_EMPTY;//seted in login
 	
 	private static ConcurrentHashMap<String, HttpSession> onLineSession = new ConcurrentHashMap<String,HttpSession>();
 

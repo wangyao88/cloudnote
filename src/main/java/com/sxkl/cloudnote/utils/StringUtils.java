@@ -1,10 +1,12 @@
 package com.sxkl.cloudnote.utils;
 
+import com.google.common.io.Files;
 import org.apache.commons.collections.CollectionUtils;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
+import java.io.File;
 import java.util.*;
 
 /**
@@ -30,7 +32,7 @@ import java.util.*;
  */
 public abstract class StringUtils {
 
-    private static final String FOLDER_SEPARATOR = "/";
+    private static final String FOLDER_SEPARATOR = File.separator;
 
     private static final String WINDOWS_FOLDER_SEPARATOR = "\\";
 

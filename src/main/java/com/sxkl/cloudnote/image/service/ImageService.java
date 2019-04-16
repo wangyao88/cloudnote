@@ -1,9 +1,14 @@
 package com.sxkl.cloudnote.image.service;
 
+import java.io.*;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.sxkl.cloudnote.common.entity.Constant;
+import com.sxkl.cloudnote.utils.ObjectUtils;
+import com.sxkl.cloudnote.utils.StringUtils;
+import lombok.Cleanup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,17 +28,74 @@ public class ImageService {
 
 	@Logger(message="根据图片名获取图片")
 	public Image getImageByName(HttpServletRequest request) {
-		String name = request.getParameter("name");
-		return imageDao.getImageByName(name);
+		try {
+			String name = request.getParameter("name");
+			Image image = imageDao.getImageByName(name);
+			byte[] content = image.getContent();
+			if(ObjectUtils.isNull(content) || content.length == 0) {
+				content = getImageContentFromDisk(image.getName());
+			}
+			image.setContent(content);
+			return image;
+		} catch (Exception e) {
+			log.error("获取图片失败!"+e.getMessage());
+			return null;
+		}
+	}
+
+	private byte[] getImageContentFromDisk(String name){
+		byte[] buffer = StringUtils.EMPTY.getBytes();
+		try {
+			if(StringUtils.isEmpty(name)) {
+				return buffer;
+			}
+			File dir = new File(Constant.IMAGE_SAVED_PATH);
+			if(!dir.exists() && dir.isDirectory()){
+				dir.mkdirs();
+			}
+			String filePath = StringUtils.appendJoinFolderSeparator(Constant.IMAGE_SAVED_PATH, name);
+			File file = new File(filePath);
+			@Cleanup
+			FileInputStream fis = new FileInputStream(file);
+			@Cleanup
+			ByteArrayOutputStream bos = new ByteArrayOutputStream(1000);
+			byte[] b = new byte[1000];
+			int n;
+			while ((n = fis.read(b)) != -1) {
+				bos.write(b, 0, n);
+			}
+			buffer = bos.toByteArray();
+		} catch (Exception e) {
+			log.error("从磁盘获取图片内容失败!"+e.getMessage());
+		}
+		return buffer;
 	}
 
 	@Logger(message="保存图片")
 	public void saveImage(Image image) {
 		try {
+			byte[] content = image.getContent();
+			image.setContent(StringUtils.EMPTY.getBytes());
 			imageDao.save(image);
+			// 保存到磁盘
+			saveToDisk(image.getName(), content);
 		} catch (Exception e) {
 			log.error("保存图片失败!"+e.getMessage());
 		}
+	}
+
+	public void saveToDisk(String name, byte[] content) throws IOException {
+		String path = StringUtils.appendJoinFolderSeparator(Constant.IMAGE_SAVED_PATH, name);
+		File dir = new File(Constant.IMAGE_SAVED_PATH);
+		if(!dir.exists() && dir.isDirectory()){
+			dir.mkdirs();
+		}
+		File file = new File(path);
+		@Cleanup
+		FileOutputStream fos = new FileOutputStream(file);
+		@Cleanup
+		BufferedOutputStream bos = new BufferedOutputStream(fos);
+		bos.write(content);
 	}
 
 	@Logger(message="关联文章与图片")
@@ -70,5 +132,14 @@ public class ImageService {
 
 	public void updateAll(List<Image> updateImages) {
 		imageDao.updateAll(updateImages);
+	}
+
+	@Logger(message="获取全部图片")
+	public List<Image> getAll() {
+		return imageDao.getAll();
+	}
+
+	public Image getOne(String id) {
+		return imageDao.getOne(id);
 	}
 }
