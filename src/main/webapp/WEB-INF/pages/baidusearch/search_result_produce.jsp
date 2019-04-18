@@ -176,10 +176,11 @@
                                "</div>";
                 });
                 $("#contentList").html(content);
+                $("html, body").animate({ scrollTop: 0 }, 120);
             },
             error : function(data) {
-                mini.alert("查询数据失败，请稍候重试！");
                 $("#contentList").html("暂无数据");
+                $("html, body").animate({ scrollTop: 0 }, 120);
             }
         });
     }
