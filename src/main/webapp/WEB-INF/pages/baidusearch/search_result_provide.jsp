@@ -148,8 +148,7 @@
             showPageTotalFlag: true, //是否显示数据统计,不填默认不显示
             showSkipInputFlag: true, //是否支持跳转,不填默认不显示
             getPage: function (page) {
-                getPageData(page, pageAmount)
-
+                getPageData(page, pageAmount);
             }
         })
     }
@@ -175,6 +174,7 @@
                                "</div>";
                 });
                 $("#contentList").html(content);
+                $("html, body").animate({ scrollTop: 0 }, 120);
             },
             error : function(data) {
                 mini.alert("查询数据失败，请稍候重试！");
