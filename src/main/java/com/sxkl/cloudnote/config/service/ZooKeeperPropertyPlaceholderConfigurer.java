@@ -17,7 +17,7 @@ import com.sxkl.cloudnote.utils.DESUtil;
  */
 public class ZooKeeperPropertyPlaceholderConfigurer extends PropertyPlaceholderConfigurer {
 	
-    @Override  
+    @Override
     protected void processProperties(ConfigurableListableBeanFactory beanFactoryToProcess, Properties props)  
             throws BeansException { 
     	DESUtil desUtil = new DESUtil();
@@ -28,16 +28,12 @@ public class ZooKeeperPropertyPlaceholderConfigurer extends PropertyPlaceholderC
     		if(isEncryptPropertyVal(key)){
     			value = desUtil.decrypt(value.toString());
     		}
-    		props.put(key,value);
+    		props.put(key, value);
     	}
         super.processProperties(beanFactoryToProcess, props);  
     }
     
     private boolean isEncryptPropertyVal(String propertyName){
-        if(propertyName.contains("password")){
-            return true;
-        }else{
-            return false;
-        }
+        return propertyName.contains("password");
     }
 }
