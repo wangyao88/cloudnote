@@ -415,5 +415,9 @@ public class ArticleService {
 		contentFilted = FileUtils.filterDraft(contentFilted);
 		article.setContent(contentFilted);
 		articleDao.saveOrUpdate(article);
+
+		User sessionUser = UserUtil.getSessionUser(request);
+		User user = userService.selectUser(sessionUser);
+		PublishManager.getPublishManager().getArticlePublisher().updateIndexByUpdate(article, user.getId());
 	}
 }

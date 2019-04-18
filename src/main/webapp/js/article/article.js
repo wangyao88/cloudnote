@@ -314,13 +314,13 @@ function addListener(){
 		//grid.updateRow(record,{hitNum : record.hitNum+1});
 	});
 
-	var searchArticleByTitleText = mini.get("searchArticleByTitleText");
-	searchArticleByTitleText.on("keydown", function(event) {
-		//		htmlEvent,sender,source,type
-		if (event.htmlEvent.keyCode == 13) {
-			searchArticle();
-		}
-	});
+	// var searchArticleByTitleText = mini.get("searchArticleByTitleText");
+	// searchArticleByTitleText.on("keydown", function(event) {
+	// 	//		htmlEvent,sender,source,type
+	// 	if (event.htmlEvent.keyCode == 13) {
+	// 		searchArticle();
+	// 	}
+	// });
 
 	$(document).keydown(function(e) {
 		var keyCode = e.keyCode || e.which || e.charCode;

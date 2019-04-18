@@ -13,6 +13,10 @@ import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.ObjectMapper;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -39,6 +43,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.IOContext;
 import org.apache.lucene.store.RAMDirectory;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -171,45 +176,81 @@ public class LuceneManager {
 	@Logger(message="添加笔记索引")
 	public synchronized void addDocument(Article article, String userId){
 		try {
-			@Cleanup
-			IndexWriter ramWriter = getFSIndexWriter(userId);
-			ramWriter.addDocument(toDocument(article));
-			ramWriter.commit();
-		} catch (IOException e) {
-			log.error("添加笔记索引失败！错误信息：{}",e.getMessage());
-		}
-	}
-
-	@Logger(message="删除笔记索引")
-	public synchronized void deleteDocument(String articleId, String userId){
-		try {
-			Term term = new Term("id", articleId);
-			@Cleanup
-			IndexWriter ramWriter = getFSIndexWriter(userId);
-			ramWriter.deleteDocuments(term);
-			ramWriter.flush();
-			ramWriter.commit();
-		} catch (IOException e) {
-			e.printStackTrace();
-			log.error("删除笔记索引失败！错误信息：{}",e.getMessage());
+//			@Cleanup
+//			IndexWriter ramWriter = getFSIndexWriter(userId);
+//			ramWriter.addDocument(toDocument(article));
+//			ramWriter.commit();
+			insertOrUpdateIndex(article, "添加");
+		} catch (Exception e) {
+			log.error("添加笔记【"+article.getTitle()+"】索引失败！错误信息：{}", e.getMessage());
 		}
 	}
 
 	@Logger(message="更新笔记索引")
 	public void updateDocument(Article article, String userId){
 		try {
-			Term term = new Term("id", String.valueOf(article.getId()));
-			@Cleanup
-			IndexWriter ramWriter = getFSIndexWriter(userId);
-			ramWriter.updateDocument(term, toDocument(article));
-			ramWriter.flush();
-			ramWriter.commit();
-		} catch (IOException e) {
-			e.printStackTrace();
-			log.error("更新笔记索引失败！错误信息：{}",e.getMessage());
+//			Term term = new Term("id", String.valueOf(article.getId()));
+//			@Cleanup
+//			IndexWriter ramWriter = getFSIndexWriter(userId);
+//			ramWriter.updateDocument(term, toDocument(article));
+//			ramWriter.flush();
+//			ramWriter.commit();
+			insertOrUpdateIndex(article, "更新");
+		} catch (Exception e) {
+			log.error("更新笔记【"+article.getTitle()+"】索引失败！错误信息：{}", e.getMessage());
 		}
 	}
-	
+
+	private void insertOrUpdateIndex(Article article, String operate) throws UnirestException {
+		String url = "http://127.0.0.1:11000/es/insertOrUpdate";
+		JSONObject json = convertJson(article);
+		HttpResponse<String> response = Unirest.post(url)
+				.header("Content-Type", "application/json")
+				.body(json).asString();
+		String result = response.getBody();
+		if(Boolean.valueOf(result)) {
+			log.info(operate + "笔记【"+article.getTitle()+"】索引成功!");
+		}else {
+			log.info(operate + "笔记【"+article.getTitle()+"】索引失败!");
+		}
+	}
+
+	private JSONObject convertJson(Article article) {
+		JSONObject json = new JSONObject();
+		json.put("id" , article.getId());
+		json.put("title" , article.getTitle());
+		json.put("content" , article.getContent());
+		json.put("creatTime" , article.getCreateTime());
+		json.put("hitNum" , article.getHitNum());
+		json.put("isSHared" , article.isShared() ? 1: 0);
+		json.put("nId" , article.getNote().getId());
+		json.put("uId" , article.getUser().getId());
+		return json;
+	}
+
+	@Logger(message="删除笔记索引")
+	public synchronized void deleteDocument(Article article, String userId){
+		try {
+//			Term term = new Term("id", articleId);
+//			@Cleanup
+//			IndexWriter ramWriter = getFSIndexWriter(userId);
+//			ramWriter.deleteDocuments(term);
+//			ramWriter.flush();
+//			ramWriter.commit();
+			String url = "http://127.0.0.1:11000/es/delete";
+			HttpResponse<String> response = Unirest.post(url).queryString("id", article.getId()).asString();
+			String result = response.getBody();
+			if(Boolean.valueOf(result)) {
+				log.info("删除笔记【"+article.getTitle()+"】索引成功!");
+			}else {
+				log.info("删除笔记【"+article.getTitle()+"】索引失败!");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("删除笔记索引失败！错误信息：{}",e.getMessage());
+		}
+	}
+
 	@Logger(message="搜索笔记")
 	public List<Article> search(String keyword, String userId, int pageSize){
 		List<Article> list = Lists.newArrayList();

@@ -4,6 +4,9 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.sxkl.cloudnote.note.entity.Note;
+import com.sxkl.cloudnote.user.entity.User;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -20,6 +23,8 @@ import com.sxkl.cloudnote.eventdriven.entity.ArticlePublisherEvent;
 import com.sxkl.cloudnote.image.service.ImageService;
 import com.sxkl.cloudnote.log.annotation.Logger;
 
+
+@Slf4j
 @Service
 public class ArticleListener implements ApplicationListener<ApplicationEvent>{
 	
@@ -53,7 +58,10 @@ public class ArticleListener implements ApplicationListener<ApplicationEvent>{
 				break;
 	        case UPDATE_INDEX_BY_DELETE_OPERATION:
 //	        	indexManager.updateIndexByDelete(convertArticle(article),article.getUserId());
-	        	luceneManager.deleteDocument(article.getArticleId(), article.getUserId());
+	        	luceneManager.deleteDocument(convertArticle(article), article.getUserId());
+				break;
+			default:
+				log.error("不支持的操作类型");
 				break;
 		}
 	}
@@ -87,6 +95,13 @@ public class ArticleListener implements ApplicationListener<ApplicationEvent>{
 		article.setTitle(articlePublisherBean.getArticleTitle());
 		article.setContent(articlePublisherBean.getArticleContent());
 		article.setHitNum(articlePublisherBean.getHitNum());
+		article.setCreateTime(articlePublisherBean.getCreateTime());
+		User user = new User();
+		user.setId(articlePublisherBean.getUserId());
+		article.setUser(user);
+		Note note = new Note();
+		note.setId(articlePublisherBean.getNoteId());
+		article.setNote(note);
 		return article;
 	}
 	

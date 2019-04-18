@@ -56,7 +56,9 @@ public class ArticlePublisher {
 		bean.setArticleTitle(article.getTitle());
 		bean.setArticleContent(article.getContent());
 		bean.setHitNum(article.getHitNum());
+		bean.setCreateTime(article.getCreateTime());
 		bean.setUserId(userId);
+		bean.setNoteId(article.getNote().getId());
 		bean.setDutype(dutyType);
         applicationContext.publishEvent(new ArticlePublisherEvent(bean));
 	}
