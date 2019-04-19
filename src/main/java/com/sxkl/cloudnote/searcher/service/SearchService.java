@@ -32,7 +32,7 @@ public class SearchService {
     private static final int HOT_LABELS_ZSET_SIZE = 14;
     private static final String RECOMMEND_ARTICLE_LIST_KEY_IN_REDIS = "recommend_article";
     private static final int RECOMMEND_ARTICLE_LIST_SIZE = 9;
-    private static final String TODAY_NEWS_LIST_KEY_IN_REDIS = "recommend_article";
+    private static final String TODAY_NEWS_LIST_KEY_IN_REDIS = "today_news";
     private static final int TODAY_NEWS_LIST_SIZE = 9;
 
     @Autowired
