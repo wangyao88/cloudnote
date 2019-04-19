@@ -53,8 +53,8 @@
     </div>
 </div>
 <div class="w_foot">
-    <div class="w_foot_copyright">Copyright &copy; 2017-2020, www.travelmonk123.com. All Rights Reserved. <span>|</span>
-        <a target="_blank" href="http://www.miitbeian.gov.cn/" rel="nofollow">皖ICP备17002922号</a>
+    <div class="w_foot_copyright">
+        Copyright &copy; 2017-2020, www.travelmonk123.com. All Rights Reserved.
     </div>
 </div>
 <!--toTop-->

@@ -24,6 +24,23 @@
     <script src="<%=basePath%>js/baidusearch/searchresult/bootstrap.min.js"></script>
     <script src="<%=basePath%>plugins/myPagination/myPagination.js"></script>
 <body>
+<div class="w_header">
+    <div class="container">
+        <div class="w_header_top">
+            <span class="w_header_nav">
+					<ul>
+						<%--<li><a href="" class="active">首页</a></li>--%>
+					</ul>
+				</span>
+            <div class="w_search">
+                <div class="w_searchbox">
+                    <input type="text" placeholder="请输入您要搜索的内容" />
+                    <button>搜索</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="w_container">
     <div class="container">
         <div class="row w_main_row">
@@ -103,12 +120,73 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-lg-3 col-md-3 w_main_right">
+                <div class="panel panel-default sitetip">
+                    <a href="article_detail.html">
+                        <strong>搜索统计信息</strong>
+                        <h3 class="title">搜索成功</h3>
+                        <p class="overView">搜索数量：${total}</p>
+                        <p class="overView">命中数量：${count}</p>
+                        <p id="rate" class="overView">命&nbsp;&nbsp;中&nbsp;&nbsp;率：${rate}</p>
+                        <p id="pageNum" class="overView">本页数量：${pageNum}</p>
+                        <p id="cost" class="overView">搜索耗时：${cost}ms</p>
+                    </a>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">热门关键字</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div id="labelList" class="labelList">
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">文章推荐</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul id="recommendArticleList" class="list-unstyled sidebar">
+
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">友情链接</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="newContent">
+                            <ul class="list-unstyled sidebar shiplink">
+                                <li>
+                                    <a href="https://www.baidu.com/" target="_blank">百度</a>
+                                </li>
+                                <li>
+                                    <a href="https://www.oschina.net/" target="_blank">开源中国</a>
+                                </li>
+                                <li>
+                                    <a href="https://www.csdn.net/" target="_blank">csdn</a>
+                                </li>
+                                <li>
+                                    <a href="https://github.com/" target="_blank">github</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 </div>
 <div class="w_foot">
-    <div class="w_foot_copyright">Copyright &copy; 2017-2020, www.travelmonk123.com. All Rights Reserved. <span>|</span>
-        <a target="_blank" href="http://www.miitbeian.gov.cn/" rel="nofollow">皖ICP备17002922号</a>
+    <div class="w_foot_copyright">
+        Copyright &copy; 2017-2020, www.travelmonk123.com. All Rights Reserved.
     </div>
 </div>
 </body>
@@ -134,14 +212,14 @@
     });
 
     window.onload = function () {
-        var pageAmount = 20;
+        var pageAmount = 10;
         var dataTotal = ${count};
         var num = Math.floor(dataTotal/pageAmount);
         var pageTotal = dataTotal % pageAmount == 0 ? num : num+1;
         new Page({
             id: 'pagination',
             pageTotal: pageTotal, //必填,总页数
-            pageAmount: 20,  //每页多少条
+            pageAmount: pageAmount,  //每页多少条
             dataTotal: dataTotal, //总共多少条数据
             curPage: 1, //初始页码,不填默认为1
             pageSize: 5, //分页个数,不填默认为5
@@ -163,9 +241,13 @@
                 size : size
             },
             success : function(data){
-                console.log(data);
+                var pageNum = data.pageNum;
+                $("#pageNum").html("本页数量："+pageNum);
+                var cost = data.cost;
+                $("#cost").html("搜索耗时："+cost+"ms");
+                var articles = data.articles;
                 var content = "";
-                $(data).each(function(index, article) {
+                $(articles).each(function(index, article) {
                     content += "<div class='panel panel-default'>"+
                                     "<div class='panel-body'>"+
                                     "<h4><a target='_blank' class='title' href='<%=basePath%>article/detail?id="+article.id+"'>"+article.title+"</a></h4>"+
@@ -182,5 +264,52 @@
             }
         });
     }
+
+    function getHotLabels() {
+        $.ajax({
+            url : basePATH+"search/hotLabel",
+            type : "get",
+            success : function(labels){
+                if(labels.length == 0) {
+                    $("#labelList").html("暂无数据");
+                    return;
+                }
+                var content = "";
+                $(labels).each(function(index, label) {
+                    content += "<a class='label label-default'>"+label+"</a>";
+                });
+                $("#labelList").html(content);
+            },
+            error : function(data) {
+                $("#labelList").html("暂无数据");
+            }
+        });
+    }
+
+    function getRecommendArticles() {
+        $.ajax({
+            url : basePATH+"search/recommendArticles",
+            type : "get",
+            success : function(articles){
+                if(articles.length == 0) {
+                    $("#recommendArticleList").html("暂无数据");
+                    return;
+                }
+                var content = "";
+                $(articles).each(function(index, article) {
+                    content += "<li><a target='_blank' href='"+article.url+"'>"+article.title+"</a></li>";
+                });
+                $("#recommendArticleList").html(content);
+            },
+            error : function(data) {
+                $("#recommendArticleList").html("暂无数据");
+            }
+        });
+    }
+
+    $(document).ready(function(){
+        getHotLabels();
+        getRecommendArticles();
+    });
 </script>
 </html>

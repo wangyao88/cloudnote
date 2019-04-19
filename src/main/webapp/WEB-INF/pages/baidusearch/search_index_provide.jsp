@@ -35,10 +35,18 @@ body {
         if(words == "") {
             location.reload();
         }else {
-            window.open("<%=basePath%>search/result?words="+words+"&page=0&size=20");
+            window.open("<%=basePath%>search/result?words="+words+"&page=0&size=10");
             location.reload();
         }
 	}
+
+    $(document).ready(function(){
+        $('#input').keydown(function(event) {
+            if (event.keyCode == 13) {
+                search();
+            }
+        });
+    });
 </script>
 </head>
   <body>

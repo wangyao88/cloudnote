@@ -188,7 +188,7 @@ function getWeather(){
 				                  "<th>风力</th>"+
 			                  "</thead>"+
 			                  "<tbody>";
-			$(result).each(function(index,weather) { 
+			$(result).each(function(index,weather) {
 				if(index == 0){
 					title = weather.city + "-未来七天天气预报";
 				}
@@ -306,8 +306,8 @@ function addQuickKey(){
 $(document).ready(function(){
 	addQuickKey();
 	getWeather();
-	window.setTimeout(oneNews, 15000)
-	window.setInterval(oneNews, 1800000);
+	// window.setTimeout(oneNews, 15000)
+	// window.setInterval(oneNews, 1800000);
 	setSkin();
 	setInterval(showClock,1000);
 });
