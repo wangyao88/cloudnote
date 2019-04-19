@@ -124,13 +124,15 @@
 
             <div class="col-lg-3 col-md-3 w_main_right">
                 <div class="panel panel-default sitetip">
-                    <strong>搜索统计信息</strong>
-                    <h3 class="title">搜索成功</h3>
-                    <p class="overView">搜索数量：${total}</p>
-                    <p class="overView">命中数量：${count}</p>
-                    <p id="rate" class="overView">命&nbsp;&nbsp;中&nbsp;&nbsp;率：${rate}</p>
-                    <p id="pageNum" class="overView">本页数量：${pageNum}</p>
-                    <p id="cost" class="overView">搜索耗时：${cost}ms</p>
+                    <a href="javascript:void(0);">
+                        <strong>搜索统计信息</strong>
+                        <h3 class="title">搜索成功</h3>
+                        <p class="overView">搜索数量：${total}</p>
+                        <p class="overView">命中数量：${count}</p>
+                        <p id="rate" class="overView">命&nbsp;&nbsp;中&nbsp;&nbsp;率：${rate}</p>
+                        <p id="pageNum" class="overView">本页数量：${pageNum}</p>
+                        <p id="cost" class="overView">搜索耗时：${cost}ms</p>
+                    </a>
                 </div>
 
                 <div class="panel panel-default">
