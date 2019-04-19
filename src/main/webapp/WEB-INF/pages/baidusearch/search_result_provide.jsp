@@ -47,7 +47,7 @@
             <div class="col-lg-9 col-md-9 w_main_left">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">搜索结果</h3>
+                        <h3 class="panel-title">${words} 搜索结果</h3>
                     </div>
                     <div class="panel-body">
                         <!--文章列表开始-->

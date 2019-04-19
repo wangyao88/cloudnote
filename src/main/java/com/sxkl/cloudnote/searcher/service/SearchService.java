@@ -59,7 +59,9 @@ public class SearchService {
         }catch (Exception e) {
             log.error("搜索知识库失败！错误信息："+Throwables.getStackTraceAsString(e));
         }
-        saveSearchWordsToRedis(words);
+        if(!articles.isEmpty()) {
+            saveSearchWordsToRedis(words);
+        }
         return articles;
     }
 

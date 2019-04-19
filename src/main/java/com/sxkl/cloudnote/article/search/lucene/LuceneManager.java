@@ -222,7 +222,7 @@ public class LuceneManager {
 		json.put("id" , article.getId());
 		json.put("title" , article.getTitle());
 		json.put("content" , article.getContent());
-		json.put("creatTime" , article.getCreateTime());
+		json.put("creatTime" , article.getCreateTime().getTime());
 		json.put("hitNum" , article.getHitNum());
 		json.put("isSHared" , article.isShared() ? 1: 0);
 		json.put("nId" , article.getNote().getId());

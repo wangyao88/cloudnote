@@ -32,8 +32,8 @@ body {
 <script src="<%=basePath%>js/baidusearch/jquery-1.9.1.min.js"></script>
 <script>
     function search(){
-        value = $("#input").val();
-        if(value == "") {
+        words = $("#input").val();
+        if(words == "") {
             location.reload();
         }else {
             window.open("<%=basePath%>search/result?words="+words+"&page=0&size=10");
