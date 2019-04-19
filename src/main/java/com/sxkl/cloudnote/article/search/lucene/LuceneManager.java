@@ -46,6 +46,7 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.IOContext;
 import org.apache.lucene.store.RAMDirectory;
 import org.json.JSONObject;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -75,6 +76,7 @@ public class LuceneManager {
 	@Autowired
 	private UserService userService;
 	private static final int PAGE_SIZE = 50;
+	private org.slf4j.Logger logger = LoggerFactory.getLogger(LuceneManager.class);
 	
 	@Logger(message="于磁盘创建所有用户笔记索引")
 	public void initAllUserArticleIndex() {
@@ -184,7 +186,7 @@ public class LuceneManager {
 //			ramWriter.commit();
 			insertOrUpdateIndex(article, "添加");
 		} catch (Exception e) {
-			log.error("添加笔记【"+article.getTitle()+"】索引失败！错误信息：{}", e.getMessage());
+			logger.error("添加笔记【{}】索引失败！错误信息：{}", article.getTitle(), e.getMessage());
 		}
 	}
 
@@ -199,7 +201,7 @@ public class LuceneManager {
 //			ramWriter.commit();
 			insertOrUpdateIndex(article, "更新");
 		} catch (Exception e) {
-			log.error("更新笔记【"+article.getTitle()+"】索引失败！错误信息："+Throwables.getStackTraceAsString(e));
+			logger.error("更新笔记【{}】索引失败！错误信息：{}", article.getTitle(), Throwables.getStackTraceAsString(e));
 		}
 	}
 
@@ -209,11 +211,12 @@ public class LuceneManager {
 		HttpResponse<String> response = Unirest.post(url)
 				.header("Content-Type", "application/json")
 				.body(json).asString();
+		int status = response.getStatus();
 		String result = response.getBody();
-		if(Boolean.valueOf(result)) {
-			log.info(operate + "笔记【"+article.getTitle()+"】索引成功!");
+		if(status == 200 || "true".equals(result)) {
+			logger.info("{}笔记【{}】索引成功!", operate, article.getTitle());
 		}else {
-			log.info(operate + "笔记【"+article.getTitle()+"】索引失败!");
+			logger.error("{}笔记【{}】索引失败!", operate, article.getTitle());
 		}
 	}
 
@@ -243,12 +246,12 @@ public class LuceneManager {
 			HttpResponse<String> response = Unirest.post(url).queryString("id", article.getId()).asString();
 			String result = response.getBody();
 			if(Boolean.valueOf(result)) {
-				log.info("删除笔记【"+article.getTitle()+"】索引成功!");
+				logger.info("删除笔记【{}】索引成功!", article.getTitle());
 			}else {
-				log.info("删除笔记【"+article.getTitle()+"】索引失败!");
+				log.info("删除笔记【{}】索引失败!", article.getTitle());
 			}
 		} catch (Exception e) {
-			log.error("删除笔记索引失败！错误信息："+Throwables.getStackTraceAsString(e));
+			logger.error("删除笔记索引失败！错误信息：{}", Throwables.getStackTraceAsString(e));
 		}
 	}
 

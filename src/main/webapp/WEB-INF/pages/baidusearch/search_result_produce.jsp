@@ -127,11 +127,11 @@
                     <a href="javascript:void(0);">
                         <strong>搜索统计信息</strong>
                         <h3 class="title">搜索成功</h3>
-                        <p class="overView">搜索数量：${total}</p>
-                        <p class="overView">命中数量：${count}</p>
-                        <p id="rate" class="overView">命&nbsp;&nbsp;中&nbsp;&nbsp;率：${rate}</p>
-                        <p id="pageNum" class="overView">本页数量：${pageNum}</p>
-                        <p id="cost" class="overView">搜索耗时：${cost}ms</p>
+                        <p id="total" class="overView">搜索数量：0</p>
+                        <p id="count" class="overView">命中数量：0</p>
+                        <p id="rate" class="overView">命&nbsp;&nbsp;中&nbsp;&nbsp;率：0</p>
+                        <p id="pageNum" class="overView">本页数量：0</p>
+                        <p id="cost" class="overView">搜索耗时：0ms</p>
                     </a>
                 </div>
 
@@ -238,25 +238,30 @@
             showPageTotalFlag: true, //是否显示数据统计,不填默认不显示
             showSkipInputFlag: true, //是否支持跳转,不填默认不显示
             getPage: function (page) {
-                getPageData(page, pageAmount);
+                getPageData(0, page, pageAmount, ${count});
             }
         })
     }
 
-    function getPageData(page, size) {
+    function getPageData(first, page, size, count) {
         $.ajax({
             url : basePATH+"search/page",
             type : "get",
             data : {
                 words : "${words}",
+                first : first,
                 page : page-1,
-                size : size
+                size : size,
+                count : count
             },
             success : function(data){
-                var pageNum = data.pageNum;
-                $("#pageNum").html("本页数量："+pageNum);
-                var cost = data.cost;
-                $("#cost").html("搜索耗时："+cost+"ms");
+                if(first == 1) {
+                    $("#total").html("搜索数量："+data.total);
+                    $("#count").html("命中数量："+data.count);
+                    $("#rate").html("命&nbsp;&nbsp;中&nbsp;&nbsp;率："+data.rate);
+                }
+                $("#pageNum").html("本页数量："+data.pageNum);
+                $("#cost").html("搜索耗时："+data.cost+"ms");
                 var articles = data.articles;
                 if(articles.length == 0) {
                     $("#contentList").html("未找到搜索数据");
@@ -345,6 +350,7 @@
     }
 
     $(document).ready(function(){
+        getPageData(1, 1, 10, ${count});
         getHotLabels();
         getRecommendArticles();
         getTodayNews();

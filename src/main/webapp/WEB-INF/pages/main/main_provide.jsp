@@ -143,5 +143,7 @@
 </html>
 <script type="text/javascript">
 mini.parse();
-var editor = UE.getEditor('articleContainer');
+var editor = UE.getEditor('articleContainer',{
+    'enterTag' : 'br'
+});
 </script>

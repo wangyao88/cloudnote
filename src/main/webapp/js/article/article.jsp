@@ -78,7 +78,9 @@ body, html {
 </html>
 <script type="text/javascript">
 	mini.parse();
-	var editor = UE.getEditor('editor_id');
+    var editor = UE.getEditor('editor_id',{
+        'enterTag' : 'br'
+    });
 	var form = new mini.Form("form1");
 	var isEdit = false;
 	var articleId;

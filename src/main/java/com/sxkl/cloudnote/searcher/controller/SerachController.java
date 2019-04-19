@@ -31,32 +31,31 @@ public class SerachController {
     }
 
     @RequestMapping("/result")
-    public ModelAndView result(@RequestParam("words") String words, @RequestParam("page") int page, @RequestParam("size") int size){
+    public ModelAndView result(@RequestParam("words") String words){
         ModelAndView modelAndView = new ModelAndView(StringUtils.appendJoinEmpty("baidusearch/search_result","_",PropertyUtil.getMode()));
-        long start = System.currentTimeMillis();
-        List<Article> articles = searchService.searchPage(words, page, size);
-        long end = System.currentTimeMillis();
         long count = searchService.count(words);
-        long total = searchService.total();
-        DecimalFormat df = new DecimalFormat("#.00");
-        String rate = StringUtils.appendJoinEmpty(df.format(count*100d/total), "%");
         modelAndView.addObject("words", words);
-        modelAndView.addObject("articles", articles);
         modelAndView.addObject("count", count);
-        modelAndView.addObject("total", total);
-        modelAndView.addObject("rate", rate);
-        modelAndView.addObject("pageNum", articles.size());
-        modelAndView.addObject("cost", end-start);
         return modelAndView;
     }
 
     @RequestMapping("/page")
     @ResponseBody
-    public JSONObject page(@RequestParam("words") String words, @RequestParam("page") int page, @RequestParam("size") int size){
+    public JSONObject page(@RequestParam("first") int first, @RequestParam("words") String words,
+                           @RequestParam("page") int page, @RequestParam("size") int size,
+                           @RequestParam("count") int count){
+        JSONObject json = new JSONObject();
+        if(first == 1) {
+            long total = searchService.total();
+            DecimalFormat df = new DecimalFormat("#0.00");
+            String rate = StringUtils.appendJoinEmpty(df.format(count*100d/total), "%");
+            json.put("count", count);
+            json.put("total", total);
+            json.put("rate", rate);
+        }
         long start = System.currentTimeMillis();
         List<Article> articles = searchService.searchPage(words, page, size);
         long end = System.currentTimeMillis();
-        JSONObject json = new JSONObject();
         json.put("articles", articles);
         json.put("cost", end-start);
         json.put("pageNum", articles.size());

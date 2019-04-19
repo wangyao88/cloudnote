@@ -15,6 +15,7 @@ import com.sxkl.cloudnote.utils.CloudnoteServiceUrlConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -22,9 +23,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 
-@Slf4j
 @Service
 public class SearchService {
 
@@ -37,6 +38,7 @@ public class SearchService {
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+    private org.slf4j.Logger logger = LoggerFactory.getLogger(SearchService.class);
 
     @Logger(message = "搜索知识库")
     public List<Article> searchPage(String words, int page, int size) {
@@ -57,10 +59,10 @@ public class SearchService {
                 articles.add(gson.fromJson(jsonObject.toString(), Article.class));
             }
         }catch (Exception e) {
-            log.error("搜索知识库失败！错误信息："+Throwables.getStackTraceAsString(e));
+            logger.error("搜索知识库失败！错误信息：{}", Throwables.getStackTraceAsString(e));
         }
         if(!articles.isEmpty()) {
-            saveSearchWordsToRedis(words);
+            CompletableFuture.runAsync(()->saveSearchWordsToRedis(words));
         }
         return articles;
     }
@@ -70,6 +72,7 @@ public class SearchService {
         results.forEach(result -> {
             redisTemplate.opsForZSet().incrementScore(HOT_LABELS_ZSET_KEY_IN_REDIS, result, 1);
         });
+        logger.info("保存热门标签成功！");
     }
 
     public long count(String words) {
@@ -79,7 +82,7 @@ public class SearchService {
             String count = response.getBody();
             return Long.valueOf(count);
         }catch (Exception e) {
-            log.error("搜索知识库命中数量失败！错误信息："+Throwables.getStackTraceAsString(e));
+            logger.error("搜索知识库命中数量失败！错误信息：{}", Throwables.getStackTraceAsString(e));
         }
         return 0;
     }
@@ -91,7 +94,7 @@ public class SearchService {
             String total = response.getBody();
             return Long.valueOf(total);
         }catch (Exception e) {
-            log.error("搜索知识库总数量失败！错误信息："+Throwables.getStackTraceAsString(e));
+            logger.error("搜索知识库总数量失败！错误信息：{}", Throwables.getStackTraceAsString(e));
         }
         return 0;
     }

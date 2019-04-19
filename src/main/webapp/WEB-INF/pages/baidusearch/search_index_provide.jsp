@@ -35,7 +35,7 @@ body {
         if(words == "") {
             location.reload();
         }else {
-            window.open("<%=basePath%>search/result?words="+words+"&page=0&size=10");
+            window.open("<%=basePath%>search/result?words="+words);
             location.reload();
         }
 	}
