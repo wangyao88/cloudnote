@@ -191,6 +191,7 @@ public class ArticleService {
     	String content = article.getContent();
 		content = content.replaceAll(Constant.ARTICLE_CONTENT_DOMAIN, Constant.DOMAIN);
 		article.setContent(content);
+		PublishManager.getPublishManager().getArticlePublisher().increaseArticleHitNum(id);
 		return article;
 	}
 	

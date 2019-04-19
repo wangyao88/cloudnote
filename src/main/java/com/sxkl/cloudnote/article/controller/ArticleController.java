@@ -1,20 +1,21 @@
 package com.sxkl.cloudnote.article.controller;
 
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.Unirest;
 import com.sxkl.cloudnote.article.entity.Article;
 import com.sxkl.cloudnote.article.search.lucene.LuceneManager;
 import com.sxkl.cloudnote.article.service.ArticleService;
 import com.sxkl.cloudnote.common.service.OperateResultService;
 import com.sxkl.cloudnote.user.entity.User;
+import com.sxkl.cloudnote.utils.CloudnoteServiceUrlConstant;
 import com.sxkl.cloudnote.utils.PropertyUtil;
 import com.sxkl.cloudnote.utils.StringUtils;
 import com.sxkl.cloudnote.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -92,10 +93,11 @@ public class ArticleController {
 //			User user = UserUtil.getSessionUser(request);
 //			indexManager.createIndex(user.getId());
 //			luceneManager.creatIndexOnDisk(user.getId());
-			String url = "http://127.0.0.1:11000/es/loadData";
-			RestTemplate restTemplate = new RestTemplate();
-			ResponseEntity<Boolean> resultsEntity = restTemplate.getForEntity(url, Boolean.class);
-			if(resultsEntity.getBody()) {
+
+			String url = CloudnoteServiceUrlConstant.LOAD_DATA_URL;
+			HttpResponse<String> response = Unirest.get(url).asString();
+			String result = response.getBody();
+			if(Boolean.valueOf(result)) {
 				return OperateResultService.configurateSuccessResult();
 			}else {
 				return OperateResultService.configurateFailureResult("创建索引失败");

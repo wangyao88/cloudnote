@@ -13,10 +13,12 @@ import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import com.google.common.base.Throwables;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.ObjectMapper;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.sxkl.cloudnote.utils.CloudnoteServiceUrlConstant;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -197,12 +199,12 @@ public class LuceneManager {
 //			ramWriter.commit();
 			insertOrUpdateIndex(article, "更新");
 		} catch (Exception e) {
-			log.error("更新笔记【"+article.getTitle()+"】索引失败！错误信息：{}", e.getMessage());
+			log.error("更新笔记【"+article.getTitle()+"】索引失败！错误信息："+Throwables.getStackTraceAsString(e));
 		}
 	}
 
 	private void insertOrUpdateIndex(Article article, String operate) throws UnirestException {
-		String url = "http://127.0.0.1:11000/es/insertOrUpdate";
+		String url = CloudnoteServiceUrlConstant.INSERT_OR_UPDATE_URL;
 		JSONObject json = convertJson(article);
 		HttpResponse<String> response = Unirest.post(url)
 				.header("Content-Type", "application/json")
@@ -237,7 +239,7 @@ public class LuceneManager {
 //			ramWriter.deleteDocuments(term);
 //			ramWriter.flush();
 //			ramWriter.commit();
-			String url = "http://127.0.0.1:11000/es/delete";
+			String url = CloudnoteServiceUrlConstant.DELETE_URL;
 			HttpResponse<String> response = Unirest.post(url).queryString("id", article.getId()).asString();
 			String result = response.getBody();
 			if(Boolean.valueOf(result)) {
@@ -246,8 +248,7 @@ public class LuceneManager {
 				log.info("删除笔记【"+article.getTitle()+"】索引失败!");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-			log.error("删除笔记索引失败！错误信息：{}",e.getMessage());
+			log.error("删除笔记索引失败！错误信息："+Throwables.getStackTraceAsString(e));
 		}
 	}
 

@@ -158,6 +158,17 @@
 
                 <div class="panel panel-default">
                     <div class="panel-heading">
+                        <h3 class="panel-title">今日新闻</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul id="newsList" class="list-unstyled sidebar">
+
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
                         <h3 class="panel-title">友情链接</h3>
                     </div>
                     <div class="panel-body">
@@ -307,9 +318,31 @@
         });
     }
 
+    function getTodayNews() {
+        $.ajax({
+            url : basePATH+"search/todayNews",
+            type : "get",
+            success : function(newss){
+                if(newss.length == 0) {
+                    $("#newsList").html("暂无数据");
+                    return;
+                }
+                var content = "";
+                $(newss).each(function(index, news) {
+                    content += "<li><a target='_blank' href='"+news.url+"'>"+news.title+"</a></li>";
+                });
+                $("#newsList").html(content);
+            },
+            error : function(data) {
+                $("#newsList").html("暂无数据");
+            }
+        });
+    }
+
     $(document).ready(function(){
         getHotLabels();
         getRecommendArticles();
+        getTodayNews();
     });
 </script>
 </html>

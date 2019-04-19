@@ -15,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.text.DecimalFormat;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @Controller
@@ -72,7 +71,13 @@ public class SerachController {
 
     @RequestMapping("/recommendArticles")
     @ResponseBody
-    public List<Map<String, String>> recommendArticles() {
+    public List<Object> recommendArticles() {
         return searchService.getRecommendArticles();
+    }
+
+    @RequestMapping("/todayNews")
+    @ResponseBody
+    public List<Object> todayNews() {
+        return searchService.getTodayNews();
     }
 }
