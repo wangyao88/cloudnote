@@ -47,7 +47,7 @@
             <div class="col-lg-9 col-md-9 w_main_left">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">${words} 搜索结果</h3>
+                        <h3 class="panel-title">${words} -> 搜索结果</h3>
                     </div>
                     <div class="panel-body">
                         <!--文章列表开始-->
@@ -123,15 +123,13 @@
 
             <div class="col-lg-3 col-md-3 w_main_right">
                 <div class="panel panel-default sitetip">
-                    <a href="article_detail.html">
-                        <strong>搜索统计信息</strong>
-                        <h3 class="title">搜索成功</h3>
-                        <p class="overView">搜索数量：${total}</p>
-                        <p class="overView">命中数量：${count}</p>
-                        <p id="rate" class="overView">命&nbsp;&nbsp;中&nbsp;&nbsp;率：${rate}</p>
-                        <p id="pageNum" class="overView">本页数量：${pageNum}</p>
-                        <p id="cost" class="overView">搜索耗时：${cost}ms</p>
-                    </a>
+                    <strong>搜索统计信息</strong>
+                    <h3 class="title">搜索成功</h3>
+                    <p class="overView">搜索数量：${total}</p>
+                    <p class="overView">命中数量：${count}</p>
+                    <p id="rate" class="overView">命&nbsp;&nbsp;中&nbsp;&nbsp;率：${rate}</p>
+                    <p id="pageNum" class="overView">本页数量：${pageNum}</p>
+                    <p id="cost" class="overView">搜索耗时：${cost}ms</p>
                 </div>
 
                 <div class="panel panel-default">
@@ -257,6 +255,10 @@
                 var cost = data.cost;
                 $("#cost").html("搜索耗时："+cost+"ms");
                 var articles = data.articles;
+                if(articles.length == 0) {
+                    $("#contentList").html("未找到搜索数据");
+                    return;
+                }
                 var content = "";
                 $(articles).each(function(index, article) {
                     content += "<div class='panel panel-default'>"+

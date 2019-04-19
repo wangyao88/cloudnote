@@ -1,5 +1,10 @@
 package com.sxkl.cloudnote.eventdriven.publisher;
 
+import com.google.common.base.Throwables;
+import com.sxkl.cloudnote.note.entity.Note;
+import com.sxkl.cloudnote.utils.ObjectUtils;
+import com.sxkl.cloudnote.utils.StringUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
@@ -11,6 +16,7 @@ import com.sxkl.cloudnote.eventdriven.entity.ArticlePublisherEvent;
 import com.sxkl.cloudnote.eventdriven.entity.DutyType;
 import com.sxkl.cloudnote.log.annotation.Logger;
 
+@Slf4j
 @Service
 public class ArticlePublisher {
 
@@ -51,15 +57,22 @@ public class ArticlePublisher {
 	}
 
 	private void updateIndex(Article article, String userId, DutyType dutyType) {
-		ArticlePublisherBean bean = new ArticlePublisherBean();
-		bean.setArticleId(article.getId());
-		bean.setArticleTitle(article.getTitle());
-		bean.setArticleContent(article.getContent());
-		bean.setHitNum(article.getHitNum());
-		bean.setCreateTime(article.getCreateTime());
-		bean.setUserId(userId);
-		bean.setNoteId(article.getNote().getId());
-		bean.setDutype(dutyType);
-        applicationContext.publishEvent(new ArticlePublisherEvent(bean));
+		try {
+			ArticlePublisherBean bean = new ArticlePublisherBean();
+			bean.setArticleId(article.getId());
+			bean.setArticleTitle(article.getTitle());
+			bean.setArticleContent(article.getContent());
+			bean.setHitNum(article.getHitNum());
+			bean.setCreateTime(article.getCreateTime());
+			bean.setUserId(userId);
+			Note note = article.getNote();
+			String noteId = ObjectUtils.isNull(note) ? StringUtils.EMPTY : note.getId();
+			bean.setNoteId(noteId);
+			bean.setDutype(dutyType);
+			applicationContext.publishEvent(new ArticlePublisherEvent(bean));
+		}catch (Exception e) {
+			log.error("发布更新索引事件失败！错误信息："+Throwables.getStackTraceAsString(e));
+		}
+
 	}
 }

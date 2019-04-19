@@ -286,8 +286,27 @@ function showClock() {
 	if(s < 10){
 		s = "0" + s;
 	}
-	var dateStr = year + '年' + mon + '月' + da + '日' + ' ' + h + ':' + m + ':' + s + ' ' + '星期' + day ;
+	var dayStr = getDay(day);
+	var dateStr = year + '年' + mon + '月' + da + '日' + ' ' + h + ':' + m + ':' + s + ' ' + '星期' + dayStr ;
 	clock.html(dateStr);
+}
+
+function getDay(day) {
+	if(day == 0) {
+		return "日";
+	}else if (day == 1) {
+        return "一";
+    }else if (day == 2) {
+        return "二";
+    }else if (day == 3) {
+        return "三";
+    }else if (day == 4) {
+        return "四";
+    }else if (day == 5) {
+        return "五";
+    }else if (day == 6) {
+        return "六";
+    }
 }
 
 function addQuickKey(){
