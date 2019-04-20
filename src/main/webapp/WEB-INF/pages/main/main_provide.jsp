@@ -23,6 +23,8 @@
 <link rel="stylesheet" href="<%=basePath%>css/flag.jquery.autocomplete.css" />
 <link rel="stylesheet" href="<%=basePath%>css/a.css" />
 <link rel="stylesheet" href="<%=basePath%>css/scroller.css" />
+<link rel="stylesheet" href="<%=basePath%>css/scroller.css" />
+<link rel="stylesheet" href="<%=basePath%>js/ueditor-1.4.3.3/third-party/SyntaxHighlighter/shCoreDefault.css" />
 
 <script type="text/javascript">
    var basePath = "<%=basePath%>";
@@ -31,6 +33,7 @@
 <script src="<%=basePath%>js/jquery.min.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/ueditor-1.4.3.3/ueditor.config.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/ueditor-1.4.3.3/ueditor.all.min.js" type="text/javascript"></script>
+<script src="<%=basePath%>js/ueditor-1.4.3.3/third-party/SyntaxHighlighter/shCore.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/note/note.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/flag/flag.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/article/article.js" type="text/javascript"></script> 
@@ -39,6 +42,9 @@
 <script src="<%=basePath%>js/backup/backup.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/lexicon/lexicon.js" type="text/javascript"></script>
 <script type="text/javascript" src="<%=basePath%>js/jquery.autocomplete-min.js"></script>
+<script type="text/javascript">
+	SyntaxHighlighter.all();
+</script>
 </head>
 <body id="globalKeyEvent">
 	<div id="layout1" class="mini-layout" style="width:100%;height:100%;"borderStyle="border:solid 1px #aaa;">

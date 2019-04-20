@@ -9,10 +9,16 @@
 <html>
 <head>
 <title>增加节点</title>
+
+<link rel="stylesheet" href="<%=basePath%>js/ueditor-1.4.3.3/third-party/SyntaxHighlighter/shCoreDefault.css" />
+
 <script src="<%=basePath%>js/boot.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/ueditor-1.4.3.3/ueditor.config.js" type="text/javascript"></script>
 <script src="<%=basePath%>js/ueditor-1.4.3.3/ueditor.all.min.js" type="text/javascript"></script>
-
+<script src="<%=basePath%>js/ueditor-1.4.3.3/third-party/SyntaxHighlighter/shCore.js" type="text/javascript"></script>
+<script type="text/javascript">
+	SyntaxHighlighter.all();
+</script>
 <style type="text/css">
 body, html {
 	height: 100%;

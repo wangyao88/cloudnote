@@ -263,15 +263,14 @@ public class Dictionary {
 						theWord = br.readLine();
 						if (theWord != null && !"".equals(theWord.trim())) {
 							// 加载扩展词典数据到主内存词典中
-							// System.out.println(theWord);
+//							 System.out.println(theWord);
 							_MainDict.fillSegment(theWord.trim().toLowerCase()
 									.toCharArray());
 						}
 					} while (theWord != null);
 
 				} catch (IOException ioe) {
-					System.err
-							.println("Extension Dictionary loading exception.");
+					System.err.println("Extension Dictionary loading exception.");
 					ioe.printStackTrace();
 
 				} finally {
