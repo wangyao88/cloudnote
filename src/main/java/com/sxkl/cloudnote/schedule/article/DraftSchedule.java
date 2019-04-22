@@ -22,7 +22,7 @@ public class DraftSchedule {
 	private ArticleService articleService;
 	
 	@Logger(message="定时删除失效笔记附件")
-	@Scheduled(cron="0 0 2 * * ?")
+//	@Scheduled(cron="0 0 2 * * ?")
     public void deleteExpireDraft(){
 		if(StringUtils.isEmpty(Constant.REAL_DRAFT_PATH)){
 			return;

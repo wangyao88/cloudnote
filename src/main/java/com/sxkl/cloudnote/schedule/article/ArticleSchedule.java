@@ -46,7 +46,7 @@ public class ArticleSchedule {
     }
 	
 	@Logger(message="定时创建用户笔记索引")
-	@Scheduled(cron="0 0 1 * * ?")
+//	@Scheduled(cron="0 0 1 * * ?")
 	public void createIndex(){
 		luceneManager.initAllUserArticleIndex();
     }
