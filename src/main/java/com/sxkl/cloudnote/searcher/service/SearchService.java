@@ -59,18 +59,18 @@ public class SearchService {
         }catch (Exception e) {
             log.error("搜索知识库失败！错误信息："+Throwables.getStackTraceAsString(e));
         }
-        if(!articles.isEmpty()) {
-            saveSearchWordsToRedis(words);
-        }
+//        if(!articles.isEmpty()) {
+//            saveSearchWordsToRedis(words);
+//        }
         return articles;
     }
 
-    private void saveSearchWordsToRedis(String words) {
-        List<String> results = IKAnalyzerHandler.handle(words);
-        results.forEach(result -> {
-            redisTemplate.opsForZSet().incrementScore(HOT_LABELS_ZSET_KEY_IN_REDIS, result, 1);
-        });
-    }
+//    private void saveSearchWordsToRedis(String words) {
+//        List<String> results = IKAnalyzerHandler.handle(words);
+//        results.forEach(result -> {
+//            redisTemplate.opsForZSet().incrementScore(HOT_LABELS_ZSET_KEY_IN_REDIS, result, 1);
+//        });
+//    }
 
     public long count(String words) {
         try {

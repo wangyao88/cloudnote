@@ -73,6 +73,5 @@ public class ArticlePublisher {
 		}catch (Exception e) {
 			log.error("发布更新索引事件失败！错误信息："+Throwables.getStackTraceAsString(e));
 		}
-
 	}
 }
