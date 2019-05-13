@@ -193,3 +193,6 @@ ADD COLUMN `user_id` VARCHAR(36) NULL COMMENT '记账人' AFTER `type`;
 
 ALTER TABLE `cloudnote`.`cn_article` 
 ADD INDEX `article_user_id` USING BTREE (`uId` ASC);
+
+ALTER TABLE `cloudnote`.`cn_article`
+ADD INDEX `article_create_time_index` (`createTime` ASC);
