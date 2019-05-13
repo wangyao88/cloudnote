@@ -50,6 +50,21 @@
                     </div>
                 </div>
             </div>
+
+            <<input id="articleId" type="hidden" value="${article.id}"/>
+            <div class="col-lg-3 col-md-3 w_main_right">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">相似文章</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul id="sameArticleList" class="list-unstyled sidebar">
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -66,4 +81,31 @@
     </div>
 </div>
 </body>
+<script type="text/javascript">
+    function getSameArticles() {
+        $.ajax({
+            url : basePATH+"article/sameArticles",
+            type : "post",
+            data: {id: $('#articleId').val()},
+            success : function(articles){
+                if(articles.length === 0) {
+                    $("#sameArticleList").html("暂无数据");
+                    return;
+                }
+                var content = "";
+                $(articles).each(function(index, article) {
+                    content += "<li><a target='_blank' href='"+article.url+"'>"+article.title+"</a></li>";
+                });
+                $("#sameArticleList").html(content);
+            },
+            error : function(data) {
+                $("#sameArticleList").html("暂无数据");
+            }
+        });
+    }
+
+    $(document).ready(function(){
+        getSameArticles();
+    });
+</script>
 </html>

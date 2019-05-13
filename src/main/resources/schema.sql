@@ -178,7 +178,7 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COMMENT = '记账系统-记账条目';
 
-ALTER TABLE `cloudnote`.`cn_category` 
+ALTER TABLE `cloudnote`.`cn_category`
 ADD COLUMN `parent_id` VARCHAR(36) NULL AFTER `account_book_id`;
 
 ALTER TABLE `cloudnote`.`cn_tally` 
@@ -196,3 +196,11 @@ ADD INDEX `article_user_id` USING BTREE (`uId` ASC);
 
 ALTER TABLE `cloudnote`.`cn_article`
 ADD INDEX `article_create_time_index` (`createTime` ASC);
+
+CREATE TABLE `cloudnote`.`cn_same_article` (
+  `id` VARCHAR(36) NOT NULL COMMENT '主键',
+  `same_ids` VARCHAR(400) NOT NULL COMMENT '相似文章主键',
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COMMENT = '相似文章对应表';

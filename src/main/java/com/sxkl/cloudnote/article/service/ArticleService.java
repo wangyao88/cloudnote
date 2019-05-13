@@ -10,7 +10,8 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.StringUtils;
+import com.sxkl.cloudnote.article.entity.*;
+import com.sxkl.cloudnote.utils.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -21,11 +22,6 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.sxkl.cloudnote.article.dao.ArticleDao;
-import com.sxkl.cloudnote.article.entity.Article;
-import com.sxkl.cloudnote.article.entity.ArticleForCache;
-import com.sxkl.cloudnote.article.entity.ArticleForEdit;
-import com.sxkl.cloudnote.article.entity.ArticleForHtml;
-import com.sxkl.cloudnote.article.entity.Blog;
 import com.sxkl.cloudnote.article.search.handler.impl.LuceneSearcher;
 import com.sxkl.cloudnote.article.search.lucene.WordAnalyzer;
 import com.sxkl.cloudnote.cache.annotation.RedisDisCachable;
@@ -41,9 +37,6 @@ import com.sxkl.cloudnote.note.service.NoteService;
 import com.sxkl.cloudnote.spider.entity.SearchComplete;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.user.service.UserService;
-import com.sxkl.cloudnote.utils.DateUtils;
-import com.sxkl.cloudnote.utils.FileUtils;
-import com.sxkl.cloudnote.utils.UserUtil;
 
 @Service
 public class ArticleService {
@@ -420,5 +413,18 @@ public class ArticleService {
 		User sessionUser = UserUtil.getSessionUser(request);
 		User user = userService.selectUser(sessionUser);
 		PublishManager.getPublishManager().getArticlePublisher().updateIndexByUpdate(article, user.getId());
+	}
+
+	public List<Article> getSameArticles(String id) {
+		SameArticle sameArticle = articleDao.getSameArticleIds(id);
+		if(ObjectUtils.isNull(sameArticle)) {
+			return Lists.newArrayList();
+		}
+		String sameIds = sameArticle.getSameIds();
+		if(StringUtils.isBlank(sameIds)) {
+			return Lists.newArrayList();
+		}
+		List<String> idList = StringUtils.str2List(sameIds);
+		return articleDao.getSameArticlesInIds(idList);
 	}
 }

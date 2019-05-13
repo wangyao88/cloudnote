@@ -1271,4 +1271,19 @@ public abstract class StringUtils {
 	public static boolean notContains(String str, String key){
 		return !contains(str,key);
 	}
+
+    public static List<String> str2List(String str) {
+        return str2List(str, ",");
+    }
+
+	public static List<String> str2List(String str, String separator) {
+        List<String> results = Lists.newArrayList();
+        if(StringUtils.isBlank(str)) {
+            return Lists.newArrayList();
+        }
+        if(StringUtils.isBlank(separator)) {
+            separator = ",";
+        }
+        return Lists.newArrayList(str.split(separator));
+    }
 }

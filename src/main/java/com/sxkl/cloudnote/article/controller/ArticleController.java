@@ -12,13 +12,11 @@ import com.sxkl.cloudnote.utils.PropertyUtil;
 import com.sxkl.cloudnote.utils.StringUtils;
 import com.sxkl.cloudnote.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping("/article")
@@ -124,5 +122,11 @@ public class ArticleController {
 		Article article = articleService.getArticle(id);
 		modelAndView.addObject("article", article);
 		return modelAndView;
+	}
+
+	@RequestMapping(value = "/sameArticles", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	@ResponseBody
+	public List<Article> sameArticles(@RequestParam("id") String id) {
+		return articleService.getSameArticles(id);
 	}
 }

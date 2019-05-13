@@ -3,6 +3,7 @@ package com.sxkl.cloudnote.article.dao;
 import java.math.BigInteger;
 import java.util.List;
 
+import com.sxkl.cloudnote.article.entity.SameArticle;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -293,5 +294,21 @@ public class ArticleDao extends BaseDao<String,Article> {
 		Query query = session.createQuery(hql);
 	    query.setString("name", Joiner.on(name).join("%","%"));
 	    return (Article) query.uniqueResult();
+	}
+
+	public SameArticle getSameArticleIds(String id) {
+		String hql = "select new SameArticle(id,sameIds) from SameArticle a where a.id = :id";
+		Session session = this.getSession();
+		Query query = session.createQuery(hql);
+		query.setString("id", id);
+		return (SameArticle) query.uniqueResult();
+	}
+
+	public List<Article> getSameArticlesInIds(List<String> idList) {
+		String hql = "select new Article(id,title,hitNum) from Article a where a.id in :idList";
+		Session session = this.getSession();
+		Query query = session.createQuery(hql);
+		query.setParameterList("idList", idList);
+		return query.list();
 	}
 }
