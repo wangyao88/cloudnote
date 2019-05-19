@@ -124,7 +124,7 @@ public class ArticleController {
 		return modelAndView;
 	}
 
-	@RequestMapping(value = "/sameArticles", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	@RequestMapping(value = "/sameArticles", method = RequestMethod.POST)
 	@ResponseBody
 	public List<Article> sameArticles(@RequestParam("id") String id) {
 		return articleService.getSameArticles(id);

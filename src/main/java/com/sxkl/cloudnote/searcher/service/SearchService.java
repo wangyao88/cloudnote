@@ -9,7 +9,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.sxkl.cloudnote.article.entity.Article;
-import com.sxkl.cloudnote.ikanalyzer.IKAnalyzerHandler;
+import com.sxkl.cloudnote.article.service.ArticleService;
 import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.utils.CloudnoteServiceUrlConstant;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +37,8 @@ public class SearchService {
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+    @Autowired
+    private ArticleService articleService;
 
     @Logger(message = "搜索知识库")
     public List<Article> searchPage(String words, int page, int size) {
@@ -101,9 +103,10 @@ public class SearchService {
     }
 
 
-    public List<Object> getRecommendArticles() {
+    public List<Article> getRecommendArticles() {
+        return articleService.getRecent();
         // title url source date
-        return redisTemplate.opsForList().range(RECOMMEND_ARTICLE_LIST_KEY_IN_REDIS, 0, RECOMMEND_ARTICLE_LIST_SIZE);
+//        return redisTemplate.opsForList().range(RECOMMEND_ARTICLE_LIST_KEY_IN_REDIS, 0, RECOMMEND_ARTICLE_LIST_SIZE);
     }
 
     public List<Object> getTodayNews() {

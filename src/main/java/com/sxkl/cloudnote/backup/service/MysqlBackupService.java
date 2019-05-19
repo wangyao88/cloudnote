@@ -78,6 +78,7 @@ public class MysqlBackupService extends AbstractBackupDB {
             p.waitFor();
             log.info("备份数据库成功!");
         }catch (Exception e) {
+            e.printStackTrace();
             log.error("备份数据库失败！错误信息:{}",e.getMessage());
         }finally{
         	p.destroy();

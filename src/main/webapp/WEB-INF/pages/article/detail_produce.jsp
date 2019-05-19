@@ -82,6 +82,7 @@
 </div>
 </body>
 <script type="text/javascript">
+    var basePATH = "<%=basePath%>";
     function getSameArticles() {
         $.ajax({
             url : basePATH+"article/sameArticles",
@@ -94,7 +95,7 @@
                 }
                 var content = "";
                 $(articles).each(function(index, article) {
-                    content += "<li><a target='_blank' href='"+article.url+"'>"+article.title+"</a></li>";
+                    content += "<li><a target='_blank' href='<%=basePath%>article/detail?id="+article.id+"'>"+article.title+"</a></li>";
                 });
                 $("#sameArticleList").html(content);
             },

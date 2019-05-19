@@ -318,7 +318,7 @@ public class ArticleService {
 		return OperateResultService.configurateSuccessResult(blogs);
 	}
 	
-	public String getRecent() {
+	public String getRecentForBlog() {
 		Article article = new Article();
 		article.setShared(true);
 		List<Article> articles = articleDao.getRecent(article);
@@ -330,6 +330,12 @@ public class ArticleService {
 			blogs.add(blog);
 		}
 		return OperateResultService.configurateSuccessResult(blogs);
+	}
+
+	public List<Article> getRecent() {
+		Article article = new Article();
+		article.setShared(true);
+		return articleDao.getRecent(article);
 	}
 	
 	@Logger(message="获取博客详情")

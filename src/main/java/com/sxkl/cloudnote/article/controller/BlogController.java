@@ -26,7 +26,7 @@ public class BlogController {
 	
 	@RequestMapping(value = "/getRecent", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
 	public String getRecent(){
-		return articleService.getRecent();
+		return articleService.getRecentForBlog();
 	}
 	
 	@RequestMapping(value = "/getBlog", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")

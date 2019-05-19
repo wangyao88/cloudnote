@@ -70,7 +70,7 @@ public class SerachController {
 
     @RequestMapping("/recommendArticles")
     @ResponseBody
-    public List<Object> recommendArticles() {
+    public List<Article> recommendArticles() {
         return searchService.getRecommendArticles();
     }
 

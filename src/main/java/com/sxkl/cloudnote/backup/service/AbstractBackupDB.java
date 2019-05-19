@@ -19,11 +19,4 @@ public abstract class AbstractBackupDB implements DataBaseBackService{
 	public abstract void sendMail(String draft);
 	
 	public abstract void deleteExpireFile(String path);
-	
-	public static void main(String[] args) {
-		String str = "/home/wy/sdfsfs.sql";
-		str = str.substring(str.lastIndexOf("/")+1, str.length());
-		System.out.println(str);
-	}
-
 }
