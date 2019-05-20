@@ -44,27 +44,35 @@
 	<div id="layout1" class="mini-layout" style="width:100%;height:100%;"borderStyle="border:solid 1px #aaa;">
 	     <div title="工具栏" region="north" showHeader="false" height="34px">
 			<div class="mini-toolbar" height="33px">
-			    <a class="mini-button" iconCls="icon-addnew" onclick="addArticle">增加</a>
-			    <span class="separator"></span>
-			    <a class="mini-button" iconCls="icon-edit" onclick="editArticle">修改</a>
-			    <span class="separator"></span>
-			    <a class="mini-button" iconCls="icon-save" onclick="contentChange">快速保存</a>
-			    <span class="separator"></span>
-			    <a class="mini-button" iconCls="icon-remove" onclick="removeArticle">删除</a>
-			    <span class="separator"></span>
-			    <%--<input class="mini-textbox" id="searchArticleByTitleText" emptyText="笔记标题"/>   --%>
-			    <%--<a class="mini-button" id="searchArticleByTitleBtn" iconCls="icon-search" onclick="searchArticleByTitle">查询</a>--%>
-			    <%--<span class="separator"></span>--%>
-			    <%--<input class="mini-textbox" width="200px" id="searchArticleByTitleOrContentText" emptyText="搜索关键字"/>--%>
-			    <a class="mini-button" id="searchArticleByTitleOrContentBtn" iconCls="icon-find" href="<%=basePath%>search/index" target="_blank">搜一下</a>
-			    <%--<span class="separator"></span>--%>
-			    <%--<a class="mini-button" iconCls="icon-help" href="<%=basePath%>spider/searchPage" target="_blank">在线搜索</a>--%>
-			    <span id="clock" style="float: right;margin-right:20px;"></span>
+				<input id="skin" name="skin"
+					   class="mini-combobox" style="width:155px;" textField="name"
+					   valueField="id" emptyText="请选择皮肤..."
+					   url="<%=basePath%>main/getAllSkinsFromCombo" ajaxType="get"
+					   required="true" allowInput="true" showNullItem="true"
+					   nullItemText="请选择皮肤..." onitemclick="selectSkin"/>
+				<span class="separator"></span>
+				<a class="mini-button" iconCls="icon-addnew" onclick="addArticle">增加</a>
+				<span class="separator"></span>
+				<a class="mini-button" iconCls="icon-edit" onclick="editArticle">修改</a>
+				<span class="separator"></span>
+				<a class="mini-button" iconCls="icon-save" onclick="contentChange">快速保存</a>
+				<span class="separator"></span>
+				<a class="mini-button" iconCls="icon-remove" onclick="removeArticle">删除</a>
+				<%--<span class="separator"></span>--%>
+				<%--<input class="mini-textbox" id="searchArticleByTitleText" emptyText="笔记标题"/>   --%>
+				<%--<a class="mini-button" id="searchArticleByTitleBtn" iconCls="icon-search" onclick="searchArticleByTitle">查询</a>--%>
+				<span class="separator"></span>
+				<%--<input class="mini-textbox" width="200px" id="searchArticleByTitleOrContentText" emptyText="搜索关键字"/>--%>
+				<a class="mini-button" id="searchArticleByTitleOrContentBtn" iconCls="icon-find" href="<%=basePath%>search/index" target="_blank">搜一下</a>
+				<%--<span class="separator"></span>
+                <a class="mini-button" iconCls="icon-help" href="<%=basePath%>spider/searchPage" target="_blank">在线搜索</a>--%>
+				<a class="mini-button" iconCls="icon-downgrade" onclick="logout" style="float: right;margin-right:0px;">退出</a>
+				<span id="clock" style="float: right;margin-right:20px;"></span>
 		    </div>
 		 </div>
-		 <div title="south" region="south" showSplit="false" showHeader="false" height="35px" showSplitIcon="false" >
+		 <%--<div title="south" region="south" showSplit="false" showHeader="false" height="35px" showSplitIcon="false" >
         		<div class="mini-toolbar">
-			    <%-- <a class="mini-button" iconCls="icon-date" onclick="openStatChart">报表</a>
+			     <a class="mini-button" iconCls="icon-date" onclick="openStatChart">报表</a>
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-edit" onclick="">账号管理</a>
 			    <span class="separator"></span>
@@ -73,7 +81,7 @@
 			    <a class="mini-button" iconCls="icon-goto" onclick="">发送邮件</a>
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-goto" onclick="onLineNum">在线用户数</a>
-			    <span class="separator"></span>--%>
+			    <span class="separator"></span>
 			    <input id="skin" name="skin"
 					class="mini-combobox" style="width:155px;" textField="name"
 					valueField="id" emptyText="请选择皮肤..."
@@ -88,7 +96,6 @@
 			    <a class="mini-button" iconCls="icon-collapse" href="<%=basePath%>spider/index" target="_blank">订阅文章</a>
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-sort" onclick="createIndexs">创建索引</a>
-			    <!-- <a class="mini-button" iconCls="icon-sort" href="<%=basePath%>lexicon/lexicon" target="_blank">索引管理</a> -->
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-split" onclick="backupDB()">备份数据</a>
 			    <span class="separator"></span>
@@ -97,7 +104,7 @@
 			    <a class="mini-button" iconCls="icon-downgrade" onclick="logout">退出</a>
 			    <span class="separator"></span>
 		    </div>
-    	</div>
+    	</div>--%>
 		 <div title="笔记和标签" showProxyText="true" region="west" width="300px" expanded="true" showSplitIcon="true">
 			<div class="mini-toolbar" height="33px">
 			    <input type="text" id="flagNameInput" width="100px"/>

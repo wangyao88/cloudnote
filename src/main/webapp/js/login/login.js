@@ -24,6 +24,7 @@ function doLogin(){
 				    		}) ;
 							return false;
 						}
+                        document.cookie="miniuiSkin=metro-green";
 						window.location.href = basePath + result; 
 			        }
 				});

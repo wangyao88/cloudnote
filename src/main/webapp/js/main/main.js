@@ -327,6 +327,6 @@ $(document).ready(function(){
 	getWeather();
 	// window.setTimeout(oneNews, 15000)
 	// window.setInterval(oneNews, 1800000);
-	setSkin();
+    setSkin();
 	setInterval(showClock,1000);
 });
