@@ -67,9 +67,11 @@
 			    <%--<span class="separator"></span>--%>
 			    <%--<input class="mini-textbox" id="searchArticleByTitleText" emptyText="笔记标题"/>   --%>
 			    <%--<a class="mini-button" id="searchArticleByTitleBtn" iconCls="icon-search" onclick="searchArticleByTitle">查询</a>--%>
-			    <span class="separator"></span>
-			    <%--<input class="mini-textbox" width="200px" id="searchArticleByTitleOrContentText" emptyText="搜索关键字"/>--%>
-			    <a class="mini-button" id="searchArticleByTitleOrContentBtn" iconCls="icon-find" href="<%=basePath%>search/index" target="_blank">搜一下</a>
+				<span class="separator"></span>
+				<input class="mini-textbox" width="200px" id="searchArticleByTitleOrContentText" emptyText="搜索关键字"/>
+				<a class="mini-button" id="searchArticleByTitleOrContentBtn" iconCls="icon-search" onclick="searchArticleByTitleOrContentText">查询</a>
+				<span class="separator"></span>
+				<a class="mini-button" id="searchArticleEsBtn" iconCls="icon-find" href="<%=basePath%>search/index" target="_blank">搜一下</a>
 			    <%--<span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-help" href="<%=basePath%>spider/searchPage" target="_blank">在线搜索</a>--%>
 				<a class="mini-button" iconCls="icon-downgrade" onclick="logout" style="float: right;margin-right:0px;">退出</a>

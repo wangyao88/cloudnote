@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import com.sxkl.cloudnote.article.entity.*;
+import com.sxkl.cloudnote.searcher.service.SearchService;
 import com.sxkl.cloudnote.utils.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -54,6 +55,8 @@ public class ArticleService {
 //	@Qualifier("luceneSearcher")
 	@Autowired
 	private LuceneSearcher articleSeracher;
+	@Autowired
+	private SearchService searchService;
 
 	@Logger(message="添加笔记")
 	@RedisDisCachable(key={Constant.TREE_MENU_KEY_IN_REDIS,Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS,})
@@ -106,7 +109,8 @@ public class ArticleService {
 		String pageIndex = request.getParameter("pageIndex");
 		String pageSize = request.getParameter("pageSize");
 		String first = request.getParameter("first");
-		String title = request.getParameter("title");
+//		String title = request.getParameter("title");
+		String title = "";
 		String titleOrContent = request.getParameter("titleOrContent");
 		User sessionUser = UserUtil.getSessionUser(request);
 		String userId = sessionUser.getId();
@@ -121,8 +125,8 @@ public class ArticleService {
 			articles = articleDao.selectAllArticlesByNameOrderByHitNum(title,Integer.parseInt(pageIndex),Integer.parseInt(pageSize),userId);
 			total = articleDao.selectAllArticlesByNameOrderByCreateTimeAndHitNumCount(title,userId);
 		}else if(!StringUtils.isEmpty(titleOrContent)){
-			articles = articleSeracher.search(titleOrContent,userId);
-			total = articles.size();
+			articles = searchService.searchPage(titleOrContent, Integer.parseInt(pageIndex), Integer.parseInt(pageSize));
+			total = Integer.parseInt(searchService.count(titleOrContent)+"");
 		}else{
 			String flagId = request.getParameter("flagId");
 			if(!StringUtils.isEmpty(flagId)){

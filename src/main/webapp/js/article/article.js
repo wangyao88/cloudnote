@@ -269,7 +269,7 @@ function searchArticleByTitle() {
 }
 
 function searchArticleByTitleOrContentText() {
-	mini.get("searchArticleByTitleText").setValue("");
+	// mini.get("searchArticleByTitleText").setValue("");
 	var text = mini.get("searchArticleByTitleOrContentText");
 	var grid = mini.get("articleGrid");
 	grid.load({
