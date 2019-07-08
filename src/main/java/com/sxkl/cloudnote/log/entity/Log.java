@@ -59,6 +59,9 @@ public class Log {
 	
 	@Column(name="userName",unique=false,nullable=true)
 	private String userName;
+
+	@Transient
+	private Throwable throwable;
 	
 	public void setLogLevel(LogLevel logLevel) {
 		this.logLevel = logLevel;

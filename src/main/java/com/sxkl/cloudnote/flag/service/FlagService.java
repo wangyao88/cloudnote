@@ -1,15 +1,5 @@
 package com.sxkl.cloudnote.flag.service;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang3.math.NumberUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.google.common.collect.Ordering;
 import com.google.gson.Gson;
 import com.sxkl.cloudnote.article.dao.ArticleDao;
@@ -26,6 +16,14 @@ import com.sxkl.cloudnote.user.dao.UserDao;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.utils.UUIDUtil;
 import com.sxkl.cloudnote.utils.UserUtil;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class FlagService {

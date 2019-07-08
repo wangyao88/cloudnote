@@ -1,18 +1,19 @@
 package com.sxkl.cloudnote.log.service;
 
+import com.google.common.base.Charsets;
+import com.sxkl.cloudnote.log.entity.Log;
+import com.sxkl.cloudnote.utils.StringUtils;
+import com.sxkl.project.easylogger.common.LoggerLevelEnum;
+import com.sxkl.project.easylogger.core.EasyLogger;
+import com.sxkl.project.easylogger.core.Logger;
+import net.sf.json.JSONObject;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.common.base.Charsets;
-import com.sxkl.cloudnote.log.entity.Log;
-import com.sxkl.cloudnote.log.entity.LogLevel;
-import com.sxkl.cloudnote.utils.DateUtils;
-import com.sxkl.cloudnote.utils.StringUtils;
-
-import net.sf.json.JSONObject;
+import java.time.LocalDateTime;
 
 @Service
 public class LogService{
@@ -21,34 +22,32 @@ public class LogService{
 	private AmqpTemplate amqpTemplate;
 
 	public void showLogInConsole(Log log){
-		StringBuilder consoleLog = new StringBuilder();
-		consoleLog.append(DateUtils.formatDate2Str(log.getDate()))
-				  .append(" ")
-				  .append(log.getLogLevel().toString())
-				  .append(" ")
-				  .append(log.getClassName())
-				  .append(" ")
-				  .append(log.getMethodName())
-				  .append(" ")
-				  .append(log.getMessage())
-				  .append(" ");
-		 if(LogLevel.ERROR.equals(log.getLogLevel())){
-			 consoleLog.append(log.getErrorMsg())
-			           .append(" ");
-		 }
-		 consoleLog.append(log.getCostTime())
-				   .append(" ")
-				   .append(log.getUserName())
-				   .append(" ")
-				   .append(log.getIp());
-		System.out.println(consoleLog.toString());
-//		save(logger);
+		EasyLogger.log(adapte(log));
 		String routeKey = getRouteKey(log.getLevel());
 		JSONObject json = JSONObject.fromObject(log);
 		Message message = new Message(json.toString().getBytes(Charsets.UTF_8),new MessageProperties());
 		sendQueue("log_exchange", routeKey, message);
 	}
-	
+
+	private Logger adapte(Log log) {
+		return Logger.builder()
+				     .dateTime(LocalDateTime.now())
+				     .level(getLevel(log.getLogLevel().toString()))
+				     .threadName(Thread.currentThread().getName())
+				     .userName(log.getUserName())
+				     .ip(log.getIp())
+				     .className(log.getClassName())
+				     .methodName(log.getMethodName())
+				     .message(log.getMessage())
+				     .costTime(log.getCostTime())
+				     .throwable(log.getThrowable())
+				     .build();
+	}
+
+	private LoggerLevelEnum getLevel(String level) {
+		return LoggerLevelEnum.valueOf(level);
+	}
+
 	private String getRouteKey(String level) {
 		if(StringUtils.isEmpty(level)){
 			return "other_log_queue";

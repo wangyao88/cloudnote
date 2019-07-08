@@ -1,10 +1,14 @@
 package com.sxkl.cloudnote.log.aop;
 
-import java.lang.reflect.Method;
-import java.util.Date;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.sxkl.cloudnote.log.annotation.Logger;
+import com.sxkl.cloudnote.log.entity.Log;
+import com.sxkl.cloudnote.log.entity.LogLevel;
+import com.sxkl.cloudnote.log.service.LogService;
+import com.sxkl.cloudnote.user.entity.User;
+import com.sxkl.cloudnote.utils.IPUtils;
+import com.sxkl.cloudnote.utils.ObjectUtils;
+import com.sxkl.cloudnote.utils.RequestUtils;
+import com.sxkl.cloudnote.utils.UserUtil;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -16,15 +20,9 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.sxkl.cloudnote.log.annotation.Logger;
-import com.sxkl.cloudnote.log.entity.Log;
-import com.sxkl.cloudnote.log.entity.LogLevel;
-import com.sxkl.cloudnote.log.service.LogService;
-import com.sxkl.cloudnote.user.entity.User;
-import com.sxkl.cloudnote.utils.IPUtils;
-import com.sxkl.cloudnote.utils.ObjectUtils;
-import com.sxkl.cloudnote.utils.RequestUtils;
-import com.sxkl.cloudnote.utils.UserUtil;
+import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Method;
+import java.util.Date;
 
 @Aspect
 @Component
@@ -56,6 +54,7 @@ public class LogInterceptor {
 		}
 		log.setLogLevel(LogLevel.ERROR);
 		log.setErrorMsg(e.getMessage());
+		log.setThrowable(e);
 		logService.showLogInConsole(log);
 	}
 	
@@ -64,6 +63,7 @@ public class LogInterceptor {
 		Log log = configurateLog(jp);
 		log.setLogLevel(LogLevel.ERROR);
 		log.setErrorMsg(e.getMessage());
+		log.setThrowable(e);
 		logService.showLogInConsole(log);
 	}
 
