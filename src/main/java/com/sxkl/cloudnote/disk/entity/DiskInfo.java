@@ -21,22 +21,22 @@ import lombok.Data;
  */
 @Data
 @Entity
-@Table(name="cn_disk")
+@Table(name = "cn_disk")
 @GenericGenerator(name = "uuid", strategy = "uuid")
 public class DiskInfo {
 
-	@Id
-	@GeneratedValue(generator = "uuid")
-	@Column(name="id",unique=true,nullable=false)
-	private String id;
-	
-	@Column(name="totalSize",nullable=false)
-	private double totalSize;
-	
-	@Column(name="usedSize",nullable=false)
-	private double usedSize;
-	
-	@OneToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="uId")
-	private User user;
+    @Id
+    @GeneratedValue(generator = "uuid")
+    @Column(name = "id", unique = true, nullable = false)
+    private String id;
+
+    @Column(name = "totalSize", nullable = false)
+    private double totalSize;
+
+    @Column(name = "usedSize", nullable = false)
+    private double usedSize;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "uId")
+    private User user;
 }

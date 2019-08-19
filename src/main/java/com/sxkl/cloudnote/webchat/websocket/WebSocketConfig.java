@@ -12,7 +12,7 @@ import org.springframework.web.socket.server.standard.ServletServerContainerFact
 
 /**
  * WebScoket配置处理器
- * 
+ *
  * @author Goofy
  * @Date 2015年6月11日 下午1:15:09
  */
@@ -21,17 +21,17 @@ import org.springframework.web.socket.server.standard.ServletServerContainerFact
 @EnableWebSocket
 public class WebSocketConfig extends WebMvcConfigurerAdapter implements WebSocketConfigurer {
 
-	@Autowired
-	private MyWebSocketHandler myWebsocketHandler;
-	@Autowired
-	private MyWebsocketInterceptor myWebsocketInterceptor;
+    @Autowired
+    private MyWebSocketHandler myWebsocketHandler;
+    @Autowired
+    private MyWebsocketInterceptor myWebsocketInterceptor;
 
-	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-		registry.addHandler(myWebsocketHandler, "/mywebsocket").addInterceptors(myWebsocketInterceptor);// .setAllowedOrigins("*")/*不加AllowedOrigins，有可能会全拒绝*/;
-		registry.addHandler(myWebsocketHandler, "/mywebsocket/sockjs").addInterceptors(myWebsocketInterceptor).withSockJS(); /* 用于支持SockJS */
-	}
-	
-	@Bean
+    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+        registry.addHandler(myWebsocketHandler, "/mywebsocket").addInterceptors(myWebsocketInterceptor);// .setAllowedOrigins("*")/*不加AllowedOrigins，有可能会全拒绝*/;
+        registry.addHandler(myWebsocketHandler, "/mywebsocket/sockjs").addInterceptors(myWebsocketInterceptor).withSockJS(); /* 用于支持SockJS */
+    }
+
+    @Bean
     public ServletServerContainerFactoryBean createWebSocketContainer() {
         ServletServerContainerFactoryBean container = new ServletServerContainerFactoryBean();
         container.setMaxTextMessageBufferSize(8192);

@@ -12,10 +12,11 @@ import java.lang.annotation.Target;
 @Inherited
 @Documented
 public @interface RedisDisCachable {
-	
-	/**
-	 * remove from cache key
-	 * @return
-	 */
+
+    /**
+     * remove from cache key
+     *
+     * @return
+     */
     String[] key() default {};
 }

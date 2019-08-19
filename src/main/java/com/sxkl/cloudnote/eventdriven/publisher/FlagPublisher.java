@@ -11,15 +11,15 @@ import com.sxkl.cloudnote.log.annotation.Logger;
 @Service
 public class FlagPublisher {
 
-	@Autowired
-	private ApplicationContext applicationContext;
-	
-	@Logger(message="缓存增加笔记时的标签树")
-	public void cacheAddArticleTreeMenu(String userId){
-		FlagPublisherBean bean = new FlagPublisherBean();
-		bean.setUserId(userId);
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    @Logger(message = "缓存增加笔记时的标签树")
+    public void cacheAddArticleTreeMenu(String userId) {
+        FlagPublisherBean bean = new FlagPublisherBean();
+        bean.setUserId(userId);
         applicationContext.publishEvent(new FlagPublisherEvent(bean));
-        
+
     }
 
 }

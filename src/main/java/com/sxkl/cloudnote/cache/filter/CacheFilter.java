@@ -26,32 +26,32 @@ import com.sxkl.cloudnote.utils.PropertyUtil;
 import com.sxkl.cloudnote.utils.SpringContextUtil;
 
 @Component
-public class CacheFilter  implements Filter, ApplicationContextAware {
-	
+public class CacheFilter implements Filter, ApplicationContextAware {
+
     private WebApplicationContext springContext;
     private RedisCacheService redisCacheService;
     @Autowired
-	private ConfigService configService;
-    
+    private ConfigService configService;
+
     @Override
     public void init(FilterConfig config) throws ServletException {
         springContext = WebApplicationContextUtils.getWebApplicationContext(config.getServletContext());
         redisCacheService = (RedisCacheService) springContext.getBean("redisCacheService");
     }
-    
+
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
         HttpServletRequest req = (HttpServletRequest) servletRequest;
-        String requestUrl = req.getRequestURI()+"-"+req.getMethod();
-        configService = (ConfigService) SpringContextUtil.getBean("configService",ConfigService.class);
+        String requestUrl = req.getRequestURI() + "-" + req.getMethod();
+        configService = (ConfigService) SpringContextUtil.getBean("configService", ConfigService.class);
         String cachePages = configService.getCachePages();
         //访问登录页，并且是GET请求，则拦截
-        if(cachePages.contains(requestUrl)){
-        	String html = "provide".equals(PropertyUtil.getMode()) ? 
-        			redisCacheService.getProvideLoginPageFromCache(resp,req,filterChain) : 
-        			redisCacheService.getProduceLoginPageFromCache(resp, req, filterChain);
-        	html = html.replaceAll(Constant.LOGIN_PAGE_DOMAIN, Constant.DOMAIN);
+        if (cachePages.contains(requestUrl)) {
+            String html = "provide".equals(PropertyUtil.getMode()) ?
+                    redisCacheService.getProvideLoginPageFromCache(resp, req, filterChain) :
+                    redisCacheService.getProduceLoginPageFromCache(resp, req, filterChain);
+            html = html.replaceAll(Constant.LOGIN_PAGE_DOMAIN, Constant.DOMAIN);
             // 返回响应
             resp.setContentType("text/html; charset=utf-8");
             resp.getWriter().print(html);
@@ -59,16 +59,16 @@ public class CacheFilter  implements Filter, ApplicationContextAware {
         }
         filterChain.doFilter(servletRequest, resp);
     }
-    
+
     @Override
     public void destroy() {
     }
-    
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        
+
     }
-    
+
 //    private String getDomain(HttpServletRequest request){
 //		StringBuilder domain = new StringBuilder();
 //		domain.append(request.getScheme())

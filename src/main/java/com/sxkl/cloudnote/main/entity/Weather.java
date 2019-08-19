@@ -8,10 +8,10 @@ import lombok.Data;
  */
 @Data
 public class Weather {
-	
-	private String city;
-	private String date;
-	private String status;
-	private String temprature;
-	private String wind;
+
+    private String city;
+    private String date;
+    private String status;
+    private String temprature;
+    private String wind;
 }

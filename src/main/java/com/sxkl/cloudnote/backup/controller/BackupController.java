@@ -21,9 +21,9 @@ public class BackupController {
     private MysqlBackupService mysqlBackupService;
 
     @RequestMapping(value = "/backupDB", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
-    public String backupDB(){
+    public String backupDB() {
         try {
-        	String path = mysqlBackupService.backupChain();
+            String path = mysqlBackupService.backupChain();
             return OperateResultService.configurateSuccessResult(path);
         } catch (Exception e) {
             return OperateResultService.configurateFailureResult(e.getMessage());

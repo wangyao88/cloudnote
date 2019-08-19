@@ -23,113 +23,113 @@ import com.sxkl.cloudnote.article.entity.Article;
 import com.sxkl.cloudnote.user.entity.User;
 
 @Entity
-@Table(name="cn_note")
+@Table(name = "cn_note")
 @GenericGenerator(name = "uuid", strategy = "uuid")
-public class Note implements Serializable{
-	
-	private static final long serialVersionUID = -2237203894851782556L;
+public class Note implements Serializable {
 
-	@Id
-	@GeneratedValue(generator = "uuid")
-	@Column(name="id",unique=true,nullable=false)
-	private String id;
-	
-	@Column(name="name",unique=true,nullable=false)
-	private String name;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="uId")
-	private User user;
-	
-	@OneToMany(fetch=FetchType.LAZY)
-	@Cascade(value={CascadeType.ALL})
-	@JoinColumn(name="nId")  
+    private static final long serialVersionUID = -2237203894851782556L;
+
+    @Id
+    @GeneratedValue(generator = "uuid")
+    @Column(name = "id", unique = true, nullable = false)
+    private String id;
+
+    @Column(name = "name", unique = true, nullable = false)
+    private String name;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "uId")
+    private User user;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @Cascade(value = {CascadeType.ALL})
+    @JoinColumn(name = "nId")
     private Set<Article> articles = new HashSet<Article>();
-	
-	@Transient
-	private boolean isLeaf;
-	
-	public Note() {
-		super();
-	}
 
-	public Note(String id, String name) {
-		this.id = id;
-		this.name = name;
-	}
+    @Transient
+    private boolean isLeaf;
 
-	public String getId() {
-		return id;
-	}
+    public Note() {
+        super();
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public Note(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public User getUser() {
-		return user;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public Set<Article> getArticles() {
-		return articles;
-	}
+    public User getUser() {
+        return user;
+    }
 
-	public void setArticles(Set<Article> articles) {
-		this.articles = articles;
-	}
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-	public boolean isLeaf() {
-		return isLeaf;
-	}
+    public Set<Article> getArticles() {
+        return articles;
+    }
 
-	public void setLeaf(boolean isLeaf) {
-		this.isLeaf = isLeaf;
-	}
+    public void setArticles(Set<Article> articles) {
+        this.articles = articles;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + (isLeaf ? 1231 : 1237);
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
-	}
+    public boolean isLeaf() {
+        return isLeaf;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Note other = (Note) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (isLeaf != other.isLeaf)
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
-	}
-	
+    public void setLeaf(boolean isLeaf) {
+        this.isLeaf = isLeaf;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + (isLeaf ? 1231 : 1237);
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Note other = (Note) obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        if (isLeaf != other.isLeaf)
+            return false;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        return true;
+    }
+
 }

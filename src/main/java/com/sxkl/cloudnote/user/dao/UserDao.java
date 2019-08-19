@@ -10,34 +10,34 @@ import com.sxkl.cloudnote.common.dao.BaseDao;
 import com.sxkl.cloudnote.user.entity.User;
 
 @Repository
-public class UserDao extends BaseDao<String,User> {
+public class UserDao extends BaseDao<String, User> {
 
-	public List<User> getUserByNameAndPass(String userName, String password) {
-		User user = new User();
-		user.setName(userName);
-		user.setPassword(password);
-		return this.getHibernateTemplate().findByExample(user);
-	}
+    public List<User> getUserByNameAndPass(String userName, String password) {
+        User user = new User();
+        user.setName(userName);
+        user.setPassword(password);
+        return this.getHibernateTemplate().findByExample(user);
+    }
 
-	public User selectUser(User sessionUser) {
-		Session session = this.getSessionFactory().getCurrentSession();
-		return session.load(sessionUser.getClass(), sessionUser.getId());
-	}
+    public User selectUser(User sessionUser) {
+        Session session = this.getSessionFactory().getCurrentSession();
+        return session.load(sessionUser.getClass(), sessionUser.getId());
+    }
 
-	@SuppressWarnings("unchecked")
-	public List<User> getFriends(String userId) {
-		String hql = "select new User(u.id, u.name)from User u where u.id <> :userId";
-		Session session = this.getSessionFactory().getCurrentSession();
-		Query query = session.createQuery(hql);
-		query.setString("userId", userId);
-		return query.list();
-	}
+    @SuppressWarnings("unchecked")
+    public List<User> getFriends(String userId) {
+        String hql = "select new User(u.id, u.name)from User u where u.id <> :userId";
+        Session session = this.getSessionFactory().getCurrentSession();
+        Query query = session.createQuery(hql);
+        query.setString("userId", userId);
+        return query.list();
+    }
 
-	public User getUserByName(String name) {
-		String hql = "select new User(u.id, u.name)from User u where u.name=:name";
-		Session session = this.getSessionFactory().getCurrentSession();
-		Query query = session.createQuery(hql);
-		query.setString("name", name);
-		return (User) query.uniqueResult();
-	}
+    public User getUserByName(String name) {
+        String hql = "select new User(u.id, u.name)from User u where u.name=:name";
+        Session session = this.getSessionFactory().getCurrentSession();
+        Query query = session.createQuery(hql);
+        query.setString("name", name);
+        return (User) query.uniqueResult();
+    }
 }

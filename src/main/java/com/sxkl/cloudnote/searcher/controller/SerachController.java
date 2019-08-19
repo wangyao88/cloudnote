@@ -25,14 +25,14 @@ public class SerachController {
     private SearchService searchService;
 
     @RequestMapping("/index")
-    public ModelAndView index(){
-        ModelAndView modelAndView = new ModelAndView(StringUtils.appendJoinEmpty("baidusearch/search_index","_",PropertyUtil.getMode()));
+    public ModelAndView index() {
+        ModelAndView modelAndView = new ModelAndView(StringUtils.appendJoinEmpty("baidusearch/search_index", "_", PropertyUtil.getMode()));
         return modelAndView;
     }
 
     @RequestMapping("/result")
-    public ModelAndView result(@RequestParam("words") String words){
-        ModelAndView modelAndView = new ModelAndView(StringUtils.appendJoinEmpty("baidusearch/search_result","_",PropertyUtil.getMode()));
+    public ModelAndView result(@RequestParam("words") String words) {
+        ModelAndView modelAndView = new ModelAndView(StringUtils.appendJoinEmpty("baidusearch/search_result", "_", PropertyUtil.getMode()));
         long count = searchService.count(words);
         modelAndView.addObject("words", words);
         modelAndView.addObject("count", count);
@@ -43,12 +43,12 @@ public class SerachController {
     @ResponseBody
     public JSONObject page(@RequestParam("first") int first, @RequestParam("words") String words,
                            @RequestParam("page") int page, @RequestParam("size") int size,
-                           @RequestParam("count") int count){
+                           @RequestParam("count") int count) {
         JSONObject json = new JSONObject();
-        if(first == 1) {
+        if (first == 1) {
             long total = searchService.total();
             DecimalFormat df = new DecimalFormat("#0.00");
-            String rate = StringUtils.appendJoinEmpty(df.format(count*100d/total), "%");
+            String rate = StringUtils.appendJoinEmpty(df.format(count * 100d / total), "%");
             json.put("count", count);
             json.put("total", total);
             json.put("rate", rate);
@@ -57,7 +57,7 @@ public class SerachController {
         List<Article> articles = searchService.searchPage(words, page, size);
         long end = System.currentTimeMillis();
         json.put("articles", articles);
-        json.put("cost", end-start);
+        json.put("cost", end - start);
         json.put("pageNum", articles.size());
         return json;
     }

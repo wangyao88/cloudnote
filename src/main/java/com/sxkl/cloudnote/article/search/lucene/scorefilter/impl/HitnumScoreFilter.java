@@ -12,24 +12,24 @@ import com.sxkl.cloudnote.article.search.lucene.scorefilter.ScoreFilter;
  */
 public class HitnumScoreFilter extends AbstractScoreFilter implements ScoreFilter {
 
-	private static final int HITNUM_WEIGHT = 1;
-	
-	@Override
-	public void doFilte(Map<String, Article> result, Article article) {
-		for(Map.Entry<String, Article> entry : result.entrySet()){
-			Article simpleArticle = entry.getValue();
-			simpleArticle.setWeight(simpleArticle.getWeight()+article.getHitNum()*HITNUM_WEIGHT);
-		}
-	}
+    private static final int HITNUM_WEIGHT = 1;
 
-	@Override
-	protected int getWeight() {
-		return HITNUM_WEIGHT;
-	}
+    @Override
+    public void doFilte(Map<String, Article> result, Article article) {
+        for (Map.Entry<String, Article> entry : result.entrySet()) {
+            Article simpleArticle = entry.getValue();
+            simpleArticle.setWeight(simpleArticle.getWeight() + article.getHitNum() * HITNUM_WEIGHT);
+        }
+    }
 
-	@Override
-	public int getPriority() {
-		return 0;
-	}
+    @Override
+    protected int getWeight() {
+        return HITNUM_WEIGHT;
+    }
+
+    @Override
+    public int getPriority() {
+        return 0;
+    }
 
 }

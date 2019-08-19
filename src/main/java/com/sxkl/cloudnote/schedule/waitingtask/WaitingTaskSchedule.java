@@ -9,12 +9,12 @@ import com.sxkl.cloudnote.waitingtask.service.WaitingTaskService;
 @Service
 public class WaitingTaskSchedule {
 
-	@Autowired
+    @Autowired
     private WaitingTaskService waitingTaskService;
-	
-	@Logger(message="定时更新页面待办任务状态，推送消息")
+
+    @Logger(message = "定时更新页面待办任务状态，推送消息")
 //	@Scheduled(cron="0 0/60 9-20 * * ?")
-	public void sendToWaitingTask(){
-		waitingTaskService.sendToWaitingTask();
-	}
+    public void sendToWaitingTask() {
+        waitingTaskService.sendToWaitingTask();
+    }
 }

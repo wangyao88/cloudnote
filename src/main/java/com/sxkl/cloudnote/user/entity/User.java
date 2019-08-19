@@ -21,138 +21,138 @@ import com.sxkl.cloudnote.flag.entity.Flag;
 import com.sxkl.cloudnote.note.entity.Note;
 
 @Entity
-@Table(name="cn_user")
+@Table(name = "cn_user")
 @GenericGenerator(name = "uuid", strategy = "uuid")
-public class User implements Serializable{
-	
-	private static final long serialVersionUID = -6480781567126316019L;
+public class User implements Serializable {
 
-	@Id
-	@GeneratedValue(generator = "uuid")
-	@Column(name="id",unique=true,nullable=false)
-	private String id;
-	
-	@Column(name="name",unique=true,nullable=false)
-	private String name;
-	
-	@Column(name="password",nullable=false)
-	private String password;
-	
-	@Column(name="email",unique=true,nullable=true)
-	private String email;
+    private static final long serialVersionUID = -6480781567126316019L;
 
-	@Column(name="mailpass",unique=true,nullable=true)
-	private String mailpass;
-	
-	@OneToMany(fetch=FetchType.LAZY,mappedBy="user")
-	@Cascade(value={CascadeType.ALL})
-	private Set<Note> notes = new HashSet<Note>();
-	
-	@OneToMany(fetch=FetchType.LAZY,mappedBy="user")
-	@Cascade(value={CascadeType.ALL})
-	private Set<Flag> flags = new HashSet<Flag>();
-	
-	@OneToMany(fetch=FetchType.LAZY,mappedBy="user")
-	@Cascade(value={CascadeType.ALL})
-	private Set<AccountBook> accountBooks = new HashSet<AccountBook>();
-	
-	public User() {
-		super();
-	}
-	
-	public User(String id, String name) {
-		this.id = id;
-		this.name = name;
-	}
+    @Id
+    @GeneratedValue(generator = "uuid")
+    @Column(name = "id", unique = true, nullable = false)
+    private String id;
 
-	public String getId() {
-		return id;
-	}
+    @Column(name = "name", unique = true, nullable = false)
+    private String name;
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    @Column(name = "password", nullable = false)
+    private String password;
 
-	public String getName() {
-		return name;
-	}
+    @Column(name = "email", unique = true, nullable = true)
+    private String email;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    @Column(name = "mailpass", unique = true, nullable = true)
+    private String mailpass;
 
-	public String getPassword() {
-		return password;
-	}
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @Cascade(value = {CascadeType.ALL})
+    private Set<Note> notes = new HashSet<Note>();
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @Cascade(value = {CascadeType.ALL})
+    private Set<Flag> flags = new HashSet<Flag>();
 
-	public String getEmail() {
-		return email;
-	}
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @Cascade(value = {CascadeType.ALL})
+    private Set<AccountBook> accountBooks = new HashSet<AccountBook>();
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public User() {
+        super();
+    }
 
-	public Set<Note> getNotes() {
-		return notes;
-	}
+    public User(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
-	public void setNotes(Set<Note> notes) {
-		this.notes = notes;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public Set<Flag> getFlags() {
-		return flags;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setFlags(Set<Flag> flags) {
-		this.flags = flags;
-	}
+    public String getName() {
+        return name;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((password == null) ? 0 : password.hashCode());
-		return result;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		User other = (User) obj;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (password == null) {
-			if (other.password != null)
-				return false;
-		} else if (!password.equals(other.password))
-			return false;
-		return true;
-	}
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Set<Note> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(Set<Note> notes) {
+        this.notes = notes;
+    }
+
+    public Set<Flag> getFlags() {
+        return flags;
+    }
+
+    public void setFlags(Set<Flag> flags) {
+        this.flags = flags;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((email == null) ? 0 : email.hashCode());
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((password == null) ? 0 : password.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        User other = (User) obj;
+        if (email == null) {
+            if (other.email != null)
+                return false;
+        } else if (!email.equals(other.email))
+            return false;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        if (password == null) {
+            if (other.password != null)
+                return false;
+        } else if (!password.equals(other.password))
+            return false;
+        return true;
+    }
 }

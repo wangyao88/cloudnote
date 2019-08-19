@@ -16,28 +16,28 @@ import java.util.Map;
 @Slf4j
 public class MapToBeanUtils<T> {
 
-    public void mapToBean(T t, String prefix){
+    public void mapToBean(T t, String prefix) {
 //        Map<String,String> map = PropertyUtil.getPropertiesAllValue("init.properties");
-        Map<String,Object> map =ZKClientConfig.getChildrenData(ZKClientConfig.BASE_PATH);
+        Map<String, Object> map = ZKClientConfig.getChildrenData(ZKClientConfig.BASE_PATH);
         Predicate<String> filter = new Predicate<String>() {
             @Override
             public boolean apply(String key) {
                 return key.startsWith(prefix);
             }
         };
-        Map<String,Object> filteredMap = Maps.filterKeys(map, filter);
+        Map<String, Object> filteredMap = Maps.filterKeys(map, filter);
         Method[] methods = t.getClass().getDeclaredMethods();
-        try{
-            for (Method method : methods){
-                if (method.getName().startsWith("set")){
+        try {
+            for (Method method : methods) {
+                if (method.getName().startsWith("set")) {
                     String field = method.getName();
                     field = field.substring(field.indexOf("set") + 3);
                     field = field.toLowerCase().charAt(0) + field.substring(1);
-                    method.invoke(t, new Object[]{filteredMap.get(prefix+field)});
+                    method.invoke(t, new Object[]{filteredMap.get(prefix + field)});
                 }
             }
-        }catch (Exception e){
-            log.error("mapToBean失败！错误信息:{}",e.getMessage());
+        } catch (Exception e) {
+            log.error("mapToBean失败！错误信息:{}", e.getMessage());
         }
     }
 }

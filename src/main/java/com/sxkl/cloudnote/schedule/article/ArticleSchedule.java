@@ -19,35 +19,35 @@ import com.sxkl.cloudnote.user.service.UserService;
 
 @Service
 public class ArticleSchedule {
-	
-	private static final int HOT_ARTICLE_RANGE = 10;
-	
-	@Autowired
-	private RedisCacheService redisCacheService;
-	@Autowired
-	private ArticleService articleService;
-	@Autowired
-	private UserService userService;
-	@Autowired
-	private LuceneManager luceneManager;
-	
-	@Logger(message="定时缓存用户热门笔记")
+
+    private static final int HOT_ARTICLE_RANGE = 10;
+
+    @Autowired
+    private RedisCacheService redisCacheService;
+    @Autowired
+    private ArticleService articleService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private LuceneManager luceneManager;
+
+    @Logger(message = "定时缓存用户热门笔记")
 //	@Scheduled(fixedRate=Constant.HOT_ARTICLE_EXPIRE_IN_REDIS)
-    public void cacheHotArticle(){
-		List<User> users = userService.getAllUsers();
-		for(User user : users){
-			List<ArticleForCache> articles = articleService.getHotArticles(user.getId(),HOT_ARTICLE_RANGE);
-			Map<String,String> result = new HashMap<String,String>();
-			for(ArticleForCache articleForCache : articles){
-				result.put(articleForCache.getId(), articleForCache.getContent());
-			}
-			redisCacheService.cacheMap(Constant.HOT_ARTICLE_KEY_IN_REDIS+user.getId(),result);
-		}
+    public void cacheHotArticle() {
+        List<User> users = userService.getAllUsers();
+        for (User user : users) {
+            List<ArticleForCache> articles = articleService.getHotArticles(user.getId(), HOT_ARTICLE_RANGE);
+            Map<String, String> result = new HashMap<String, String>();
+            for (ArticleForCache articleForCache : articles) {
+                result.put(articleForCache.getId(), articleForCache.getContent());
+            }
+            redisCacheService.cacheMap(Constant.HOT_ARTICLE_KEY_IN_REDIS + user.getId(), result);
+        }
     }
-	
-	@Logger(message="定时创建用户笔记索引")
+
+    @Logger(message = "定时创建用户笔记索引")
 //	@Scheduled(cron="0 0 1 * * ?")
-	public void createIndex(){
-		luceneManager.initAllUserArticleIndex();
+    public void createIndex() {
+        luceneManager.initAllUserArticleIndex();
     }
 }

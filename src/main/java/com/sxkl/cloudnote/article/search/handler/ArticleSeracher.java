@@ -10,5 +10,5 @@ import com.sxkl.cloudnote.article.entity.Article;
  */
 public interface ArticleSeracher {
 
-	List<Article> search(String searchKeys, String userId);
+    List<Article> search(String searchKeys, String userId);
 }

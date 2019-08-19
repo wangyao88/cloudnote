@@ -10,15 +10,16 @@ import java.lang.annotation.Target;
 import com.sxkl.cloudnote.common.entity.Constant;
 
 /**
- * @author wangyao
- * @date 2018年1月14日 下午2:59:57
- * @description: 数据源注解
- */
+ *  * @author wangyao
+ *  * @date 2018年1月14日 下午2:59:57
+ *  * @description: 数据源注解
+ *  
+ */
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Documented
 public @interface SessionFactory {
 
-	String value() default Constant.DEFAULT_SESSION_FACTORY;
+    String value() default Constant.DEFAULT_SESSION_FACTORY;
 }

@@ -10,18 +10,18 @@ import com.sxkl.cloudnote.common.dao.BaseDao;
 import com.sxkl.cloudnote.webchat.entity.Message;
 
 @Repository
-public class MessageDao extends BaseDao<String,Message> {
+public class MessageDao extends BaseDao<String, Message> {
 
-	@SuppressWarnings("unchecked")
-	public List<Message> getHistory(String userFrom, String userTo) {
-		String hql = "from Message a where (a.from=:userFrom and a.to=:userTo) or (a.from=:userTo and a.to=:userFrom) order by a.date desc";
-		Session session = this.getSessionFactory().getCurrentSession();
-	    Query query = session.createQuery(hql);
-	    query.setString("userFrom", userFrom);
-	    query.setString("userTo", userTo);
-	    query.setFirstResult(0);
+    @SuppressWarnings("unchecked")
+    public List<Message> getHistory(String userFrom, String userTo) {
+        String hql = "from Message a where (a.from=:userFrom and a.to=:userTo) or (a.from=:userTo and a.to=:userFrom) order by a.date desc";
+        Session session = this.getSessionFactory().getCurrentSession();
+        Query query = session.createQuery(hql);
+        query.setString("userFrom", userFrom);
+        query.setString("userTo", userTo);
+        query.setFirstResult(0);
         query.setMaxResults(10);
-		return query.list();
-	}
+        return query.list();
+    }
 
 }

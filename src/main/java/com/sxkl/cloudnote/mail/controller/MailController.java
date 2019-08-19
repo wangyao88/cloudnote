@@ -23,7 +23,7 @@ public class MailController {
     private MailService mailService;
 
     @RequestMapping(value = "/sendMail", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
-    public String sendMail(HttpServletRequest request){
+    public String sendMail(HttpServletRequest request) {
         try {
             Mail mail = new Mail();
             mailService.sendMail(mail);

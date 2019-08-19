@@ -26,87 +26,87 @@ import com.sxkl.cloudnote.log.annotation.Logger;
 
 @Slf4j
 @Service
-public class ArticleListener implements ApplicationListener<ApplicationEvent>{
-	
-	@Autowired
-	private ImageService imageService;
-	@Autowired
-	private ArticleDao articleDao;
-	@Autowired
-	private LuceneManager luceneManager;
+public class ArticleListener implements ApplicationListener<ApplicationEvent> {
 
-	@Override
-	public void onApplicationEvent(ApplicationEvent event) {
-		if(isNotDuty(event)){
-			return;
-		}
-		ArticlePublisherBean article = (ArticlePublisherBean) event.getSource();
-		switch (article.getDutype()) {
-			case LINK_ARTICLE_IMAGE:
-				linkArticleImage(article);
-				break;
-	        case INCREASE_HITNUM:
-				increaseHitNum(article);
-				break;
-	        case UPDATE_INDEX_BY_ADD_OPERATION:
+    @Autowired
+    private ImageService imageService;
+    @Autowired
+    private ArticleDao articleDao;
+    @Autowired
+    private LuceneManager luceneManager;
+
+    @Override
+    public void onApplicationEvent(ApplicationEvent event) {
+        if (isNotDuty(event)) {
+            return;
+        }
+        ArticlePublisherBean article = (ArticlePublisherBean) event.getSource();
+        switch (article.getDutype()) {
+            case LINK_ARTICLE_IMAGE:
+                linkArticleImage(article);
+                break;
+            case INCREASE_HITNUM:
+                increaseHitNum(article);
+                break;
+            case UPDATE_INDEX_BY_ADD_OPERATION:
 //	        	indexManager.updateIndexByAdd(convertArticle(article),article.getUserId());
-	        	luceneManager.addDocument(convertArticle(article), article.getUserId());
-				break;
-	        case UPDATE_INDEX_BY_UPDATE_OPERATION:
+                luceneManager.addDocument(convertArticle(article), article.getUserId());
+                break;
+            case UPDATE_INDEX_BY_UPDATE_OPERATION:
 //	        	indexManager.updateIndexByUpdate(convertArticle(article),article.getUserId());
-	        	luceneManager.updateDocument(convertArticle(article), article.getUserId());
-				break;
-	        case UPDATE_INDEX_BY_DELETE_OPERATION:
+                luceneManager.updateDocument(convertArticle(article), article.getUserId());
+                break;
+            case UPDATE_INDEX_BY_DELETE_OPERATION:
 //	        	indexManager.updateIndexByDelete(convertArticle(article),article.getUserId());
-	        	luceneManager.deleteDocument(convertArticle(article), article.getUserId());
-				break;
-			default:
-				log.error("不支持的操作类型");
-				break;
-		}
-	}
-	
-	@Logger(message="增加笔记点击量")
-	public void increaseHitNum(ArticlePublisherBean bean) {
-		articleDao.increaseHitNum(bean.getArticleId());
-	}
+                luceneManager.deleteDocument(convertArticle(article), article.getUserId());
+                break;
+            default:
+                log.error("不支持的操作类型");
+                break;
+        }
+    }
 
-	@Logger(message="建立笔记和图片的关系")
-	public void linkArticleImage(ArticlePublisherBean article) {
-		Document doc = Jsoup.parse(article.getArticleContent());
-		Elements imgs = doc.getElementsByTag("img");
-		String regex = "^(http|https|ftp)+://.*$";
-		for (int i = 0; i < imgs.size(); i++) {
-			String imgUrl = imgs.get(i).attr("src");
-			if ((Pattern.matches(regex, imgUrl)) && (imgUrl.startsWith(article.getDomain()))) {
-				String imageName = imgUrl.substring(imgUrl.lastIndexOf("=")+1);
-				imageService.establishLinkagesBetweenArticleAndImage(article.getArticleId(),imageName);
-			}
-		}
-	}
+    @Logger(message = "增加笔记点击量")
+    public void increaseHitNum(ArticlePublisherBean bean) {
+        articleDao.increaseHitNum(bean.getArticleId());
+    }
 
-	private boolean isNotDuty(ApplicationEvent event){
-		return !event.getClass().toString().equals(ArticlePublisherEvent.class.toString());
-	}
-	
-	private Article convertArticle(ArticlePublisherBean articlePublisherBean){
-		Article article = new Article();
-		article.setId(articlePublisherBean.getArticleId());
-		article.setTitle(articlePublisherBean.getArticleTitle());
-		article.setContent(articlePublisherBean.getArticleContent());
-		article.setHitNum(articlePublisherBean.getHitNum());
-		article.setCreateTime(articlePublisherBean.getCreateTime());
-		User user = new User();
-		user.setId(articlePublisherBean.getUserId());
-		article.setUser(user);
-		Note note = new Note();
-		note.setId(articlePublisherBean.getNoteId());
-		article.setNote(note);
-		return article;
-	}
-	
-	public void cacheAddArticleTreeMenu(HttpServletRequest request) {
-		
-	}
+    @Logger(message = "建立笔记和图片的关系")
+    public void linkArticleImage(ArticlePublisherBean article) {
+        Document doc = Jsoup.parse(article.getArticleContent());
+        Elements imgs = doc.getElementsByTag("img");
+        String regex = "^(http|https|ftp)+://.*$";
+        for (int i = 0; i < imgs.size(); i++) {
+            String imgUrl = imgs.get(i).attr("src");
+            if ((Pattern.matches(regex, imgUrl)) && (imgUrl.startsWith(article.getDomain()))) {
+                String imageName = imgUrl.substring(imgUrl.lastIndexOf("=") + 1);
+                imageService.establishLinkagesBetweenArticleAndImage(article.getArticleId(), imageName);
+            }
+        }
+    }
+
+    private boolean isNotDuty(ApplicationEvent event) {
+        return !event.getClass().toString().equals(ArticlePublisherEvent.class.toString());
+    }
+
+    private Article convertArticle(ArticlePublisherBean articlePublisherBean) {
+        Article article = new Article();
+        article.setId(articlePublisherBean.getArticleId());
+        article.setTitle(articlePublisherBean.getArticleTitle());
+        article.setContent(articlePublisherBean.getArticleContent());
+        article.setHitNum(articlePublisherBean.getHitNum());
+        article.setCreateTime(articlePublisherBean.getCreateTime());
+        User user = new User();
+        user.setId(articlePublisherBean.getUserId());
+        article.setUser(user);
+        Note note = new Note();
+        note.setId(articlePublisherBean.getNoteId());
+        article.setNote(note);
+        return article;
+    }
+
+    public void cacheAddArticleTreeMenu(HttpServletRequest request) {
+
+    }
 
 }

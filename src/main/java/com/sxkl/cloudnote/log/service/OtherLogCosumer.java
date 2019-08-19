@@ -15,22 +15,22 @@ import net.sf.json.JSONObject;
 /**
  * @author: wangyao
  * @date: 2018年5月14日 下午5:12:17
- * @description: 
+ * @description:
  */
 @Service
 public class OtherLogCosumer implements MessageListener {
-	
-	@Autowired
-	private LogDao logDao;
-	
+
+    @Autowired
+    private LogDao logDao;
+
     public void onMessage(Message message) {
-    	try {
-    		String logStr = new String(message.getBody(),Charsets.UTF_8);
-    		JSONObject json = JSONObjectUtils.toJson(logStr);
-        	Log log = (Log) JSONObject.toBean(json, Log.class);
-        	logDao.save(log);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+        try {
+            String logStr = new String(message.getBody(), Charsets.UTF_8);
+            JSONObject json = JSONObjectUtils.toJson(logStr);
+            Log log = (Log) JSONObject.toBean(json, Log.class);
+            logDao.save(log);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

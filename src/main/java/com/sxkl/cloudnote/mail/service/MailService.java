@@ -38,10 +38,10 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class MailService {
 
-	@Logger(message="发送邮件")
-    public void sendMail(Mail mail){
-        try{
-        	log.info("开始发送邮件");
+    @Logger(message = "发送邮件")
+    public void sendMail(Mail mail) {
+        try {
+            log.info("开始发送邮件");
             MailUser toUser = mail.getToUser();
             MailUser fromUser = mail.getFromUser();
             MailMessage mailMessage = mail.getMessage();
@@ -56,8 +56,8 @@ public class MailService {
             properties.put("mail.smtp.ssl.enable", "true");
             properties.put("mail.smtp.ssl.socketFactory", sf);
             // 获取默认session对象
-            Session session = Session.getDefaultInstance(properties,new Authenticator(){
-                public PasswordAuthentication getPasswordAuthentication(){
+            Session session = Session.getDefaultInstance(properties, new Authenticator() {
+                public PasswordAuthentication getPasswordAuthentication() {
                     DESUtil desUtil = new DESUtil();
                     //qq邮箱服务器账户、第三方登录授权码
                     return new PasswordAuthentication(fromUser.getUsername(), desUtil.decrypt(fromUser.getPassword())); //发件人邮件用户名、密码
@@ -79,7 +79,7 @@ public class MailService {
             Multipart multipart = new MimeMultipart();
             // 设置文本消息部分
             multipart.addBodyPart(messageBodyPart);
-            for(String draft : mailMessage.getDrafts()){
+            for (String draft : mailMessage.getDrafts()) {
                 // 附件部分
                 messageBodyPart = new MimeBodyPart();
                 //设置要发送附件的文件路径
@@ -92,28 +92,28 @@ public class MailService {
                 multipart.addBodyPart(messageBodyPart);
             }
             // 发送完整消息
-            message.setContent(multipart );
+            message.setContent(multipart);
             // 发送消息
             Transport.send(message);
             log.info("发送邮件完成！");
-        }catch (Exception mex) {
-            log.error("发送邮件失败！错误信息:{}",mex.getMessage());
+        } catch (Exception mex) {
+            log.error("发送邮件失败！错误信息:{}", mex.getMessage());
         }
     }
 
-	@Logger(message="获取系统默认邮件发送人")
-    public MailUser getSystemMailFromUser(){
+    @Logger(message = "获取系统默认邮件发送人")
+    public MailUser getSystemMailFromUser() {
         MailUser fromuser = new MailUser();
         MapToBeanUtils<MailUser> mapToBeanUtils = new MapToBeanUtils<MailUser>();
-        mapToBeanUtils.mapToBean(fromuser,"mail.from.");
+        mapToBeanUtils.mapToBean(fromuser, "mail.from.");
         return fromuser;
     }
 
-	@Logger(message="获取系统默认邮件接收人")
-    public MailUser getSystemMailToUser(){
+    @Logger(message = "获取系统默认邮件接收人")
+    public MailUser getSystemMailToUser() {
         MailUser touser = new MailUser();
         MapToBeanUtils<MailUser> mapToBeanUtils = new MapToBeanUtils<MailUser>();
-        mapToBeanUtils.mapToBean(touser,"mail.to.");
+        mapToBeanUtils.mapToBean(touser, "mail.to.");
         return touser;
     }
 }

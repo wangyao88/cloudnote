@@ -6,9 +6,9 @@ package com.sxkl.cloudnote.utils;
  */
 public class StringAppendUtils {
 
-    public static String append(Object... objs){
+    public static String append(Object... objs) {
         StringBuilder builder = new StringBuilder();
-        for(Object obj : objs){
+        for (Object obj : objs) {
             builder.append(String.valueOf(obj));
         }
         return builder.toString();

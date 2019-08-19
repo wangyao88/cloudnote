@@ -39,29 +39,29 @@ public class MysqlBackupService extends AbstractBackupDB {
     @Autowired
     private ImageService imageService;
 
-    @Logger(message="获取数据库信息")
+    @Logger(message = "获取数据库信息")
     @Override
     public DataBaseInfo getDataBaseInfo() {
         DataBaseInfo dataBaseInfo = new DataBaseInfo();
         MapToBeanUtils<DataBaseInfo> mapToBeanUtils = new MapToBeanUtils<DataBaseInfo>();
-        mapToBeanUtils.mapToBean(dataBaseInfo,"jdbc.");
-        dataBaseInfo.setFilename(DateUtils.formatDate4()+ Constant.SQL_FILE_EXTENSION);
+        mapToBeanUtils.mapToBean(dataBaseInfo, "jdbc.");
+        dataBaseInfo.setFilename(DateUtils.formatDate4() + Constant.SQL_FILE_EXTENSION);
         return dataBaseInfo;
     }
 
-    @Logger(message="备份数据库")
-	@Override
-	public String backup(DataBaseInfo dataBaseInfo) {
+    @Logger(message = "备份数据库")
+    @Override
+    public String backup(DataBaseInfo dataBaseInfo) {
 //        etlImage();
-		String savePath = dataBaseInfo.getPath();
+        String savePath = dataBaseInfo.getPath();
         File saveFile = new File(savePath);
         if (!saveFile.exists()) {
             saveFile.mkdirs();
         }
-        if(!savePath.endsWith(File.separator)){
+        if (!savePath.endsWith(File.separator)) {
             savePath = savePath + File.separator;
         }
-        Process p =  null;
+        Process p = null;
         String path = savePath + dataBaseInfo.getFilename();
         try {
 //            mysqldump --login-path=mysql_key cloudnote > /home/wy/backup/cloudnote2.sql
@@ -73,20 +73,20 @@ public class MysqlBackupService extends AbstractBackupDB {
             sb.append("> ");
             sb.append(path);
             Runtime cmd = Runtime.getRuntime();
-            String[] cmds = new String[]{"sh","-c",sb.toString()};
+            String[] cmds = new String[]{"sh", "-c", sb.toString()};
             p = cmd.exec(cmds);
             p.waitFor();
             log.info("备份数据库成功!");
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            log.error("备份数据库失败！错误信息:{}",e.getMessage());
-        }finally{
-        	p.destroy();
+            log.error("备份数据库失败！错误信息:{}", e.getMessage());
+        } finally {
+            p.destroy();
         }
-		return path;
-	}
+        return path;
+    }
 
-    @Logger(message="etlImage")
+    @Logger(message = "etlImage")
     public void etlImage() {
         List<Image> images = imageService.getAll();
         images.forEach(image -> {
@@ -100,48 +100,48 @@ public class MysqlBackupService extends AbstractBackupDB {
         log.info("etlImage成功!");
     }
 
-    @Logger(message="调用邮件服务")
-	@Override
-	public void sendMail(String draft) {
-		MailUser fromuser = mailService.getSystemMailFromUser();
+    @Logger(message = "调用邮件服务")
+    @Override
+    public void sendMail(String draft) {
+        MailUser fromuser = mailService.getSystemMailFromUser();
         MailUser touser = mailService.getSystemMailToUser();
         MailMessage message = new MailMessage();
         message.setSubject("曼妙云端数据库备份");
-        message.setContent(StringAppendUtils.append("于",DateUtils.formatDate2Str(new Date()),"曼妙云端数据库备份成功！","路径为:",draft));
+        message.setContent(StringAppendUtils.append("于", DateUtils.formatDate2Str(new Date()), "曼妙云端数据库备份成功！", "路径为:", draft));
         message.setDrafts(new String[]{draft});
         Mail mail = new Mail();
         mail.setFromUser(fromuser);
         mail.setToUser(touser);
         mail.setMessage(message);
         mailService.sendMail(mail);
-	}
+    }
 
-    @Logger(message="删除数据库过期的备份文件")
-	@Override
-	public void deleteExpireFile(String path) {
-		path = path.substring(0,path.lastIndexOf("/"));
-		File file = new File(path);
-		List<File> fileList = new ArrayList<File>();
-		if(file.isDirectory()){
-			File []files = file.listFiles();
-			for(File fileIndex : files){
-				fileList.add(fileIndex);
-		    }
-		}
-		Ordering<File> fileOrdering = new Ordering<File>() {
-			public int compare(File left, File right) {
-				return left.getName().compareTo(right.getName());
-			}
-		};
-		List<File> latestFiles = fileOrdering.greatestOf(fileList, 3);
-		fileList.removeAll(latestFiles);
-		Iterator<File> files = fileList.iterator();
-		while(files.hasNext()){
-			File delFile = files.next();
-			String filename = delFile.getName();
-			if(delFile.delete()){
-				log.info("删除备份数据文件:{}",filename);
-			}
-		}
-	}
+    @Logger(message = "删除数据库过期的备份文件")
+    @Override
+    public void deleteExpireFile(String path) {
+        path = path.substring(0, path.lastIndexOf("/"));
+        File file = new File(path);
+        List<File> fileList = new ArrayList<File>();
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            for (File fileIndex : files) {
+                fileList.add(fileIndex);
+            }
+        }
+        Ordering<File> fileOrdering = new Ordering<File>() {
+            public int compare(File left, File right) {
+                return left.getName().compareTo(right.getName());
+            }
+        };
+        List<File> latestFiles = fileOrdering.greatestOf(fileList, 3);
+        fileList.removeAll(latestFiles);
+        Iterator<File> files = fileList.iterator();
+        while (files.hasNext()) {
+            File delFile = files.next();
+            String filename = delFile.getName();
+            if (delFile.delete()) {
+                log.info("删除备份数据文件:{}", filename);
+            }
+        }
+    }
 }

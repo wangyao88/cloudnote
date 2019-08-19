@@ -16,93 +16,93 @@ import com.sxkl.cloudnote.editor.define.State;
 import com.sxkl.cloudnote.editor.upload.StorageManager;
 
 public class ImageHunter {
-	
-	private String filename = null;
-	private String savePath = null;
-	private String rootPath = null;
-	private List<String> allowTypes = null;
-	private long maxSize = -1L;
-	private List<String> filters = null;
 
-	public ImageHunter(Map<String, Object> conf) {
-		this.filename = ((String) conf.get("filename"));
-		this.savePath = ((String) conf.get("savePath"));
-		this.rootPath = ((String) conf.get("rootPath"));
-		this.maxSize = ((Long) conf.get("maxSize")).longValue();
-		this.allowTypes = Arrays.asList((String[]) conf.get("allowFiles"));
-		this.filters = Arrays.asList((String[]) conf.get("filter"));
-	}
+    private String filename = null;
+    private String savePath = null;
+    private String rootPath = null;
+    private List<String> allowTypes = null;
+    private long maxSize = -1L;
+    private List<String> filters = null;
 
-	public State capture(String[] list) {
-		MultiState state = new MultiState(true);
-		for (String source : list) {
-			state.addState(captureRemoteData(source));
-		}
-		return state;
-	}
+    public ImageHunter(Map<String, Object> conf) {
+        this.filename = ((String) conf.get("filename"));
+        this.savePath = ((String) conf.get("savePath"));
+        this.rootPath = ((String) conf.get("rootPath"));
+        this.maxSize = ((Long) conf.get("maxSize")).longValue();
+        this.allowTypes = Arrays.asList((String[]) conf.get("allowFiles"));
+        this.filters = Arrays.asList((String[]) conf.get("filter"));
+    }
 
-	public State captureRemoteData(String urlStr) {
-		HttpURLConnection connection = null;
-		URL url = null;
-		String suffix = null;
-		try {
-			url = new URL(urlStr);
-			if (!validHost(url.getHost())) {
-				return new BaseState(false, 201);
-			}
-			connection = (HttpURLConnection) url.openConnection();
+    public State capture(String[] list) {
+        MultiState state = new MultiState(true);
+        for (String source : list) {
+            state.addState(captureRemoteData(source));
+        }
+        return state;
+    }
 
-			connection.setInstanceFollowRedirects(true);
-			connection.setUseCaches(true);
-			if (!validContentState(connection.getResponseCode())) {
-				return new BaseState(false, 202);
-			}
-			suffix = MIMEType.getSuffix(connection.getContentType());
-			if (!validFileType(suffix)) {
-				return new BaseState(false, 8);
-			}
-			if (!validFileSize(connection.getContentLength())) {
-				return new BaseState(false, 1);
-			}
-			String savePath = getPath(this.savePath, this.filename, suffix);
-			String physicalPath = this.rootPath + savePath;
+    public State captureRemoteData(String urlStr) {
+        HttpURLConnection connection = null;
+        URL url = null;
+        String suffix = null;
+        try {
+            url = new URL(urlStr);
+            if (!validHost(url.getHost())) {
+                return new BaseState(false, 201);
+            }
+            connection = (HttpURLConnection) url.openConnection();
 
-			State state = StorageManager.saveFileByInputStream(connection.getInputStream(), physicalPath);
-			if (state.isSuccess()) {
-				state.putInfo("url", PathFormat.format(savePath));
-				state.putInfo("source", urlStr);
-			}
-			return state;
-		} catch (Exception e) {
-		}
-		return new BaseState(false, 203);
-	}
+            connection.setInstanceFollowRedirects(true);
+            connection.setUseCaches(true);
+            if (!validContentState(connection.getResponseCode())) {
+                return new BaseState(false, 202);
+            }
+            suffix = MIMEType.getSuffix(connection.getContentType());
+            if (!validFileType(suffix)) {
+                return new BaseState(false, 8);
+            }
+            if (!validFileSize(connection.getContentLength())) {
+                return new BaseState(false, 1);
+            }
+            String savePath = getPath(this.savePath, this.filename, suffix);
+            String physicalPath = this.rootPath + savePath;
 
-	private String getPath(String savePath, String filename, String suffix) {
-		return PathFormat.parse(savePath + suffix, filename);
-	}
+            State state = StorageManager.saveFileByInputStream(connection.getInputStream(), physicalPath);
+            if (state.isSuccess()) {
+                state.putInfo("url", PathFormat.format(savePath));
+                state.putInfo("source", urlStr);
+            }
+            return state;
+        } catch (Exception e) {
+        }
+        return new BaseState(false, 203);
+    }
 
-	private boolean validHost(String hostname) {
-		try {
-			InetAddress ip = InetAddress.getByName(hostname);
-			if (ip.isSiteLocalAddress()) {
-				return false;
-			}
-		} catch (UnknownHostException e) {
-			return false;
-		}
-		return !this.filters.contains(hostname);
-	}
+    private String getPath(String savePath, String filename, String suffix) {
+        return PathFormat.parse(savePath + suffix, filename);
+    }
 
-	private boolean validContentState(int code) {
-		return 200 == code;
-	}
+    private boolean validHost(String hostname) {
+        try {
+            InetAddress ip = InetAddress.getByName(hostname);
+            if (ip.isSiteLocalAddress()) {
+                return false;
+            }
+        } catch (UnknownHostException e) {
+            return false;
+        }
+        return !this.filters.contains(hostname);
+    }
 
-	private boolean validFileType(String type) {
-		return this.allowTypes.contains(type);
-	}
+    private boolean validContentState(int code) {
+        return 200 == code;
+    }
 
-	private boolean validFileSize(int size) {
-		return size < this.maxSize;
-	}
+    private boolean validFileType(String type) {
+        return this.allowTypes.contains(type);
+    }
+
+    private boolean validFileSize(int size) {
+        return size < this.maxSize;
+    }
 }

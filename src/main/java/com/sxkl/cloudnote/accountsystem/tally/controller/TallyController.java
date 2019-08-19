@@ -14,36 +14,36 @@ import com.sxkl.cloudnote.accountsystem.tally.service.TallyService;
 /**
  * @author: wangyao
  * @date: 2018年5月8日 上午9:20:56
- * @description: 
+ * @description:
  */
 @Controller
 @RequestMapping("/accountsystem/tally")
 public class TallyController {
 
-	@Autowired
-	private TallyService tallyService;
-	
-	@RequestMapping(value = "/index", method = {RequestMethod.GET, RequestMethod.HEAD})
-	public ModelAndView login(HttpServletRequest request) throws Exception{
-		ModelAndView modelAndView = new ModelAndView("accountsystem/tally/index");
-		return modelAndView;
-	}
-	
-	@RequestMapping(value = "/getTallyList", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
-	@ResponseBody
-	public String getTallyList(HttpServletRequest request){
-		return tallyService.getTallyList(request);
-	}
-	
-	@RequestMapping(value = "/saveChanges", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
-	@ResponseBody
-	public String saveChanges(HttpServletRequest request){
-		return tallyService.saveChanges(request);
-	}
-	
-	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
-	@ResponseBody
-	public String delete(HttpServletRequest request){
-		return tallyService.delete(request);
-	}
+    @Autowired
+    private TallyService tallyService;
+
+    @RequestMapping(value = "/index", method = {RequestMethod.GET, RequestMethod.HEAD})
+    public ModelAndView login(HttpServletRequest request) throws Exception {
+        ModelAndView modelAndView = new ModelAndView("accountsystem/tally/index");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/getTallyList", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+    @ResponseBody
+    public String getTallyList(HttpServletRequest request) {
+        return tallyService.getTallyList(request);
+    }
+
+    @RequestMapping(value = "/saveChanges", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+    @ResponseBody
+    public String saveChanges(HttpServletRequest request) {
+        return tallyService.saveChanges(request);
+    }
+
+    @RequestMapping(value = "/delete", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+    @ResponseBody
+    public String delete(HttpServletRequest request) {
+        return tallyService.delete(request);
+    }
 }

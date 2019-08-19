@@ -14,7 +14,7 @@ import java.util.Map;
  * @date:2018年1月8日 下午3:18:40
  */
 public class RSACoder {
-	public static final String KEY_ALGORITHM = "RSA";
+    public static final String KEY_ALGORITHM = "RSA";
     public static final String SIGNATURE_ALGORITHM = "MD5withRSA";
 
     private static final String PUBLIC_KEY = "RSAPublicKey";
@@ -78,7 +78,7 @@ public class RSACoder {
         return signature.verify(decryptBASE64(sign));
     }
 
-    public static byte[] decryptByPrivateKey(byte[] data, String key) throws Exception{
+    public static byte[] decryptByPrivateKey(byte[] data, String key) throws Exception {
         // 对密钥解密
         byte[] keyBytes = decryptBASE64(key);
         // 取得私钥
@@ -102,7 +102,7 @@ public class RSACoder {
      */
     public static byte[] decryptByPrivateKey(String data, String key)
             throws Exception {
-        return decryptByPrivateKey(decryptBASE64(data),key);
+        return decryptByPrivateKey(decryptBASE64(data), key);
     }
 
     /**

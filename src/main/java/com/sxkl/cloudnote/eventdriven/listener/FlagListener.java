@@ -15,45 +15,44 @@ import com.sxkl.cloudnote.flag.service.FlagService;
 import com.sxkl.cloudnote.log.annotation.Logger;
 
 @Service
-public class FlagListener implements ApplicationListener<ApplicationEvent>{
-	
-	@Autowired
-	private FlagService flagService;
-	@Autowired
-	private RedisTemplate<Object, Object> redisTemplate;
+public class FlagListener implements ApplicationListener<ApplicationEvent> {
 
-	@Override
-	public void onApplicationEvent(ApplicationEvent event) {
-		if(isNotDuty(event)){
-			return;
-		}
-		FlagPublisherBean flag = (FlagPublisherBean) event.getSource();
-		cacheAddArticleTreeMenu(flag.getUserId());
-	}
-	
-	
+    @Autowired
+    private FlagService flagService;
+    @Autowired
+    private RedisTemplate<Object, Object> redisTemplate;
 
-	private boolean isNotDuty(ApplicationEvent event){
-		return !event.getClass().toString().equals(FlagPublisherEvent.class.toString());
-	}
-	
-	@Logger(message="缓存增加笔记时的标签树")
-	public void cacheAddArticleTreeMenu(String userId) {
-		String key = Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS + userId;
-		boolean hasCached = redisTemplate.hasKey(key);
-		if(hasCached){
-			return;
-		}
-		String flagTreeMenu = flagService.getFlagTreeMenu(userId);
-		StringBuilder treeJson = new StringBuilder();
-		treeJson.append(Constant.TREE_MENU_PREFIX);
-		treeJson.append(flagTreeMenu);
-		treeJson.append(Constant.TREE_MENU_SUFFIX);
-		redisTemplate.opsForValue().set(key, treeJson.toString());
-		long baseKeyTime = redisTemplate.getExpire(key);
-		if (baseKeyTime == -1) {
-			redisTemplate.expire(key, 30, TimeUnit.MINUTES);
-		}
-	}
+    @Override
+    public void onApplicationEvent(ApplicationEvent event) {
+        if (isNotDuty(event)) {
+            return;
+        }
+        FlagPublisherBean flag = (FlagPublisherBean) event.getSource();
+        cacheAddArticleTreeMenu(flag.getUserId());
+    }
+
+
+    private boolean isNotDuty(ApplicationEvent event) {
+        return !event.getClass().toString().equals(FlagPublisherEvent.class.toString());
+    }
+
+    @Logger(message = "缓存增加笔记时的标签树")
+    public void cacheAddArticleTreeMenu(String userId) {
+        String key = Constant.TREE_FOR_ARTICLE_KEY_IN_REDIS + userId;
+        boolean hasCached = redisTemplate.hasKey(key);
+        if (hasCached) {
+            return;
+        }
+        String flagTreeMenu = flagService.getFlagTreeMenu(userId);
+        StringBuilder treeJson = new StringBuilder();
+        treeJson.append(Constant.TREE_MENU_PREFIX);
+        treeJson.append(flagTreeMenu);
+        treeJson.append(Constant.TREE_MENU_SUFFIX);
+        redisTemplate.opsForValue().set(key, treeJson.toString());
+        long baseKeyTime = redisTemplate.getExpire(key);
+        if (baseKeyTime == -1) {
+            redisTemplate.expire(key, 30, TimeUnit.MINUTES);
+        }
+    }
 
 }

@@ -9,8 +9,8 @@ import com.sxkl.cloudnote.article.entity.Article;
  * @date:2018年1月11日 下午2:26:26
  */
 public interface ScoreFilter {
-	
-	void doFilte(Map<String,Article> result, Article article);
-	
-	int getPriority();
+
+    void doFilte(Map<String, Article> result, Article article);
+
+    int getPriority();
 }

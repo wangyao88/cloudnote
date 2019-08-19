@@ -11,15 +11,15 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @Entity
-@Table(name="cn_same_article")
+@Table(name = "cn_same_article")
 @GenericGenerator(name = "uuid", strategy = "uuid")
-public class SameArticle implements Serializable{
+public class SameArticle implements Serializable {
 
-	@Id
-	@GeneratedValue(generator = "uuid")
-	@Column(name="id",unique=true,nullable=false)
-	private String id;
+    @Id
+    @GeneratedValue(generator = "uuid")
+    @Column(name = "id", unique = true, nullable = false)
+    private String id;
 
-	@Column(name="same_ids",nullable=false)
-	private String sameIds;
+    @Column(name = "same_ids", nullable = false)
+    private String sameIds;
 }

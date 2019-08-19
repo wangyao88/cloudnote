@@ -9,18 +9,19 @@ import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 public class CustomizedPropertyPlaceholderConfigurer extends PropertyPlaceholderConfigurer {
 
     @Override
-    protected String convertProperty(String propertyName,String propertyValue){
+    protected String convertProperty(String propertyName, String propertyValue) {
         DESUtil desUtil = new DESUtil();
-        if(isEncryptPropertyVal(propertyName)){
-        	 return desUtil.decrypt(propertyValue);
-        }else{
+        if (isEncryptPropertyVal(propertyName)) {
+            return desUtil.decrypt(propertyValue);
+        } else {
             return propertyValue;
         }
     }
-    private boolean isEncryptPropertyVal(String propertyName){
-        if(propertyName.contains("password")){
+
+    private boolean isEncryptPropertyVal(String propertyName) {
+        if (propertyName.contains("password")) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

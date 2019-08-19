@@ -70,69 +70,69 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class LuceneManager {
-	
-	@Autowired
-	private ArticleService articleService;
-	@Autowired
-	private UserService userService;
-	private static final int PAGE_SIZE = 50;
-	private org.slf4j.Logger logger = LoggerFactory.getLogger(LuceneManager.class);
-	
-	@Logger(message="于磁盘创建所有用户笔记索引")
-	public void initAllUserArticleIndex() {
-		try {
-			List<User> users = userService.getAllUsers();
-			for(User user : users){
-				creatIndexOnDisk(user.getId());
-			}
-		} catch (Exception e) {
-			log.error("于磁盘创建所有用户笔记索引失败！错误信息：{}",e.getMessage());
-		}
-	}
 
-	@Logger(message="于磁盘创建笔记索引")
-	public void creatIndexOnDisk(String userId) {
-		try {
-			Path path = Paths.get(getPath(userId));
-			File temp = path.toFile();
-			if(!temp.exists()){
-				temp.mkdirs();
-			}
-			for (File file : temp.listFiles()) {
-				file.delete();
-			}
-			FSDirectory fsDirectory = FSDirectory.open(path);
-			Analyzer analyzer = new IKAnalyzer(true);
-			IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
-			indexWriterConfig.setOpenMode(OpenMode.CREATE_OR_APPEND);
-			@Cleanup
-			IndexWriter writer = new IndexWriter(fsDirectory, indexWriterConfig);
-			int articleTotal = articleService.getArticleTotal(userId);
-			int pageTotal = getPageTotal(articleTotal);
-			
-			ExecutorCompletionService<List<Article>> executorCompletionService = new ExecutorCompletionService<List<Article>>(
-	                Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()*2));
-			
-			for (int i = 0; i < pageTotal; i++) {
-				int pageIndex = i;
+    @Autowired
+    private ArticleService articleService;
+    @Autowired
+    private UserService userService;
+    private static final int PAGE_SIZE = 50;
+    private org.slf4j.Logger logger = LoggerFactory.getLogger(LuceneManager.class);
+
+    @Logger(message = "于磁盘创建所有用户笔记索引")
+    public void initAllUserArticleIndex() {
+        try {
+            List<User> users = userService.getAllUsers();
+            for (User user : users) {
+                creatIndexOnDisk(user.getId());
+            }
+        } catch (Exception e) {
+            log.error("于磁盘创建所有用户笔记索引失败！错误信息：{}", e.getMessage());
+        }
+    }
+
+    @Logger(message = "于磁盘创建笔记索引")
+    public void creatIndexOnDisk(String userId) {
+        try {
+            Path path = Paths.get(getPath(userId));
+            File temp = path.toFile();
+            if (!temp.exists()) {
+                temp.mkdirs();
+            }
+            for (File file : temp.listFiles()) {
+                file.delete();
+            }
+            FSDirectory fsDirectory = FSDirectory.open(path);
+            Analyzer analyzer = new IKAnalyzer(true);
+            IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
+            indexWriterConfig.setOpenMode(OpenMode.CREATE_OR_APPEND);
+            @Cleanup
+            IndexWriter writer = new IndexWriter(fsDirectory, indexWriterConfig);
+            int articleTotal = articleService.getArticleTotal(userId);
+            int pageTotal = getPageTotal(articleTotal);
+
+            ExecutorCompletionService<List<Article>> executorCompletionService = new ExecutorCompletionService<List<Article>>(
+                    Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2));
+
+            for (int i = 0; i < pageTotal; i++) {
+                int pageIndex = i;
                 executorCompletionService.submit(new Callable<List<Article>>() {
                     @Override
                     public List<Article> call() throws Exception {
-                    	return articleService.findPage(pageIndex,PAGE_SIZE,userId);
+                        return articleService.findPage(pageIndex, PAGE_SIZE, userId);
                     }
                 });
             }
-			
-			for (int i = 0; i < pageTotal; i++) {
-				Future<List<Article>> take = executorCompletionService.take();
+
+            for (int i = 0; i < pageTotal; i++) {
+                Future<List<Article>> take = executorCompletionService.take();
                 List<Article> articles = take.get();
                 for (Article article : articles) {
-    				writer.addDocument(toDocument(article));
-    			}
+                    writer.addDocument(toDocument(article));
+                }
             }
-			
+
 //			List<Article> articles = articleService.getAllArticles(userId);
-			
+
 //			int articleTotal = articleService.getArticleTotal(userId);
 //			List<Article> articles = new ArrayList<Article>(articleTotal);
 //			ForkJoinPool forkJoinPool = new ForkJoinPool();  
@@ -148,7 +148,7 @@ public class LuceneManager {
 //	        } catch (Exception e) { 
 //	        	e.printStackTrace();
 //	        }  
-			
+
 //			int currentPage = 0;
 //			while(currentPage*PAGE_SIZE < articleTotal){
 //				articles.addAll(articleService.findPage(currentPage,PAGE_SIZE,userId));
@@ -157,193 +157,193 @@ public class LuceneManager {
 //			for (Article article : articles) {
 //				writer.addDocument(toDocument(article));
 //			}
-		} catch (Exception e) {
-			log.error("于磁盘创建笔记索引失败！错误信息：{}",e.getMessage());
-		}
-	}
+        } catch (Exception e) {
+            log.error("于磁盘创建笔记索引失败！错误信息：{}", e.getMessage());
+        }
+    }
 
-	private int getPageTotal(int articleTotal) {
-		int temp = articleTotal/PAGE_SIZE;
-		return temp*PAGE_SIZE < articleTotal ? temp+1 : temp;
-	}
-	
-	@Logger(message="实体article对象转document笔记索引对象")
-	public Document toDocument(Article article) {
-		Document doc = new Document();
-		doc.add(new StringField("id", String.valueOf(article.getId()), Field.Store.YES));
-		doc.add(new Field("title", article.getTitle(), TextField.TYPE_STORED));
-		doc.add(new Field("hitNum", String.valueOf(article.getHitNum()), TextField.TYPE_STORED));
-		doc.add(new Field("content", article.getContent(), TextField.TYPE_STORED));
-		return doc;
-	}
+    private int getPageTotal(int articleTotal) {
+        int temp = articleTotal / PAGE_SIZE;
+        return temp * PAGE_SIZE < articleTotal ? temp + 1 : temp;
+    }
 
-	@Logger(message="添加笔记索引")
-	public synchronized void addDocument(Article article, String userId){
-		try {
+    @Logger(message = "实体article对象转document笔记索引对象")
+    public Document toDocument(Article article) {
+        Document doc = new Document();
+        doc.add(new StringField("id", String.valueOf(article.getId()), Field.Store.YES));
+        doc.add(new Field("title", article.getTitle(), TextField.TYPE_STORED));
+        doc.add(new Field("hitNum", String.valueOf(article.getHitNum()), TextField.TYPE_STORED));
+        doc.add(new Field("content", article.getContent(), TextField.TYPE_STORED));
+        return doc;
+    }
+
+    @Logger(message = "添加笔记索引")
+    public synchronized void addDocument(Article article, String userId) {
+        try {
 //			@Cleanup
 //			IndexWriter ramWriter = getFSIndexWriter(userId);
 //			ramWriter.addDocument(toDocument(article));
 //			ramWriter.commit();
-			insertOrUpdateIndex(article, "添加");
-		} catch (Exception e) {
-			logger.error("添加笔记【{}】索引失败！错误信息：{}", article.getTitle(), e.getMessage());
-		}
-	}
+            insertOrUpdateIndex(article, "添加");
+        } catch (Exception e) {
+            logger.error("添加笔记【{}】索引失败！错误信息：{}", article.getTitle(), e.getMessage());
+        }
+    }
 
-	@Logger(message="更新笔记索引")
-	public void updateDocument(Article article, String userId){
-		try {
+    @Logger(message = "更新笔记索引")
+    public void updateDocument(Article article, String userId) {
+        try {
 //			Term term = new Term("id", String.valueOf(article.getId()));
 //			@Cleanup
 //			IndexWriter ramWriter = getFSIndexWriter(userId);
 //			ramWriter.updateDocument(term, toDocument(article));
 //			ramWriter.flush();
 //			ramWriter.commit();
-			insertOrUpdateIndex(article, "更新");
-		} catch (Exception e) {
-			logger.error("更新笔记【{}】索引失败！错误信息：{}", article.getTitle(), Throwables.getStackTraceAsString(e));
-		}
-	}
+            insertOrUpdateIndex(article, "更新");
+        } catch (Exception e) {
+            logger.error("更新笔记【{}】索引失败！错误信息：{}", article.getTitle(), Throwables.getStackTraceAsString(e));
+        }
+    }
 
-	private void insertOrUpdateIndex(Article article, String operate) throws UnirestException {
-		String url = CloudnoteServiceUrlConstant.INSERT_OR_UPDATE_URL;
-		JSONObject json = convertJson(article);
-		HttpResponse<String> response = Unirest.post(url)
-				.header("Content-Type", "application/json")
-				.body(json).asString();
-		int status = response.getStatus();
-		String result = response.getBody();
-		if(status == 200 || "true".equals(result)) {
-			logger.info("{}笔记【{}】索引成功!", operate, article.getTitle());
-		}else {
-			logger.error("{}笔记【{}】索引失败!", operate, article.getTitle());
-		}
-	}
+    private void insertOrUpdateIndex(Article article, String operate) throws UnirestException {
+        String url = CloudnoteServiceUrlConstant.INSERT_OR_UPDATE_URL;
+        JSONObject json = convertJson(article);
+        HttpResponse<String> response = Unirest.post(url)
+                .header("Content-Type", "application/json")
+                .body(json).asString();
+        int status = response.getStatus();
+        String result = response.getBody();
+        if (status == 200 || "true".equals(result)) {
+            logger.info("{}笔记【{}】索引成功!", operate, article.getTitle());
+        } else {
+            logger.error("{}笔记【{}】索引失败!", operate, article.getTitle());
+        }
+    }
 
-	private JSONObject convertJson(Article article) {
-		JSONObject json = new JSONObject();
-		json.put("id" , article.getId());
-		json.put("title" , article.getTitle());
-		json.put("content" , article.getContent());
-		json.put("creatTime" , article.getCreateTime().getTime());
-		json.put("hitNum" , article.getHitNum());
-		json.put("isSHared" , article.isShared() ? 1: 0);
-		json.put("nId" , article.getNote().getId());
-		json.put("uId" , article.getUser().getId());
-		return json;
-	}
+    private JSONObject convertJson(Article article) {
+        JSONObject json = new JSONObject();
+        json.put("id", article.getId());
+        json.put("title", article.getTitle());
+        json.put("content", article.getContent());
+        json.put("creatTime", article.getCreateTime().getTime());
+        json.put("hitNum", article.getHitNum());
+        json.put("isSHared", article.isShared() ? 1 : 0);
+        json.put("nId", article.getNote().getId());
+        json.put("uId", article.getUser().getId());
+        return json;
+    }
 
-	@Logger(message="删除笔记索引")
-	public synchronized void deleteDocument(Article article, String userId){
-		try {
+    @Logger(message = "删除笔记索引")
+    public synchronized void deleteDocument(Article article, String userId) {
+        try {
 //			Term term = new Term("id", articleId);
 //			@Cleanup
 //			IndexWriter ramWriter = getFSIndexWriter(userId);
 //			ramWriter.deleteDocuments(term);
 //			ramWriter.flush();
 //			ramWriter.commit();
-			String url = CloudnoteServiceUrlConstant.DELETE_URL;
-			HttpResponse<String> response = Unirest.post(url).queryString("id", article.getId()).asString();
-			String result = response.getBody();
-			if(Boolean.valueOf(result)) {
-				logger.info("删除笔记【{}】索引成功!", article.getTitle());
-			}else {
-				log.info("删除笔记【{}】索引失败!", article.getTitle());
-			}
-		} catch (Exception e) {
-			logger.error("删除笔记索引失败！错误信息：{}", Throwables.getStackTraceAsString(e));
-		}
-	}
+            String url = CloudnoteServiceUrlConstant.DELETE_URL;
+            HttpResponse<String> response = Unirest.post(url).queryString("id", article.getId()).asString();
+            String result = response.getBody();
+            if (Boolean.valueOf(result)) {
+                logger.info("删除笔记【{}】索引成功!", article.getTitle());
+            } else {
+                log.info("删除笔记【{}】索引失败!", article.getTitle());
+            }
+        } catch (Exception e) {
+            logger.error("删除笔记索引失败！错误信息：{}", Throwables.getStackTraceAsString(e));
+        }
+    }
 
-	@Logger(message="搜索笔记")
-	public List<Article> search(String keyword, String userId, int pageSize){
-		List<Article> list = Lists.newArrayList();
-		try {
-			IndexSearcher indexSearcher = new IndexSearcher(DirectoryReader.open(getRAMDirectory(userId)));
-			String[] fields = { "title", "content" };
-			Analyzer analyzer = new IKAnalyzer(true);
-			QueryParser queryParser = new MultiFieldQueryParser(fields, analyzer);
-			Query query = queryParser.parse(keyword);
-			TopDocs hits = indexSearcher.search(query, pageSize);
-			// 高亮
-			SimpleHTMLFormatter simpleHTMLFormatter = new SimpleHTMLFormatter("<b><font color='red'>", "</font></b>");
-			Highlighter highlighter = new Highlighter(simpleHTMLFormatter, new QueryScorer(query));
+    @Logger(message = "搜索笔记")
+    public List<Article> search(String keyword, String userId, int pageSize) {
+        List<Article> list = Lists.newArrayList();
+        try {
+            IndexSearcher indexSearcher = new IndexSearcher(DirectoryReader.open(getRAMDirectory(userId)));
+            String[] fields = {"title", "content"};
+            Analyzer analyzer = new IKAnalyzer(true);
+            QueryParser queryParser = new MultiFieldQueryParser(fields, analyzer);
+            Query query = queryParser.parse(keyword);
+            TopDocs hits = indexSearcher.search(query, pageSize);
+            // 高亮
+            SimpleHTMLFormatter simpleHTMLFormatter = new SimpleHTMLFormatter("<b><font color='red'>", "</font></b>");
+            Highlighter highlighter = new Highlighter(simpleHTMLFormatter, new QueryScorer(query));
 
-			for (ScoreDoc scoreDoc : hits.scoreDocs) {
-				Article article = new Article();
-				Document doc = indexSearcher.doc(scoreDoc.doc);
-				article.setId(doc.get("id"));
-				String title = doc.get("title");
-				String content = doc.get("content");
-				String hitNum = doc.get("hitNum");
-				article.setTitle(highlighter.getBestFragment(analyzer.tokenStream("title", new StringReader(title)), title));
-				article.setContent(highlighter.getBestFragment(analyzer.tokenStream("content", new StringReader(content)), content));
-				article.setHitNum(Integer.valueOf(hitNum));
-				list.add(article);
-			}
-		} catch (Exception e) {
-			log.error("搜索笔记失败！错误信息：{}",e.getMessage());
-		}
-		return list;
-	}
+            for (ScoreDoc scoreDoc : hits.scoreDocs) {
+                Article article = new Article();
+                Document doc = indexSearcher.doc(scoreDoc.doc);
+                article.setId(doc.get("id"));
+                String title = doc.get("title");
+                String content = doc.get("content");
+                String hitNum = doc.get("hitNum");
+                article.setTitle(highlighter.getBestFragment(analyzer.tokenStream("title", new StringReader(title)), title));
+                article.setContent(highlighter.getBestFragment(analyzer.tokenStream("content", new StringReader(content)), content));
+                article.setHitNum(Integer.valueOf(hitNum));
+                list.add(article);
+            }
+        } catch (Exception e) {
+            log.error("搜索笔记失败！错误信息：{}", e.getMessage());
+        }
+        return list;
+    }
 
-	@Logger(message="同步笔记索引至磁盘")
-	public void indexSync(String userId) {
-		try {
-			IndexWriterConfig config = null;
-			SnapshotDeletionPolicy snapshotDeletionPolicy = null;
-			IndexCommit indexCommit = null;
-			IndexWriter ramWriter = getRAMIndexWriter(userId);
-			config = (IndexWriterConfig) ramWriter.getConfig();
-			snapshotDeletionPolicy = (SnapshotDeletionPolicy) config.getIndexDeletionPolicy();
-			indexCommit = snapshotDeletionPolicy.snapshot();
-			config.setIndexCommit(indexCommit);
-			Collection<String> fileNames = indexCommit.getFileNames();
-			Path toPath = Paths.get(getPath(userId));
-			@Cleanup
-			Directory toDir = FSDirectory.open(toPath);
-			// 删除所有原有笔记索引文件
-			for (File file : toPath.toFile().listFiles()) {
-				file.delete();
-			}
-			// 从ramdir复制新笔记索引文件至磁盘
-			for (String fileName : fileNames) {
-				toDir.copyFrom(getRAMDirectory(userId), fileName, fileName, IOContext.DEFAULT);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			log.error("同步笔记索引至磁盘失败！错误信息：{}",e.getMessage());
-		}
-	}
-	
-	private String getPath(String userId){
-		String path = LuceneManager.class.getClassLoader().getResource("").getPath();
-		path = Joiner.on("").join(Arrays.asList(path,"index/",userId));
-		if(path.contains(":")){
-			path = path.substring(1);
-		}
-		return path;
-	}
-	
-	private RAMDirectory getRAMDirectory(String userId) throws IOException{
-		@Cleanup
-		FSDirectory fsDirectory = FSDirectory.open(Paths.get(getPath(userId)));
-		return new RAMDirectory(fsDirectory, IOContext.READONCE);
-	}
-	
-	private IndexWriter getRAMIndexWriter(String userId) throws IOException{
-		Analyzer analyzer = new IKAnalyzer(true);
-		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
-		indexWriterConfig.setIndexDeletionPolicy(new SnapshotDeletionPolicy(new KeepOnlyLastCommitDeletionPolicy()));
-		return new IndexWriter(getRAMDirectory(userId), indexWriterConfig);
-	}
-	
-	private IndexWriter getFSIndexWriter(String userId) throws IOException{
-		Path path = Paths.get(getPath(userId));
-		FSDirectory fsDirectory = FSDirectory.open(path);
-		Analyzer analyzer = new IKAnalyzer(true);
-		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
-		indexWriterConfig.setOpenMode(OpenMode.CREATE_OR_APPEND);
-		return new IndexWriter(fsDirectory, indexWriterConfig);
-	}
+    @Logger(message = "同步笔记索引至磁盘")
+    public void indexSync(String userId) {
+        try {
+            IndexWriterConfig config = null;
+            SnapshotDeletionPolicy snapshotDeletionPolicy = null;
+            IndexCommit indexCommit = null;
+            IndexWriter ramWriter = getRAMIndexWriter(userId);
+            config = (IndexWriterConfig) ramWriter.getConfig();
+            snapshotDeletionPolicy = (SnapshotDeletionPolicy) config.getIndexDeletionPolicy();
+            indexCommit = snapshotDeletionPolicy.snapshot();
+            config.setIndexCommit(indexCommit);
+            Collection<String> fileNames = indexCommit.getFileNames();
+            Path toPath = Paths.get(getPath(userId));
+            @Cleanup
+            Directory toDir = FSDirectory.open(toPath);
+            // 删除所有原有笔记索引文件
+            for (File file : toPath.toFile().listFiles()) {
+                file.delete();
+            }
+            // 从ramdir复制新笔记索引文件至磁盘
+            for (String fileName : fileNames) {
+                toDir.copyFrom(getRAMDirectory(userId), fileName, fileName, IOContext.DEFAULT);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            log.error("同步笔记索引至磁盘失败！错误信息：{}", e.getMessage());
+        }
+    }
+
+    private String getPath(String userId) {
+        String path = LuceneManager.class.getClassLoader().getResource("").getPath();
+        path = Joiner.on("").join(Arrays.asList(path, "index/", userId));
+        if (path.contains(":")) {
+            path = path.substring(1);
+        }
+        return path;
+    }
+
+    private RAMDirectory getRAMDirectory(String userId) throws IOException {
+        @Cleanup
+        FSDirectory fsDirectory = FSDirectory.open(Paths.get(getPath(userId)));
+        return new RAMDirectory(fsDirectory, IOContext.READONCE);
+    }
+
+    private IndexWriter getRAMIndexWriter(String userId) throws IOException {
+        Analyzer analyzer = new IKAnalyzer(true);
+        IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
+        indexWriterConfig.setIndexDeletionPolicy(new SnapshotDeletionPolicy(new KeepOnlyLastCommitDeletionPolicy()));
+        return new IndexWriter(getRAMDirectory(userId), indexWriterConfig);
+    }
+
+    private IndexWriter getFSIndexWriter(String userId) throws IOException {
+        Path path = Paths.get(getPath(userId));
+        FSDirectory fsDirectory = FSDirectory.open(path);
+        Analyzer analyzer = new IKAnalyzer(true);
+        IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
+        indexWriterConfig.setOpenMode(OpenMode.CREATE_OR_APPEND);
+        return new IndexWriter(fsDirectory, indexWriterConfig);
+    }
 }

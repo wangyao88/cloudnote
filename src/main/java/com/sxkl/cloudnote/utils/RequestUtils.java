@@ -7,13 +7,13 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 public class RequestUtils {
 
-	public static HttpServletRequest getRequest(){
-		HttpServletRequest request = null;
-		try {
-			request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-		} catch (Exception e) {
-			request = null;
-		}
-	    return request;
-	}
+    public static HttpServletRequest getRequest() {
+        HttpServletRequest request = null;
+        try {
+            request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        } catch (Exception e) {
+            request = null;
+        }
+        return request;
+    }
 }

@@ -22,83 +22,83 @@ import com.sxkl.cloudnote.utils.StringUtils;
 @Controller
 @RequestMapping("/spider")
 public class SpiderController {
-	
-	@Autowired
-	private SpiderService spiderService;
-	@Autowired
-	private ArticleService articleService;
-	@Autowired
-	private SearchSpider searchSpider;
-	
-	@RequestMapping("/index")
-	public ModelAndView index(){
-		ModelAndView modelAndView = new ModelAndView(StringUtils.appendJoinEmpty("spider/index","_",PropertyUtil.getMode()));
-		return modelAndView;
-	}
-	
-	@RequestMapping("/getAll")
-	@ResponseBody
-	public String getAll(){
-		return spiderService.getArticles();
-	}
-	
-	@RequestMapping("/fetch")
-	@ResponseBody
-	public String fetch(String id){
-		return spiderService.getArticleById(id);
-	}
-	
-	@RequestMapping("/delete")
-	@ResponseBody
-	public void delete(String ids){
-		spiderService.delete(ids);
-	}
-	
-	@RequestMapping("/deleteAll")
-	@ResponseBody
-	public void deleteAll(){
-		spiderService.deleteAll();
-	}
-	
-	@RequestMapping("/spider")
-	@ResponseBody
-	public void spider(){
-		spiderService.spider();
-	}
-	
-	@RequestMapping("/getTotal")
-	@ResponseBody
-	public int getTotal(){
-		return spiderService.getTotal();
-	}
-	
-	@RequestMapping("/searchPage")
-	public ModelAndView searchPage(){
-		ModelAndView modelAndView = new ModelAndView("spider/searchPage");
-		return modelAndView;
-	}
-	
-	@RequestMapping(value="/searchKey", method = RequestMethod.GET)
-	@ResponseBody
-	public SearchComplete search(String query){
-		return articleService.getAllByTitle(query);
-	}
-	
-	@RequestMapping(value="/search", method = RequestMethod.POST)
-	@ResponseBody
-	public List<NetArticle> searchOnLine(int page, String searchKey) throws IOException{
-		return  searchSpider.spider(page, searchKey);
-	}
-	
-	@RequestMapping(value="/news", method = RequestMethod.POST)
-	@ResponseBody
-	public String news() throws IOException{
-		return  searchSpider.news();
-	}
-	
-	@RequestMapping(value="/oneNews", method = RequestMethod.GET)
-	@ResponseBody
-	public News oneNews() throws IOException{
-		return  searchSpider.oneNews();
-	}
+
+    @Autowired
+    private SpiderService spiderService;
+    @Autowired
+    private ArticleService articleService;
+    @Autowired
+    private SearchSpider searchSpider;
+
+    @RequestMapping("/index")
+    public ModelAndView index() {
+        ModelAndView modelAndView = new ModelAndView(StringUtils.appendJoinEmpty("spider/index", "_", PropertyUtil.getMode()));
+        return modelAndView;
+    }
+
+    @RequestMapping("/getAll")
+    @ResponseBody
+    public String getAll() {
+        return spiderService.getArticles();
+    }
+
+    @RequestMapping("/fetch")
+    @ResponseBody
+    public String fetch(String id) {
+        return spiderService.getArticleById(id);
+    }
+
+    @RequestMapping("/delete")
+    @ResponseBody
+    public void delete(String ids) {
+        spiderService.delete(ids);
+    }
+
+    @RequestMapping("/deleteAll")
+    @ResponseBody
+    public void deleteAll() {
+        spiderService.deleteAll();
+    }
+
+    @RequestMapping("/spider")
+    @ResponseBody
+    public void spider() {
+        spiderService.spider();
+    }
+
+    @RequestMapping("/getTotal")
+    @ResponseBody
+    public int getTotal() {
+        return spiderService.getTotal();
+    }
+
+    @RequestMapping("/searchPage")
+    public ModelAndView searchPage() {
+        ModelAndView modelAndView = new ModelAndView("spider/searchPage");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/searchKey", method = RequestMethod.GET)
+    @ResponseBody
+    public SearchComplete search(String query) {
+        return articleService.getAllByTitle(query);
+    }
+
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    @ResponseBody
+    public List<NetArticle> searchOnLine(int page, String searchKey) throws IOException {
+        return searchSpider.spider(page, searchKey);
+    }
+
+    @RequestMapping(value = "/news", method = RequestMethod.POST)
+    @ResponseBody
+    public String news() throws IOException {
+        return searchSpider.news();
+    }
+
+    @RequestMapping(value = "/oneNews", method = RequestMethod.GET)
+    @ResponseBody
+    public News oneNews() throws IOException {
+        return searchSpider.oneNews();
+    }
 }

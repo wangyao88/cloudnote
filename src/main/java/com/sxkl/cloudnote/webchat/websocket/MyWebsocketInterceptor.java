@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * Socket建立连接（握手）和断开
- * 
+ *
  * @author Goofy
  * @Date 2015年6月11日 下午2:23:09
  */
@@ -24,20 +24,20 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class MyWebsocketInterceptor implements HandshakeInterceptor {
 
-	public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
-		String uid = ((ServletServerHttpRequest) request).getServletRequest().getParameter("uid");
-		log.info("Websocket:用户[ID:" + uid + "]已经建立连接");
-		if (request instanceof ServletServerHttpRequest) {
-			if(StringUtils.isEmpty(uid)){
-			    return false;
-			}
-			attributes.put("uid", uid);
-		}
-		return true;
-	}
+    public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
+        String uid = ((ServletServerHttpRequest) request).getServletRequest().getParameter("uid");
+        log.info("Websocket:用户[ID:" + uid + "]已经建立连接");
+        if (request instanceof ServletServerHttpRequest) {
+            if (StringUtils.isEmpty(uid)) {
+                return false;
+            }
+            attributes.put("uid", uid);
+        }
+        return true;
+    }
 
-	public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Exception exception) {
-		
-	}
+    public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Exception exception) {
+
+    }
 
 }

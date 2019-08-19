@@ -13,120 +13,120 @@ import com.sxkl.cloudnote.editor.define.BaseState;
 import com.sxkl.cloudnote.editor.define.State;
 
 public class StorageManager {
-	
-	public static final int BUFFER_SIZE = 8192;
 
-	public static State saveBinaryFile(byte[] data, String path) {
-		File file = new File(path);
+    public static final int BUFFER_SIZE = 8192;
 
-		State state = valid(file);
-		if (!state.isSuccess()) {
-			return state;
-		}
-		try {
-			BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
-			bos.write(data);
-			bos.flush();
-			bos.close();
-		} catch (IOException ioe) {
-			return new BaseState(false, 4);
-		}
-		state = new BaseState(true, file.getAbsolutePath());
-		state.putInfo("size", data.length);
-		state.putInfo("title", file.getName());
-		return state;
-	}
+    public static State saveBinaryFile(byte[] data, String path) {
+        File file = new File(path);
 
-	public static State saveFileByInputStream(InputStream is, String path, long maxSize) {
-		State state = null;
+        State state = valid(file);
+        if (!state.isSuccess()) {
+            return state;
+        }
+        try {
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
+            bos.write(data);
+            bos.flush();
+            bos.close();
+        } catch (IOException ioe) {
+            return new BaseState(false, 4);
+        }
+        state = new BaseState(true, file.getAbsolutePath());
+        state.putInfo("size", data.length);
+        state.putInfo("title", file.getName());
+        return state;
+    }
 
-		File tmpFile = getTmpFile();
+    public static State saveFileByInputStream(InputStream is, String path, long maxSize) {
+        State state = null;
 
-		byte[] dataBuf = new byte[2048];
-		BufferedInputStream bis = new BufferedInputStream(is, 8192);
-		try {
-			BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(tmpFile), 8192);
+        File tmpFile = getTmpFile();
 
-			int count = 0;
-			while ((count = bis.read(dataBuf)) != -1) {
-				bos.write(dataBuf, 0, count);
-			}
-			bos.flush();
-			bos.close();
-			if (tmpFile.length() > maxSize) {
-				tmpFile.delete();
-				return new BaseState(false, 1);
-			}
-			state = saveTmpFile(tmpFile, path);
-			if (!state.isSuccess()) {
-				tmpFile.delete();
-			}
-			return state;
-		} catch (IOException localIOException) {
-		}
-		return new BaseState(false, 4);
-	}
+        byte[] dataBuf = new byte[2048];
+        BufferedInputStream bis = new BufferedInputStream(is, 8192);
+        try {
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(tmpFile), 8192);
 
-	public static State saveFileByInputStream(InputStream is, String path) {
-		State state = null;
+            int count = 0;
+            while ((count = bis.read(dataBuf)) != -1) {
+                bos.write(dataBuf, 0, count);
+            }
+            bos.flush();
+            bos.close();
+            if (tmpFile.length() > maxSize) {
+                tmpFile.delete();
+                return new BaseState(false, 1);
+            }
+            state = saveTmpFile(tmpFile, path);
+            if (!state.isSuccess()) {
+                tmpFile.delete();
+            }
+            return state;
+        } catch (IOException localIOException) {
+        }
+        return new BaseState(false, 4);
+    }
 
-		File tmpFile = getTmpFile();
+    public static State saveFileByInputStream(InputStream is, String path) {
+        State state = null;
 
-		byte[] dataBuf = new byte[2048];
-		BufferedInputStream bis = new BufferedInputStream(is, 8192);
-		try {
-			BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(tmpFile), 8192);
+        File tmpFile = getTmpFile();
 
-			int count = 0;
-			while ((count = bis.read(dataBuf)) != -1) {
-				bos.write(dataBuf, 0, count);
-			}
-			bos.flush();
-			bos.close();
+        byte[] dataBuf = new byte[2048];
+        BufferedInputStream bis = new BufferedInputStream(is, 8192);
+        try {
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(tmpFile), 8192);
 
-			state = saveTmpFile(tmpFile, path);
-			if (!state.isSuccess()) {
-				tmpFile.delete();
-			}
-			return state;
-		} catch (IOException localIOException) {
-		}
-		return new BaseState(false, 4);
-	}
+            int count = 0;
+            while ((count = bis.read(dataBuf)) != -1) {
+                bos.write(dataBuf, 0, count);
+            }
+            bos.flush();
+            bos.close();
 
-	private static File getTmpFile() {
-		File tmpDir = FileUtils.getTempDirectory();
-		double doubleFileName= Math.random() * 10000.0D;
-		String tmpFileName = (doubleFileName+"").replace(".", "");
-		return new File(tmpDir, tmpFileName);
-	}
+            state = saveTmpFile(tmpFile, path);
+            if (!state.isSuccess()) {
+                tmpFile.delete();
+            }
+            return state;
+        } catch (IOException localIOException) {
+        }
+        return new BaseState(false, 4);
+    }
 
-	private static State saveTmpFile(File tmpFile, String path) {
-		State state = null;
-		File targetFile = new File(path);
-		if (targetFile.canWrite()) {
-			return new BaseState(false, 2);
-		}
-		try {
-			FileUtils.moveFile(tmpFile, targetFile);
-		} catch (IOException e) {
-			return new BaseState(false, 4);
-		}
-		state = new BaseState(true);
-		state.putInfo("size", targetFile.length());
-		state.putInfo("title", targetFile.getName());
+    private static File getTmpFile() {
+        File tmpDir = FileUtils.getTempDirectory();
+        double doubleFileName = Math.random() * 10000.0D;
+        String tmpFileName = (doubleFileName + "").replace(".", "");
+        return new File(tmpDir, tmpFileName);
+    }
 
-		return state;
-	}
+    private static State saveTmpFile(File tmpFile, String path) {
+        State state = null;
+        File targetFile = new File(path);
+        if (targetFile.canWrite()) {
+            return new BaseState(false, 2);
+        }
+        try {
+            FileUtils.moveFile(tmpFile, targetFile);
+        } catch (IOException e) {
+            return new BaseState(false, 4);
+        }
+        state = new BaseState(true);
+        state.putInfo("size", targetFile.length());
+        state.putInfo("title", targetFile.getName());
 
-	private static State valid(File file) {
-		File parentPath = file.getParentFile();
-		if ((!parentPath.exists()) && (!parentPath.mkdirs())) {
-			return new BaseState(false, 3);
-		}
-		if (!parentPath.canWrite()) {
-			return new BaseState(false, 2);
-		}
-		return new BaseState(true);
-	}
+        return state;
+    }
+
+    private static State valid(File file) {
+        File parentPath = file.getParentFile();
+        if ((!parentPath.exists()) && (!parentPath.mkdirs())) {
+            return new BaseState(false, 3);
+        }
+        if (!parentPath.canWrite()) {
+            return new BaseState(false, 2);
+        }
+        return new BaseState(true);
+    }
 }

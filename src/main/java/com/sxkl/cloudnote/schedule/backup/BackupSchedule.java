@@ -10,12 +10,12 @@ import com.sxkl.cloudnote.log.annotation.Logger;
 @Service
 public class BackupSchedule {
 
-	@Autowired
+    @Autowired
     private MysqlBackupService mysqlBackupService;
-	
-	@Logger(message="定时备份数据库")
-	@Scheduled(cron="0 0 0 * * ?")
-	public void backupDB(){
-		mysqlBackupService.backupChain();
-	}
+
+    @Logger(message = "定时备份数据库")
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void backupDB() {
+        mysqlBackupService.backupChain();
+    }
 }

@@ -13,25 +13,25 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class OnlineSessionListener implements HttpSessionListener, ApplicationContextAware{
+public class OnlineSessionListener implements HttpSessionListener, ApplicationContextAware {
 
-	@Override
-	public void sessionCreated(HttpSessionEvent se) {
-		HttpSession session = se.getSession();
+    @Override
+    public void sessionCreated(HttpSessionEvent se) {
+        HttpSession session = se.getSession();
 //		redisCacheService.cacheSessionInfo(session);
-		log.info("session["+session.getId()+"]已上线");
-	}
+        log.info("session[" + session.getId() + "]已上线");
+    }
 
-	@Override
-	public void sessionDestroyed(HttpSessionEvent se) {
-		HttpSession session = se.getSession();
+    @Override
+    public void sessionDestroyed(HttpSessionEvent se) {
+        HttpSession session = se.getSession();
 //		redisCacheService.unCacheSessionInfo(session);
-		log.info("session["+session.getId()+"]已下线");
-	}
+        log.info("session[" + session.getId() + "]已下线");
+    }
 
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		
-	}
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+
+    }
 
 }

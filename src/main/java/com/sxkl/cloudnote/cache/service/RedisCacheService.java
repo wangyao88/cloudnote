@@ -27,16 +27,16 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class RedisCacheService {
 
-	@Autowired
+    @Autowired
     private RedisTemplate<Object, Object> redisTemplate;
-	
-    public void initAllData() throws Exception{
-        RedisCacheService redisCacheServiceProxy = (RedisCacheService)AopContext.currentProxy();
+
+    public void initAllData() throws Exception {
+        RedisCacheService redisCacheServiceProxy = (RedisCacheService) AopContext.currentProxy();
         //请缓存
         redisCacheServiceProxy.clearAllCache();
     }
-    
-    public String clearAllCache(){
+
+    public String clearAllCache() {
         return redisTemplate.execute(new RedisCallback<String>() {
             public String doInRedis(RedisConnection connection) throws DataAccessException {
                 connection.flushDb();
@@ -44,40 +44,40 @@ public class RedisCacheService {
             }
         });
     }
-    
-    @RedisCachable(key=Constant.LOGIN_PAGE_KEY_IN_REDIS_PRODUCE,dateTime=200)
+
+    @RedisCachable(key = Constant.LOGIN_PAGE_KEY_IN_REDIS_PRODUCE, dateTime = 200)
     public String getProduceLoginPageFromCache(HttpServletResponse resp, HttpServletRequest req, FilterChain filterChain) throws IOException, ServletException {
         return getPageFromCache(resp, req, filterChain);
     }
 
-    @RedisCachable(key=Constant.LOGIN_PAGE_KEY_IN_REDIS_PROVIDE,dateTime=200)
+    @RedisCachable(key = Constant.LOGIN_PAGE_KEY_IN_REDIS_PROVIDE, dateTime = 200)
     public String getProvideLoginPageFromCache(HttpServletResponse resp, HttpServletRequest req, FilterChain filterChain) throws IOException, ServletException {
         return getPageFromCache(resp, req, filterChain);
     }
-    
+
     private String getPageFromCache(HttpServletResponse resp, HttpServletRequest req, FilterChain filterChain)
-			throws IOException, ServletException {
-		ResponseWrapper wrapper = new ResponseWrapper(resp);
+            throws IOException, ServletException {
+        ResponseWrapper wrapper = new ResponseWrapper(resp);
         filterChain.doFilter(req, wrapper);
         String loginPage = wrapper.getResult();
         String domain = Constant.DOMAIN;
         loginPage = loginPage.replaceAll(domain, Constant.LOGIN_PAGE_DOMAIN);
         log.info("<--------------------登录页缓存不存在，生成缓存-------------------->");
         return loginPage;
-	}
+    }
 
-	public void cacheMap(String hotArticleKeyInRedis, Map<String, String> result) {
-		redisTemplate.opsForHash().putAll(hotArticleKeyInRedis, result);
-	}
+    public void cacheMap(String hotArticleKeyInRedis, Map<String, String> result) {
+        redisTemplate.opsForHash().putAll(hotArticleKeyInRedis, result);
+    }
 
-	public String getValueFromHash(String hotArticleKeyInRedis, String hashKey, HttpServletRequest request) {
-		User sessionUser = UserUtil.getSessionUser(request);
-		String userId = sessionUser.getId();
-		hotArticleKeyInRedis += userId;
-		if(redisTemplate.opsForHash().hasKey(hotArticleKeyInRedis, hashKey)){
-			return String.valueOf(redisTemplate.opsForHash().get(hotArticleKeyInRedis, hashKey));
-		}
-		return null;
-	}
+    public String getValueFromHash(String hotArticleKeyInRedis, String hashKey, HttpServletRequest request) {
+        User sessionUser = UserUtil.getSessionUser(request);
+        String userId = sessionUser.getId();
+        hotArticleKeyInRedis += userId;
+        if (redisTemplate.opsForHash().hasKey(hotArticleKeyInRedis, hashKey)) {
+            return String.valueOf(redisTemplate.opsForHash().get(hotArticleKeyInRedis, hashKey));
+        }
+        return null;
+    }
 
 }

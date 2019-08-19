@@ -16,61 +16,61 @@ import com.sxkl.cloudnote.note.service.NoteService;
 @RequestMapping("/note")
 public class NoteController {
 
-	@Autowired
-	private NoteService noteService;
+    @Autowired
+    private NoteService noteService;
 
-	
-	@RequestMapping(value = "/addNote", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
-	@ResponseBody
-	public String addNote(HttpServletRequest request){
-		try {
-			noteService.insertNote(request);
-			return OperateResultService.configurateSuccessResult();
-		} catch (Exception e) {
-			return OperateResultService.configurateFailureResult(e.getMessage());
-		}
-	}
-	
-	@RequestMapping(value = "/deleteNote", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
-	@ResponseBody
-	public String deleteNote(HttpServletRequest request){
-		try {
-			noteService.deleteNote(request);
-			return OperateResultService.configurateSuccessResult();
-		} catch (Exception e) {
-			return OperateResultService.configurateFailureResult(e.getMessage());
-		}
-	}
-	
-	@RequestMapping(value = "/updateNote", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
-	@ResponseBody
-	public String updateNote(HttpServletRequest request){
-		try {
-			noteService.updateNote(request);
-			return OperateResultService.configurateSuccessResult();
-		} catch (Exception e) {
-			return OperateResultService.configurateFailureResult(e.getMessage());
-		}
-	}
-	
-	@RequestMapping(value = "/getNoteDataFromCombo", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
-	@ResponseBody
-	public String getNoteDataFromCombo(HttpServletRequest request){
-		try {
-			return noteService.getNoteDataFromCombo(request);
-		} catch (Exception e) {
-			return OperateResultService.configurateFailureResult(e.getMessage());
-		}
-	}
-	
-	@RequestMapping(value = "/getNoteByArticleId", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
-	@ResponseBody
-	public String getNoteByArticleId(HttpServletRequest request){
-		try {
-			Note note = noteService.getNoteByArticleId(request);
-			return OperateResultService.configurateSuccessResult(note);
-		} catch (Exception e) {
-			return OperateResultService.configurateFailureResult(e.getMessage());
-		}
-	}
+
+    @RequestMapping(value = "/addNote", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+    @ResponseBody
+    public String addNote(HttpServletRequest request) {
+        try {
+            noteService.insertNote(request);
+            return OperateResultService.configurateSuccessResult();
+        } catch (Exception e) {
+            return OperateResultService.configurateFailureResult(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/deleteNote", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+    @ResponseBody
+    public String deleteNote(HttpServletRequest request) {
+        try {
+            noteService.deleteNote(request);
+            return OperateResultService.configurateSuccessResult();
+        } catch (Exception e) {
+            return OperateResultService.configurateFailureResult(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/updateNote", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+    @ResponseBody
+    public String updateNote(HttpServletRequest request) {
+        try {
+            noteService.updateNote(request);
+            return OperateResultService.configurateSuccessResult();
+        } catch (Exception e) {
+            return OperateResultService.configurateFailureResult(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/getNoteDataFromCombo", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+    @ResponseBody
+    public String getNoteDataFromCombo(HttpServletRequest request) {
+        try {
+            return noteService.getNoteDataFromCombo(request);
+        } catch (Exception e) {
+            return OperateResultService.configurateFailureResult(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/getNoteByArticleId", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+    @ResponseBody
+    public String getNoteByArticleId(HttpServletRequest request) {
+        try {
+            Note note = noteService.getNoteByArticleId(request);
+            return OperateResultService.configurateSuccessResult(note);
+        } catch (Exception e) {
+            return OperateResultService.configurateFailureResult(e.getMessage());
+        }
+    }
 }

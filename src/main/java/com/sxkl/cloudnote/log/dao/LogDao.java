@@ -8,12 +8,13 @@ import com.sxkl.cloudnote.log.entity.Log;
 import com.sxkl.cloudnote.sessionfactory.SessionFactory;
 
 /**
- * @author wangyao
- * @date 2018年1月14日 下午3:26:58
- * @description:
- */
+ *  * @author wangyao
+ *  * @date 2018年1月14日 下午3:26:58
+ *  * @description:
+ *  
+ */
 @SessionFactory(Constant.CVM_SESSION_FACTORY)
 @Repository
-public class LogDao extends BaseDao<String,Log>{
+public class LogDao extends BaseDao<String, Log> {
 
 }

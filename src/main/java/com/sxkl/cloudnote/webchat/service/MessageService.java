@@ -13,18 +13,18 @@ import com.sxkl.cloudnote.webchat.entity.Message;
 @Service
 public class MessageService {
 
-	@Autowired
-	private MessageDao messageDao;
-	
-	@Logger(message="保存在线聊天消息")
-	public void saveMessage(Message message){
-		messageDao.save(message);
-	}
-	
-	@Logger(message="获取在线聊天历史消息")
-	public List<Message> getHistory(String userFrom, String userTo) {
-		List<Message> msgs = messageDao.getHistory(userFrom,userTo);
-		Collections.reverse(msgs);
-		return msgs;
-	}
+    @Autowired
+    private MessageDao messageDao;
+
+    @Logger(message = "保存在线聊天消息")
+    public void saveMessage(Message message) {
+        messageDao.save(message);
+    }
+
+    @Logger(message = "获取在线聊天历史消息")
+    public List<Message> getHistory(String userFrom, String userTo) {
+        List<Message> msgs = messageDao.getHistory(userFrom, userTo);
+        Collections.reverse(msgs);
+        return msgs;
+    }
 }

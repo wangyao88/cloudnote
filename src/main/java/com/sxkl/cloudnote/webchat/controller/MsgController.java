@@ -26,34 +26,34 @@ import com.sxkl.cloudnote.webchat.websocket.MyWebSocketHandler;
 @RequestMapping("/msg")
 public class MsgController {
 
-	@Resource
-	private MyWebSocketHandler handler;
-	@Autowired
-	private MessageService messageService;
+    @Resource
+    private MyWebSocketHandler handler;
+    @Autowired
+    private MessageService messageService;
 
-	// 跳转到发布广播页面
-	@RequestMapping(value = "broadcast", method = RequestMethod.GET)
-	public ModelAndView broadcast() {
-		return new ModelAndView("broadcast");
-	}
+    // 跳转到发布广播页面
+    @RequestMapping(value = "broadcast", method = RequestMethod.GET)
+    public ModelAndView broadcast() {
+        return new ModelAndView("broadcast");
+    }
 
-	// 发布系统广播（群发）
-	@ResponseBody
-	@RequestMapping(value = "broadcast", method = RequestMethod.POST)
-	public void broadcast(String text) throws IOException {
-		Message msg = new Message();
-		msg.setDate(new Date());
+    // 发布系统广播（群发）
+    @ResponseBody
+    @RequestMapping(value = "broadcast", method = RequestMethod.POST)
+    public void broadcast(String text) throws IOException {
+        Message msg = new Message();
+        msg.setDate(new Date());
 //		msg.setFrom(-1L);
 //		msg.setFromName("系统广播");
 //		msg.setTo(0L);
-		msg.setText(text);
-		handler.broadcast(new TextMessage(new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(msg)));
-	}
-	
-	@RequestMapping(value = "/getHistory", method = RequestMethod.POST)
-	@ResponseBody
-	public List<Message> getHistory(String userTo, HttpServletRequest request){
-		User user = UserUtil.getSessionUser(request);
-		return messageService.getHistory(user.getId(),userTo);
-	}
+        msg.setText(text);
+        handler.broadcast(new TextMessage(new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(msg)));
+    }
+
+    @RequestMapping(value = "/getHistory", method = RequestMethod.POST)
+    @ResponseBody
+    public List<Message> getHistory(String userTo, HttpServletRequest request) {
+        User user = UserUtil.getSessionUser(request);
+        return messageService.getHistory(user.getId(), userTo);
+    }
 }

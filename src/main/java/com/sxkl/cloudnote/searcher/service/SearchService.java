@@ -58,8 +58,8 @@ public class SearchService {
                 jsonObject.put("isShared", jsonObject.getInt("isShared") == 1);
                 articles.add(gson.fromJson(jsonObject.toString(), Article.class));
             }
-        }catch (Exception e) {
-            log.error("搜索知识库失败！错误信息："+Throwables.getStackTraceAsString(e));
+        } catch (Exception e) {
+            log.error("搜索知识库失败！错误信息：" + Throwables.getStackTraceAsString(e));
         }
 //        if(!articles.isEmpty()) {
 //            saveSearchWordsToRedis(words);
@@ -80,8 +80,8 @@ public class SearchService {
             HttpResponse<String> response = Unirest.get(url).queryString("words", words).asString();
             String count = response.getBody();
             return Long.valueOf(count);
-        }catch (Exception e) {
-            log.error("搜索知识库命中数量失败！错误信息："+Throwables.getStackTraceAsString(e));
+        } catch (Exception e) {
+            log.error("搜索知识库命中数量失败！错误信息：" + Throwables.getStackTraceAsString(e));
         }
         return 0;
     }
@@ -92,8 +92,8 @@ public class SearchService {
             HttpResponse<String> response = Unirest.get(url).asString();
             String total = response.getBody();
             return Long.valueOf(total);
-        }catch (Exception e) {
-            log.error("搜索知识库总数量失败！错误信息："+Throwables.getStackTraceAsString(e));
+        } catch (Exception e) {
+            log.error("搜索知识库总数量失败！错误信息：" + Throwables.getStackTraceAsString(e));
         }
         return 0;
     }

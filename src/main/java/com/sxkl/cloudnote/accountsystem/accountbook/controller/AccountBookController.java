@@ -15,48 +15,48 @@ import com.sxkl.cloudnote.accountsystem.accountbook.service.AccountBookService;
 /**
  * @author: wangyao
  * @date: 2018年5月8日 上午9:20:56
- * @description: 
+ * @description:
  */
 @Controller
 @RequestMapping("/accountsystem/accountbook")
 public class AccountBookController {
 
-	@Autowired
-	private AccountBookService accountBookService;
-	
-	@RequestMapping(value = "/index", method = {RequestMethod.GET, RequestMethod.HEAD})
-	public ModelAndView login(HttpServletRequest request) throws Exception{
-		ModelAndView modelAndView = new ModelAndView("accountsystem/accountbook/index");
-		return modelAndView;
-	}
-	
-	@RequestMapping(value = "/getAccountBookList", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
-	@ResponseBody
-	public String getAccountBookList(HttpServletRequest request){
-		return accountBookService.getAccountBookList(request);
-	}
-	
-	@RequestMapping(value = "/getAll", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
-	@ResponseBody
-	public String getAll(HttpServletRequest request){
-		return accountBookService.getAll(request);
-	}
-	
-	@RequestMapping(value = "/add", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
-	@ResponseBody
-	public String add(AccountBook accountBook, HttpServletRequest request){
-		return accountBookService.add(accountBook,request);
-	}
-	
-	@RequestMapping(value = "/saveChanges", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
-	@ResponseBody
-	public String saveChanges(String data, HttpServletRequest request){
-		return accountBookService.saveChanges(data,request);
-	}
-	
-	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
-	@ResponseBody
-	public String delete(String id, HttpServletRequest request){
-		return accountBookService.delete(id,request);
-	}
+    @Autowired
+    private AccountBookService accountBookService;
+
+    @RequestMapping(value = "/index", method = {RequestMethod.GET, RequestMethod.HEAD})
+    public ModelAndView login(HttpServletRequest request) throws Exception {
+        ModelAndView modelAndView = new ModelAndView("accountsystem/accountbook/index");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/getAccountBookList", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+    @ResponseBody
+    public String getAccountBookList(HttpServletRequest request) {
+        return accountBookService.getAccountBookList(request);
+    }
+
+    @RequestMapping(value = "/getAll", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+    @ResponseBody
+    public String getAll(HttpServletRequest request) {
+        return accountBookService.getAll(request);
+    }
+
+    @RequestMapping(value = "/add", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+    @ResponseBody
+    public String add(AccountBook accountBook, HttpServletRequest request) {
+        return accountBookService.add(accountBook, request);
+    }
+
+    @RequestMapping(value = "/saveChanges", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+    @ResponseBody
+    public String saveChanges(String data, HttpServletRequest request) {
+        return accountBookService.saveChanges(data, request);
+    }
+
+    @RequestMapping(value = "/delete", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+    @ResponseBody
+    public String delete(String id, HttpServletRequest request) {
+        return accountBookService.delete(id, request);
+    }
 }

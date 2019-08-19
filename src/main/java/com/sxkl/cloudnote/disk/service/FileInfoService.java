@@ -16,40 +16,40 @@ import com.sxkl.cloudnote.log.annotation.Logger;
  */
 @Service
 public class FileInfoService {
-	
-	@Autowired
-	private FileInfoDao fileInfoDao;
-	
-	@Logger(message="保存云盘上传文件")
-	public void save(FileInfo fileInfo){
-		fileInfoDao.save(fileInfo);
-	}
-	
-	@Logger(message="删除云盘文件")
-	public void delete(String id){
-		fileInfoDao.delete(fileInfoDao.fetch(id));
-	}
-	
-	@Logger(message="删除云盘文件")
-	public void delete(FileInfo fileInfo){
-		fileInfoDao.delete(fileInfo);
-	}
-	
-	@Logger(message="更新云盘文件")
-	public void update(FileInfo fileInfo){
-		fileInfoDao.update(fileInfo);
-	}
-	
-	@Logger(message="获取云盘文件")
-	public FileInfo fetch(String id){
-		return fileInfoDao.fetch(id);
-	}
-	
-	@Logger(message="获取云盘文件夹下所有文件")
-	public List<FileInfo> findAllSubFiles(String id){
-		FileInfo fileInfo = fetch(id);
-		List<FileInfo> fileInfos = Lists.newArrayList(fileInfo.getChildren());
-		//TODO sort
-		return fileInfos;
-	}
+
+    @Autowired
+    private FileInfoDao fileInfoDao;
+
+    @Logger(message = "保存云盘上传文件")
+    public void save(FileInfo fileInfo) {
+        fileInfoDao.save(fileInfo);
+    }
+
+    @Logger(message = "删除云盘文件")
+    public void delete(String id) {
+        fileInfoDao.delete(fileInfoDao.fetch(id));
+    }
+
+    @Logger(message = "删除云盘文件")
+    public void delete(FileInfo fileInfo) {
+        fileInfoDao.delete(fileInfo);
+    }
+
+    @Logger(message = "更新云盘文件")
+    public void update(FileInfo fileInfo) {
+        fileInfoDao.update(fileInfo);
+    }
+
+    @Logger(message = "获取云盘文件")
+    public FileInfo fetch(String id) {
+        return fileInfoDao.fetch(id);
+    }
+
+    @Logger(message = "获取云盘文件夹下所有文件")
+    public List<FileInfo> findAllSubFiles(String id) {
+        FileInfo fileInfo = fetch(id);
+        List<FileInfo> fileInfos = Lists.newArrayList(fileInfo.getChildren());
+        //TODO sort
+        return fileInfos;
+    }
 }

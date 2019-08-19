@@ -12,9 +12,9 @@ import java.lang.annotation.Target;
 @Inherited
 @Documented
 public @interface Logger {
-	
-	String logLevel() default "INFO";
-	
-	String message() default "";
-	
+
+    String logLevel() default "INFO";
+
+    String message() default "";
+
 }

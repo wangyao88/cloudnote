@@ -22,27 +22,27 @@ import lombok.Cleanup;
 @RequestMapping("/image")
 public class ImageController {
 
-	@Autowired
-	private ImageService imageService;
+    @Autowired
+    private ImageService imageService;
 
-	@RequestMapping("/getImage")
-	public void valicode(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException{
-		@Cleanup
-		ServletOutputStream out = response.getOutputStream();
-		Image image = imageService.getImageByName(request);
-		if(image == null || image.getContent() == null){
-			return;
-		}
-		@Cleanup
-		InputStream imageStream = new ByteArrayInputStream(image.getContent()); 
-		response.setContentType("image/*");
-		int len = 0;
-		byte[] buf = new byte[1024];
-		while ((len = imageStream.read(buf, 0, 1024)) != -1) {
-			out.write(buf, 0, len);
-		}
-		out.write(image.getContent());
-		out.flush();
-	}
+    @RequestMapping("/getImage")
+    public void valicode(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
+        @Cleanup
+        ServletOutputStream out = response.getOutputStream();
+        Image image = imageService.getImageByName(request);
+        if (image == null || image.getContent() == null) {
+            return;
+        }
+        @Cleanup
+        InputStream imageStream = new ByteArrayInputStream(image.getContent());
+        response.setContentType("image/*");
+        int len = 0;
+        byte[] buf = new byte[1024];
+        while ((len = imageStream.read(buf, 0, 1024)) != -1) {
+            out.write(buf, 0, len);
+        }
+        out.write(image.getContent());
+        out.flush();
+    }
 
 }

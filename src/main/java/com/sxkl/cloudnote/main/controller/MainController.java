@@ -19,32 +19,32 @@ import com.sxkl.cloudnote.utils.StringUtils;
 
 @Controller
 public class MainController {
-	
-	@Autowired
-	private MainService mainService;
 
-	@RequestMapping(value = "/main", method = {RequestMethod.GET, RequestMethod.HEAD})
-	@ResponseBody
-	public ModelAndView login(HttpServletRequest request) throws Exception{
-		ModelAndView modelAndView = new ModelAndView(StringUtils.appendJoinEmpty("main/main","_",PropertyUtil.getMode()));
-		return modelAndView;
-	}
-	
-	@RequestMapping(value = "/main/getTree", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
-	@ResponseBody
-	public String getTree(HttpServletRequest request){
-		return mainService.getTree(request);
-	}
-	
-	@RequestMapping(value = "/main/getWeather", method = RequestMethod.GET)
-	@ResponseBody
-	public List<Weather> getWeather(HttpServletRequest request) throws Exception{
-		return mainService.getWeather(request);
-	}
-	
-	@RequestMapping(value = "/main/getAllSkinsFromCombo", method = RequestMethod.GET)
-	@ResponseBody
-	public List<Skin> getAllSkinsFromCombo() throws Exception{
-		return mainService.getAllSkinsFromCombo();
-	}
+    @Autowired
+    private MainService mainService;
+
+    @RequestMapping(value = "/main", method = {RequestMethod.GET, RequestMethod.HEAD})
+    @ResponseBody
+    public ModelAndView login(HttpServletRequest request) throws Exception {
+        ModelAndView modelAndView = new ModelAndView(StringUtils.appendJoinEmpty("main/main", "_", PropertyUtil.getMode()));
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/main/getTree", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+    @ResponseBody
+    public String getTree(HttpServletRequest request) {
+        return mainService.getTree(request);
+    }
+
+    @RequestMapping(value = "/main/getWeather", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Weather> getWeather(HttpServletRequest request) throws Exception {
+        return mainService.getWeather(request);
+    }
+
+    @RequestMapping(value = "/main/getAllSkinsFromCombo", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Skin> getAllSkinsFromCombo() throws Exception {
+        return mainService.getAllSkinsFromCombo();
+    }
 }

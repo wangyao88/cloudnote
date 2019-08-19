@@ -10,10 +10,10 @@ import com.sxkl.cloudnote.disk.service.FileInfoService;
 @Controller
 @RequestMapping("/disk")
 public class DiskController {
-	
-	@Autowired
-	private DiskInfoService disInfokService;
-	@Autowired
-	private FileInfoService fileInfoService;
-	
+
+    @Autowired
+    private DiskInfoService disInfokService;
+    @Autowired
+    private FileInfoService fileInfoService;
+
 }

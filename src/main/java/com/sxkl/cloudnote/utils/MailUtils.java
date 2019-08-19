@@ -16,7 +16,7 @@ import java.util.Properties;
 public class MailUtils {
 
     public static void main(String[] args) {
-        try{
+        try {
             // 收件人电子邮箱
             String to = "1558676269@qq.com";
 
@@ -38,9 +38,8 @@ public class MailUtils {
             properties.put("mail.smtp.ssl.enable", "true");
             properties.put("mail.smtp.ssl.socketFactory", sf);
             // 获取默认session对象
-            Session session = Session.getDefaultInstance(properties,new Authenticator(){
-                public PasswordAuthentication getPasswordAuthentication()
-                {  //qq邮箱服务器账户、第三方登录授权码
+            Session session = Session.getDefaultInstance(properties, new Authenticator() {
+                public PasswordAuthentication getPasswordAuthentication() {  //qq邮箱服务器账户、第三方登录授权码
                     return new PasswordAuthentication("898234471@qq.com", "sxkl1285674045sx"); //发件人邮件用户名、密码
                 }
             });
@@ -81,12 +80,12 @@ public class MailUtils {
             multipart.addBodyPart(messageBodyPart);
 
             // 发送完整消息
-            message.setContent(multipart );
+            message.setContent(multipart);
 
             // 发送消息
             Transport.send(message);
             System.out.println("Sent message successfully....");
-        }catch (Exception mex) {
+        } catch (Exception mex) {
             mex.printStackTrace();
         }
     }

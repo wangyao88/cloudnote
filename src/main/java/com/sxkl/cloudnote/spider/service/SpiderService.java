@@ -19,64 +19,64 @@ import com.sxkl.cloudnote.spider.entity.NetArticle;
 
 @Service
 public class SpiderService {
-	
-	@Autowired
+
+    @Autowired
     private RedisTemplate<Object, NetArticle> redisTemplate;
-	@Autowired
-	private SpiderSchedule spiderSchedule;
-	
-	@Logger(message="获取所有订阅文章")
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public String getArticles(){
-		Set<Object> keys = redisTemplate.opsForHash().keys(Constant.SIMPLE_NETARTICLE_KEY_IN_REDIS);
-		long size = keys.size();
-		List articles = null;
-		if(size > 25){
-			Set<Object> keyTemps = new HashSet<Object>();
-			configurateKeys(Lists.newArrayList(keys),keyTemps);
-			articles = redisTemplate.opsForHash().multiGet(Constant.SIMPLE_NETARTICLE_KEY_IN_REDIS, keyTemps);
-		}else{
-			articles = redisTemplate.opsForHash().multiGet(Constant.SIMPLE_NETARTICLE_KEY_IN_REDIS, keys);
-		}
-		return OperateResultService.configurateSuccessDataGridResult(Lists.newArrayList(articles),articles.size());
-	}
-	
-	private void configurateKeys(ArrayList<Object> keys,Set<Object> keyTemps){
-		if(keyTemps.size() >= 25){
-			return;
-		}
-		Random random = new Random();
-		keyTemps.add(keys.get(random.nextInt(keys.size())));
-		configurateKeys(keys,keyTemps);
-	}
-	
-	@Logger(message="获取订阅文章")
-	public String getArticleById(String id){
-		NetArticle article = (NetArticle) redisTemplate.opsForHash().get(Constant.NETARTICLE_KEY_IN_REDIS, id);
-		return article.getContent();
-	}
-	
-	@Logger(message="删除订阅文章")
-	public void delete(String ids) {
-		String[] idArr = ids.split(",");
-		redisTemplate.opsForHash().delete(Constant.SIMPLE_NETARTICLE_KEY_IN_REDIS, idArr);
-		redisTemplate.opsForHash().delete(Constant.NETARTICLE_KEY_IN_REDIS, idArr);
-	}
-	
-	@Logger(message="删除所有订阅文章")
-	public void deleteAll() {
-		Set<Object> simpleKeys = redisTemplate.opsForHash().keys(Constant.SIMPLE_NETARTICLE_KEY_IN_REDIS);
-		redisTemplate.opsForHash().delete(Constant.SIMPLE_NETARTICLE_KEY_IN_REDIS, simpleKeys.toArray());
-		Set<Object> keys = redisTemplate.opsForHash().keys(Constant.NETARTICLE_KEY_IN_REDIS);
-		redisTemplate.opsForHash().delete(Constant.NETARTICLE_KEY_IN_REDIS, keys.toArray());
-	}
+    @Autowired
+    private SpiderSchedule spiderSchedule;
 
-	public void spider() {
-		spiderSchedule.spider();
-	}
+    @Logger(message = "获取所有订阅文章")
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public String getArticles() {
+        Set<Object> keys = redisTemplate.opsForHash().keys(Constant.SIMPLE_NETARTICLE_KEY_IN_REDIS);
+        long size = keys.size();
+        List articles = null;
+        if (size > 25) {
+            Set<Object> keyTemps = new HashSet<Object>();
+            configurateKeys(Lists.newArrayList(keys), keyTemps);
+            articles = redisTemplate.opsForHash().multiGet(Constant.SIMPLE_NETARTICLE_KEY_IN_REDIS, keyTemps);
+        } else {
+            articles = redisTemplate.opsForHash().multiGet(Constant.SIMPLE_NETARTICLE_KEY_IN_REDIS, keys);
+        }
+        return OperateResultService.configurateSuccessDataGridResult(Lists.newArrayList(articles), articles.size());
+    }
 
-	public int getTotal() {
-		Set<Object> keys = redisTemplate.opsForHash().keys(Constant.SIMPLE_NETARTICLE_KEY_IN_REDIS);
-		return keys.size();
-	}
+    private void configurateKeys(ArrayList<Object> keys, Set<Object> keyTemps) {
+        if (keyTemps.size() >= 25) {
+            return;
+        }
+        Random random = new Random();
+        keyTemps.add(keys.get(random.nextInt(keys.size())));
+        configurateKeys(keys, keyTemps);
+    }
+
+    @Logger(message = "获取订阅文章")
+    public String getArticleById(String id) {
+        NetArticle article = (NetArticle) redisTemplate.opsForHash().get(Constant.NETARTICLE_KEY_IN_REDIS, id);
+        return article.getContent();
+    }
+
+    @Logger(message = "删除订阅文章")
+    public void delete(String ids) {
+        String[] idArr = ids.split(",");
+        redisTemplate.opsForHash().delete(Constant.SIMPLE_NETARTICLE_KEY_IN_REDIS, idArr);
+        redisTemplate.opsForHash().delete(Constant.NETARTICLE_KEY_IN_REDIS, idArr);
+    }
+
+    @Logger(message = "删除所有订阅文章")
+    public void deleteAll() {
+        Set<Object> simpleKeys = redisTemplate.opsForHash().keys(Constant.SIMPLE_NETARTICLE_KEY_IN_REDIS);
+        redisTemplate.opsForHash().delete(Constant.SIMPLE_NETARTICLE_KEY_IN_REDIS, simpleKeys.toArray());
+        Set<Object> keys = redisTemplate.opsForHash().keys(Constant.NETARTICLE_KEY_IN_REDIS);
+        redisTemplate.opsForHash().delete(Constant.NETARTICLE_KEY_IN_REDIS, keys.toArray());
+    }
+
+    public void spider() {
+        spiderSchedule.spider();
+    }
+
+    public int getTotal() {
+        Set<Object> keys = redisTemplate.opsForHash().keys(Constant.SIMPLE_NETARTICLE_KEY_IN_REDIS);
+        return keys.size();
+    }
 }

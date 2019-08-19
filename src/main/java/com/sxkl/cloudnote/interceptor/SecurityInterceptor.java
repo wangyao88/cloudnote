@@ -14,8 +14,8 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        
-    	HttpSession session = request.getSession(true);
+
+        HttpSession session = request.getSession(true);
 
         // 从session 里面获取用户名的信息
         Object obj = session.getAttribute(Constant.USER_IN_SESSION_KEY);
@@ -23,12 +23,12 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
         // 判断如果没有取到用户信息，就跳转到登陆页面，提示用户进行登陆
         if (obj == null || "".equals(obj.toString())) {
             if (request.getHeader("x-requested-with") != null && request.getHeader("x-requested-with").equalsIgnoreCase("XMLHttpRequest")) {
-            	response.setHeader("sessionStatus", "timeout");
+                response.setHeader("sessionStatus", "timeout");
                 String redirectUrl = request.getContextPath() + LOGIN_URL;
                 response.sendRedirect(redirectUrl);
             } else {
-            	  String redirectUrl = request.getContextPath() + LOGIN_URL;
-            	  response.sendRedirect(redirectUrl);
+                String redirectUrl = request.getContextPath() + LOGIN_URL;
+                response.sendRedirect(redirectUrl);
             }
             return false;
         }

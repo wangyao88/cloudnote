@@ -12,23 +12,23 @@ import com.sxkl.cloudnote.article.search.lucene.scorefilter.ScoreFilter;
  */
 public class TitleScoreFilter extends AbstractScoreFilter implements ScoreFilter {
 
-	private static final int TITLE_WEIGHT = 200;
-	
-	@Override
-	public void doFilte(Map<String, Article> result, Article article) {
-		String title = article.getTitle();
-		title = title.replaceAll("-", ",");
-		doTextFilte(result,title,article);
-	}
+    private static final int TITLE_WEIGHT = 200;
 
-	@Override
-	protected int getWeight() {
-		return TITLE_WEIGHT;
-	}
+    @Override
+    public void doFilte(Map<String, Article> result, Article article) {
+        String title = article.getTitle();
+        title = title.replaceAll("-", ",");
+        doTextFilte(result, title, article);
+    }
 
-	@Override
-	public int getPriority() {
-		return 1;
-	}
+    @Override
+    protected int getWeight() {
+        return TITLE_WEIGHT;
+    }
+
+    @Override
+    public int getPriority() {
+        return 1;
+    }
 
 }

@@ -14,7 +14,7 @@ import static org.junit.Assert.assertTrue;
  * @date:2018年1月8日 下午3:19:41
  */
 public class RSACoderTest {
-	private String publicKey;
+    private String publicKey;
     private String privateKey;
 
     @Before
@@ -32,7 +32,7 @@ public class RSACoderTest {
         String inputStr = "abc";
         byte[] encodedData = RSACoder.encryptByPublicKey(inputStr, publicKey);
         System.out.println(new String(encodedData));
-        byte[] decodedData = RSACoder.decryptByPrivateKey(encodedData,privateKey);
+        byte[] decodedData = RSACoder.decryptByPrivateKey(encodedData, privateKey);
         String outputStr = new String(decodedData);
         System.err.println("加密前: " + inputStr + "\n\r" + "解密后: " + outputStr);
         assertEquals(inputStr, outputStr);

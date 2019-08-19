@@ -10,7 +10,7 @@ import net.sf.json.processors.JsonValueProcessor;
 /**
  * @author: wangyao
  * @date: 2018年5月15日 上午11:23:51
- * @description: 
+ * @description:
  */
 public class JsonDateValueProcessor implements JsonValueProcessor {
 

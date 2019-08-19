@@ -13,16 +13,16 @@ import com.sxkl.cloudnote.utils.StringUtils;
 /**
  * @author: wangyao
  * @date: 2018年5月8日 上午9:20:56
- * @description: 
+ * @description:
  */
 @Controller
 @RequestMapping("/accountsystem/main")
 public class AccountSystemMainController {
 
-	
-	@RequestMapping(value = "/index", method = {RequestMethod.GET, RequestMethod.HEAD})
-	public ModelAndView login(HttpServletRequest request) throws Exception{
-		ModelAndView modelAndView = new ModelAndView(StringUtils.appendJoinEmpty("accountsystem/main/index","_",PropertyUtil.getMode()));
-		return modelAndView;
-	}
+
+    @RequestMapping(value = "/index", method = {RequestMethod.GET, RequestMethod.HEAD})
+    public ModelAndView login(HttpServletRequest request) throws Exception {
+        ModelAndView modelAndView = new ModelAndView(StringUtils.appendJoinEmpty("accountsystem/main/index", "_", PropertyUtil.getMode()));
+        return modelAndView;
+    }
 }

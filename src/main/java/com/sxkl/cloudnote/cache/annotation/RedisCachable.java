@@ -12,16 +12,18 @@ import java.lang.annotation.Target;
 @Inherited
 @Documented
 public @interface RedisCachable {
-	
-	/**
-	 * cache key
-	 * @return
-	 */
-    String key() default "";
-    
+
     /**
-     * expire time 
+     * cache key
+     *
+     * @return
+     */
+    String key() default "";
+
+    /**
+     * expire time
      * unit minute
+     *
      * @return
      */
     long dateTime() default -1L;
