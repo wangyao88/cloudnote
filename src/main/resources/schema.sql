@@ -225,3 +225,19 @@ create table cn_quicktext
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
   comment 'QuickText';
+
+CREATE TABLE cn_current_todo
+(
+    id varchar(36) PRIMARY KEY COMMENT '主键',
+    content varchar(300) NOT NULL COMMENT '待办内容',
+    beginDateTime datetime NOT NULL COMMENT '开始时间',
+    endDateTime datetime NOT NULL COMMENT '结束时间',
+    status varchar(2) DEFAULT 0 NOT NULL COMMENT '完成状态',
+    createDateTime datetime NOT NULL COMMENT '创建时间',
+    updateDateTime datetime NOT NULL COMMENT '更新时间',
+    fId varchar(36) COMMENT '父ID',
+    userId varchar(36) NOT NULL COMMENT '用户主键'
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+  comment '待办事项';

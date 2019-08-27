@@ -1,17 +1,17 @@
 package com.sxkl.cloudnote.todo.entity;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.Lists;
 import lombok.Data;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @Entity
-@Table(name = "cn_todo")
+@Table(name = "cn_current_todo")
 @GenericGenerator(name = "uuid", strategy = "uuid")
 public class Todo {
 
@@ -51,7 +51,7 @@ public class Todo {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
     @Cascade(value = {org.hibernate.annotations.CascadeType.ALL, org.hibernate.annotations.CascadeType.DELETE, org.hibernate.annotations.CascadeType.SAVE_UPDATE})
-    private Set<Todo> children = Sets.newHashSet();
+    private List<Todo> children = Lists.newArrayList();
 
     @Transient
     private Date startDate;

@@ -21,6 +21,7 @@ import java.util.List;
 public class QuickTextService {
 
     private static final String DEFAULT_TITLE = "新建QuickText";
+    private static final int MAX_SIZE = 10;
 
     @Autowired
     private QuickTextDao quickTextDao;
@@ -90,5 +91,12 @@ public class QuickTextService {
         User sessionUser = UserUtil.getSessionUser(request);
         User user = userDao.selectUser(sessionUser);
         return quickTextDao.findAll(user.getId());
+    }
+
+    public boolean count(HttpServletRequest request) {
+        User sessionUser = UserUtil.getSessionUser(request);
+        User user = userDao.selectUser(sessionUser);
+        int count = quickTextDao.count(user.getId());
+        return count <= MAX_SIZE;
     }
 }

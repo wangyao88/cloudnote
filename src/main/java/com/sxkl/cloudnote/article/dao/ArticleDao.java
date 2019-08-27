@@ -1,17 +1,16 @@
 package com.sxkl.cloudnote.article.dao;
 
-import java.math.BigInteger;
-import java.util.List;
-
+import com.google.common.base.Joiner;
+import com.sxkl.cloudnote.article.entity.Article;
 import com.sxkl.cloudnote.article.entity.SameArticle;
+import com.sxkl.cloudnote.common.dao.BaseDao;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
-import com.google.common.base.Joiner;
-import com.sxkl.cloudnote.article.entity.Article;
-import com.sxkl.cloudnote.common.dao.BaseDao;
+import java.math.BigInteger;
+import java.util.List;
 
 @Repository
 public class ArticleDao extends BaseDao<String, Article> {
@@ -62,15 +61,6 @@ public class ArticleDao extends BaseDao<String, Article> {
         BigInteger bInt = (BigInteger) query.uniqueResult();
         return bInt.intValue();
     }
-
-//	public Article selectArticleById(String articleId) {
-//		String hql = "from Article a where a.id=:articleId";
-//		Session session = this.getSession();
-//	    Query query = session.createQuery(hql);
-//	    query.setString("articleId", articleId);
-//	    query.setCacheable(true);
-//		return (Article) query.uniqueResult();
-//	}
 
     @SuppressWarnings("rawtypes")
     public List selectAllFlagArticlesOrderByCreateTimeAndHitNum(String flagId, int pageIndex, int pageSize) {

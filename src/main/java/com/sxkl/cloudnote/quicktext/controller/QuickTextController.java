@@ -82,4 +82,18 @@ public class QuickTextController {
             return OperateResultService.configurateFailureResult(e.getMessage());
         }
     }
+
+    @RequestMapping(value = "/count", method = RequestMethod.GET)
+    @ResponseBody
+    public String count(HttpServletRequest request) {
+        try {
+            boolean status = quickTextService.count(request);
+            if(status) {
+                return OperateResultService.configurateSuccessResult();
+            }
+            return OperateResultService.configurateFailureResult();
+        } catch (Exception e) {
+            return OperateResultService.configurateFailureResult(e.getMessage());
+        }
+    }
 }

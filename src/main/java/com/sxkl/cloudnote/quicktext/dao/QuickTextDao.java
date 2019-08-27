@@ -3,9 +3,11 @@ package com.sxkl.cloudnote.quicktext.dao;
 import com.sxkl.cloudnote.common.dao.BaseDao;
 import com.sxkl.cloudnote.quicktext.entity.QuickText;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -23,5 +25,14 @@ public class QuickTextDao extends BaseDao<String, QuickText> {
         Query query = session.createQuery(hql);
         query.setString("userId", userId);
         return query.list();
+    }
+
+    public int count(String userId) {
+        String hql = "select count(1) from cn_quicktext a where a.userId=:userId";
+        Session session = this.getSession();
+        SQLQuery query = session.createSQLQuery(hql);
+        query.setString("userId", userId);
+        BigInteger bInt = (BigInteger) query.uniqueResult();
+        return bInt.intValue();
     }
 }

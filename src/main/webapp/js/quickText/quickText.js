@@ -109,10 +109,24 @@ function gridRowClick() {
 }
 
 function newQuickText() {
-    switchChange = false;
-    editor.setContent('');
-    currentQuickTextId = null;
-    switchChange = true;
+    $.ajax({
+        url : basePath + "/quickText/count",
+        type : "get",
+        success : function(result) {
+            var operationResult = JSON.parse(result);
+            if(operationResult.status) {
+                switchChange = false;
+                editor.setContent('');
+                currentQuickTextId = null;
+                switchChange = true;
+            }else {
+                mini.alert("QuickText数量大于10！请先删除无用QuickText！");
+            }
+        },
+        error : function() {
+            mini.alert("笔记删除失败，请稍候重试！");
+        }
+    });
 }
 
 function removeQuickText() {
@@ -135,7 +149,7 @@ function removeQuickText() {
                         reLoad();
                     },
                     error : function() {
-                        mini.alert("笔记删除失败，请稍候重试！");
+                        mini.alert("QuickText删除失败，请稍候重试！");
                     }
                 });
             }
