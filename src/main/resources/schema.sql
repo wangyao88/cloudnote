@@ -7,6 +7,8 @@ content LONGTEXT not null, createTime datetime not null, hitNum integer not null
 title varchar(50) not null, nId varchar(50), uId varchar(50), primary key (id)) ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
+CREATE INDEX cn_article__index_title ON cn_article (title);
+
 create table cn_flag (id varchar(50) not null, name varchar(50) not null, fId varchar(50),
 uId varchar(50), primary key (id))  ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
@@ -241,3 +243,9 @@ CREATE TABLE cn_current_todo
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
   comment '待办事项';
+
+ALTER TABLE cn_current_todo ADD INDEX cn_current_todo_createDateTime_index (createDateTime);
+ALTER TABLE cn_current_todo ADD INDEX cn_current_todo_updateDateTime_index (updateDateTime);
+ALTER TABLE cn_current_todo ADD INDEX cn_current_todo_beginDateTime_index (beginDateTime);
+ALTER TABLE cn_current_todo ADD INDEX cn_current_todo_endDateTime_index (endDateTime);
+ALTER TABLE cn_current_todo ADD INDEX cn_current_todo_status_index (status);

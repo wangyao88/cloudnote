@@ -44,4 +44,8 @@ public class TodoDao extends BaseDao<String, Todo> {
         List<Todo> result = criteria.list();
         return PageResult.<Todo>builder().total(count).datas(result).build();
     }
+
+    public Todo findEarlestTodo() {
+        return null;
+    }
 }

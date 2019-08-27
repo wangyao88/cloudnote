@@ -90,4 +90,14 @@ public class TodoController {
             return OperateResultService.configurateFailureResult(e.getMessage());
         }
     }
+
+    @RequestMapping(value = "/getDateTree", method = RequestMethod.POST)
+    @ResponseBody
+    public String getDateTree(HttpServletRequest request) {
+        try {
+            return todoService.getDateTree(request);
+        } catch (Exception e) {
+            return "[]";
+        }
+    }
 }
