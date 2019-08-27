@@ -52,7 +52,7 @@ public class BaseDao<ID extends Serializable, E> extends AbstractBaseDao {
     }
 
     public E findOne(ID id) {
-        return getSession().load(clazz, id);
+        return getSession().get(clazz, id);
     }
 
     public void save(E e) {

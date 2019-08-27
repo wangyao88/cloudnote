@@ -1,12 +1,9 @@
 <%@ page language="java"
-	import="java.util.*" 
-	import="com.sxkl.cloudnote.common.entity.Constant"
 	pageEncoding="UTF-8"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	String doMain = Constant.DOMAIN;
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -22,7 +19,6 @@
 <link href="<%=basePath%>js/miniui/res/demo.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="<%=basePath%>css/flag.jquery.autocomplete.css" />
 <link rel="stylesheet" href="<%=basePath%>css/a.css" />
-<link rel="stylesheet" href="<%=basePath%>css/scroller.css" />
 <link rel="stylesheet" href="<%=basePath%>css/scroller.css" />
 <link rel="stylesheet" href="<%=basePath%>js/ueditor-1.4.3.3/third-party/SyntaxHighlighter/shCoreDefault.css" />
 
@@ -61,9 +57,9 @@
 			    <span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-edit" onclick="editArticle">修改</a>
 			    <span class="separator"></span>
-			    <a class="mini-button" iconCls="icon-save" onclick="contentChange">快速保存</a>
+			    <a class="mini-button" iconCls="icon-goto" onclick="contentChange">快速保存</a>
 			    <span class="separator"></span>
-			    <a class="mini-button" iconCls="icon-remove" onclick="removeArticle">删除</a>
+			    <a class="mini-button" iconCls="icon-date" onclick="removeArticle">删除</a>
 			    <%--<span class="separator"></span>--%>
 			    <%--<input class="mini-textbox" id="searchArticleByTitleText" emptyText="笔记标题"/>   --%>
 			    <%--<a class="mini-button" id="searchArticleByTitleBtn" iconCls="icon-search" onclick="searchArticleByTitle">查询</a>--%>
@@ -72,7 +68,11 @@
 				<a class="mini-button" id="searchArticleByTitleOrContentBtn" iconCls="icon-search" onclick="searchArticleByTitleOrContentText">查询</a>
 				<span class="separator"></span>
 				<a class="mini-button" id="searchArticleEsBtn" iconCls="icon-find" href="<%=basePath%>search/index" target="_blank">搜一下</a>
-			    <%--<span class="separator"></span>
+				<span class="separator"></span>
+				<a class="mini-button" id="quickTextBtn" iconCls="icon-find" href="<%=basePath%>quickText/index" target="_blank">QuickText</a>
+				<span class="separator"></span>
+				<a class="mini-button" id="todoListBtn" iconCls="icon-find" href="<%=basePath%>todo/index" target="_blank">Todo-List</a>
+				<%--<span class="separator"></span>
 			    <a class="mini-button" iconCls="icon-help" href="<%=basePath%>spider/searchPage" target="_blank">在线搜索</a>--%>
 				<a class="mini-button" iconCls="icon-downgrade" onclick="logout" style="float: right;margin-right:0px;">退出</a>
 			    <span id="clock" style="float: right;margin-right:20px;"></span>

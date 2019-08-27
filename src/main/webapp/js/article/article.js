@@ -280,8 +280,8 @@ function searchArticleByTitleOrContentText() {
 function firstLoadArticles(){
 	var data = {
 			first : true
-		};
-		loadArticles(data);
+	};
+	loadArticles(data);
 }
 
 var isEditorReady = true;

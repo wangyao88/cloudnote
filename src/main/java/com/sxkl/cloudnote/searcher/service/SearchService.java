@@ -1,6 +1,5 @@
 package com.sxkl.cloudnote.searcher.service;
 
-
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 
 @Slf4j
 @Service
@@ -61,18 +59,8 @@ public class SearchService {
         } catch (Exception e) {
             log.error("搜索知识库失败！错误信息：" + Throwables.getStackTraceAsString(e));
         }
-//        if(!articles.isEmpty()) {
-//            saveSearchWordsToRedis(words);
-//        }
         return articles;
     }
-
-//    private void saveSearchWordsToRedis(String words) {
-//        List<String> results = IKAnalyzerHandler.handle(words);
-//        results.forEach(result -> {
-//            redisTemplate.opsForZSet().incrementScore(HOT_LABELS_ZSET_KEY_IN_REDIS, result, 1);
-//        });
-//    }
 
     public long count(String words) {
         try {

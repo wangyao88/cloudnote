@@ -204,3 +204,24 @@ CREATE TABLE `cloudnote`.`cn_same_article` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COMMENT = '相似文章对应表';
+
+-- auto-generated definition
+create table cn_quicktext
+(
+  id             varchar(36) not null
+  comment '主键'
+    primary key,
+  title          varchar(40) not null
+  comment '标题',
+  content        text        null
+  comment '内容',
+  createDateTime datetime    not null
+  comment '创建时间',
+  updateDateTime datetime    not null
+  comment '更新时间',
+  userId         varchar(36) not null
+  comment '用户主键'
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+  comment 'QuickText';

@@ -2,8 +2,8 @@ package com.sxkl.cloudnote.quicktext.controller;
 
 import com.sxkl.cloudnote.common.service.OperateResultService;
 import com.sxkl.cloudnote.log.annotation.Logger;
-import com.sxkl.cloudnote.quicktext.entity.Quicktext;
-import com.sxkl.cloudnote.quicktext.service.QuicktextService;
+import com.sxkl.cloudnote.quicktext.entity.QuickText;
+import com.sxkl.cloudnote.quicktext.service.QuickTextService;
 import com.sxkl.cloudnote.utils.PropertyUtil;
 import com.sxkl.cloudnote.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,24 +16,24 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
-@RequestMapping("/quicktext")
-public class QuicktextController {
+@RequestMapping("/quickText")
+public class QuickTextController {
 
     @Autowired
-    private QuicktextService quicktextService;
+    private QuickTextService quickTextService;
 
-    @Logger(message = "跳转到quicktext主页")
+    @Logger(message = "跳转到quickText主页")
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String index() {
-        return StringUtils.appendJoinEmpty("quicktext/index", "_", PropertyUtil.getMode());
+        return StringUtils.appendJoinEmpty("quickText/index", "_", PropertyUtil.getMode());
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/add", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     @ResponseBody
-    public String add(HttpServletRequest request, Quicktext quicktext) {
+    public String add(HttpServletRequest request) {
         try {
-            quicktextService.insert(request, quicktext);
-            return OperateResultService.configurateSuccessResult();
+            String id = quickTextService.insert(request);
+            return OperateResultService.configurateSuccessResult(id);
         } catch (Exception e) {
             return OperateResultService.configurateFailureResult(e.getMessage());
         }
@@ -43,19 +43,19 @@ public class QuicktextController {
     @ResponseBody
     public String delete(HttpServletRequest request) {
         try {
-            quicktextService.delete(request);
+            quickTextService.delete(request);
             return OperateResultService.configurateSuccessResult();
         } catch (Exception e) {
             return OperateResultService.configurateFailureResult(e.getMessage());
         }
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/update", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     @ResponseBody
-    public String update(HttpServletRequest request, Quicktext quicktext) {
+    public String update(HttpServletRequest request) {
         try {
-            quicktextService.update(request, quicktext);
-            return OperateResultService.configurateSuccessResult();
+            String id = quickTextService.update(request);
+            return OperateResultService.configurateSuccessResult(id);
         } catch (Exception e) {
             return OperateResultService.configurateFailureResult(e.getMessage());
         }
@@ -65,8 +65,8 @@ public class QuicktextController {
     @ResponseBody
     public String findOne(HttpServletRequest request) {
         try {
-            Quicktext quicktext = quicktextService.findOne(request);
-            return OperateResultService.configurateSuccessResult(quicktext);
+            QuickText quickText = quickTextService.findOne(request);
+            return OperateResultService.configurateSuccessResult(quickText);
         } catch (Exception e) {
             return OperateResultService.configurateFailureResult(e.getMessage());
         }
@@ -76,8 +76,8 @@ public class QuicktextController {
     @ResponseBody
     public String findAll(HttpServletRequest request) {
         try {
-            List<Quicktext> quicktexts = quicktextService.findAll(request);
-            return OperateResultService.configurateSuccessDataGridResult(quicktexts, quicktexts.size());
+            List<QuickText> quickTexts = quickTextService.findAll(request);
+            return OperateResultService.configurateSuccessDataGridResult(quickTexts, quickTexts.size());
         } catch (Exception e) {
             return OperateResultService.configurateFailureResult(e.getMessage());
         }

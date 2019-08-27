@@ -1,7 +1,7 @@
 package com.sxkl.cloudnote.quicktext.dao;
 
 import com.sxkl.cloudnote.common.dao.BaseDao;
-import com.sxkl.cloudnote.quicktext.entity.Quicktext;
+import com.sxkl.cloudnote.quicktext.entity.QuickText;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
@@ -15,11 +15,11 @@ import java.util.List;
  *  
  */
 @Repository
-public class QuicktextDao extends BaseDao<String, Quicktext> {
+public class QuickTextDao extends BaseDao<String, QuickText> {
 
-    public List<Quicktext> findAll(String userId) {
+    public List<QuickText> findAll(String userId) {
         Session session = this.getSessionFactory().getCurrentSession();
-        String hql = "from Quicktext n where n.userId=:userId";
+        String hql = "select new QuickText(id, title) from QuickText n where n.userId=:userId order by n.updateDateTime desc, createDateTime desc";
         Query query = session.createQuery(hql);
         query.setString("userId", userId);
         return query.list();
