@@ -2,13 +2,17 @@ package com.sxkl.cloudnote.todo.entity;
 
 import com.google.common.collect.Lists;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+@NoArgsConstructor
 @Data
 @Entity
 @Table(name = "cn_current_todo")
@@ -45,17 +49,24 @@ public class Todo {
     @Column(name = "userId", nullable = false)
     private String userId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "fId")
+    @NotFound(action = NotFoundAction.IGNORE)
     private Todo parent;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
-    @Cascade(value = {org.hibernate.annotations.CascadeType.ALL, org.hibernate.annotations.CascadeType.DELETE, org.hibernate.annotations.CascadeType.SAVE_UPDATE})
-    private List<Todo> children = Lists.newArrayList();
 
     @Transient
     private Date startDate;
 
     @Transient
     private Date endDate;
+
+    @Transient
+    private String nodeId;
+
+    @Transient
+    private String nodeText;
+
+    public Todo(Date beginDateTime) {
+        this.beginDateTime = beginDateTime;
+    }
 }

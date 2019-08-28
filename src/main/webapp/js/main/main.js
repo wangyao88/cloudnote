@@ -49,16 +49,6 @@ function onNodeClick1(){
 	if(isFlagTreeNode(node)){
 		data.flagId = node.id;
 	}
-	
-//	var grid = mini.get("articleGrid");
-//	 grid.loading();
-//     grid.load(data);
-//     grid.unmask();
-//     grid.hideColumn("idColumn");
-//     grid.select(0);
-//	 	var record = grid.getSelected();
-//	 	getArticleById(record.id);
-	
 	loadArticles(data);
 }
 

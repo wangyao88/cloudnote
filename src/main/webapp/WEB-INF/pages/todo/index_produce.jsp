@@ -10,6 +10,7 @@
 <head>
     <base href="<%=basePath%>">
     <title>曼妙云端笔记-待办</title>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta http-equiv="pragma" content="no-cache">
     <meta http-equiv="cache-control" content="no-cache">
     <meta http-equiv="expires" content="0">
@@ -65,7 +66,7 @@
      showModal="true" allowResize="false" allowDrag="true">
     <div id="editTodoForm" class="form" >
         <input class="mini-hidden" name="id"/>
-        <input class="mini-hidden" name="parent.id" id="parentId"/>
+        <input class="mini-hidden" name="parentId"/>
         <table style="width:100%;">
             <tr>
                 <td style="width:80px;">

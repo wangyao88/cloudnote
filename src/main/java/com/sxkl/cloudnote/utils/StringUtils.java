@@ -1294,6 +1294,10 @@ public abstract class StringUtils {
         return true;
     }
 
+    public static boolean isNotBlank(String str) {
+        return !isBlank(str);
+    }
+
     public static String makeInitialUpperCase(String str) {
         return str.substring(0, 1).toUpperCase() + str.substring(1, str.length());
     }

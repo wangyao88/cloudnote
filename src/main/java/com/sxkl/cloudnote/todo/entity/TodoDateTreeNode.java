@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,14 +19,15 @@ public class TodoDateTreeNode {
     private String text;
     private String parent;
     private boolean isleaf = false;
-	private boolean expand = false;
+	private boolean expanded = false;
 
 	public static TodoDateTreeNode getRootNode() {
 	    return new TodoDateTreeNode(ROOT_NODE_ID, ROOT_NODE_TEXT, ROOT_NODE_PID, false, true);
     }
 
     public static TodoDateTreeNode getYearNode(int year) {
-        return new TodoDateTreeNode(String.valueOf(year), year+"年", ROOT_NODE_ID, false, false);
+	    boolean expanded = LocalDate.now().getYear() == year;
+        return new TodoDateTreeNode(String.valueOf(year), year+"年", ROOT_NODE_ID, false, expanded);
     }
 
     public static TodoDateTreeNode getMonthNode(int year, int month) {

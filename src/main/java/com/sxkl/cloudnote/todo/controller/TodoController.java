@@ -1,20 +1,26 @@
 package com.sxkl.cloudnote.todo.controller;
 
-import com.sxkl.cloudnote.common.entity.Page;
-import com.sxkl.cloudnote.common.entity.PageResult;
+import com.google.common.collect.Lists;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.sxkl.cloudnote.common.entity.ComBoxNode;
 import com.sxkl.cloudnote.common.service.OperateResultService;
 import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.todo.entity.Todo;
 import com.sxkl.cloudnote.todo.service.TodoService;
+import com.sxkl.cloudnote.utils.ObjectUtils;
 import com.sxkl.cloudnote.utils.PropertyUtil;
 import com.sxkl.cloudnote.utils.StringUtils;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 @RequestMapping("/todo")
@@ -29,17 +35,21 @@ public class TodoController {
         return StringUtils.appendJoinEmpty("todo/index", "_", PropertyUtil.getMode());
     }
 
-    @Logger(message = "跳转到todo编辑页面")
-    @RequestMapping(value = "/editPage", method = RequestMethod.GET)
-    public String editPage() {
-        return StringUtils.appendJoinEmpty("todo/editPage", "_", PropertyUtil.getMode());
-    }
-
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/save", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     @ResponseBody
-    public String add(HttpServletRequest request, Todo todo) {
+    public String add(HttpServletRequest request) {
         try {
-            todoService.insert(request, todo);
+            String jsonTodo = request.getParameter("todo");
+            Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+            Todo todo = gson.fromJson(jsonTodo, Todo.class);
+            if(ObjectUtils.isNull(todo)) {
+                return OperateResultService.configurateFailureResult("todo为空");
+            }
+            if(StringUtils.isBlank(todo.getId())) {
+                todoService.insert(request, todo);
+            }else {
+                todoService.update(request, todo);
+            }
             return OperateResultService.configurateSuccessResult();
         } catch (Exception e) {
             return OperateResultService.configurateFailureResult(e.getMessage());
@@ -57,18 +67,7 @@ public class TodoController {
         }
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    @ResponseBody
-    public String update(HttpServletRequest request, Todo todo) {
-        try {
-            todoService.update(request, todo);
-            return OperateResultService.configurateSuccessResult();
-        } catch (Exception e) {
-            return OperateResultService.configurateFailureResult(e.getMessage());
-        }
-    }
-
-    @RequestMapping(value = "/findOne", method = RequestMethod.GET)
+    @RequestMapping(value = "/findOne", method = RequestMethod.POST)
     @ResponseBody
     public String findOne(HttpServletRequest request) {
         try {
@@ -81,13 +80,11 @@ public class TodoController {
 
     @RequestMapping(value = "/findAll", method = RequestMethod.POST)
     @ResponseBody
-    public String findAll(HttpServletRequest request, Todo todo) {
+    public String findAll(HttpServletRequest request) {
         try {
-            Page page = todoService.getPage(request);
-            PageResult<Todo> pageResult = todoService.findPage(page, todo);
-            return OperateResultService.configurateSuccessDataGridResult(pageResult.getDatas(), pageResult.getTotal());
+            return todoService.findAll(request);
         } catch (Exception e) {
-            return OperateResultService.configurateFailureResult(e.getMessage());
+            return "[]";
         }
     }
 
@@ -98,6 +95,16 @@ public class TodoController {
             return todoService.getDateTree(request);
         } catch (Exception e) {
             return "[]";
+        }
+    }
+
+    @RequestMapping(value = "/getStatus", method = RequestMethod.GET)
+    @ResponseBody
+    public List<ComBoxNode> getStatus(HttpServletRequest request) {
+        try {
+            return todoService.getStatus(request);
+        } catch (Exception e) {
+            return Lists.newArrayList();
         }
     }
 }

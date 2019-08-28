@@ -3,13 +3,9 @@ package com.sxkl.cloudnote.utils;
 import java.text.DateFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 public class DateUtils {
 
@@ -423,5 +419,11 @@ public class DateUtils {
         Instant instant = date.toInstant();
         ZoneId zoneId = ZoneId.systemDefault();
         return instant.atZone(zoneId).toLocalDate();
+    }
+
+    public static Date convertLocalDateToDate(LocalDate localDate) {
+        ZoneId zoneId = ZoneId.systemDefault();
+        ZonedDateTime zdt = localDate.atStartOfDay(zoneId);
+        return Date.from(zdt.toInstant());
     }
 }
