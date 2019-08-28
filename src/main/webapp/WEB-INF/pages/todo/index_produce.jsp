@@ -66,7 +66,7 @@
      showModal="true" allowResize="false" allowDrag="true">
     <div id="editTodoForm" class="form" >
         <input class="mini-hidden" name="id"/>
-        <input class="mini-hidden" name="parentId"/>
+        <input class="mini-hidden" name="parent.id" id="parentId"/>
         <table style="width:100%;">
             <tr>
                 <td style="width:80px;">
