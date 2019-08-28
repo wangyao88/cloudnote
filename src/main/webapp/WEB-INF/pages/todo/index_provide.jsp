@@ -36,7 +36,7 @@
         </div>
     </div>
 
-    <div title="日期树" showProxyText="true" region="west" width="400px" expanded="true" showSplitIcon="true">
+    <div title="日期树" showProxyText="true" region="west" width="160px" expanded="true" showSplitIcon="true">
         <ul id="dateTree" class="mini-tree" url="<%=basePath%>todo/getDateTree" ajaxType="post"
             style="width:100%;height:94%"
             showTreeIcon="true" textField="text" idField="id" parentField="parent" enableHotTrack="true"

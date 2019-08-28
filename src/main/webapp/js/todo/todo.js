@@ -92,6 +92,8 @@ function saveTodo() {
         },
         success: function () {
             closeEditTodoWindow();
+            var form = new mini.Form("#editTodoForm");
+            form.clear();
             dateTreeClick();
         },
         error: function (jqXHR) {
@@ -126,6 +128,31 @@ function removeTodo() {
     });
 }
 
+function rendererStatus(e) {
+    if(e.row.status === "已完成") {
+        e.rowStyle = 'background-color:#DCDCDC';
+    }
+    if(e.row.status === "未完成") {
+        e.rowStyle = 'background-color:#D3D3D3';
+    }
+    return e.value;
+}
+
+function gridOnDrawcell() {
+    var todoTreeGrid = mini.get("todoTreeGrid");
+    todoTreeGrid.on("drawcell", function(e) {
+        var field = e.field;
+        var value = e.value;
+        if (field === "status" && value === "已完成") {
+            e.cellStyle = "background:#32CD32";
+        }
+        if (field === "status" && value === "未完成") {
+            e.cellStyle = "background:#D3D3D3";
+        }
+    });
+}
+
 $(document).ready(function() {
     selectNodeOnLoad();
+    gridOnDrawcell();
 });
