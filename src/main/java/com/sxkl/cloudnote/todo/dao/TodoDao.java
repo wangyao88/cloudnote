@@ -102,7 +102,7 @@ public class TodoDao extends BaseDao<String, Todo> {
         StringBuilder subSelect = new StringBuilder(" or (fId in (select id from cn_current_todo");
         subSelect.append(where.toString()).append("))");
 
-        sql.append(where.toString()).append(subSelect.toString()).append(" order by beginDateTime desc");
+        sql.append(where.toString()).append(subSelect.toString()).append(" order by beginDateTime desc, createDateTime desc");
         return sql.toString();
     }
 
