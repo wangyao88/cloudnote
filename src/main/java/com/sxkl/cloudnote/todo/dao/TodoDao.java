@@ -96,7 +96,7 @@ public class TodoDao extends BaseDao<String, Todo> {
         }
 
         if(ObjectUtils.isNotNull(todo.getEndDate())) {
-            where.append(" and endDateTime <= '").append(DateUtils.formatDate2Str(todo.getEndDate())).append("'");
+            where.append(" and beginDateTime <= '").append(DateUtils.formatDate2Str(todo.getEndDate())).append("'");
         }
 
         StringBuilder subSelect = new StringBuilder(" or (fId in (select id from cn_current_todo");
