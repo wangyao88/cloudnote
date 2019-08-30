@@ -22,6 +22,7 @@ public class FlagListener implements ApplicationListener<ApplicationEvent> {
     @Autowired
     private RedisTemplate<Object, Object> redisTemplate;
 
+    @Logger(message = "FlagListener监听到消息")
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
         if (isNotDuty(event)) {

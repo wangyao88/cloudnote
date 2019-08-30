@@ -1,5 +1,6 @@
 package com.sxkl.cloudnote.eventdriven.manager;
 
+import com.sxkl.cloudnote.log.annotation.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ public class PublishManager {
     @Autowired
     private FlagPublisher flagPublisher;
 
+    @Logger(message = "获取PublishManager")
     public static PublishManager getPublishManager() {
         try {
             return (PublishManager) SpringContextUtil.getBean("publishManager");

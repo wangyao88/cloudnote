@@ -28,7 +28,7 @@ public class SpiderSchedule {
     private RedisTemplate<Object, NetArticle> redisTemplate;
 
     @Logger(message = "定时爬取文章")
-    @Scheduled(cron = "0 0/60 4-6 * * ?")
+//    @Scheduled(cron = "0 0/60 4-6 * * ?")
     public void spider() {
         try {
             List<NetArticle> articles = spider.spider();

@@ -24,6 +24,7 @@ public class ContextStartedListener implements ApplicationListener<ContextRefres
     @Autowired
     private RedisTemplate<Object, Object> redisTemplate;
 
+    @Logger(message = "ContextStartedListener监听到消息")
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if (event.getApplicationContext().getParent() == null) {

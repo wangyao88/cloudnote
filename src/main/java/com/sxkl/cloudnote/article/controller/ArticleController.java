@@ -6,6 +6,7 @@ import com.sxkl.cloudnote.article.entity.Article;
 import com.sxkl.cloudnote.article.search.lucene.LuceneManager;
 import com.sxkl.cloudnote.article.service.ArticleService;
 import com.sxkl.cloudnote.common.service.OperateResultService;
+import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.utils.CloudnoteServiceUrlConstant;
 import com.sxkl.cloudnote.utils.PropertyUtil;
@@ -27,6 +28,7 @@ public class ArticleController {
     @Autowired
     private LuceneManager luceneManager;
 
+    @Logger(message = "添加笔记")
     @RequestMapping(value = "/addArticle", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
     public String addArticle(HttpServletRequest request) {
         try {
@@ -37,6 +39,7 @@ public class ArticleController {
         }
     }
 
+    @Logger(message = "获取所有笔记")
     @RequestMapping(value = "/getAllArticles", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
     public String getAllArticles(HttpServletRequest request) {
         try {
@@ -46,6 +49,7 @@ public class ArticleController {
         }
     }
 
+    @Logger(message = "获取指定笔记")
     @RequestMapping(value = "/getArticle", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
     public String getArticle(HttpServletRequest request) {
         try {
@@ -56,6 +60,7 @@ public class ArticleController {
         }
     }
 
+    @Logger(message = "删除笔记")
     @RequestMapping(value = "/deleteArticle", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
     public String deleteArticle(HttpServletRequest request) {
         try {
@@ -66,6 +71,7 @@ public class ArticleController {
         }
     }
 
+    @Logger(message = "获取笔记详情")
     @RequestMapping(value = "/getArticleForEdit", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
     public String getArticleForEdit(HttpServletRequest request) {
         try {
@@ -75,6 +81,7 @@ public class ArticleController {
         }
     }
 
+    @Logger(message = "校验笔记标题唯一性")
     @RequestMapping(value = "/checkTitle", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
     public String checkTitle(String title, HttpServletRequest request) {
         try {
@@ -85,6 +92,7 @@ public class ArticleController {
         }
     }
 
+    @Logger(message = "创建笔记索引")
     @RequestMapping(value = "/createIndex", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
     public String createIndex(HttpServletRequest request) {
         try {
@@ -106,6 +114,7 @@ public class ArticleController {
         }
     }
 
+    @Logger(message = "快速保存笔记")
     @RequestMapping(value = "/quickupdate", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
     public String quickupdate(HttpServletRequest request) {
         try {
@@ -116,6 +125,7 @@ public class ArticleController {
         }
     }
 
+    @Logger(message = "获取笔记详情")
     @RequestMapping("/detail")
     public ModelAndView result(@RequestParam("id") String id) {
         ModelAndView modelAndView = new ModelAndView(StringUtils.appendJoinEmpty("article/detail", "_", PropertyUtil.getMode()));
@@ -124,6 +134,7 @@ public class ArticleController {
         return modelAndView;
     }
 
+    @Logger(message = "获取相似笔记")
     @RequestMapping(value = "/sameArticles", method = RequestMethod.POST)
     @ResponseBody
     public List<Article> sameArticles(@RequestParam("id") String id) {

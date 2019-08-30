@@ -1,5 +1,7 @@
 package com.sxkl.cloudnote.filter;
 
+import com.sxkl.cloudnote.log.annotation.Logger;
+
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -22,13 +24,15 @@ import javax.servlet.http.HttpSession;
  */
 public class LoginFilter implements Filter {
 
-    public static final String NEW_SESSION_INDICATOR = "com.sxkl.cloudnote.filter.LoginFilter";
+    private static final String NEW_SESSION_INDICATOR = "com.sxkl.cloudnote.filter.LoginFilter";
 
+    @Logger(message = "LoginFilter初始化")
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
     }
 
+    @Logger(message = "执行filter")
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         if (request instanceof HttpServletRequest) {
@@ -59,9 +63,9 @@ public class LoginFilter implements Filter {
         chain.doFilter(request, response);
     }
 
+    @Logger(message = "LoginFilter销毁")
     @Override
     public void destroy() {
 
     }
-
 }

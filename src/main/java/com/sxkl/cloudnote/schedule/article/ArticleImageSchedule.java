@@ -40,7 +40,7 @@ public class ArticleImageSchedule {
     private AtomicInteger num = new AtomicInteger(0);//执行数
 
     @Logger(message = "定时删除失效笔记图片")
-    @Scheduled(cron = "0 0 4 * * ?")
+//    @Scheduled(cron = "0 0 4 * * ?")
     public void deleteExpireImage() {
         int total = imageService.getTotal();
         if (total == 0) {

@@ -35,6 +35,7 @@ public class ArticleListener implements ApplicationListener<ApplicationEvent> {
     @Autowired
     private LuceneManager luceneManager;
 
+    @Logger(message = "ArticleListener监听到消息")
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
         if (isNotDuty(event)) {

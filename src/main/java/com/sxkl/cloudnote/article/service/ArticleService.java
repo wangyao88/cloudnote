@@ -322,6 +322,7 @@ public class ArticleService {
         return OperateResultService.configurateSuccessResult(blogs);
     }
 
+    @Logger(message = "获取最新博客列表")
     public String getRecentForBlog() {
         Article article = new Article();
         article.setShared(true);
@@ -336,6 +337,7 @@ public class ArticleService {
         return OperateResultService.configurateSuccessResult(blogs);
     }
 
+    @Logger(message = "获取最新笔记列表")
     public List<Article> getRecent() {
         Article article = new Article();
         article.setShared(true);
@@ -425,6 +427,7 @@ public class ArticleService {
         PublishManager.getPublishManager().getArticlePublisher().updateIndexByUpdate(article, user.getId());
     }
 
+    @Logger(message = "查询相似笔记列表")
     public List<Article> getSameArticles(String id) {
         SameArticle sameArticle = articleDao.getSameArticleIds(id);
         if (ObjectUtils.isNull(sameArticle)) {

@@ -2,6 +2,7 @@ package com.sxkl.cloudnote.flag.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.sxkl.cloudnote.log.annotation.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,6 +25,7 @@ public class FlagController {
     @Autowired
     private FlagService flagService;
 
+    @Logger(message = "添加标签")
     @RequestMapping(value = "/addFlag", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
     public String addFlag(HttpServletRequest request) {
         try {
