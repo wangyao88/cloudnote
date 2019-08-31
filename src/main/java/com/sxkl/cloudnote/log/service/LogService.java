@@ -22,26 +22,30 @@ public class LogService {
     private AmqpTemplate amqpTemplate;
 
     public void showLogInConsole(Log log) {
-        EasyLogger.log(adapte(log));
-        String routeKey = getRouteKey(log.getLevel());
-        JSONObject json = JSONObject.fromObject(log);
-        Message message = new Message(json.toString().getBytes(Charsets.UTF_8), new MessageProperties());
-        sendQueue("log_exchange", routeKey, message);
+        try {
+            EasyLogger.log(adapte(log));
+            String routeKey = getRouteKey(log.getLevel());
+            JSONObject json = JSONObject.fromObject(log);
+            Message message = new Message(json.toString().getBytes(Charsets.UTF_8), new MessageProperties());
+            sendQueue("log_exchange", routeKey, message);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private Logger adapte(Log log) {
         return Logger.builder()
-                .dateTime(LocalDateTime.now())
-                .level(getLevel(log.getLogLevel().toString()))
-                .threadName(Thread.currentThread().getName())
-                .userName(log.getUserName())
-                .ip(log.getIp())
-                .className(log.getClassName())
-                .methodName(log.getMethodName())
-                .message(log.getMessage())
-                .costTime(log.getCostTime())
-                .throwable(log.getThrowable())
-                .build();
+                     .dateTime(LocalDateTime.now())
+                     .level(getLevel(log.getLogLevel().toString()))
+                     .threadName(Thread.currentThread().getName())
+                     .userName(log.getUserName())
+                     .ip(log.getIp())
+                     .className(log.getClassName())
+                     .methodName(log.getMethodName())
+                     .message(log.getMessage())
+                     .costTime(log.getCostTime())
+                     .throwable(log.getThrowable())
+                     .build();
     }
 
     private LoggerLevelEnum getLevel(String level) {

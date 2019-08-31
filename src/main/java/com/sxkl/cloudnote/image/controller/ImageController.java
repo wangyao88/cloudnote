@@ -9,6 +9,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.sxkl.cloudnote.log.annotation.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +26,7 @@ public class ImageController {
     @Autowired
     private ImageService imageService;
 
+    @Logger(message = "获取图片")
     @RequestMapping("/getImage")
     public void valicode(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
         @Cleanup

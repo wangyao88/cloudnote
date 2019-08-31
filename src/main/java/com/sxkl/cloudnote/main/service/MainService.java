@@ -143,5 +143,4 @@ public class MainService {
         skin.setPath(name);
         return skin;
     }
-
 }

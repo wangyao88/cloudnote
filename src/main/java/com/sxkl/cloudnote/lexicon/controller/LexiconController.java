@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.sxkl.cloudnote.log.annotation.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,12 +34,14 @@ public class LexiconController {
     @Autowired
     private LexiconService lexiconService;
 
+    @Logger(message = "跳转到词库主页")
     @RequestMapping("/lexicon")
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView("lexicon/lexicon");
         return modelAndView;
     }
 
+    @Logger(message = "保存扩展词")
     @RequestMapping("/saveExtLexicon")
     @ResponseBody
     public void saveExtLexicon(String name, HttpServletRequest request) {
@@ -49,6 +52,7 @@ public class LexiconController {
         lexiconService.save(lexicon);
     }
 
+    @Logger(message = "保存停用词")
     @RequestMapping("/saveStopLexicon")
     @ResponseBody
     public void saveStopLexicon(String name, HttpServletRequest request) {
@@ -59,6 +63,7 @@ public class LexiconController {
         lexiconService.save(lexicon);
     }
 
+    @Logger(message = "保存关键字")
     @RequestMapping("/saveKeyLexicon")
     @ResponseBody
     public void saveKeyLexicon(String name, HttpServletRequest request) {
@@ -69,24 +74,28 @@ public class LexiconController {
         lexiconService.save(lexicon);
     }
 
+    @Logger(message = "删除词库")
     @RequestMapping("/delete")
     @ResponseBody
     public void delete(String id) {
         lexiconService.deleteById(id);
     }
 
+    @Logger(message = "分页查询扩展词列表")
     @RequestMapping("/findAllExt")
     @ResponseBody
     public List<Lexicon> findAllExt(HttpServletRequest request) {
         return findPage("ExtLexicon", request);
     }
 
+    @Logger(message = "分页查询停用词列表")
     @RequestMapping("/findAllStop")
     @ResponseBody
     public List<Lexicon> findAllStop(HttpServletRequest request) {
         return findPage("StopLexicon", request);
     }
 
+    @Logger(message = "分页查询关键字列表")
     @RequestMapping("/findAllKey")
     @ResponseBody
     public List<Lexicon> findAllKey(HttpServletRequest request) {
@@ -100,6 +109,7 @@ public class LexiconController {
         return lexiconService.findPage(page);
     }
 
+    @Logger(message = "停用关键词")
     @RequestMapping("/changeToStop")
     @ResponseBody
     public void changeToStop(String id, String name, HttpServletRequest request) {
@@ -110,6 +120,7 @@ public class LexiconController {
         lexiconService.changeToStop(id, lexicon);
     }
 
+    @Logger(message = "初始化关键字")
     @RequestMapping("/initKey")
     @ResponseBody
     public void initKey(HttpServletRequest request) {

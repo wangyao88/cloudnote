@@ -1,11 +1,10 @@
 package com.sxkl.cloudnote.user.controller;
 
-import java.io.IOException;
-import java.util.Objects;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.sxkl.cloudnote.listener.RsaKeyManager;
+import com.sxkl.cloudnote.log.annotation.Logger;
+import com.sxkl.cloudnote.user.entity.User;
+import com.sxkl.cloudnote.user.service.UserService;
+import com.sxkl.cloudnote.utils.DESUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,10 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
-import com.sxkl.cloudnote.listener.RsaKeyManager;
-import com.sxkl.cloudnote.user.entity.User;
-import com.sxkl.cloudnote.user.service.UserService;
-import com.sxkl.cloudnote.utils.DESUtil;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Objects;
 
 @Controller
 public class LoginController {
@@ -26,16 +25,16 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
+    @Logger(message = "拦截请求地址/，跳转到登陆页面")
     @RequestMapping("/")
-    public ModelAndView all() {
-        ModelAndView modelAndView = new ModelAndView("login/login");
-        return modelAndView;
+    public String all() {
+        return "login/login";
     }
 
+    @Logger(message = "获取Todo的状态信息")
     @RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.HEAD})
-    public ModelAndView login(HttpServletRequest request) {
-        ModelAndView modelAndView = new ModelAndView("login/login");
-        return modelAndView;
+    public String login(HttpServletRequest request) {
+        return "login/login";
     }
 
     /**
@@ -46,6 +45,7 @@ public class LoginController {
      * @return
      * @throws Exception
      */
+    @Logger(message = "执行登陆逻辑")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
     public String login(HttpServletRequest httpServletRequest, RedirectAttributesModelMap modelMap) throws Exception {
@@ -53,6 +53,7 @@ public class LoginController {
         return mv.getViewName();
     }
 
+    @Logger(message = "退出")
     @RequestMapping(value = "/logout", method = {RequestMethod.GET, RequestMethod.HEAD})
     @ResponseBody
     public boolean logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -61,12 +62,13 @@ public class LoginController {
         return true;
     }
 
+    @Logger(message = "跳转到注册页面")
     @RequestMapping(value = "/login/registe", method = {RequestMethod.GET, RequestMethod.HEAD})
-    public ModelAndView registeIndex() {
-        ModelAndView modelAndView = new ModelAndView("login/registe");
-        return modelAndView;
+    public String registeIndex() {
+        return "login/registe";
     }
 
+    @Logger(message = "检查用户名是否存在")
     @RequestMapping(value = "/login/checkName", method = RequestMethod.POST)
     @ResponseBody
     public boolean checkName(String name) {
@@ -77,6 +79,7 @@ public class LoginController {
         return false;
     }
 
+    @Logger(message = "注册用户")
     @RequestMapping(value = "/login/registe", method = RequestMethod.POST)
     @ResponseBody
     public boolean registe(String name, String password, String repassword) {
@@ -95,6 +98,7 @@ public class LoginController {
         return !StringUtils.isEmpty(password) && !StringUtils.isEmpty(repassword) && password.equals(repassword);
     }
 
+    @Logger(message = "获取公钥")
     @RequestMapping(value = "/login/getPublicKey", method = RequestMethod.POST)
     @ResponseBody
     public String getPublicKey(String name) {

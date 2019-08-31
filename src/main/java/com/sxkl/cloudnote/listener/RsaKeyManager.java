@@ -1,14 +1,13 @@
 package com.sxkl.cloudnote.listener;
 
+import com.sxkl.cloudnote.log.annotation.Logger;
+import com.sxkl.cloudnote.utils.RSACoder;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
 import java.security.Key;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.annotation.PostConstruct;
-
-import org.springframework.stereotype.Service;
-
-import com.sxkl.cloudnote.utils.RSACoder;
 
 /**
  * @author: wangyao
@@ -21,6 +20,7 @@ public class RsaKeyManager {
     private static final String PUBLIC_KEY = "publicKey";
     private static final String PRIVATE_KEY = "privateKey";
 
+    @Logger(message = "初始化公钥和秘钥")
     @PostConstruct
     public void initialization() throws Exception {
         Map<String, Key> keyMap = RSACoder.initKey();
@@ -30,10 +30,12 @@ public class RsaKeyManager {
         key.put(PRIVATE_KEY, privateKey);
     }
 
+    @Logger(message = "获取公钥")
     public static String getPublickey() {
         return key.get(PUBLIC_KEY);
     }
 
+    @Logger(message = "获取秘钥")
     public static String getPrivateKey() {
         return key.get(PRIVATE_KEY);
     }

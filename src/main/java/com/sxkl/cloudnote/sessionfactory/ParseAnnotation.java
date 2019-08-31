@@ -2,6 +2,7 @@ package com.sxkl.cloudnote.sessionfactory;
 
 import java.lang.reflect.Method;
 
+import com.sxkl.cloudnote.log.annotation.Logger;
 import org.apache.commons.lang3.StringUtils;
 
 import com.sxkl.cloudnote.common.entity.Constant;
@@ -20,6 +21,7 @@ public class ParseAnnotation {
      * @param <T>
      * @param clazz
      */
+    @Logger(message = "获取方法上的SessionFactory注解信息")
     @SuppressWarnings("rawtypes")
     public static String parseMethod(Class clazz) {
         String sessionFactoryName = StringUtils.EMPTY;
@@ -42,6 +44,7 @@ public class ParseAnnotation {
      * @param <T>
      * @param clazz
      */
+    @Logger(message = "获取类上的SessionFactory注解信息")
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static String parseType(Class clazz) {
         String sessionFactoryName = StringUtils.EMPTY;
@@ -56,6 +59,7 @@ public class ParseAnnotation {
         return sessionFactoryName;
     }
 
+    @Logger(message = "获取类上的SessionFactory注解的SessionFactory名称")
     @SuppressWarnings("rawtypes")
     public static String getSessionFactoryName(Class clazz) {
         String sessionFactoryName = parseMethod(clazz);
@@ -67,11 +71,4 @@ public class ParseAnnotation {
         }
         return sessionFactoryName;
     }
-
-
-    public static void main(String[] args) {
-        parseMethod(LogDao.class);
-        parseType(LogDao.class);
-    }
-
 }

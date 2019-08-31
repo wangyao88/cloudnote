@@ -2,6 +2,7 @@ package com.sxkl.cloudnote.flag.dao;
 
 import java.util.List;
 
+import com.sxkl.cloudnote.log.annotation.Logger;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -13,6 +14,7 @@ import com.sxkl.cloudnote.flag.entity.Flag;
 @Repository
 public class FlagDao extends BaseDao<String, Flag> {
 
+    @Logger(message = "根据主键获取标签列表")
     @SuppressWarnings("unchecked")
     public List<Flag> selectFlagsByIds(String[] flags) {
         Session session = this.getSessionFactory().getCurrentSession();
@@ -31,6 +33,7 @@ public class FlagDao extends BaseDao<String, Flag> {
 //		return query.list();
 //	}
 
+    @Logger(message = "获取指定用户的所有标签")
     @SuppressWarnings("rawtypes")
     public List getAllFlagByUserId(String userId) {
         StringBuilder sql = new StringBuilder();
@@ -42,6 +45,7 @@ public class FlagDao extends BaseDao<String, Flag> {
         return query.list();
     }
 
+    @Logger(message = "获取指定用户的标签列表， 标签名模糊匹配")
     @SuppressWarnings("unchecked")
     public List<Flag> getAllByName(String name, String userId) {
         String hql = "select new Flag(id,name) from Flag a where a.name like :name and a.user.id=:userId";
@@ -54,6 +58,7 @@ public class FlagDao extends BaseDao<String, Flag> {
         return query.list();
     }
 
+    @Logger(message = "获取标签，标签名模糊匹配")
     public Flag getByName(String flagName) {
         String hql = "select new Flag(id,name) from Flag a where a.name = :name";
         Session session = this.getSessionFactory().getCurrentSession();
@@ -61,5 +66,4 @@ public class FlagDao extends BaseDao<String, Flag> {
         query.setString("name", flagName);
         return (Flag) query.uniqueResult();
     }
-
 }

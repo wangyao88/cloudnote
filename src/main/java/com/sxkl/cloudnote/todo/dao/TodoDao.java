@@ -2,6 +2,7 @@ package com.sxkl.cloudnote.todo.dao;
 
 import com.google.common.collect.Lists;
 import com.sxkl.cloudnote.common.dao.BaseDao;
+import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.todo.entity.Todo;
 import com.sxkl.cloudnote.utils.DateUtils;
 import com.sxkl.cloudnote.utils.ObjectUtils;
@@ -17,6 +18,7 @@ import java.util.List;
 @Repository
 public class TodoDao extends BaseDao<String, Todo> {
 
+    @Logger(message = "根据调价查询todo列表")
     public List<Todo> findAllByExample(Todo todo) {
         Session session = this.getSessionFactory().getCurrentSession();
         String sql = getSql(todo);
@@ -106,6 +108,7 @@ public class TodoDao extends BaseDao<String, Todo> {
         return sql.toString();
     }
 
+    @Logger(message = "获取最早的todo")
     public Todo findEarlestTodo(String userId) {
         Session session = this.getSessionFactory().getCurrentSession();
         String hql = "select new Todo(beginDateTime) from Todo n where n.userId=:userId order by n.beginDateTime desc, createDateTime desc";

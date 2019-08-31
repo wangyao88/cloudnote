@@ -1,16 +1,10 @@
 package com.sxkl.cloudnote.log.service;
 
+import com.sxkl.cloudnote.log.dao.LogDao;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.google.common.base.Charsets;
-import com.sxkl.cloudnote.log.dao.LogDao;
-import com.sxkl.cloudnote.log.entity.Log;
-import com.sxkl.cloudnote.utils.JSONObjectUtils;
-
-import net.sf.json.JSONObject;
 
 /**
  * @author: wangyao
@@ -18,19 +12,18 @@ import net.sf.json.JSONObject;
  * @description:
  */
 @Service
-public class ErrorLogCosumer implements MessageListener {
+public class ErrorLogCosumer extends BaseLogCosumer implements MessageListener {
 
     @Autowired
     private LogDao logDao;
 
+    @Override
     public void onMessage(Message message) {
-        try {
-            String logStr = new String(message.getBody(), Charsets.UTF_8);
-            JSONObject json = JSONObjectUtils.toJson(logStr);
-            Log log = (Log) JSONObject.toBean(json, Log.class);
-            logDao.save(log);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        super.onMessage(message);
+    }
+
+    @Override
+    protected LogDao getLogDao() {
+        return logDao;
     }
 }

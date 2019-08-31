@@ -1,10 +1,15 @@
 package com.sxkl.cloudnote.eventdriven.listener;
 
+import com.mohan.project.easylogger.core.EasyLogger;
+import com.mohan.project.easytools.common.StringTools;
+import com.mohan.project.easytools.file.BannerTools;
+import com.mohan.project.easytools.file.FileTools;
 import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.main.service.MainService;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.user.service.UserService;
+import com.sxkl.cloudnote.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -12,6 +17,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -29,7 +35,13 @@ public class ContextStartedListener implements ApplicationListener<ContextRefres
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if (event.getApplicationContext().getParent() == null) {
             configurateTreeMenuCache();
+            showBanner();
         }
+    }
+
+    private void showBanner() {
+        String banner = BannerTools.getBanner();
+        EasyLogger.info(StringTools.append(FileTools.LF, "项目名称", banner));
     }
 
     @Logger(message = "缓存用户菜单树")
@@ -51,6 +63,4 @@ public class ContextStartedListener implements ApplicationListener<ContextRefres
             }
         }
     }
-
-
 }

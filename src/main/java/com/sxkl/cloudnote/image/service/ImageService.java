@@ -85,6 +85,7 @@ public class ImageService {
         }
     }
 
+    @Logger(message = "保存图片到磁盘")
     public void saveToDisk(String name, byte[] content) throws IOException {
         String path = StringUtils.appendJoinFolderSeparator(Constant.IMAGE_SAVED_PATH, name);
         File dir = new File(Constant.IMAGE_SAVED_PATH);
@@ -131,6 +132,7 @@ public class ImageService {
         imageDao.deleteAll(results);
     }
 
+    @Logger(message = "更新指定图片集合")
     public void updateAll(List<Image> updateImages) {
         imageDao.updateAll(updateImages);
     }
@@ -140,6 +142,7 @@ public class ImageService {
         return imageDao.getAll();
     }
 
+    @Logger(message = "获取指定图片")
     public Image getOne(String id) {
         return imageDao.getOne(id);
     }

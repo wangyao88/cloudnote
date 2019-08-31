@@ -10,6 +10,8 @@ public class Constant {
 
     public static final String PROJECT_NAME = "cloudnote";
 
+    public static final String BANNER_FILE_NAME = "banner.txt";
+
     public static final String USER_IN_SESSION_KEY = "user";
 
     public static final String TREE_MENU_PREFIX = "[";

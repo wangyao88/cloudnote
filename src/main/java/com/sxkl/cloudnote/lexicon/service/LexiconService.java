@@ -1,15 +1,5 @@
 package com.sxkl.cloudnote.lexicon.service;
 
-import java.io.File;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
-
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.sxkl.cloudnote.common.dao.BaseDao;
@@ -20,6 +10,15 @@ import com.sxkl.cloudnote.lexicon.entity.Lexicon;
 import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.utils.PropertyUtil;
 import com.sxkl.cloudnote.utils.StringAppendUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
+
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Set;
 
 /**
  *  * @author wangyao
@@ -53,6 +52,7 @@ public class LexiconService extends BaseService<String, Lexicon> {
         save(lexicon);
     }
 
+    @Logger(message = "初始化关键字")
     public void initKey(String userId) {
         String key = StringAppendUtils.append(Constant.WORD_ARTICLE_MAPPING_IN_REDIS, "-", userId);
         Set<Object> keys = redisTemplate.opsForHash().keys(key);
@@ -63,4 +63,3 @@ public class LexiconService extends BaseService<String, Lexicon> {
         }
     }
 }
-

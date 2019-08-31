@@ -38,7 +38,7 @@ public class SearchService {
     @Autowired
     private ArticleService articleService;
 
-    @Logger(message = "搜索知识库")
+    @Logger(message = "分页查询笔记")
     public List<Article> searchPage(String words, int page, int size) {
         List<Article> articles = Lists.newArrayList();
         try {
@@ -62,6 +62,7 @@ public class SearchService {
         return articles;
     }
 
+    @Logger(message = "查询 分页查询笔记 的总量")
     public long count(String words) {
         try {
             String url = CloudnoteServiceUrlConstant.COUNT_URL;
@@ -74,6 +75,7 @@ public class SearchService {
         return 0;
     }
 
+    @Logger(message = "查询知识库总数")
     public long total() {
         try {
             String url = CloudnoteServiceUrlConstant.TOTAL_URL;
@@ -86,17 +88,19 @@ public class SearchService {
         return 0;
     }
 
+    @Logger(message = "获取热门标签")
     public Set<Object> getHotLabel() {
         return redisTemplate.opsForZSet().reverseRange(HOT_LABELS_ZSET_KEY_IN_REDIS, 0, HOT_LABELS_ZSET_SIZE);
     }
 
-
+    @Logger(message = "获取推荐笔记")
     public List<Article> getRecommendArticles() {
         return articleService.getRecent();
         // title url source date
 //        return redisTemplate.opsForList().range(RECOMMEND_ARTICLE_LIST_KEY_IN_REDIS, 0, RECOMMEND_ARTICLE_LIST_SIZE);
     }
 
+    @Logger(message = "获取今日新闻")
     public List<Object> getTodayNews() {
         // title url source date
         return redisTemplate.opsForList().range(TODAY_NEWS_LIST_KEY_IN_REDIS, 0, TODAY_NEWS_LIST_SIZE);

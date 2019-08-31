@@ -3,6 +3,7 @@ package com.sxkl.cloudnote.searcher.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.sxkl.cloudnote.article.entity.Article;
+import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.searcher.service.SearchService;
 import com.sxkl.cloudnote.utils.PropertyUtil;
 import com.sxkl.cloudnote.utils.StringUtils;
@@ -24,12 +25,14 @@ public class SerachController {
     @Autowired
     private SearchService searchService;
 
+    @Logger(message = "跳转到搜索首页")
     @RequestMapping("/index")
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView(StringUtils.appendJoinEmpty("baidusearch/search_index", "_", PropertyUtil.getMode()));
         return modelAndView;
     }
 
+    @Logger(message = "跳转到搜索结果首页")
     @RequestMapping("/result")
     public ModelAndView result(@RequestParam("words") String words) {
         ModelAndView modelAndView = new ModelAndView(StringUtils.appendJoinEmpty("baidusearch/search_result", "_", PropertyUtil.getMode()));
@@ -39,6 +42,7 @@ public class SerachController {
         return modelAndView;
     }
 
+    @Logger(message = "分页查询笔记")
     @RequestMapping("/page")
     @ResponseBody
     public JSONObject page(@RequestParam("first") int first, @RequestParam("words") String words,
@@ -62,18 +66,21 @@ public class SerachController {
         return json;
     }
 
+    @Logger(message = "查询热门标签")
     @RequestMapping("/hotLabel")
     @ResponseBody
     public Set<Object> hotLabel() {
         return searchService.getHotLabel();
     }
 
+    @Logger(message = "获取推荐笔记")
     @RequestMapping("/recommendArticles")
     @ResponseBody
     public List<Article> recommendArticles() {
         return searchService.getRecommendArticles();
     }
 
+    @Logger(message = "获取今日新闻")
     @RequestMapping("/todayNews")
     @ResponseBody
     public List<Object> todayNews() {

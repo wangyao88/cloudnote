@@ -28,6 +28,7 @@ public class QuickTextController {
         return StringUtils.appendJoinEmpty("quickText/index", "_", PropertyUtil.getMode());
     }
 
+    @Logger(message = "添加QuickText")
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     @ResponseBody
     public String add(HttpServletRequest request) {
@@ -39,6 +40,7 @@ public class QuickTextController {
         }
     }
 
+    @Logger(message = "删除QuickText")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     public String delete(HttpServletRequest request) {
@@ -50,6 +52,7 @@ public class QuickTextController {
         }
     }
 
+    @Logger(message = "更新QuickText")
     @RequestMapping(value = "/update", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     @ResponseBody
     public String update(HttpServletRequest request) {
@@ -61,6 +64,7 @@ public class QuickTextController {
         }
     }
 
+    @Logger(message = "获取QuickText")
     @RequestMapping(value = "/findOne", method = RequestMethod.GET)
     @ResponseBody
     public String findOne(HttpServletRequest request) {
@@ -72,6 +76,7 @@ public class QuickTextController {
         }
     }
 
+    @Logger(message = "获取所有QuickText")
     @RequestMapping(value = "/findAll", method = RequestMethod.POST)
     @ResponseBody
     public String findAll(HttpServletRequest request) {
@@ -83,6 +88,7 @@ public class QuickTextController {
         }
     }
 
+    @Logger(message = "获取QuickText的总量")
     @RequestMapping(value = "/count", method = RequestMethod.GET)
     @ResponseBody
     public String count(HttpServletRequest request) {

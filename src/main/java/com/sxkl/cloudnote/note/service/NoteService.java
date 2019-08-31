@@ -147,5 +147,4 @@ public class NoteService {
             treeJson.deleteCharAt(treeJson.length() - 1);
         }
     }
-
 }

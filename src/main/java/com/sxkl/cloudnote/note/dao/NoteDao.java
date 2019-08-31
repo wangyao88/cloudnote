@@ -2,6 +2,7 @@ package com.sxkl.cloudnote.note.dao;
 
 import java.util.List;
 
+import com.sxkl.cloudnote.log.annotation.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
@@ -12,6 +13,7 @@ import com.sxkl.cloudnote.note.entity.Note;
 @Repository
 public class NoteDao extends BaseDao<String, Note> {
 
+    @Logger(message = "获取指定用户的所有笔记本")
     @SuppressWarnings("unchecked")
     public List<Note> getAllNote(String uid) {
         Session session = this.getSessionFactory().getCurrentSession();

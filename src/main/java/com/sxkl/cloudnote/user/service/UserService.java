@@ -104,10 +104,12 @@ public class UserService {
         return gson.toJson(users);
     }
 
+    @Logger(message = "根据用户名获取用户")
     public User getUserByName(String name) {
         return userDao.getUserByName(name);
     }
 
+    @Logger(message = "注册用户")
     public void registe(User user) {
         userDao.save(user);
     }

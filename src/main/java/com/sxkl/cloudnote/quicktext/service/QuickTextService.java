@@ -93,6 +93,7 @@ public class QuickTextService {
         return quickTextDao.findAll(user.getId());
     }
 
+    @Logger(message = "获取QuickText的总量")
     public boolean count(HttpServletRequest request) {
         User sessionUser = UserUtil.getSessionUser(request);
         User user = userDao.selectUser(sessionUser);

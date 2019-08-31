@@ -35,6 +35,7 @@ public class TodoController {
         return StringUtils.appendJoinEmpty("todo/index", "_", PropertyUtil.getMode());
     }
 
+    @Logger(message = "保存todo")
     @RequestMapping(value = "/save", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     @ResponseBody
     public String add(HttpServletRequest request) {
@@ -56,6 +57,7 @@ public class TodoController {
         }
     }
 
+    @Logger(message = "删除todo")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     public String delete(HttpServletRequest request) {
@@ -67,6 +69,7 @@ public class TodoController {
         }
     }
 
+    @Logger(message = "获取todo")
     @RequestMapping(value = "/findOne", method = RequestMethod.POST)
     @ResponseBody
     public String findOne(HttpServletRequest request) {
@@ -78,6 +81,7 @@ public class TodoController {
         }
     }
 
+    @Logger(message = "获取所有的todo")
     @RequestMapping(value = "/findAll", method = RequestMethod.POST)
     @ResponseBody
     public String findAll(HttpServletRequest request) {
@@ -88,6 +92,7 @@ public class TodoController {
         }
     }
 
+    @Logger(message = "获取todo首页日期树")
     @RequestMapping(value = "/getDateTree", method = RequestMethod.POST)
     @ResponseBody
     public String getDateTree(HttpServletRequest request) {
@@ -98,6 +103,7 @@ public class TodoController {
         }
     }
 
+    @Logger(message = "获取todo的所有可用状态信息")
     @RequestMapping(value = "/getStatus", method = RequestMethod.GET)
     @ResponseBody
     public List<ComBoxNode> getStatus(HttpServletRequest request) {

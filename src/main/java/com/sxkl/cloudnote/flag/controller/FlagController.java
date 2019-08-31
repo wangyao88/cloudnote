@@ -36,6 +36,7 @@ public class FlagController {
         }
     }
 
+    @Logger(message = "更新标签")
     @RequestMapping(value = "/updateFlag", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
     public String updateFlag(HttpServletRequest request) {
         try {
@@ -46,6 +47,7 @@ public class FlagController {
         }
     }
 
+    @Logger(message = "删除标签")
     @RequestMapping(value = "/deleteFlag", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
     public String deleteFlag(HttpServletRequest request) {
         try {
@@ -56,6 +58,7 @@ public class FlagController {
         }
     }
 
+    @Logger(message = "获取标签树")
     @RequestMapping(value = "/getCheckFlagTree", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
     public String getCheckFlagTree(HttpServletRequest request) {
         try {
@@ -65,6 +68,7 @@ public class FlagController {
         }
     }
 
+    @Logger(message = "获取笔记的标签")
     @RequestMapping(value = "/getFlagByArticleId", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
     public String getFlagByArticleId(HttpServletRequest request) {
         try {
@@ -75,12 +79,14 @@ public class FlagController {
         }
     }
 
+    @Logger(message = "缓存添加笔记页面中的标签树")
     @RequestMapping(value = "/cacheAddArticleTreeMenu", method = RequestMethod.GET)
     public void cacheAddArticleTreeMenu(HttpServletRequest request) {
         User sessionUser = UserUtil.getSessionUser(request);
         PublishManager.getPublishManager().getFlagPublisher().cacheAddArticleTreeMenu(sessionUser.getId());
     }
 
+    @Logger(message = "搜索标签")
     @RequestMapping(value = "/searchFlag", method = RequestMethod.GET)
     @ResponseBody
     public SearchComplete searchFlag(String query, HttpServletRequest request) {
@@ -88,6 +94,7 @@ public class FlagController {
         return flagService.getAllByName(query, user.getId());
     }
 
+    @Logger(message = "获取标签主键")
     @RequestMapping(value = "/getFlagId", method = RequestMethod.POST)
     @ResponseBody
     public String getFlagId(String flagName) {

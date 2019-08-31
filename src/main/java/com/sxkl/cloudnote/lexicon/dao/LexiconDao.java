@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
 
+import com.sxkl.cloudnote.log.annotation.Logger;
 import org.springframework.stereotype.Repository;
 
 import com.google.common.collect.Lists;
@@ -27,6 +28,7 @@ import lombok.Cleanup;
 @Repository
 public class LexiconDao extends BaseDao<String, Lexicon> {
 
+    @Logger(message = "批量保存词库")
     public void batchSave(Set<Object> keys, String userId) throws SQLException {
         String sql = "insert into cn_lexicon(id,name,uId,discriminator) values (?,?,?,?)";
         @Cleanup
@@ -51,5 +53,4 @@ public class LexiconDao extends BaseDao<String, Lexicon> {
         statement.executeBatch();
         conn.commit();
     }
-
 }
