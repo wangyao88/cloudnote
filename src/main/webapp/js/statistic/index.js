@@ -228,83 +228,92 @@ function char2() {
     });
 }
 function char3() {
+    $.ajax({
+        url : basePath+"statistic/getLineData",
+        type : "get",
+        dataType: "json",
+        success : function(result){
+            var myChart = echarts.init($("#char3")[0]);
 
-    var myChart = echarts.init($("#char3")[0]);
+            option = {
+                legend: {
+                    data:['todo完成数量'],
+                    textStyle : {
+                        color : '#ffffff',
 
-    option = {
-        legend: {
-            data:['车辆行驶数量'],
-            textStyle : {
-                color : '#ffffff',
-
-            }
-        },
-        grid: {show:'true',borderWidth:'0'},
-
-        calculable : false,
-        tooltip : {
-            trigger: 'axis',
-            formatter: "Temperature : <br/>{b}km : {c}°C"
-        },
-        xAxis : [
-            {
-                type : 'value',
-                axisLabel : {
-                    formatter: '{value}',
-                    textStyle: {
-                        color: '#fff'
                     }
                 },
+                grid: {show:'true',borderWidth:'0'},
 
-                splitLine:{
-                    lineStyle:{
-                        width:0,
-                        type:'solid'
-                    }
-                }
-            }
-        ],
-        yAxis : [
-            {
-                type : 'category',
-                axisLine : {onZero: false},
-                axisLabel : {
-                    formatter: '{value} km',
-                    textStyle: {
-                        color: '#fff'
-                    }
+                calculable : false,
+                tooltip : {
+                    trigger: 'axis',
+                    formatter: "todo完成数量: <br/>{b}月 : {c}条"
                 },
-                splitLine:{
-                    lineStyle:{
-                        width:0,
-                        type:'solid'
-                    }
-                },
-                boundaryGap : false,
-                data : ['0', '10', '20', '30', '40', '50', '60', '70', '80']
-            }
-        ],
-        series : [
-            {
-                name:'车辆行驶数量',
-                type:'line',
-                smooth:true,
-                itemStyle: {
-                    normal: {
-                        lineStyle: {
-                            shadowColor : 'rgba(0,0,0,0.4)'
+                xAxis : [
+                    {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}',
+                            textStyle: {
+                                color: '#fff'
+                            }
+                        },
+
+                        splitLine:{
+                            lineStyle:{
+                                width:0,
+                                type:'solid'
+                            }
                         }
                     }
-                },
-                data:[15, 0, 20, 45, 22.1, 25, 70, 55, 76]
-            }
-        ]
-    };
+                ],
+                yAxis : [
+                    {
+                        type : 'category',
+                        axisLine : {onZero: false},
+                        axisLabel : {
+                            formatter: '{value}月',
+                            textStyle: {
+                                color: '#fff'
+                            }
+                        },
+                        splitLine:{
+                            lineStyle:{
+                                width:0,
+                                type:'solid'
+                            }
+                        },
+                        boundaryGap : false,
+                        data : result.months
+                    }
+                ],
+                series : [
+                    {
+                        name:'todo完成数量',
+                        type:'line',
+                        smooth:true,
+                        itemStyle: {
+                            normal: {
+                                lineStyle: {
+                                    shadowColor : 'rgba(0,0,0,0.4)'
+                                }
+                            }
+                        },
+                        data: result.datas
+                    }
+                ]
+            };
 
-    myChart.setOption(option);
-    window.addEventListener('resize', function () {myChart.resize();})
-
+            myChart.setOption(option);
+            window.addEventListener('resize', function () {myChart.resize();})
+        },
+        error : function(){
+            alert("getLineData执行失败，请稍候重试！");
+        }
+    });
 }
+
 function char4() {
 
     var myChart = echarts.init($("#char4")[0]);

@@ -9,6 +9,8 @@ import com.sxkl.cloudnote.common.entity.Page;
 import com.sxkl.cloudnote.common.entity.PageResult;
 import com.sxkl.cloudnote.common.service.BaseService;
 import com.sxkl.cloudnote.log.annotation.Logger;
+import com.sxkl.cloudnote.statistic.model.DateRange;
+import com.sxkl.cloudnote.statistic.model.KeyValue;
 import com.sxkl.cloudnote.todo.dao.TodoDao;
 import com.sxkl.cloudnote.todo.entity.Todo;
 import com.sxkl.cloudnote.todo.entity.TodoDateTreeNode;
@@ -162,5 +164,10 @@ public class TodoService extends BaseService<String, Todo> {
     @Override
     protected BaseDao<String, Todo> getDao() {
         return todoDao;
+    }
+
+    public List<KeyValue> getLineData(String userId) {
+        DateRange dateRange = DateUtils.getCurrentYearDateRange();
+        return todoDao.getLineData(userId, dateRange);
     }
 }

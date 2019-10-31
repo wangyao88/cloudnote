@@ -2,6 +2,7 @@ package com.sxkl.cloudnote.statistic.controller;
 
 import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.statistic.model.BarPercentData;
+import com.sxkl.cloudnote.statistic.model.LineData;
 import com.sxkl.cloudnote.statistic.model.PieData;
 import com.sxkl.cloudnote.statistic.model.StatisticData;
 import com.sxkl.cloudnote.statistic.service.StatisticService;
@@ -47,6 +48,13 @@ public class StatisticController {
     @ResponseBody
     public BarPercentData getBarPercentData(HttpServletRequest request) {
         return statisticService.getBarPercentData(request);
+    }
+
+    @Logger(message = "getLineData")
+    @RequestMapping(value = "/getLineData", method = RequestMethod.GET)
+    @ResponseBody
+    public LineData getLineData(HttpServletRequest request) {
+        return statisticService.getLineData(request);
     }
 
     private String getIndex() {

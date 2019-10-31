@@ -3,6 +3,8 @@ package com.sxkl.cloudnote.todo.dao;
 import com.google.common.collect.Lists;
 import com.sxkl.cloudnote.common.dao.BaseDao;
 import com.sxkl.cloudnote.log.annotation.Logger;
+import com.sxkl.cloudnote.statistic.model.DateRange;
+import com.sxkl.cloudnote.statistic.model.KeyValue;
 import com.sxkl.cloudnote.todo.entity.Todo;
 import com.sxkl.cloudnote.utils.DateUtils;
 import com.sxkl.cloudnote.utils.ObjectUtils;
@@ -118,5 +120,29 @@ public class TodoDao extends BaseDao<String, Todo> {
         query.setMaxResults(1);
         List list = query.list();
         return list.isEmpty() ? new Todo() : (Todo) list.get(0);
+    }
+
+    public List<KeyValue> getLineData(String userId, DateRange dateRange) {
+        Session session = this.getSessionFactory().getCurrentSession();
+        StringBuilder hql = new StringBuilder();
+        hql.append("select ")
+           .append("DATE_FORMAT(beginDateTime,'%m') as name, count(1) as value ")
+           .append("from cn_current_todo ")
+           .append("where beginDateTime >= :start and beginDateTime < :end and status = '已完成' and userId = :userId ")
+           .append("group by name ");
+        Query query = session.createSQLQuery(hql.toString());
+        query.setDate("start", dateRange.getStart());
+        query.setDate("end", dateRange.getEnd());
+        query.setString("userId", userId);
+        List list = query.list();
+        List<KeyValue> keyValues = Lists.newArrayListWithCapacity(list.size());
+        for (Object obj : list) {
+            Object[] arr = (Object[]) obj;
+            KeyValue keyValue = new KeyValue();
+            keyValue.setName(arr[0].toString());
+            keyValue.setValue(arr[1].toString());
+            keyValues.add(keyValue);
+        }
+        return keyValues;
     }
 }

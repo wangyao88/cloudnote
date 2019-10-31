@@ -263,7 +263,7 @@ public class FlagService {
         List<Flag> flags = flagDao.getFlagDatas(userId);
         List<FlagData> flagDatas = Lists.newArrayListWithCapacity(flags.size());
         for (int i = 0; i < flags.size(); i++) {
-            flagDatas.add(FlagData.configure(i, flags.get(i)));
+            flagDatas.add(FlagData.configure(i+1, flags.get(i)));
         }
         return flagDatas;
     }

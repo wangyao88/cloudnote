@@ -471,4 +471,13 @@ public class DateUtils {
         Instant instant = localDate.atStartOfDay().atZone(zone).toInstant();
         return Date.from(instant);
     }
+
+    public static DateRange getCurrentYearDateRange() {
+        LocalDate start = LocalDate.now().withMonth(1).with(TemporalAdjusters.firstDayOfMonth());
+        LocalDate end = LocalDate.now().withMonth(12).with(TemporalAdjusters.lastDayOfMonth());
+        DateRange dateRange = new DateRange();
+        dateRange.setStart(LocalDateToDate(start));
+        dateRange.setEnd(LocalDateToDate(end));
+        return dateRange;
+    }
 }

@@ -101,7 +101,7 @@
         </div>
         <div class="right div_any01">
             <div class="div_any_child">
-                <div class="div_any_title"><img src="<%=basePath%>images/statistic/title_4.png">todo季度统计 </div>
+                <div class="div_any_title"><img src="<%=basePath%>images/statistic/title_4.png">todo月度统计 </div>
                 <p id="char3" class="p_chart"></p>
             </div>
             <div class="div_any_child">

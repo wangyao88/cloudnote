@@ -10,6 +10,7 @@ import com.sxkl.cloudnote.log.service.LogService;
 import com.sxkl.cloudnote.note.service.NoteService;
 import com.sxkl.cloudnote.searcher.service.SearchService;
 import com.sxkl.cloudnote.statistic.model.*;
+import com.sxkl.cloudnote.todo.service.TodoService;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.utils.DateUtils;
 import com.sxkl.cloudnote.utils.UserUtil;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Comparator;
 import java.util.List;
@@ -38,7 +40,20 @@ public class StatisticService {
     private LogService logService;
     @Autowired
     private SearchService searchService;
-    private static final List<String> LOG_LEVELS = Stream.of(LogLevel.values()).map(LogLevel::name).collect(Collectors.toList());
+    @Autowired
+    private TodoService todoService;
+    private static final List<String> MONTHS = Lists.newArrayList();
+
+    @PostConstruct
+    private void init() {
+        for (int i = 1; i < 13; i++) {
+            if(i < 10) {
+                MONTHS.add("0"+i);
+                continue;
+            }
+            MONTHS.add(i+"");
+        }
+    }
 
     @Logger(message = "获取统计信息 topData tableData")
     public StatisticData getTopAndTableData(HttpServletRequest request) {
@@ -179,5 +194,21 @@ public class StatisticService {
         debugDatas.add(fouthQuarter.getOrDefault(LogLevel.DEBUG.name(), "0"));
         barPercentData.setDebugDatas(debugDatas);
         return barPercentData;
+    }
+
+    public LineData getLineData(HttpServletRequest request) {
+        User sessionUser = UserUtil.getSessionUser(request);
+        String userId = sessionUser.getId();
+        List<KeyValue> keyValues = todoService.getLineData(userId);
+        Map<String, String> map = keyValues.stream().collect(Collectors.toMap(KeyValue::getName, KeyValue::getValue));
+        LineData lineData = new LineData();
+        lineData.setMonths(MONTHS);
+        List<String> values = Lists.newArrayListWithCapacity(12);
+        for (String month : MONTHS) {
+            String value = map.getOrDefault(month, "0");
+            values.add(value);
+        }
+        lineData.setDatas(values);
+        return lineData;
     }
 }
