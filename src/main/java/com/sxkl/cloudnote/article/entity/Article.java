@@ -98,6 +98,12 @@ public class Article implements Serializable {
         this.hitNum = hitNum;
     }
 
+    public Article(String id, String title, Date createTime) {
+        this.id = id;
+        this.title = title;
+        this.createTime = createTime;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)

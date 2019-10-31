@@ -5,12 +5,14 @@ import com.sxkl.cloudnote.article.entity.Article;
 import com.sxkl.cloudnote.article.entity.SameArticle;
 import com.sxkl.cloudnote.common.dao.BaseDao;
 import com.sxkl.cloudnote.log.annotation.Logger;
+import com.sxkl.cloudnote.utils.DateUtils;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -321,6 +323,62 @@ public class ArticleDao extends BaseDao<String, Article> {
         Session session = this.getSession();
         Query query = session.createQuery(hql);
         query.setParameterList("idList", idList);
+        return query.list();
+    }
+
+    @Logger(message = "查询指定用户的所有笔记的数量")
+    public int getArticleNum(String userId) {
+        String hql = "select count(1) from cn_article c where c.uId=:userId";
+        Session session = this.getSession();
+        SQLQuery query = session.createSQLQuery(hql);
+        query.setString("userId", userId);
+        BigInteger bInt = (BigInteger) query.uniqueResult();
+        return bInt.intValue();
+    }
+
+    @Logger(message = "查询指定用户的所有博客的数量")
+    public int getBlogNum(String userId) {
+        String sql = "select count(1) from cn_article where is_shared = 1 and uId=:userId";
+        Session session = this.getSession();
+        SQLQuery query = session.createSQLQuery(sql);
+        query.setString("userId", userId);
+        BigInteger bInt = (BigInteger) query.uniqueResult();
+        return bInt.intValue();
+    }
+
+    @Logger(message = "查询指定用户当天的所有笔记的数量")
+    public int getTodayArticleNum(String userId) {
+        String hql = "select count(1) from cn_article c where c.uId=:userId and c.createTime >= :start and c.createTime < :end";
+        Session session = this.getSession();
+        SQLQuery query = session.createSQLQuery(hql);
+        query.setString("userId", userId);
+        LocalDate start = LocalDate.now();
+        LocalDate end = start.plusDays(1);
+        query.setDate("start", DateUtils.convertLocalDateToDate(start));
+        query.setDate("end", DateUtils.convertLocalDateToDate(end));
+        BigInteger bInt = (BigInteger) query.uniqueResult();
+        return bInt.intValue();
+    }
+
+    @Logger(message = "查询指定用户最多浏览量笔记")
+    public List<Article> getHitDatas(String userId) {
+        String hql = "select new Article(id,title,hitNum) from Article a where a.user.id=:userId order by a.hitNum desc";
+        Session session = this.getSession();
+        Query query = session.createQuery(hql);
+        query.setString("userId", userId);
+        query.setFirstResult(0);
+        query.setMaxResults(5);
+        return query.list();
+    }
+
+    @Logger(message = "查询指定用户最新笔记")
+    public List<Article> getRecentDatas(String userId) {
+        String hql = "select new Article(id,title,createTime) from Article a where a.user.id=:userId order by a.createTime desc";
+        Session session = this.getSession();
+        Query query = session.createQuery(hql);
+        query.setString("userId", userId);
+        query.setFirstResult(0);
+        query.setMaxResults(5);
         return query.list();
     }
 }

@@ -59,6 +59,9 @@ public class Flag implements Serializable {
     @Transient
     private boolean isLeaf;
 
+    @Transient
+    private Integer num;
+
     public Flag() {
     }
 
@@ -121,6 +124,14 @@ public class Flag implements Serializable {
 
     public void setLeaf(boolean isLeaf) {
         this.isLeaf = isLeaf;
+    }
+
+    public Integer getNum() {
+        return num;
+    }
+
+    public void setNum(Integer num) {
+        this.num = num;
     }
 
     @Override

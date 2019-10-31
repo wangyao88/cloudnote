@@ -440,4 +440,29 @@ public class ArticleService {
         List<String> idList = StringUtils.str2List(sameIds);
         return articleDao.getSameArticlesInIds(idList);
     }
+
+    @Logger(message = "查询指定用户的所有笔记的数量")
+    public int getArticleNum(String userId) {
+        return articleDao.getArticleNum(userId);
+    }
+
+    @Logger(message = "查询指定用户的所有博客的数量")
+    public int getBlogNum(String userId) {
+        return articleDao.getBlogNum(userId);
+    }
+
+    @Logger(message = "查询指定用户当天的所有笔记的数量")
+    public int getTodayArticleNum(String userId) {
+        return articleDao.getTodayArticleNum(userId);
+    }
+
+    @Logger(message = "查询指定用户最多浏览量笔记")
+    public List<Article> getHitDatas(String userId) {
+        return articleDao.getHitDatas(userId);
+    }
+
+    @Logger(message = "查询指定用户最新笔记")
+    public List<Article> getRecentDatas(String userId) {
+        return articleDao.getRecentDatas(userId);
+    }
 }

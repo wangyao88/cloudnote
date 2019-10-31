@@ -4,7 +4,9 @@ import com.google.common.base.Charsets;
 import com.mohan.project.easylogger.common.LoggerLevelEnum;
 import com.mohan.project.easylogger.core.EasyLogger;
 import com.mohan.project.easylogger.core.Logger;
+import com.sxkl.cloudnote.log.dao.LogDao;
 import com.sxkl.cloudnote.log.entity.Log;
+import com.sxkl.cloudnote.statistic.model.DateRange;
 import com.sxkl.cloudnote.utils.StringUtils;
 import net.sf.json.JSONObject;
 import org.springframework.amqp.core.AmqpTemplate;
@@ -14,12 +16,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Service
 public class LogService {
 
     @Autowired
     private AmqpTemplate amqpTemplate;
+    @Autowired
+    private LogDao logDao;
 
     public void showLogInConsole(Log log) {
         try {
@@ -61,5 +66,13 @@ public class LogService {
 
     private void sendQueue(String exchange_key, String route_key, Object object) {
         amqpTemplate.convertAndSend(exchange_key, route_key, object);
+    }
+
+    public int getLogNum(String userId) {
+        return logDao.getLogNum(userId);
+    }
+
+    public Map<String, String> getBarPercentData(String userId, DateRange dateRange) {
+        return logDao.getBarPercentData(userId, dateRange);
     }
 }

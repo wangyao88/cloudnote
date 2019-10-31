@@ -70,6 +70,8 @@
 				<a class="mini-button" id="quickTextBtn" iconCls="icon-split" href="<%=basePath%>quickText/index" target="_blank">QuickText</a>
 				<span class="separator"></span>
 				<a class="mini-button" id="todoListBtn" iconCls="icon-date" href="<%=basePath%>todo/index" target="_blank">Todo-List</a>
+				<span class="separator"></span>
+				<a class="mini-button" id="todoListBtn" iconCls="icon-goto" href="<%=basePath%>statistic/index" target="_blank">统计</a>
 				<%--<span class="separator"></span>
                 <a class="mini-button" iconCls="icon-help" href="<%=basePath%>spider/searchPage" target="_blank">在线搜索</a>--%>
 				<a class="mini-button" iconCls="icon-downgrade" onclick="logout" style="float: right;margin-right:0px;">退出</a>

@@ -1,14 +1,17 @@
 package com.sxkl.cloudnote.note.dao;
 
-import java.util.List;
-
+import com.google.common.collect.Lists;
+import com.sxkl.cloudnote.common.dao.BaseDao;
 import com.sxkl.cloudnote.log.annotation.Logger;
+import com.sxkl.cloudnote.note.entity.Note;
+import com.sxkl.cloudnote.statistic.model.KeyValue;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
-import com.sxkl.cloudnote.common.dao.BaseDao;
-import com.sxkl.cloudnote.note.entity.Note;
+import java.math.BigInteger;
+import java.util.List;
 
 @Repository
 public class NoteDao extends BaseDao<String, Note> {
@@ -22,5 +25,33 @@ public class NoteDao extends BaseDao<String, Note> {
         query.setString("uid", uid);
         List<Note> notes = query.list();
         return notes;
+    }
+
+    @Logger(message = "查询指定用户的所有笔记本的数量")
+    public int getNoteNum(String userId) {
+        String hql = "select count(1) from cn_note c where c.uId=:userId";
+        Session session = this.getSession();
+        SQLQuery query = session.createSQLQuery(hql);
+        query.setString("userId", userId);
+        BigInteger bInt = (BigInteger) query.uniqueResult();
+        return bInt.intValue();
+    }
+
+    @Logger(message = "getPieData")
+    public List<KeyValue> getPieData(String userId) {
+        String hql = "select c.name, b.value from (select a.nId, count(1) as value from cn_article a where a.uId=:userId group by a.nId) b left join cn_note c on b.nId=c.id";
+        Session session = this.getSession();
+        SQLQuery query = session.createSQLQuery(hql);
+        query.setString("userId", userId);
+        List list = query.list();
+        List<KeyValue> keyValues = Lists.newArrayListWithCapacity(list.size());
+        for (Object obj : list) {
+            Object[] arr = (Object[]) obj;
+            KeyValue keyValue = new KeyValue();
+            keyValue.setName(arr[0].toString());
+            keyValue.setValue(arr[1].toString());
+            keyValues.add(keyValue);
+        }
+        return keyValues;
     }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.sxkl.cloudnote.statistic.model.KeyValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -146,5 +147,15 @@ public class NoteService {
         if (treeStr.substring(treeStr.length() - 1, treeStr.length()).equals(Constant.COMMA)) {
             treeJson.deleteCharAt(treeJson.length() - 1);
         }
+    }
+
+    @Logger(message = "查询指定用户的所有笔记本的数量")
+    public int getNoteNum(String userId) {
+        return noteDao.getNoteNum(userId);
+    }
+
+    @Logger(message = "getPieData")
+    public List<KeyValue> getPieData(String userId) {
+        return noteDao.getPieData(userId);
     }
 }

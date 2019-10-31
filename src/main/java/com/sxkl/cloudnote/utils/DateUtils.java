@@ -1,9 +1,12 @@
 package com.sxkl.cloudnote.utils;
 
+import com.sxkl.cloudnote.statistic.model.DateRange;
+
 import java.text.DateFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.time.*;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -425,5 +428,47 @@ public class DateUtils {
         ZoneId zoneId = ZoneId.systemDefault();
         ZonedDateTime zdt = localDate.atStartOfDay(zoneId);
         return Date.from(zdt.toInstant());
+    }
+
+    public static DateRange getFirstQuarter() {
+        LocalDate start = LocalDate.now().withMonth(1).with(TemporalAdjusters.firstDayOfMonth());
+        LocalDate end = start.plusMonths(3);
+        DateRange dateRange = new DateRange();
+        dateRange.setStart(LocalDateToDate(start));
+        dateRange.setEnd(LocalDateToDate(end));
+        return dateRange;
+    }
+
+    public static DateRange getSecondQuarter() {
+        LocalDate start = LocalDate.now().withMonth(4).with(TemporalAdjusters.firstDayOfMonth());
+        LocalDate end = start.plusMonths(3);
+        DateRange dateRange = new DateRange();
+        dateRange.setStart(LocalDateToDate(start));
+        dateRange.setEnd(LocalDateToDate(end));
+        return dateRange;
+    }
+
+    public static DateRange getThirdQuarter() {
+        LocalDate start = LocalDate.now().withMonth(7).with(TemporalAdjusters.firstDayOfMonth());
+        LocalDate end = start.plusMonths(3);
+        DateRange dateRange = new DateRange();
+        dateRange.setStart(LocalDateToDate(start));
+        dateRange.setEnd(LocalDateToDate(end));
+        return dateRange;
+    }
+
+    public static DateRange getFouthQuarter() {
+        LocalDate start = LocalDate.now().withMonth(10).with(TemporalAdjusters.firstDayOfMonth());
+        LocalDate end = start.plusMonths(3);
+        DateRange dateRange = new DateRange();
+        dateRange.setStart(LocalDateToDate(start));
+        dateRange.setEnd(LocalDateToDate(end));
+        return dateRange;
+    }
+
+    public static Date LocalDateToDate(LocalDate localDate) {
+        ZoneId zone = ZoneId.systemDefault();
+        Instant instant = localDate.atStartOfDay().atZone(zone).toInstant();
+        return Date.from(instant);
     }
 }

@@ -1,5 +1,6 @@
 package com.sxkl.cloudnote.flag.service;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.gson.Gson;
 import com.sxkl.cloudnote.article.dao.ArticleDao;
@@ -12,6 +13,7 @@ import com.sxkl.cloudnote.flag.entity.Flag;
 import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.main.entity.TreeNode;
 import com.sxkl.cloudnote.spider.entity.SearchComplete;
+import com.sxkl.cloudnote.statistic.model.FlagData;
 import com.sxkl.cloudnote.user.dao.UserDao;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.utils.UUIDUtil;
@@ -249,5 +251,20 @@ public class FlagService {
     public String getFlagId(String flagName) {
         Flag flag = flagDao.getByName(flagName);
         return flag.getId();
+    }
+
+    @Logger(message = "查询指定用户的所有标签的数量")
+    public int getFlagNum(String userId) {
+        return flagDao.getFlagNum(userId);
+    }
+
+    @Logger(message = "查询指定用户标签关联的笔记数量")
+    public List<FlagData> getFlagDatas(String userId) {
+        List<Flag> flags = flagDao.getFlagDatas(userId);
+        List<FlagData> flagDatas = Lists.newArrayListWithCapacity(flags.size());
+        for (int i = 0; i < flags.size(); i++) {
+            flagDatas.add(FlagData.configure(i, flags.get(i)));
+        }
+        return flagDatas;
     }
 }

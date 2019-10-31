@@ -16,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -91,6 +92,11 @@ public class SearchService {
     @Logger(message = "获取热门标签")
     public Set<Object> getHotLabel() {
         return redisTemplate.opsForZSet().reverseRange(HOT_LABELS_ZSET_KEY_IN_REDIS, 0, HOT_LABELS_ZSET_SIZE);
+    }
+
+    @Logger(message = "获取热门标签")
+    public Set<ZSetOperations.TypedTuple<Object>> getHotLabelWithScore() {
+        return redisTemplate.opsForZSet().reverseRangeWithScores(HOT_LABELS_ZSET_KEY_IN_REDIS, 0, 5);
     }
 
     @Logger(message = "获取推荐笔记")
