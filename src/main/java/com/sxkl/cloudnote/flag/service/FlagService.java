@@ -253,12 +253,10 @@ public class FlagService {
         return flag.getId();
     }
 
-    @Logger(message = "查询指定用户的所有标签的数量")
     public int getFlagNum(String userId) {
         return flagDao.getFlagNum(userId);
     }
 
-    @Logger(message = "查询指定用户标签关联的笔记数量")
     public List<FlagData> getFlagDatas(String userId) {
         List<Flag> flags = flagDao.getFlagDatas(userId);
         List<FlagData> flagDatas = Lists.newArrayListWithCapacity(flags.size());

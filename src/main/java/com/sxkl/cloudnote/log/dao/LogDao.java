@@ -51,7 +51,7 @@ public class LogDao extends BaseDao<String, Log> {
     }
 
     public List<Log> getLogs(int pageIndex, int pageSize, String userId) {
-        String hql = "from Log where userId=:userId";
+        String hql = "from Log where userId=:userId order by date desc";
         Session session = this.getSession();
         Query query = session.createQuery(hql);
         query.setString("userId", userId);

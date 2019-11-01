@@ -1,13 +1,5 @@
 package com.sxkl.cloudnote.note.service;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
-import com.sxkl.cloudnote.statistic.model.KeyValue;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.google.gson.Gson;
 import com.sxkl.cloudnote.article.dao.ArticleDao;
 import com.sxkl.cloudnote.article.entity.Article;
@@ -17,10 +9,16 @@ import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.main.entity.TreeNode;
 import com.sxkl.cloudnote.note.dao.NoteDao;
 import com.sxkl.cloudnote.note.entity.Note;
+import com.sxkl.cloudnote.statistic.model.KeyValue;
 import com.sxkl.cloudnote.user.dao.UserDao;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.utils.UUIDUtil;
 import com.sxkl.cloudnote.utils.UserUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Service
 public class NoteService {
@@ -149,12 +147,10 @@ public class NoteService {
         }
     }
 
-    @Logger(message = "查询指定用户的所有笔记本的数量")
     public int getNoteNum(String userId) {
         return noteDao.getNoteNum(userId);
     }
 
-    @Logger(message = "获取笔记本关联笔记统计饼图数据")
     public List<KeyValue> getPieData(String userId) {
         return noteDao.getPieData(userId);
     }

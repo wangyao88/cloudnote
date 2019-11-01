@@ -165,7 +165,6 @@ public class TodoService extends BaseService<String, Todo> {
         return todoDao;
     }
 
-    @Logger(message = "获取todo月度统计折线图数据")
     public List<KeyValue> getLineData(String userId) {
         DateRange dateRange = DateUtils.getCurrentYearDateRange();
         return todoDao.getLineData(userId, dateRange);

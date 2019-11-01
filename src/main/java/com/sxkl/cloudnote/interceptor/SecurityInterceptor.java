@@ -1,9 +1,7 @@
 package com.sxkl.cloudnote.interceptor;
 
-import com.sxkl.cloudnote.log.annotation.Logger;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-
 import com.sxkl.cloudnote.common.entity.Constant;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,7 +11,6 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
 
     private static final String LOGIN_URL = "/login";
 
-    @Logger(message = "登陆拦截器校验请求是否合法")
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession(true);

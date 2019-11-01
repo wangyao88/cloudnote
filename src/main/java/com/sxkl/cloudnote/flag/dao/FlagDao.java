@@ -1,17 +1,16 @@
 package com.sxkl.cloudnote.flag.dao;
 
-import java.math.BigInteger;
-import java.util.List;
-
 import com.google.common.collect.Lists;
+import com.sxkl.cloudnote.common.dao.BaseDao;
+import com.sxkl.cloudnote.flag.entity.Flag;
 import com.sxkl.cloudnote.log.annotation.Logger;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
-import com.sxkl.cloudnote.common.dao.BaseDao;
-import com.sxkl.cloudnote.flag.entity.Flag;
+import java.math.BigInteger;
+import java.util.List;
 
 @Repository
 public class FlagDao extends BaseDao<String, Flag> {
@@ -69,7 +68,6 @@ public class FlagDao extends BaseDao<String, Flag> {
         return (Flag) query.uniqueResult();
     }
 
-    @Logger(message = "查询指定用户的所有标签的数量")
     public int getFlagNum(String userId) {
         String hql = "select count(1) from cn_flag c where c.uId=:userId";
         Session session = this.getSession();
@@ -79,7 +77,6 @@ public class FlagDao extends BaseDao<String, Flag> {
         return bInt.intValue();
     }
 
-    @Logger(message = "查询指定用户标签关联的笔记数量")
     public List<Flag> getFlagDatas(String userId) {
         String hql = "select b.name, a.num from (select flag_id, count(1) as num from cn_flag_artile group by flag_id) a left join cn_flag b on a.flag_id=b.id where b.uId=:userId order by a.num desc";
         Session session = this.getSessionFactory().getCurrentSession();

@@ -1,30 +1,10 @@
 package com.sxkl.cloudnote.article.service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-
-import com.sxkl.cloudnote.article.entity.*;
-import com.sxkl.cloudnote.searcher.service.SearchService;
-import com.sxkl.cloudnote.statistic.model.DateRange;
-import com.sxkl.cloudnote.statistic.model.KeyValue;
-import com.sxkl.cloudnote.utils.*;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.sxkl.cloudnote.article.dao.ArticleDao;
+import com.sxkl.cloudnote.article.entity.*;
 import com.sxkl.cloudnote.article.search.handler.impl.LuceneSearcher;
 import com.sxkl.cloudnote.article.search.lucene.WordAnalyzer;
 import com.sxkl.cloudnote.cache.annotation.RedisDisCachable;
@@ -37,9 +17,21 @@ import com.sxkl.cloudnote.image.service.ImageService;
 import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.note.entity.Note;
 import com.sxkl.cloudnote.note.service.NoteService;
+import com.sxkl.cloudnote.searcher.service.SearchService;
 import com.sxkl.cloudnote.spider.entity.SearchComplete;
+import com.sxkl.cloudnote.statistic.model.DateRange;
+import com.sxkl.cloudnote.statistic.model.KeyValue;
 import com.sxkl.cloudnote.user.entity.User;
 import com.sxkl.cloudnote.user.service.UserService;
+import com.sxkl.cloudnote.utils.*;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 @Service
 public class ArticleService {
@@ -443,32 +435,26 @@ public class ArticleService {
         return articleDao.getSameArticlesInIds(idList);
     }
 
-    @Logger(message = "查询指定用户的所有笔记的数量")
     public int getArticleNum(String userId) {
         return articleDao.getArticleNum(userId);
     }
 
-    @Logger(message = "查询指定用户的所有博客的数量")
     public int getBlogNum(String userId) {
         return articleDao.getBlogNum(userId);
     }
 
-    @Logger(message = "查询指定用户当天的所有笔记的数量")
     public int getTodayArticleNum(String userId) {
         return articleDao.getTodayArticleNum(userId);
     }
 
-    @Logger(message = "查询指定用户最多浏览量笔记")
     public List<Article> getHitDatas(String userId) {
         return articleDao.getHitDatas(userId);
     }
 
-    @Logger(message = "查询指定用户最新笔记")
     public List<Article> getRecentDatas(String userId) {
         return articleDao.getRecentDatas(userId);
     }
 
-    @Logger(message = "获取笔记数量月度统计柱状图数据")
     public List<KeyValue> getBarData(String userId) {
         DateRange dateRange = DateUtils.getCurrentYearDateRange();
         return articleDao.getBarData(userId, dateRange);

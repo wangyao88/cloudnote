@@ -94,7 +94,6 @@ public class SearchService {
         return redisTemplate.opsForZSet().reverseRange(HOT_LABELS_ZSET_KEY_IN_REDIS, 0, HOT_LABELS_ZSET_SIZE);
     }
 
-    @Logger(message = "获取热门标签")
     public Set<ZSetOperations.TypedTuple<Object>> getHotLabelWithScore() {
         return redisTemplate.opsForZSet().reverseRangeWithScores(HOT_LABELS_ZSET_KEY_IN_REDIS, 0, 5);
     }

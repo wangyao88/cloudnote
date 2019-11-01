@@ -1,9 +1,12 @@
 package com.sxkl.cloudnote.eventdriven.listener;
 
-import java.util.regex.Pattern;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.sxkl.cloudnote.article.dao.ArticleDao;
+import com.sxkl.cloudnote.article.entity.Article;
+import com.sxkl.cloudnote.article.search.lucene.LuceneManager;
+import com.sxkl.cloudnote.eventdriven.entity.ArticlePublisherBean;
+import com.sxkl.cloudnote.eventdriven.entity.ArticlePublisherEvent;
+import com.sxkl.cloudnote.image.service.ImageService;
+import com.sxkl.cloudnote.log.annotation.Logger;
 import com.sxkl.cloudnote.note.entity.Note;
 import com.sxkl.cloudnote.user.entity.User;
 import lombok.extern.slf4j.Slf4j;
@@ -15,13 +18,8 @@ import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Service;
 
-import com.sxkl.cloudnote.article.dao.ArticleDao;
-import com.sxkl.cloudnote.article.entity.Article;
-import com.sxkl.cloudnote.article.search.lucene.LuceneManager;
-import com.sxkl.cloudnote.eventdriven.entity.ArticlePublisherBean;
-import com.sxkl.cloudnote.eventdriven.entity.ArticlePublisherEvent;
-import com.sxkl.cloudnote.image.service.ImageService;
-import com.sxkl.cloudnote.log.annotation.Logger;
+import javax.servlet.http.HttpServletRequest;
+import java.util.regex.Pattern;
 
 
 @Slf4j
@@ -35,7 +33,6 @@ public class ArticleListener implements ApplicationListener<ApplicationEvent> {
     @Autowired
     private LuceneManager luceneManager;
 
-    @Logger(message = "ArticleListener监听到消息")
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
         if (isNotDuty(event)) {
@@ -109,5 +106,4 @@ public class ArticleListener implements ApplicationListener<ApplicationEvent> {
     public void cacheAddArticleTreeMenu(HttpServletRequest request) {
 
     }
-
 }

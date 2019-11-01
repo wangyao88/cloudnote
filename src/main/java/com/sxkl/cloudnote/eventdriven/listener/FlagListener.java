@@ -1,18 +1,17 @@
 package com.sxkl.cloudnote.eventdriven.listener;
 
-import java.util.concurrent.TimeUnit;
-
+import com.sxkl.cloudnote.common.entity.Constant;
+import com.sxkl.cloudnote.eventdriven.entity.FlagPublisherBean;
+import com.sxkl.cloudnote.eventdriven.entity.FlagPublisherEvent;
+import com.sxkl.cloudnote.flag.service.FlagService;
+import com.sxkl.cloudnote.log.annotation.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import com.sxkl.cloudnote.common.entity.Constant;
-import com.sxkl.cloudnote.eventdriven.entity.FlagPublisherBean;
-import com.sxkl.cloudnote.eventdriven.entity.FlagPublisherEvent;
-import com.sxkl.cloudnote.flag.service.FlagService;
-import com.sxkl.cloudnote.log.annotation.Logger;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class FlagListener implements ApplicationListener<ApplicationEvent> {
@@ -22,7 +21,6 @@ public class FlagListener implements ApplicationListener<ApplicationEvent> {
     @Autowired
     private RedisTemplate<Object, Object> redisTemplate;
 
-    @Logger(message = "FlagListener监听到消息")
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
         if (isNotDuty(event)) {
@@ -55,5 +53,4 @@ public class FlagListener implements ApplicationListener<ApplicationEvent> {
             redisTemplate.expire(key, 30, TimeUnit.MINUTES);
         }
     }
-
 }
