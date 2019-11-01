@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.sxkl.cloudnote.article.entity.*;
 import com.sxkl.cloudnote.searcher.service.SearchService;
+import com.sxkl.cloudnote.statistic.model.DateRange;
+import com.sxkl.cloudnote.statistic.model.KeyValue;
 import com.sxkl.cloudnote.utils.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -464,5 +466,11 @@ public class ArticleService {
     @Logger(message = "查询指定用户最新笔记")
     public List<Article> getRecentDatas(String userId) {
         return articleDao.getRecentDatas(userId);
+    }
+
+    @Logger(message = "getBarData")
+    public List<KeyValue> getBarData(String userId) {
+        DateRange dateRange = DateUtils.getCurrentYearDateRange();
+        return articleDao.getBarData(userId, dateRange);
     }
 }

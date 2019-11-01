@@ -474,7 +474,7 @@ public class DateUtils {
 
     public static DateRange getCurrentYearDateRange() {
         LocalDate start = LocalDate.now().withMonth(1).with(TemporalAdjusters.firstDayOfMonth());
-        LocalDate end = LocalDate.now().withMonth(12).with(TemporalAdjusters.lastDayOfMonth());
+        LocalDate end = start.plusYears(1);
         DateRange dateRange = new DateRange();
         dateRange.setStart(LocalDateToDate(start));
         dateRange.setEnd(LocalDateToDate(end));

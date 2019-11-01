@@ -122,6 +122,7 @@ public class TodoDao extends BaseDao<String, Todo> {
         return list.isEmpty() ? new Todo() : (Todo) list.get(0);
     }
 
+    @Logger(message = "getLineData")
     public List<KeyValue> getLineData(String userId, DateRange dateRange) {
         Session session = this.getSessionFactory().getCurrentSession();
         StringBuilder hql = new StringBuilder();

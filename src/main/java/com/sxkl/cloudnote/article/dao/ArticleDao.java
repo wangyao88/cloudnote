@@ -1,10 +1,13 @@
 package com.sxkl.cloudnote.article.dao;
 
 import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import com.sxkl.cloudnote.article.entity.Article;
 import com.sxkl.cloudnote.article.entity.SameArticle;
 import com.sxkl.cloudnote.common.dao.BaseDao;
 import com.sxkl.cloudnote.log.annotation.Logger;
+import com.sxkl.cloudnote.statistic.model.DateRange;
+import com.sxkl.cloudnote.statistic.model.KeyValue;
 import com.sxkl.cloudnote.utils.DateUtils;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
@@ -380,5 +383,30 @@ public class ArticleDao extends BaseDao<String, Article> {
         query.setFirstResult(0);
         query.setMaxResults(5);
         return query.list();
+    }
+
+    @Logger(message = "getBarData")
+    public List<KeyValue> getBarData(String userId, DateRange dateRange) {
+        Session session = this.getSessionFactory().getCurrentSession();
+        StringBuilder hql = new StringBuilder();
+        hql.append("select ")
+                .append("DATE_FORMAT(createTime, '%m') as name, count(1) as value ")
+                .append("from cn_article ")
+                .append("where createTime >= :start and createTime < :end and uId = :userId ")
+                .append("group by name ");
+        Query query = session.createSQLQuery(hql.toString());
+        query.setDate("start", dateRange.getStart());
+        query.setDate("end", dateRange.getEnd());
+        query.setString("userId", userId);
+        List list = query.list();
+        List<KeyValue> keyValues = Lists.newArrayListWithCapacity(list.size());
+        for (Object obj : list) {
+            Object[] arr = (Object[]) obj;
+            KeyValue keyValue = new KeyValue();
+            keyValue.setName(arr[0].toString());
+            keyValue.setValue(arr[1].toString());
+            keyValues.add(keyValue);
+        }
+        return keyValues;
     }
 }

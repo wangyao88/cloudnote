@@ -211,4 +211,21 @@ public class StatisticService {
         lineData.setDatas(values);
         return lineData;
     }
+
+    @Logger(message = "getBarData")
+    public BarData getBarData(HttpServletRequest request) {
+        User sessionUser = UserUtil.getSessionUser(request);
+        String userId = sessionUser.getId();
+        List<KeyValue> keyValues = articleService.getBarData(userId);
+        Map<String, String> map = keyValues.stream().collect(Collectors.toMap(KeyValue::getName, KeyValue::getValue));
+        BarData barData = new BarData();
+        barData.setMonths(MONTHS);
+        List<String> values = Lists.newArrayListWithCapacity(12);
+        for (String month : MONTHS) {
+            String value = map.getOrDefault(month, "0");
+            values.add(value);
+        }
+        barData.setDatas(values);
+        return barData;
+    }
 }
