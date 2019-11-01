@@ -9,7 +9,7 @@
 <html>
 <head>
     <base href="<%=basePath%>">
-    <title>统计</title>
+    <title>曼妙云端云笔记统计平台</title>
     <meta http-equiv="pragma" content="no-cache">
     <meta http-equiv="cache-control" content="no-cache">
     <meta http-equiv="expires" content="0">
@@ -23,7 +23,7 @@
 <body>
 <!--顶部-->
 <header class="header left">
-    <div class="header_center left">
+    <div class="header_center">
         <h2><strong>曼妙云端云笔记统计平台</strong></h2>
     </div>
 </header>
@@ -96,7 +96,22 @@
         <div class="div_any02 left ">
             <div class="div_any_child div_height">
                 <div class="div_any_title any_title_width"><img src="<%=basePath%>images/statistic/title_3.png">实时日志监控 </div>
-                <div id="map_div"></div>
+                <div class="table_p">
+                    <table>
+                        <thead><tr>
+                            <th>编号</th>
+                            <th>级别</th>
+                            <th>操作</th>
+                            <th>耗时</th>
+                            <th>IP</th>
+                            <th>日期</th>
+                        </tr>
+                        </thead>
+                        <tbody id="logDataTable">
+
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
         <div class="right div_any01">
@@ -105,7 +120,7 @@
                 <p id="char3" class="p_chart"></p>
             </div>
             <div class="div_any_child">
-                <div class="div_any_title"><img src="<%=basePath%>images/statistic/title_5.png">笔记数量季度统计 </div>
+                <div class="div_any_title"><img src="<%=basePath%>images/statistic/title_5.png">笔记数量月度统计 </div>
                 <p id="char4" class="p_chart"></p>
             </div>
         </div>
@@ -128,7 +143,6 @@
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </div>
         <div class="left div_table_box">
@@ -191,7 +205,5 @@
 <script src="<%=basePath%>js/statistic/echarts-all.js"></script>
 <script src="<%=basePath%>js/statistic/base.js"></script>
 <script src="<%=basePath%>js/statistic/index.js"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5ieMMexWmzB9jivTq6oCRX9j&callback"></script>
-<script src="<%=basePath%>js/statistic/map.js"></script>
 </body>
 </html>

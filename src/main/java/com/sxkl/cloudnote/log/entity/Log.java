@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.sxkl.cloudnote.statistic.model.LogData;
 import org.hibernate.annotations.GenericGenerator;
 
 import lombok.Data;
@@ -66,5 +67,15 @@ public class Log {
     public void setLogLevel(LogLevel logLevel) {
         this.logLevel = logLevel;
         setLevel(logLevel.name());
+    }
+
+    public LogData convertToLogTableData() {
+        LogData logData = new LogData();
+        logData.setLevel(this.getLevel());
+        logData.setMessage(this.getMessage());
+        logData.setCostTime(this.getCostTime());
+        logData.setIp(this.getIp());
+        logData.setDate(this.getDate());
+        return logData;
     }
 }

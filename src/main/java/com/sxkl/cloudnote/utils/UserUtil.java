@@ -19,4 +19,8 @@ public class UserUtil {
         return null;
     }
 
+    public static String getSessionUserId(HttpServletRequest request) {
+        return getSessionUser(request).getId();
+    }
+
 }

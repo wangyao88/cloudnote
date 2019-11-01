@@ -57,8 +57,7 @@ public class StatisticService {
 
     @Logger(message = "获取统计信息 topData tableData")
     public StatisticData getTopAndTableData(HttpServletRequest request) {
-        User sessionUser = UserUtil.getSessionUser(request);
-        String userId = sessionUser.getId();
+        String userId = UserUtil.getSessionUserId(request);
         StatisticData statisticData = new StatisticData();
         TopData topData = getTopData(userId);
         statisticData.setTopData(topData);
@@ -138,8 +137,7 @@ public class StatisticService {
 
     @Logger(message = "getPieData")
     public PieData getPieData(HttpServletRequest request) {
-        User sessionUser = UserUtil.getSessionUser(request);
-        String userId = sessionUser.getId();
+        String userId = UserUtil.getSessionUserId(request);
         List<KeyValue> keyValues = noteService.getPieData(userId);
         PieData pieData = new PieData();
         List<String> names = keyValues.stream().map(KeyValue::getName).collect(Collectors.toList());
@@ -150,8 +148,7 @@ public class StatisticService {
 
     @Logger(message = "getBarPercentData")
     public BarPercentData getBarPercentData(HttpServletRequest request) {
-        User sessionUser = UserUtil.getSessionUser(request);
-        String userId = sessionUser.getId();
+        String userId = UserUtil.getSessionUserId(request);
         DateRange firstDateRange = DateUtils.getFirstQuarter();
         Map<String, String> firstQuarter = logService.getBarPercentData(userId, firstDateRange);
 
@@ -197,8 +194,7 @@ public class StatisticService {
     }
 
     public LineData getLineData(HttpServletRequest request) {
-        User sessionUser = UserUtil.getSessionUser(request);
-        String userId = sessionUser.getId();
+        String userId = UserUtil.getSessionUserId(request);
         List<KeyValue> keyValues = todoService.getLineData(userId);
         Map<String, String> map = keyValues.stream().collect(Collectors.toMap(KeyValue::getName, KeyValue::getValue));
         LineData lineData = new LineData();
@@ -214,8 +210,7 @@ public class StatisticService {
 
     @Logger(message = "getBarData")
     public BarData getBarData(HttpServletRequest request) {
-        User sessionUser = UserUtil.getSessionUser(request);
-        String userId = sessionUser.getId();
+        String userId = UserUtil.getSessionUserId(request);
         List<KeyValue> keyValues = articleService.getBarData(userId);
         Map<String, String> map = keyValues.stream().collect(Collectors.toMap(KeyValue::getName, KeyValue::getValue));
         BarData barData = new BarData();
@@ -227,5 +222,11 @@ public class StatisticService {
         }
         barData.setDatas(values);
         return barData;
+    }
+
+    @Logger(message = "LogData")
+    public List<LogData> getLogTableData(int pageIndex, HttpServletRequest request) {
+        String userId = UserUtil.getSessionUserId(request);
+        return logService.getLogTableData(pageIndex, 10, userId);
     }
 }

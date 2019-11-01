@@ -7,6 +7,7 @@ import com.mohan.project.easylogger.core.Logger;
 import com.sxkl.cloudnote.log.dao.LogDao;
 import com.sxkl.cloudnote.log.entity.Log;
 import com.sxkl.cloudnote.statistic.model.DateRange;
+import com.sxkl.cloudnote.statistic.model.LogData;
 import com.sxkl.cloudnote.utils.StringUtils;
 import net.sf.json.JSONObject;
 import org.springframework.amqp.core.AmqpTemplate;
@@ -16,7 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class LogService {
@@ -74,5 +77,16 @@ public class LogService {
 
     public Map<String, String> getBarPercentData(String userId, DateRange dateRange) {
         return logDao.getBarPercentData(userId, dateRange);
+    }
+
+    public List<LogData> getLogTableData(int pageIndex, int pageSize, String userId) {
+        List<Log> logs = logDao.getLogs(pageIndex, pageSize, userId);
+        List<LogData> logDatas = logs.stream().map(Log::convertToLogTableData).collect(Collectors.toList());
+        int index = (pageIndex-1) * pageSize + 1;
+        for (LogData logData : logDatas) {
+            logData.setIndex(index);
+            index++;
+        }
+        return logDatas;
     }
 }

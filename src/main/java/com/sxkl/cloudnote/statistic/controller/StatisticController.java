@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 @RequestMapping("/statistic")
@@ -59,6 +60,13 @@ public class StatisticController {
     @ResponseBody
     public BarData getBarData(HttpServletRequest request) {
         return statisticService.getBarData(request);
+    }
+
+    @Logger(message = "getLogTableData")
+    @RequestMapping(value = "/getLogTableData", method = RequestMethod.GET)
+    @ResponseBody
+    public List<LogData> getLogTableData(int pageIndex, HttpServletRequest request) {
+        return statisticService.getLogTableData(pageIndex, request);
     }
 
     private String getIndex() {

@@ -1,4 +1,4 @@
-<%@ page language="java" pageEncoding="UTF-8" %>
+<%@ page language="java" pageEncoding="UTF-8"%>
 <%
     String path = request.getContextPath();
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
@@ -9,93 +9,75 @@
 <html>
 <head>
     <base href="<%=basePath%>">
-    <title>统计</title>
+    <title>曼妙云端云笔记统计平台</title>
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta http-equiv="pragma" content="no-cache">
     <meta http-equiv="cache-control" content="no-cache">
     <meta http-equiv="expires" content="0">
     <link rel="stylesheet" href="<%=basePath%>css/statistic/base.css">
+
+    <script type="text/javascript">
+        var basePath = "<%=basePath%>";
+    </script>
+
 </head>
 <body>
 <!--顶部-->
 <header class="header left">
-    <div class="left nav">
-        <ul>
-            <li class="nav_active"><i class="nav_1"></i><a href="index.html">数据概览</a> </li>
-            <li><i class="nav_2"></i><a href="carContrl.html">车辆监控</a> </li>
-            <li><i class="nav_3"></i><a href="map.html">地图界面</a> </li>
-
-
-
-        </ul>
-    </div>
-    <div class="header_center left">
-        <h2><strong>xx区智慧旅游综合服务平台</strong></h2>
-        <p class="color_font"><small>Comprehensive service platform for smart tourism</small></p>
-    </div>
-    <div class="right nav text_right">
-        <ul> <li><i class="nav_7"></i><a href="static.html">查询统计</a> </li>
-            <li><i class="nav_8"></i><a href="message.html">信息录入</a> </li>
-            <li><i class="nav_4"></i><a href="table1.html">表格界面</a> </li>
-        </ul>
+    <div class="header_center">
+        <h2><strong>曼妙云端云笔记统计平台</strong></h2>
     </div>
 </header>
 <!--内容部分-->
 <div class="con left">
-    <!--选择时间-->
-    <div class="select_time">
-        <div class="static_top left">
-            <i></i><span>总体概况</span>
-        </div>
-    </div>
     <!--数据总概-->
     <div class="con_div">
         <div class="con_div_text left">
             <div class="con_div_text01 left">
-                <img src="img/info_1.png" class="left text01_img"/>
+                <img src="<%=basePath%>images/statistic/info_1.png" class="left text01_img"/>
                 <div class="left text01_div">
-                    <p>车辆总数(辆)</p>
-                    <p>12356</p>
+                    <p>笔记本数量</p>
+                    <p id="noteNum"></p>
                 </div>
             </div>
             <div class="con_div_text01 right">
-                <img src="img/info_2.png" class="left text01_img"/>
+                <img src="<%=basePath%>images/statistic/info_2.png" class="left text01_img"/>
                 <div class="left text01_div">
-                    <p>车辆使用数(辆)</p>
-                    <p>12356</p>
+                    <p>标签数量</p>
+                    <p id="flagNum"></p>
                 </div>
             </div>
         </div>
         <div class="con_div_text left">
             <div class="con_div_text01 left">
-                <img src="img/info_4.png" class="left text01_img"/>
+                <img src="<%=basePath%>images/statistic/info_4.png" class="left text01_img"/>
                 <div class="left text01_div">
-                    <p>行驶里程总数(km)</p>
-                    <p class="sky">12356</p>
+                    <p>笔记总数量</p>
+                    <p class="sky" id="articleNum"></p>
                 </div>
             </div>
             <div class="con_div_text01 right">
-                <img src="img/info_5.png" class="left text01_img"/>
+                <img src="<%=basePath%>images/statistic/info_5.png" class="left text01_img"/>
                 <div class="left text01_div">
-                    <p>行驶里程平均数(km)</p>
-                    <p class="sky">12356</p>
+                    <p>博客总数量</p>
+                    <p class="sky" id="blogNum"></p>
                 </div>
             </div>
         </div>
         <div class="con_div_text left">
 
             <div class="con_div_text01 left">
-                <img src="img/info_6.png" class="left text01_img"/>
+                <img src="<%=basePath%>images/statistic/info_6.png" class="left text01_img"/>
                 <div class="left text01_div">
-                    <p>行驶时长总数(s)</p>
-                    <p class="org">12356</p>
+                    <p>今天记录笔记数量</p>
+                    <p class="org" id="todayArticleNum"></p>
                 </div>
             </div>
             <div class="con_div_text01 right">
-                <img src="img/info_7.png" class="left text01_img"/>
+                <img src="<%=basePath%>images/statistic/info_7.png" class="left text01_img"/>
                 <div class="left text01_div">
-                    <p>行驶ihfj平均数(s)</p>
-                    <p class="org">12356</p>
+                    <p>操作日志数量</p>
+                    <p class="org" id="logNum"></p>
                 </div>
             </div>
         </div>
@@ -104,27 +86,42 @@
     <div class="div_any">
         <div class="left div_any01">
             <div class="div_any_child">
-                <div class="div_any_title"><img src="img/title_1.png">车辆类型统计 </div>
+                <div class="div_any_title"><img src="<%=basePath%>images/statistic/title_1.png">笔记本关联笔记统计 </div>
                 <p id="char1" class="p_chart"></p>
             </div>
             <div class="div_any_child">
-                <div class="div_any_title"><img src="img/title_2.png">车辆状态统计 </div>
+                <div class="div_any_title"><img src="<%=basePath%>images/statistic/title_2.png">季度日志状态统计 </div>
                 <p id="char2" class="p_chart"></p>
             </div>
         </div>
         <div class="div_any02 left ">
             <div class="div_any_child div_height">
-                <div class="div_any_title any_title_width"><img src="img/title_3.png">车辆行驶地图 </div>
-                <div id="map_div"></div>
+                <div class="div_any_title any_title_width"><img src="<%=basePath%>images/statistic/title_3.png">实时日志监控 </div>
+                <div class="table_p">
+                    <table>
+                        <thead><tr>
+                            <th>编号</th>
+                            <th>级别</th>
+                            <th>操作</th>
+                            <th>耗时</th>
+                            <th>IP</th>
+                            <th>日期</th>
+                        </tr>
+                        </thead>
+                        <tbody id="logDataTable">
+
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
         <div class="right div_any01">
             <div class="div_any_child">
-                <div class="div_any_title"><img src="img/title_4.png">车辆行驶统计 </div>
+                <div class="div_any_title"><img src="<%=basePath%>images/statistic/title_4.png">todo月度统计 </div>
                 <p id="char3" class="p_chart"></p>
             </div>
             <div class="div_any_child">
-                <div class="div_any_title"><img src="img/title_5.png">车辆报警统计 </div>
+                <div class="div_any_title"><img src="<%=basePath%>images/statistic/title_5.png">笔记数量月度统计 </div>
                 <p id="char4" class="p_chart"></p>
             </div>
         </div>
@@ -133,44 +130,17 @@
     <div class="div_table">
         <div class="left div_table_box">
             <div class="div_any_child">
-                <div class="div_any_title"><img src="img/title_4.png">行驶里程排名前5位 </div>
+                <div class="div_any_title"><img src="<%=basePath%>images/statistic/title_4.png">笔记浏览量排名前5位 </div>
                 <div class="table_p">
                     <table>
                         <thead><tr>
-                            <th>排名</th>
-                            <th>车牌号</th>
-                            <th>里程数（km）</th>
+                            <th>编号</th>
+                            <th>标题</th>
+                            <th>浏览量</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr><td>1</td><td>京A12345</td><td>134.2</td></tr>
-                        <tr><td>1</td><td>京A12345</td><td>134.2</td></tr>
-                        <tr><td>1</td><td>京A12345</td><td>134.2</td></tr>
-                        <tr><td>1</td><td>京A12345</td><td>134.2</td></tr>
-                        <tr><td>1</td><td>京A12345</td><td>134.2</td></tr>
-                        </tbody>
-                    </table>
-                </div>
+                        <tbody id="hitDataTable">
 
-            </div>
-        </div>
-        <div class="left div_table_box">
-            <div class="div_any_child">
-                <div class="div_any_title"><img src="img/title_4.png">行驶次数车辆前5位 </div>
-                <div class="table_p">
-                    <table>
-                        <thead><tr>
-                            <th>排名</th>
-                            <th>车牌号</th>
-                            <th>次数（km）</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr><td>1</td><td>京A12345</td><td>134.2</td></tr>
-                        <tr><td>1</td><td>京A12345</td><td>134.2</td></tr>
-                        <tr><td>1</td><td>京A12345</td><td>134.2</td></tr>
-                        <tr><td>1</td><td>京A12345</td><td>134.2</td></tr>
-                        <tr><td>1</td><td>京A12345</td><td>134.2</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -178,21 +148,17 @@
         </div>
         <div class="left div_table_box">
             <div class="div_any_child">
-                <div class="div_any_title"><img src="img/title_4.png">行驶最高时速前5位 </div>
+                <div class="div_any_title"><img src="<%=basePath%>images/statistic/title_4.png">最新添加笔记前5位 </div>
                 <div class="table_p">
                     <table>
                         <thead><tr>
-                            <th>排名</th>
-                            <th>车牌号</th>
-                            <th>时速（km）</th>
+                            <th>编号</th>
+                            <th>标题</th>
+                            <th>添加日期</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr><td>1</td><td>京A12345</td><td>134.2</td></tr>
-                        <tr><td>1</td><td>京A12345</td><td>134.2</td></tr>
-                        <tr><td>1</td><td>京A12345</td><td>134.2</td></tr>
-                        <tr><td>1</td><td>京A12345</td><td>134.2</td></tr>
-                        <tr><td>1</td><td>京A12345</td><td>134.2</td></tr>
+                        <tbody id="recentDataTable">
+
                         </tbody>
                     </table>
                 </div>
@@ -200,21 +166,35 @@
         </div>
         <div class="left div_table_box">
             <div class="div_any_child">
-                <div class="div_any_title"><img src="img/title_4.png">行驶时长排名前5位 </div>
+                <div class="div_any_title"><img src="<%=basePath%>images/statistic/title_4.png">flag拥有文章数前5位 </div>
                 <div class="table_p">
                     <table>
                         <thead><tr>
                             <th>排名</th>
-                            <th>车牌号</th>
-                            <th>时长（km）</th>
+                            <th>标签名称</th>
+                            <th>数量</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr><td>1</td><td>京A12345</td><td>134.2</td></tr>
-                        <tr><td>1</td><td>京A12345</td><td>134.2</td></tr>
-                        <tr><td>1</td><td>京A12345</td><td>134.2</td></tr>
-                        <tr><td>1</td><td>京A12345</td><td>134.2</td></tr>
-                        <tr><td>1</td><td>京A12345</td><td>134.2</td></tr>
+                        <tbody id="flagDataTable">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="left div_table_box">
+            <div class="div_any_child">
+                <div class="div_any_title"><img src="<%=basePath%>images/statistic/title_4.png">搜索关键字前5位 </div>
+                <div class="table_p">
+                    <table>
+                        <thead><tr>
+                            <th>编号</th>
+                            <th>关键字</th>
+                            <th>数量</th>
+                        </tr>
+                        </thead>
+                        <tbody id="searchDataTable">
+
                         </tbody>
                     </table>
                 </div>
@@ -222,11 +202,9 @@
         </div>
     </div>
 </div>
-<script src="<%=basePath%>js/jQuery-2.2.0.min.js"></script>
+<script src="<%=basePath%>js/jquery.min.js"></script>
 <script src="<%=basePath%>js/statistic/echarts-all.js"></script>
 <script src="<%=basePath%>js/statistic/base.js"></script>
 <script src="<%=basePath%>js/statistic/index.js"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5ieMMexWmzB9jivTq6oCRX9j&callback"></script>
-<script src="<%=basePath%>js/statistic/map.js"></script>
 </body>
 </html>

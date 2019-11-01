@@ -6,6 +6,7 @@ import com.sxkl.cloudnote.common.entity.Constant;
 import com.sxkl.cloudnote.log.entity.Log;
 import com.sxkl.cloudnote.sessionfactory.SessionFactory;
 import com.sxkl.cloudnote.statistic.model.DateRange;
+import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
@@ -47,5 +48,15 @@ public class LogDao extends BaseDao<String, Log> {
             result.put(arr[0].toString(), arr[1].toString());
         }
         return result;
+    }
+
+    public List<Log> getLogs(int pageIndex, int pageSize, String userId) {
+        String hql = "from Log where userId=:userId";
+        Session session = this.getSession();
+        Query query = session.createQuery(hql);
+        query.setString("userId", userId);
+        query.setFirstResult((pageIndex-1)*pageSize);
+        query.setMaxResults(pageSize);
+        return query.list();
     }
 }

@@ -1,12 +1,22 @@
-/**
- * Created by 30947 on 2018/7/18.
- */
+var count = 0;
 $(document).ready(function () {
     char1();
+    char1Interval();
+
     char2();
+    char2Interval();
+
     char3();
+    char3Interval();
+
     char4();
+    char4Interval();
+
     getTopAndTableData();
+    getTopAndTableDataInterval();
+
+    getLogTableData();
+    getLogTableDataInterval()
 });
 
 function getTopAndTableData() {
@@ -26,33 +36,37 @@ function getTopAndTableData() {
             //tableData
             var hitDatas = result.hitDatas;
             var hitDataHtml = "";
+            $("#hitDataTable").html(hitDataHtml);
             $(hitDatas).each(function(index, hitData) {
                 hitDataHtml += "<tr><td>"+hitData.index+"</td><td>"+hitData.title+"</td><td>"+hitData.hitNum+"</td></tr>";
             });
-            $("#hitDataTable").append(hitDataHtml);
+            $("#hitDataTable").html(hitDataHtml);
 
 
             var recentDatas = result.recentDatas;
             var recentDataHtml = "";
+            $("#recentDataTable").html(recentDataHtml);
             $(recentDatas).each(function(index, recentData) {
                 recentDataHtml += "<tr><td>"+recentData.index+"</td><td>"+recentData.title+"</td><td>"+recentData.createDate+"</td></tr>";
             });
-            $("#recentDataTable").append(recentDataHtml);
+            $("#recentDataTable").html(recentDataHtml);
 
             var flagDatas = result.flagDatas;
             var flagDataHtml = "";
+            $("#flagDataTable").html(flagDataHtml);
             $(flagDatas).each(function(index, flagData) {
                 flagDataHtml += "<tr><td>"+flagData.index+"</td><td>"+flagData.name+"</td><td>"+flagData.num+"</td></tr>";
             });
-            $("#flagDataTable").append(flagDataHtml);
+            $("#flagDataTable").html(flagDataHtml);
 
 
             var searchDatas = result.searchDatas;
             var searchDataHtml = "";
+            $("#searchDataTable").html(searchDataHtml);
             $(searchDatas).each(function(index, searchData) {
                 searchDataHtml += "<tr><td>"+searchData.index+"</td><td>"+searchData.key+"</td><td>"+searchData.num+"</td></tr>";
             });
-            $("#searchDataTable").append(searchDataHtml);
+            $("#searchDataTable").html(searchDataHtml);
         },
         error : function(){
             alert("getTopAndTableData执行失败，请稍候重试！");
@@ -381,4 +395,56 @@ function char4() {
             alert("getBarData执行失败，请稍候重试！");
         }
     });
+}
+
+function getLogTableData() {
+    if(count >= 100) {
+        count = 0;
+    }
+    count++;
+    $.ajax({
+        url : basePath+"statistic/getLogTableData",
+        type : "get",
+        data: {
+            pageIndex: count
+        },
+        dataType: "json",
+        success : function(result){
+            //tableData
+            var logDatas = result;
+            var logDataHtml = "";
+            $("#logDataTable").html(logDataHtml);
+            $(logDatas).each(function(index, logData) {
+                logDataHtml += "<tr><td>"+logData.index+"</td><td>"+logData.level+"</td><td>"+logData.message+"</td><td>"+logData.costTime+"</td><td>"+logData.ip+"</td><td>"+logData.date+"</td></tr>";
+            });
+            $("#logDataTable").html(logDataHtml);
+        },
+        error : function(){
+            alert("getLogTableData执行失败，请稍候重试！");
+        }
+    });
+}
+
+function getTopAndTableDataInterval() {
+    window.setInterval(getTopAndTableData, 1000*10);
+}
+
+function char1Interval() {
+    window.setInterval(char1, 4000);
+}
+
+function char2Interval() {
+    window.setInterval(char2, 4500);
+}
+
+function char3Interval() {
+    window.setInterval(char3, 3500);
+}
+
+function char4Interval() {
+    window.setInterval(char4, 5000);
+}
+
+function getLogTableDataInterval() {
+    window.setInterval(getLogTableData, 1000*2);
 }
