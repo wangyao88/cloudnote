@@ -385,7 +385,7 @@ public class ArticleDao extends BaseDao<String, Article> {
         return query.list();
     }
 
-    @Logger(message = "getBarData")
+    @Logger(message = "获取笔记数量月度统计柱状图数据")
     public List<KeyValue> getBarData(String userId, DateRange dateRange) {
         Session session = this.getSessionFactory().getCurrentSession();
         StringBuilder hql = new StringBuilder();

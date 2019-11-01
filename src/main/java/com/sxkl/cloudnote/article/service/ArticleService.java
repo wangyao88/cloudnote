@@ -468,7 +468,7 @@ public class ArticleService {
         return articleDao.getRecentDatas(userId);
     }
 
-    @Logger(message = "getBarData")
+    @Logger(message = "获取笔记数量月度统计柱状图数据")
     public List<KeyValue> getBarData(String userId) {
         DateRange dateRange = DateUtils.getCurrentYearDateRange();
         return articleDao.getBarData(userId, dateRange);

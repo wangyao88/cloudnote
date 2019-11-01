@@ -154,7 +154,7 @@ public class NoteService {
         return noteDao.getNoteNum(userId);
     }
 
-    @Logger(message = "getPieData")
+    @Logger(message = "获取笔记本关联笔记统计饼图数据")
     public List<KeyValue> getPieData(String userId) {
         return noteDao.getPieData(userId);
     }

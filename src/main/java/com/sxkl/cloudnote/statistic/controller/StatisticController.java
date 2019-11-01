@@ -27,42 +27,42 @@ public class StatisticController {
         return getIndex();
     }
 
-    @Logger(message = "getTopAndTableData")
+    @Logger(message = "获取顶部和底部统计数据")
     @RequestMapping(value = "/getTopAndTableData", method = RequestMethod.GET)
     @ResponseBody
     public StatisticData getTopAndTableData(HttpServletRequest request) {
         return statisticService.getTopAndTableData(request);
     }
 
-    @Logger(message = "getPieData")
+    @Logger(message = "获取笔记本关联笔记统计饼图数据")
     @RequestMapping(value = "/getPieData", method = RequestMethod.GET)
     @ResponseBody
     public PieData getPieData(HttpServletRequest request) {
         return statisticService.getPieData(request);
     }
 
-    @Logger(message = "getBarPercentData")
+    @Logger(message = "获取季度日志状态统计柱状占比图数据")
     @RequestMapping(value = "/getBarPercentData", method = RequestMethod.GET)
     @ResponseBody
     public BarPercentData getBarPercentData(HttpServletRequest request) {
         return statisticService.getBarPercentData(request);
     }
 
-    @Logger(message = "getLineData")
+    @Logger(message = "获取todo月度统计折线图数据")
     @RequestMapping(value = "/getLineData", method = RequestMethod.GET)
     @ResponseBody
     public LineData getLineData(HttpServletRequest request) {
         return statisticService.getLineData(request);
     }
 
-    @Logger(message = "getBarData")
+    @Logger(message = "获取笔记数量月度统计柱状图数据")
     @RequestMapping(value = "/getBarData", method = RequestMethod.GET)
     @ResponseBody
     public BarData getBarData(HttpServletRequest request) {
         return statisticService.getBarData(request);
     }
 
-    @Logger(message = "getLogTableData")
+    @Logger(message = "获取实时日志监控数据")
     @RequestMapping(value = "/getLogTableData", method = RequestMethod.GET)
     @ResponseBody
     public List<LogData> getLogTableData(int pageIndex, HttpServletRequest request) {

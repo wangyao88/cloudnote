@@ -135,7 +135,7 @@ public class StatisticService {
         return result;
     }
 
-    @Logger(message = "getPieData")
+    @Logger(message = "获取笔记本关联笔记统计饼图数据")
     public PieData getPieData(HttpServletRequest request) {
         String userId = UserUtil.getSessionUserId(request);
         List<KeyValue> keyValues = noteService.getPieData(userId);
@@ -146,7 +146,7 @@ public class StatisticService {
         return pieData;
     }
 
-    @Logger(message = "getBarPercentData")
+    @Logger(message = "获取季度日志状态统计柱状占比图数据")
     public BarPercentData getBarPercentData(HttpServletRequest request) {
         String userId = UserUtil.getSessionUserId(request);
         DateRange firstDateRange = DateUtils.getFirstQuarter();
@@ -193,6 +193,7 @@ public class StatisticService {
         return barPercentData;
     }
 
+    @Logger(message = "获取todo月度统计折线图数据")
     public LineData getLineData(HttpServletRequest request) {
         String userId = UserUtil.getSessionUserId(request);
         List<KeyValue> keyValues = todoService.getLineData(userId);
@@ -208,7 +209,7 @@ public class StatisticService {
         return lineData;
     }
 
-    @Logger(message = "getBarData")
+    @Logger(message = "获取笔记数量月度统计柱状图数据")
     public BarData getBarData(HttpServletRequest request) {
         String userId = UserUtil.getSessionUserId(request);
         List<KeyValue> keyValues = articleService.getBarData(userId);
@@ -224,7 +225,7 @@ public class StatisticService {
         return barData;
     }
 
-    @Logger(message = "LogData")
+    @Logger(message = "获取实时日志监控数据")
     public List<LogData> getLogTableData(int pageIndex, HttpServletRequest request) {
         String userId = UserUtil.getSessionUserId(request);
         return logService.getLogTableData(pageIndex, 10, userId);
