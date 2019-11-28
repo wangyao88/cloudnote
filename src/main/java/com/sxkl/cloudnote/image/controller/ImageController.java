@@ -1,23 +1,20 @@
 package com.sxkl.cloudnote.image.controller;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.SQLException;
-
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.sxkl.cloudnote.image.entity.Image;
+import com.sxkl.cloudnote.image.service.ImageService;
 import com.sxkl.cloudnote.log.annotation.Logger;
+import lombok.Cleanup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sxkl.cloudnote.image.entity.Image;
-import com.sxkl.cloudnote.image.service.ImageService;
-
-import lombok.Cleanup;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.SQLException;
 
 @RestController
 @RequestMapping("/image")
@@ -28,7 +25,7 @@ public class ImageController {
 
     @Logger(message = "获取图片")
     @RequestMapping("/getImage")
-    public void valicode(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
+    public void getImage(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
         @Cleanup
         ServletOutputStream out = response.getOutputStream();
         Image image = imageService.getImageByName(request);

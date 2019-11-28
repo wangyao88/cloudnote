@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.sxkl.cloudnote.article.entity.Article;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
@@ -60,7 +61,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
         return UUID.randomUUID().toString() + extendFile;
     }
 
-    public static String getUUIDNameWithoutextend(String fileName) {
+    public static String getUUIDNameWithoutextend() {
         return UUID.randomUUID().toString();
     }
 
@@ -221,8 +222,8 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
         return doc.html();
     }
 
-    public static String saveHtmlImgToDB(String html, ImageService imageService) {
-        Document doc = Jsoup.parse(html);
+    public static String saveHtmlImgToDB(Article article, ImageService imageService) {
+        Document doc = Jsoup.parse(article.getContent());
         Elements imgs = doc.getElementsByTag("img");
         String imgName = "";
         String imgNewUrl = "";
@@ -232,9 +233,14 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
                 String imgOldUrl = imgs.get(i).attr("src");
                 String imgAlt = imgs.get(i).attr("alt");
                 if ((Pattern.matches(regex, imgOldUrl)) && (!imgOldUrl.startsWith(Constant.ARTICLE_CONTENT_DOMAIN))) {
-                    imgName = getUUIDNameWithoutextend(getUrlFileName(imgOldUrl));
-                    Image image = new Image(imgName, imgAlt);
-                    saveFileToDBByUrl(imgOldUrl, image, imageService);
+                    imgName = imgOldUrl.substring(imgOldUrl.lastIndexOf("getImage?name=")+"getImage?name=".length());
+                    Image image = imageService.getImageByName(imgName);
+                    if(ObjectUtils.isNull(image)) {
+                        imgName = getUUIDNameWithoutextend();
+                        image = new Image(imgName, imgAlt);
+                        image.setAId(article.getId());
+                        saveFileToDBByUrl(imgOldUrl, image, imageService);
+                    }
                     imgNewUrl = Constant.ARTICLE_CONTENT_DOMAIN + "/image/getImage?name=" + imgName;
                     doc.getElementsByTag("img").get(i).attr("src", imgNewUrl);
                 }

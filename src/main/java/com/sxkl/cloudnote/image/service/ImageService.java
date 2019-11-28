@@ -1,23 +1,25 @@
 package com.sxkl.cloudnote.image.service;
 
-import java.io.*;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.sxkl.cloudnote.article.dao.ArticleDao;
 import com.sxkl.cloudnote.common.entity.Constant;
-import com.sxkl.cloudnote.utils.ObjectUtils;
-import com.sxkl.cloudnote.utils.StringUtils;
-import lombok.Cleanup;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.sxkl.cloudnote.common.entity.Page;
 import com.sxkl.cloudnote.image.dao.ImageDao;
 import com.sxkl.cloudnote.image.entity.Image;
 import com.sxkl.cloudnote.log.annotation.Logger;
-
+import com.sxkl.cloudnote.utils.DateUtils;
+import com.sxkl.cloudnote.utils.ObjectUtils;
+import com.sxkl.cloudnote.utils.StringUtils;
+import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
+import java.io.*;
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -25,17 +27,38 @@ public class ImageService {
 
     @Autowired
     private ImageDao imageDao;
+    @Autowired
+    private ArticleDao articleDao;
+
+    public void move() {
+        File root = new File(Constant.IMAGE_SAVED_PATH);
+        File[] files = root.listFiles();
+        for (File file : files) {
+            String name = file.getName();
+            String path;
+            Image image = imageDao.getImageByName(name);
+            if(ObjectUtils.isNull(image)) {
+                path = getDirectory("unused");
+            }else {
+                path = getDirectory(image.getCreateDate());
+            }
+            File dir = new File(path);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            String filePath = StringUtils.appendJoinFolderSeparator(path, name);
+            File move = new File(filePath);
+            file.renameTo(move);
+            System.out.println(move.getAbsolutePath());
+        }
+    }
 
     @Logger(message = "根据图片名获取图片")
     public Image getImageByName(HttpServletRequest request) {
         try {
             String name = request.getParameter("name");
             Image image = imageDao.getImageByName(name);
-//			byte[] content = image.getContent();
-//			if(ObjectUtils.isNull(content) || content.length == 0) {
-//				content = getImageContentFromDisk(image.getName());
-//			}
-            byte[] content = getImageContentFromDisk(image.getName());
+            byte[] content = getImageContentFromDisk(image);
             image.setContent(content);
             return image;
         } catch (Exception e) {
@@ -44,17 +67,32 @@ public class ImageService {
         }
     }
 
-    private byte[] getImageContentFromDisk(String name) {
+    @Logger(message = "根据图片名获取图片")
+    public Image getImageByName(String name) {
+        try {
+            Image image = imageDao.getImageByName(name);
+            byte[] content = getImageContentFromDisk(image);
+            image.setContent(content);
+            return image;
+        } catch (Exception e) {
+            log.error("获取图片失败!" + e.getMessage());
+            return null;
+        }
+    }
+
+    private byte[] getImageContentFromDisk(Image image) {
+        String name = image.getName();
         byte[] buffer = StringUtils.EMPTY.getBytes();
         try {
             if (StringUtils.isEmpty(name)) {
                 return buffer;
             }
-            File dir = new File(Constant.IMAGE_SAVED_PATH);
-            if (!dir.exists() && dir.isDirectory()) {
+            String path = getDirectory(image.getCreateDate());
+            File dir = new File(path);
+            if (!dir.exists()) {
                 dir.mkdirs();
             }
-            String filePath = StringUtils.appendJoinFolderSeparator(Constant.IMAGE_SAVED_PATH, name);
+            String filePath = StringUtils.appendJoinFolderSeparator(path, name);
             File file = new File(filePath);
             @Cleanup
             FileInputStream fis = new FileInputStream(file);
@@ -77,8 +115,8 @@ public class ImageService {
         try {
             byte[] content = image.getContent();
             image.setContent(StringUtils.EMPTY.getBytes());
+            image.setCreateDate(new Date());
             imageDao.save(image);
-            // 保存到磁盘
             saveToDisk(image.getName(), content);
         } catch (Exception e) {
             log.error("保存图片失败!" + e.getMessage());
@@ -87,11 +125,12 @@ public class ImageService {
 
     @Logger(message = "保存图片到磁盘")
     public void saveToDisk(String name, byte[] content) throws IOException {
-        String path = StringUtils.appendJoinFolderSeparator(Constant.IMAGE_SAVED_PATH, name);
-        File dir = new File(Constant.IMAGE_SAVED_PATH);
-        if (!dir.exists() && dir.isDirectory()) {
+        String path = getDirectory();
+        File dir = new File(path);
+        if (!dir.exists()) {
             dir.mkdirs();
         }
+        path = StringUtils.appendJoinFolderSeparator(path, name);
         File file = new File(path);
         @Cleanup
         FileOutputStream fos = new FileOutputStream(file);
@@ -145,5 +184,31 @@ public class ImageService {
     @Logger(message = "获取指定图片")
     public Image getOne(String id) {
         return imageDao.getOne(id);
+    }
+
+    private String getDirectory() {
+        return getDirectory(new Date());
+    }
+
+    private String getDirectory(String name) {
+        StringBuilder path = new StringBuilder(Constant.IMAGE_SAVED_PATH);
+        path.append(File.separatorChar)
+                .append(name);
+        return path.toString();
+    }
+
+    private String getDirectory(Date date) {
+        if(ObjectUtils.isNull(date)) {
+            date = new Date();
+        }
+        LocalDate now = DateUtils.convertDateToLocalDate(date);
+        StringBuilder path = new StringBuilder(Constant.IMAGE_SAVED_PATH);
+        path.append(File.separatorChar)
+                .append(now.getYear())
+                .append(File.separatorChar)
+                .append(now.getMonth().getValue())
+                .append(File.separatorChar)
+                .append(now.getDayOfMonth());
+        return path.toString();
     }
 }

@@ -269,6 +269,15 @@ public class ArticleDao extends BaseDao<String, Article> {
         return session.load(Article.class, id);
     }
 
+    @Logger(message = "查询笔记，主键精确匹配")
+    public Article getArticleCreateTimeById(String id) {
+        String hql = "select new Article(id,title,createTime) from Article a where a.id=:id";
+        Session session = this.getSession();
+        Query query = session.createQuery(hql);
+        query.setString("id", id);
+        return (Article) query.uniqueResult();
+    }
+
     @Logger(message = "查询最新笔记列表")
     @SuppressWarnings("unchecked")
     public List<Article> getRecent(Article article) {

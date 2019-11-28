@@ -23,7 +23,7 @@ public class ImageDao extends BaseDao<String, Image> {
 
     @Logger(message = "获取图片，图片名模糊匹配")
     public Image getImageByName(String name) {
-        String hql = "select new Image(id, name, aId) from Image where name = :name";
+        String hql = "select new Image(id, name, aId, createDate) from Image where name = :name";
         Session session = this.getSessionFactory().getCurrentSession();
         Query query = session.createQuery(hql);
         query.setString("name", name);

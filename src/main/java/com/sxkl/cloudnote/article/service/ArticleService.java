@@ -77,6 +77,7 @@ public class ArticleService {
             article = articleDao.findOne(articleId);
         } else {
             article = new Article();
+            article.setId(UUIDUtil.getUUID());
             article.setHitNum(0);
             article.setCreateTime(new Date());
             article.setUser(user);
@@ -85,10 +86,15 @@ public class ArticleService {
         article.setNote(note);
         article.setFlags(new HashSet<Flag>(flagBeans));
         article.setShared(Boolean.parseBoolean(isShared));
-        String contentFilted = FileUtils.saveHtmlImgToDB(content, imageService);
+        article.setContent(content);
+        String contentFilted = FileUtils.saveHtmlImgToDB(article, imageService);
         contentFilted = FileUtils.filterDraft(contentFilted);
         article.setContent(contentFilted);
-        articleDao.saveOrUpdate(article);
+        if (Boolean.valueOf(isEdit)) {
+            articleDao.update(article);
+        } else {
+            articleDao.save(article);
+        }
         PublishManager.getPublishManager().getArticlePublisher().establishLinkagesBetweenArticleAndImage(article);
         if (Boolean.valueOf(isEdit)) {
             PublishManager.getPublishManager().getArticlePublisher().updateIndexByUpdate(article, user.getId());
@@ -411,7 +417,8 @@ public class ArticleService {
         String articleId = request.getParameter("articleId");
         String content = request.getParameter("content");
         Article article = articleDao.getArticleById(articleId);
-        String contentFilted = FileUtils.saveHtmlImgToDB(content, imageService);
+        article.setContent(content);
+        String contentFilted = FileUtils.saveHtmlImgToDB(article, imageService);
         contentFilted = FileUtils.filterDraft(contentFilted);
         article.setContent(contentFilted);
         articleDao.saveOrUpdate(article);
