@@ -68,6 +68,7 @@ public class FlagDao extends BaseDao<String, Flag> {
         return (Flag) query.uniqueResult();
     }
 
+    @Logger(message = "获取指定用户拥有的标签数量")
     public int getFlagNum(String userId) {
         String hql = "select count(1) from cn_flag c where c.uId=:userId";
         Session session = this.getSession();
@@ -77,6 +78,7 @@ public class FlagDao extends BaseDao<String, Flag> {
         return bInt.intValue();
     }
 
+    @Logger(message = "获取指定用户拥有的标签")
     public List<Flag> getFlagDatas(String userId) {
         String hql = "select b.name, a.num from (select flag_id, count(1) as num from cn_flag_artile group by flag_id) a left join cn_flag b on a.flag_id=b.id where b.uId=:userId order by a.num desc";
         Session session = this.getSessionFactory().getCurrentSession();
@@ -94,5 +96,15 @@ public class FlagDao extends BaseDao<String, Flag> {
             flags.add(flag);
         }
         return flags;
+    }
+
+    @Logger(message = "获取标签，标签名精确匹配")
+    public List<Flag> getFlagsByName(String name, String parentName) {
+        String hql = "select new Flag(id,name) from Flag f where f.name = :name and f.parent.name = :parentName";
+        Session session = this.getSessionFactory().getCurrentSession();
+        Query query = session.createQuery(hql);
+        query.setParameter("name", name);
+        query.setParameter("parentName", parentName);
+        return query.list();
     }
 }

@@ -82,6 +82,19 @@ public class ArticleDao extends BaseDao<String, Article> {
         return query.list();
     }
 
+    @Logger(message = "查询笔记列表，标签精确匹配，按创建时间升序排序")
+    @SuppressWarnings("rawtypes")
+    public List<Object[]> selectArticlesByFlagIdOrderByCreateTime(String flagId) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("select a.title,a.content from cn_flag_artile f left join cn_article a on f.article_id=a.id ")
+                .append("where f.flag_id = :flagId ")
+                .append("order by a.createTime asc");
+        Session session = this.getSession();
+        SQLQuery query = session.createSQLQuery(sql.toString());
+        query.setString("flagId", flagId);
+        return query.list();
+    }
+
     @Logger(message = "查询指定用户笔记数量，标签精确匹配")
     public int selectAllFlagArticlesOrderByCreateTimeAndHitNumCount(String flagId) {
         StringBuilder sql = new StringBuilder();

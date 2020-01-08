@@ -1,12 +1,14 @@
 package com.sxkl.cloudnote.article.controller;
 
+import com.sxkl.cloudnote.article.service.ArticleService;
+import com.sxkl.cloudnote.article.service.BlogService;
 import com.sxkl.cloudnote.log.annotation.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sxkl.cloudnote.article.service.ArticleService;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *  * @author wangyao
@@ -20,6 +22,8 @@ public class BlogController {
 
     @Autowired
     private ArticleService articleService;
+    @Autowired
+    private BlogService blogService;
 
     @Logger(message = "获取推荐博客")
     @RequestMapping(value = "/getRecommend", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
@@ -49,5 +53,29 @@ public class BlogController {
     @RequestMapping(value = "/getBlogList", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
     public String getBlogList(int page, int pageSize) {
         return articleService.getBlogList(page, pageSize);
+    }
+
+    @Logger(message = "获取导航栏")
+    @RequestMapping(value = "/getNavigation", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+    public String getBlogList(HttpServletRequest request) {
+        return blogService.getNavigation(request);
+    }
+
+    @Logger(message = "获取个人基本信息")
+    @RequestMapping(value = "/getBaseInfo", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+    public String getBaseInfo(HttpServletRequest request) {
+        return blogService.getBaseInfo(request);
+    }
+
+    @Logger(message = "获取友情链接")
+    @RequestMapping(value = "/getLink", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+    public String getLink(HttpServletRequest request) {
+        return blogService.getLink(request);
+    }
+
+    @Logger(message = "获取职业技能")
+    @RequestMapping(value = "/getSkill", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+    public String getSkill(HttpServletRequest request) {
+        return blogService.getSkill(request);
     }
 }
