@@ -78,4 +78,10 @@ public class BlogController {
     public String getSkill(HttpServletRequest request) {
         return blogService.getSkill(request);
     }
+
+    @Logger(message = "获取心路历程")
+    @RequestMapping(value = "/getProcess", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+    public String getProcess(HttpServletRequest request) {
+        return blogService.getProcess(request);
+    }
 }

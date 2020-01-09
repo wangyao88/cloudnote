@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -31,6 +32,7 @@ public class BlogService {
     private static final String BASE_INFO = "个人基本信息";
     private static final String LINK = "友情链接";
     private static final String SKILL = "关于我";
+    private static final String PROCESS = "心路历程";
 
     @Logger(message = "获取导航栏")
     public String getNavigation(HttpServletRequest request) {
@@ -52,7 +54,7 @@ public class BlogService {
         Function<String, String> handler = value -> {
             Document doc = Jsoup.parse(value);
             String text = doc.text();
-            if(StringUtils.isBlank(text)) {
+            if (StringUtils.isBlank(text)) {
                 return StringUtils.EMPTY;
             }
             return Arrays.stream(text.split(";")).map(str -> StringUtils.appendJoinEmpty("<p>", str, "</p>")).collect(Collectors.joining("", "<ul>", "</ul>"));
@@ -60,16 +62,43 @@ public class BlogService {
         return getResult(SKILL, handler);
     }
 
+    @Logger(message = "获取心路历程")
+    public String getProcess(HttpServletRequest request) {
+        List<KeyValue> keyValues = getKeyValues(PROCESS, null).stream().sorted(Comparator.comparing(KeyValue::getKey).reversed()).collect(Collectors.toList());
+        List<KeyValue> result = keyValues.stream().map(keyValue -> {
+            String value = keyValue.getValue();
+            StringBuilder resultValue = new StringBuilder();
+            List<String> monthItemList = Arrays.stream(value.split("@@")).sorted(Comparator.reverseOrder()).filter(StringUtils::isNotBlank).collect(Collectors.toList());
+            for (String monthItem : monthItemList) {
+                String[] monthItemArray = monthItem.split("##");
+                String month = monthItemArray[0];
+                String item = Arrays.stream(monthItemArray[1].split(";")).filter(StringUtils::isNotBlank).collect(Collectors.joining("<br>", "", ""));
+                resultValue.append("<li><span>")
+                        .append(month)
+                        .append("</span><p><span>")
+                        .append(item)
+                        .append("</span></p></li>");
+
+            }
+            keyValue.setValue(resultValue.toString());
+            return keyValue;
+        }).collect(Collectors.toList());
+        return OperateResultService.configurateSuccessResult(result);
+    }
+
     private String getResult(String flagName) {
         return getResult(flagName, null);
     }
 
     private String getResult(String flagName, Function<String, String> handler) {
+        return OperateResultService.configurateSuccessResult(getKeyValues(flagName, handler));
+    }
+
+    private List<KeyValue> getKeyValues(String flagName, Function<String, String> handler) {
         List<Flag> flags = flagDao.getFlagsByName(flagName, BLOG);
-        List<KeyValue> results = flags.stream()
+        return flags.stream()
                 .flatMap(flag -> articleDao.selectArticlesByFlagIdOrderByCreateTime(flag.getId()).stream())
                 .map(result -> new KeyValue(String.valueOf(result[0]), String.valueOf(result[1]), handler))
                 .collect(Collectors.toList());
-        return OperateResultService.configurateSuccessResult(results);
     }
 }
