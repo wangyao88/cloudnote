@@ -27,6 +27,7 @@ public class NoteDao extends BaseDao<String, Note> {
         return notes;
     }
 
+    @Logger(message = "获取指定用户的笔记本总数量")
     public int getNoteNum(String userId) {
         String hql = "select count(1) from cn_note c where c.uId=:userId";
         Session session = this.getSession();
@@ -36,6 +37,7 @@ public class NoteDao extends BaseDao<String, Note> {
         return bInt.intValue();
     }
 
+    @Logger(message = "获取指定用户的饼图统计信息")
     public List<KeyValue> getPieData(String userId) {
         String hql = "select c.name, b.value from (select a.nId, count(1) as value from cn_article a where a.uId=:userId group by a.nId) b left join cn_note c on b.nId=c.id";
         Session session = this.getSession();
@@ -45,10 +47,12 @@ public class NoteDao extends BaseDao<String, Note> {
         List<KeyValue> keyValues = Lists.newArrayListWithCapacity(list.size());
         for (Object obj : list) {
             Object[] arr = (Object[]) obj;
-            KeyValue keyValue = new KeyValue();
-            keyValue.setName(arr[0].toString());
-            keyValue.setValue(arr[1].toString());
-            keyValues.add(keyValue);
+            if(arr.length == 2 && arr[0] != null && arr[1] != null) {
+                KeyValue keyValue = new KeyValue();
+                keyValue.setName(arr[0].toString());
+                keyValue.setValue(arr[1].toString());
+                keyValues.add(keyValue);
+            }
         }
         return keyValues;
     }
