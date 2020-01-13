@@ -25,7 +25,7 @@
 <!--顶部-->
 <header class="header left">
     <div class="header_center">
-        <h2><strong>曼妙云端云笔记统计平台</strong></h2>
+        <h2><strong>云端笔记统计平台</strong></h2>
     </div>
 </header>
 <!--内容部分-->
