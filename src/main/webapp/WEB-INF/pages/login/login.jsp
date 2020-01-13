@@ -9,7 +9,7 @@ String publicKey = RsaKeyManager.getPublickey();
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="UTF-8">
-<title>曼妙云端笔记平台</title>
+<title>云端笔记-登陆</title>
 <link rel="stylesheet" type="text/css" href="<%=basePath %>js/login/css/style2.0.css">
 <style type="text/css">
 	ul li{font-size: 30px;color:#2ec0f6;}

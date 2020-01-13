@@ -8,7 +8,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html>
   <head>
     <base href="<%=basePath%>">
-    <title>曼妙云端笔记|在线搜索文章</title>
+    <title>云端笔记-在线搜索文章</title>
     <meta charset="utf-8" />
     <meta content="user-scalable=no,width=device-width, initial-scale=1" name="viewport">
 	<meta http-equiv="pragma" content="no-cache">
