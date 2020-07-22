@@ -1,12 +1,10 @@
 package com.sxkl.cloudnote.config.zkclient;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
+import com.google.common.base.Charsets;
+import com.sxkl.cloudnote.utils.ObjectUtils;
+import com.sxkl.cloudnote.utils.PropertyUtil;
+import com.sxkl.cloudnote.utils.StringUtils;
+import lombok.Cleanup;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -16,12 +14,8 @@ import org.apache.curator.shaded.com.google.common.collect.Maps;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.data.Stat;
 
-import com.google.common.base.Charsets;
-import com.sxkl.cloudnote.utils.ObjectUtils;
-import com.sxkl.cloudnote.utils.PropertyUtil;
-import com.sxkl.cloudnote.utils.StringUtils;
-
-import lombok.Cleanup;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author: wangyao
@@ -128,22 +122,30 @@ public class ZKClientConfig {
     }
 
     public static void main(String[] args) throws Exception {
-        @Cleanup
-        CuratorFramework client = getClient();
-        String filePath = "C:\\wangyao\\workspace\\cis\\cloudnote\\src\\main\\resources\\init.properties";
-        @Cleanup
-        InputStream is = new FileInputStream(filePath);
-        Properties properties = new Properties();
-        properties.load(is);
-        Enumeration<Object> keys = properties.keys();
-        while (keys.hasMoreElements()) {
-            String key = (String) keys.nextElement();
-            String path = "/config/produce/" + key;
-            client.create()
-                    .creatingParentsIfNeeded()
-                    .withMode(CreateMode.PERSISTENT)
-                    .forPath(path, new String(properties.getProperty(key).getBytes("ISO8859-1"), "UTF-8").getBytes());
-        }
+//        @Cleanup
+//        CuratorFramework client = getClient();
+//        String filePath = "C:\\wangyao\\workspace\\cis\\cloudnote\\src\\main\\resources\\init.properties";
+//        @Cleanup
+//        InputStream is = new FileInputStream(filePath);
+//        Properties properties = new Properties();
+//        properties.load(is);
+//        Enumeration<Object> keys = properties.keys();
+//        while (keys.hasMoreElements()) {
+//            String key = (String) keys.nextElement();
+//            String path = "/config/produce/" + key;
+//            client.create()
+//                    .creatingParentsIfNeeded()
+//                    .withMode(CreateMode.PERSISTENT)
+//                    .forPath(path, new String(properties.getProperty(key).getBytes("ISO8859-1"), "UTF-8").getBytes());
+//        }
+
+
+        System.out.println(getPathData("/config/produce/jdbc.url"));
+//
+//        Map<String, Object> map = ZKClientConfig.getChildrenData(ZKClientConfig.BASE_PATH);
+//        System.out.println(map);
+
+//        saveOrUpdateNode("/config/produce/jdbc.url", "jdbc:mysql://123.206.20.115:3306/cloudnote?useUnicode=true&characterEncoding=utf-8");
 
     }
 }
