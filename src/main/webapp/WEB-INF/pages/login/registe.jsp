@@ -7,7 +7,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html>
   <head>
     <base href="<%=basePath%>">
-    <title>曼妙云端笔记|注册</title>
+    <title>云端笔记-注册</title>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
@@ -21,7 +21,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <script src="<%=basePath%>js/layer/layer.js" type="text/javascript"></script>
   </head>
   <body>
-    <h1>曼妙云端笔记</h1>
+    <h1>云端笔记</h1>
 <div class="login-form">
 	<div class="head-info">
 		<label class="lbl-1"> </label>

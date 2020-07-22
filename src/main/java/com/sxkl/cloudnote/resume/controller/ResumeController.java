@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -21,12 +21,12 @@ import java.nio.charset.StandardCharsets;
 @RequestMapping("/resume")
 public class ResumeController {
 
-    private static final String RESUME_FILE_PATH= "resume/简历-架构师-王曜.doc";
-    private static final String RESUME_FILE_NAME = "简历-架构师-王曜.doc";
+    private static final String RESUME_FILE_PATH= "resume/简历-架构师-王曜.docx";
+    private static final String RESUME_FILE_NAME = "简历-架构师-王曜.docx";
 
     @Logger(message = "下载简历")
     @RequestMapping(value = "/download", method = RequestMethod.GET)
-    public ResponseEntity<byte[]> download(HttpServletRequest request) throws IOException {
+    public ResponseEntity<byte[]> download(HttpServletRequest request, HttpServletResponse response) throws Exception {
         ClassPathResource resource = new ClassPathResource(RESUME_FILE_PATH);
         @Cleanup
         InputStream inputStream = resource.getInputStream();

@@ -9,7 +9,7 @@ String publicKey = RsaKeyManager.getPublickey();
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="UTF-8">
-<title>曼妙云端笔记平台</title>
+<title>云端笔记-登陆</title>
 <link rel="stylesheet" type="text/css" href="<%=basePath %>js/login/css/style2.0.css">
 <style type="text/css">
 	ul li{font-size: 30px;color:#2ec0f6;}
@@ -82,7 +82,7 @@ String publicKey = RsaKeyManager.getPublickey();
 </div> 
 <div id="contPar" class="contPar">
 	<div id="page1"  style="z-index:1;">
-		<div class="title0">曼妙云端笔记平台</div>
+		<div class="title0">云端笔记平台</div>
 		<div class="title1">点点滴滴的感动</div>
 		<div class="imgGroug">
 			<ul>
@@ -99,7 +99,7 @@ String publicKey = RsaKeyManager.getPublickey();
 		<form action="<%=basePath %>login" method="post" id="loginForm">
 			<h2>登录</h2>
 			<p class="tyg-p">
-			      欢迎访问  曼妙云端笔记
+			      欢迎访问 云端笔记
 			   <span style="margin-left:10px;">
 			              <a href="<%=basePath %>login/registe" target="_self" style="color:white">注册</a>
 			    </span>

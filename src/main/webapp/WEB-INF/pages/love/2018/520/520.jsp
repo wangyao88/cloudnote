@@ -10,7 +10,7 @@
 <head>
 <base href="<%=basePath%>">
 
-<title>曼妙云端云笔记-2018520表白日</title>
+<title>云端笔记-2018520表白日</title>
 
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="cache-control" content="no-cache">

@@ -15,7 +15,7 @@ import="com.sxkl.cloudnote.user.entity.User" pageEncoding="UTF-8"%>
 <html>
 <head>
 
-<title>曼妙云端笔记-在线聊天</title>
+<title>云端笔记-在线聊天</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="<%=basePath%>js/webchat/webchat.css" rel="stylesheet" type="text/css" />
 <link href="<%=basePath%>css/scroller.css" rel="stylesheet" type="text/css" />

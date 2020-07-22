@@ -10,7 +10,7 @@
 <html>
 <head>
     <base href="<%=basePath%>">
-    <title>曼妙云端笔记-搜索结果</title>
+    <title>云端笔记-搜索结果</title>
 
     <meta http-equiv="pragma" content="no-cache">
     <meta http-equiv="cache-control" content="no-cache">

@@ -106,8 +106,8 @@ public class MysqlBackupService extends AbstractBackupDB {
         MailUser fromuser = mailService.getSystemMailFromUser();
         MailUser touser = mailService.getSystemMailToUser();
         MailMessage message = new MailMessage();
-        message.setSubject("曼妙云端数据库备份");
-        message.setContent(StringAppendUtils.append("于", DateUtils.formatDate2Str(new Date()), "曼妙云端数据库备份成功！", "路径为:", draft));
+        message.setSubject("云端笔记数据库备份");
+        message.setContent(StringAppendUtils.append("于", DateUtils.formatDate2Str(new Date()), "云端笔记数据库备份成功！", "路径为:", draft));
         message.setDrafts(new String[]{draft});
         Mail mail = new Mail();
         mail.setFromUser(fromuser);
