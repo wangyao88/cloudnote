@@ -30,7 +30,7 @@ import lombok.Cleanup;
  */
 public class ZKClientConfig {
 
-    private static final String DEFAULT_SERVER_HOST = "123.206.20.115:2181";
+    private static final String DEFAULT_SERVER_HOST = "127.0.0.1:2181";
     private static final int DEFAULT_SESSION_TIMEOUTMS = 30000;
     private static final int DEFAULT_CONNECTION_TIMEOUTMS = 3000;
     public static final String BASE_PATH = StringUtils.appendJoinEmpty("/config/", PropertyUtil.getMode());
