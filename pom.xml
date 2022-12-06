@@ -281,7 +281,7 @@
         <dependency>
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
-            <version>3.3</version>
+            <version>3.9.0</version>
         </dependency>
         <!-- Json 支持包 ezmorph 正常1.0.6 降低版本1.0.4 -->
         <dependency>
